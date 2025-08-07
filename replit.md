@@ -15,7 +15,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - Fixed TanStack Query URL construction issues causing "[object Object]" errors in deal browsing
 - Changed currency from USD to South African Rand (ZAR) for local market
 - Added "REGULAR" badges to regular deal cards for better visual identification
-- Expanded business categories to 19 South African B2B categories
+- Expanded business categories to 19 South African B2B categories including "Water" category
 - Added expired deals dropdown with reactivation functionality for suppliers
 - Removed buyer dashboard - only suppliers have dashboards now
 - Fixed expired deals dropdown visibility and functionality on supplier dashboard
@@ -24,6 +24,8 @@ The application is built with a modern web stack featuring React frontend, Expre
 - Changed color scheme from blue to olive and charcoal throughout the application for brand consistency
 - All core features are now working: authentication, deal management, role switching, notifications, deal posting, deal browsing, expired deal management
 - Applied consistent olive and charcoal color scheme across all pages, components, and UI elements
+- Modified home page for non-authenticated users to show ONLY hot deals (no search, no other information)
+- Fixed regular deal posting issue by removing required product images validation from both schema and client-side validation
 
 ## User Preferences
 
