@@ -87,13 +87,13 @@ export default function Home() {
   const showLoading = isSearching ? searchLoading : hotDealsLoading;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-stone-50/30">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-r from-slate-800 via-slate-700 to-stone-800 text-white">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="text-center">
             <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30">
@@ -111,7 +111,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/hot-deals">
-                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 px-8 py-3 text-lg font-semibold shadow-lg">
+                <Button size="lg" className="bg-white text-primary hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg">
                   <Flame className="w-5 h-5 mr-2" />
                   Browse Hot Deals
                 </Button>
@@ -143,7 +143,7 @@ export default function Home() {
                     placeholder="Search thousands of products and services..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 pr-4 py-4 text-lg border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="pl-12 pr-4 py-4 text-lg border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                     data-testid="input-search"
                   />
                   <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
@@ -186,10 +186,10 @@ export default function Home() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 flex items-center" data-testid="text-search-results-title">
-                  <Search className="text-blue-500 mr-3" />
+                  <Search className="text-primary mr-3" />
                   Search Results
                   {!searchLoading && (
-                    <span className="ml-3 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                    <span className="ml-3 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
                       {sortedSearchResults.length} found
                     </span>
                   )}
@@ -329,27 +329,27 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="text-center p-8 border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-cyan-50 hover:shadow-xl transition-all duration-300">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-blue-600" />
+            <Card className="text-center p-8 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-xl transition-all duration-300">
+              <div className="bg-primary/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="h-8 w-8 text-primary" />
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Verified Suppliers</h4>
               <p className="text-muted-foreground">
                 All suppliers are thoroughly vetted and verified for quality and reliability
               </p>
             </Card>
-            <Card className="text-center p-8 border-2 border-green-100 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-xl transition-all duration-300">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Zap className="h-8 w-8 text-green-600" />
+            <Card className="text-center p-8 border-2 border-slate-200 bg-gradient-to-br from-stone-50 to-slate-50 hover:shadow-xl transition-all duration-300">
+              <div className="bg-slate-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Zap className="h-8 w-8 text-slate-700" />
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Instant Connections</h4>
               <p className="text-muted-foreground">
                 Connect directly with suppliers and get quotes within hours, not days
               </p>
             </Card>
-            <Card className="text-center p-8 border-2 border-purple-100 bg-gradient-to-br from-purple-50 to-pink-50 hover:shadow-xl transition-all duration-300">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Globe className="h-8 w-8 text-purple-600" />
+            <Card className="text-center p-8 border-2 border-stone-200 bg-gradient-to-br from-stone-100 to-stone-50 hover:shadow-xl transition-all duration-300">
+              <div className="bg-stone-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Globe className="h-8 w-8 text-stone-700" />
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Local Focus</h4>
               <p className="text-muted-foreground">
@@ -360,39 +360,39 @@ export default function Home() {
         </section>
 
         {/* Stats Section */}
-        <section className="bg-gradient-to-r from-slate-900 to-blue-900 rounded-3xl p-8 md:p-12 text-white mb-16">
+        <section className="bg-gradient-to-r from-slate-900 to-stone-900 rounded-3xl p-8 md:p-12 text-white mb-16">
           <div className="text-center mb-12">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">Trusted by Thousands</h3>
             <p className="text-xl opacity-90">Real results from real businesses across South Africa</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <Users className="h-12 w-12 text-blue-300 mx-auto mb-4" />
+              <Users className="h-12 w-12 text-primary/70 mx-auto mb-4" />
               <div className="text-4xl font-bold mb-2" data-testid="text-stat-suppliers">
                 2,150+
               </div>
-              <div className="text-blue-200 text-sm">Active Suppliers</div>
+              <div className="text-stone-200 text-sm">Active Suppliers</div>
             </div>
             <div className="text-center">
-              <TrendingUp className="h-12 w-12 text-green-300 mx-auto mb-4" />
+              <TrendingUp className="h-12 w-12 text-primary/70 mx-auto mb-4" />
               <div className="text-4xl font-bold mb-2" data-testid="text-stat-deals">
                 15,340+
               </div>
-              <div className="text-blue-200 text-sm">Deals Posted</div>
+              <div className="text-stone-200 text-sm">Deals Posted</div>
             </div>
             <div className="text-center">
-              <Zap className="h-12 w-12 text-yellow-300 mx-auto mb-4" />
+              <Zap className="h-12 w-12 text-stone-300 mx-auto mb-4" />
               <div className="text-4xl font-bold mb-2" data-testid="text-stat-connections">
                 89,250+
               </div>
-              <div className="text-blue-200 text-sm">Successful Connections</div>
+              <div className="text-stone-200 text-sm">Successful Connections</div>
             </div>
             <div className="text-center">
-              <Globe className="h-12 w-12 text-purple-300 mx-auto mb-4" />
+              <Globe className="h-12 w-12 text-stone-400 mx-auto mb-4" />
               <div className="text-4xl font-bold mb-2" data-testid="text-stat-savings">
                 R12.4M+
               </div>
-              <div className="text-blue-200 text-sm">Total Savings</div>
+              <div className="text-stone-200 text-sm">Total Savings</div>
             </div>
           </div>
         </section>

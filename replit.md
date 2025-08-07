@@ -21,6 +21,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - Fixed expired deals dropdown visibility and functionality on supplier dashboard
 - Modernized home page with contemporary design, gradients, better layouts, and enhanced user experience
 - Updated home page to show only hot deals (6 deals) - regular deals removed per user requirement
+- Changed color scheme from blue to olive and charcoal throughout the application for brand consistency
 - All core features are now working: authentication, deal management, role switching, notifications, deal posting, deal browsing, expired deal management
 
 ## User Preferences
