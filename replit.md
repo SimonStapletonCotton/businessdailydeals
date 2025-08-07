@@ -13,7 +13,11 @@ The application is built with a modern web stack featuring React frontend, Expre
 - Fixed server port configuration (running on port 5000 as configured)
 - Fixed deal posting validation issues with proper schema handling for decimal fields and arrays
 - Fixed TanStack Query URL construction issues causing "[object Object]" errors in deal browsing
-- All core features are now working: authentication, deal management, role switching, notifications, deal posting, deal browsing
+- Changed currency from USD to South African Rand (ZAR) for local market
+- Added "REGULAR" badges to regular deal cards for better visual identification
+- Expanded business categories to 19 South African B2B categories
+- Added expired deals dropdown with reactivation functionality for suppliers
+- All core features are now working: authentication, deal management, role switching, notifications, deal posting, deal browsing, expired deal management
 
 ## User Preferences
 

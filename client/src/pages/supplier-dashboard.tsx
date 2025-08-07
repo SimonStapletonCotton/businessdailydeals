@@ -1,19 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/navbar";
 import DealCard from "@/components/deal-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Package, TrendingUp, Users, MessageCircle, Flame } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { DealWithSupplier, InquiryWithDetails } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { isUnauthorizedError } from "@/lib/authUtils";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function SupplierDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
+  const [showExpiredDeals, setShowExpiredDeals] = useState(false);
+  const [reactivatingDealId, setReactivatingDealId] = useState<string | null>(null);
+  const [newExpirationDate, setNewExpirationDate] = useState("");
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -44,6 +51,45 @@ export default function SupplierDashboard() {
   const { data: inquiries, isLoading: inquiriesLoading } = useQuery<InquiryWithDetails[]>({
     queryKey: ["/api/supplier/inquiries"],
     enabled: isAuthenticated && user?.userType === "supplier",
+  });
+
+  const { data: expiredDeals, isLoading: expiredDealsLoading } = useQuery<DealWithSupplier[]>({
+    queryKey: ["/api/supplier/expired-deals"],
+    enabled: isAuthenticated && user?.userType === "supplier",
+  });
+
+  const reactivateDealMutation = useMutation({
+    mutationFn: async ({ dealId, expiresAt }: { dealId: string; expiresAt: string }) => {
+      await apiRequest("PATCH", `/api/deals/${dealId}/reactivate`, { expiresAt });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Deal Reactivated",
+        description: "Your deal has been successfully reactivated.",
+      });
+      setReactivatingDealId(null);
+      setNewExpirationDate("");
+      queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/supplier/expired-deals"] });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to reactivate deal. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   if (isLoading) {
@@ -236,6 +282,109 @@ export default function SupplierDashboard() {
             )}
           </CardContent>
         </Card>
+
+        {/* Expired Deals Dropdown */}
+        {expiredDeals && expiredDeals.length > 0 && (
+          <Card className="mt-8">
+            <CardHeader>
+              <Button
+                variant="ghost"
+                onClick={() => setShowExpiredDeals(!showExpiredDeals)}
+                className="w-full justify-between"
+                data-testid="button-toggle-expired-deals"
+              >
+                <span className="flex items-center">
+                  <RotateCcw className="h-5 w-5 mr-2" />
+                  Expired Deals ({expiredDeals.length})
+                </span>
+                {showExpiredDeals ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </Button>
+            </CardHeader>
+            {showExpiredDeals && (
+              <CardContent>
+                <div className="space-y-4">
+                  {expiredDeals.map((deal: DealWithSupplier) => (
+                    <div key={deal.id} className="flex items-center justify-between p-4 border border-border rounded-lg bg-slate-50">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-slate-900" data-testid={`text-expired-deal-title-${deal.id}`}>
+                          {deal.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground" data-testid={`text-expired-deal-category-${deal.id}`}>
+                          {deal.category} • R{deal.price}
+                        </p>
+                        <p className="text-xs text-red-600" data-testid={`text-expired-deal-date-${deal.id}`}>
+                          Expired: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'Unknown date'}
+                        </p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {reactivatingDealId === deal.id ? (
+                          <div className="flex items-center space-x-2">
+                            <div>
+                              <Label htmlFor={`expiry-${deal.id}`} className="text-xs">New Expiry Date</Label>
+                              <Input
+                                id={`expiry-${deal.id}`}
+                                type="date"
+                                value={newExpirationDate}
+                                onChange={(e) => setNewExpirationDate(e.target.value)}
+                                min={new Date().toISOString().split('T')[0]}
+                                className="w-32 text-xs"
+                                data-testid={`input-new-expiry-${deal.id}`}
+                              />
+                            </div>
+                            <Button
+                              size="sm"
+                              onClick={() => {
+                                if (newExpirationDate) {
+                                  const expiresAt = new Date(newExpirationDate);
+                                  expiresAt.setHours(23, 59, 59, 999);
+                                  reactivateDealMutation.mutate({
+                                    dealId: deal.id,
+                                    expiresAt: expiresAt.toISOString()
+                                  });
+                                }
+                              }}
+                              disabled={!newExpirationDate || reactivateDealMutation.isPending}
+                              data-testid={`button-confirm-reactivate-${deal.id}`}
+                            >
+                              {reactivateDealMutation.isPending ? "..." : "Confirm"}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setReactivatingDealId(null);
+                                setNewExpirationDate("");
+                              }}
+                              data-testid={`button-cancel-reactivate-${deal.id}`}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        ) : (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setReactivatingDealId(deal.id);
+                              // Set default to 30 days from now
+                              const defaultDate = new Date();
+                              defaultDate.setDate(defaultDate.getDate() + 30);
+                              setNewExpirationDate(defaultDate.toISOString().split('T')[0]);
+                            }}
+                            data-testid={`button-reactivate-${deal.id}`}
+                          >
+                            <RotateCcw className="h-4 w-4 mr-2" />
+                            Reactivate
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            )}
+          </Card>
+        )}
       </main>
     </div>
   );

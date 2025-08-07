@@ -31,8 +31,10 @@ export interface IStorage {
   getDeals(dealType?: 'hot' | 'regular'): Promise<DealWithSupplier[]>;
   getDeal(id: string): Promise<DealWithSupplier | undefined>;
   getDealsBySupplier(supplierId: string): Promise<DealWithSupplier[]>;
+  getExpiredDealsBySupplier(supplierId: string): Promise<DealWithSupplier[]>;
   createDeal(deal: InsertDeal): Promise<Deal>;
   updateDeal(id: string, deal: Partial<InsertDeal>): Promise<Deal>;
+  reactivateDeal(id: string, newExpiresAt: Date): Promise<Deal>;
   deleteDeal(id: string): Promise<void>;
   searchDeals(query: string, category?: string): Promise<DealWithSupplier[]>;
   
@@ -126,7 +128,21 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(deals)
       .leftJoin(users, eq(deals.supplierId, users.id))
-      .where(eq(deals.supplierId, supplierId))
+      .where(and(eq(deals.supplierId, supplierId), eq(deals.status, 'active')))
+      .orderBy(desc(deals.createdAt));
+
+    return result.map(row => ({
+      ...row.deals,
+      supplier: row.users!
+    }));
+  }
+
+  async getExpiredDealsBySupplier(supplierId: string): Promise<DealWithSupplier[]> {
+    const result = await db
+      .select()
+      .from(deals)
+      .leftJoin(users, eq(deals.supplierId, users.id))
+      .where(and(eq(deals.supplierId, supplierId), eq(deals.status, 'expired')))
       .orderBy(desc(deals.createdAt));
 
     return result.map(row => ({
@@ -161,6 +177,19 @@ export class DatabaseStorage implements IStorage {
     const [deal] = await db
       .update(deals)
       .set({ ...dealData, updatedAt: new Date() })
+      .where(eq(deals.id, id))
+      .returning();
+    return deal;
+  }
+
+  async reactivateDeal(id: string, newExpiresAt: Date): Promise<Deal> {
+    const [deal] = await db
+      .update(deals)
+      .set({ 
+        status: 'active',
+        expiresAt: newExpiresAt,
+        updatedAt: new Date() 
+      })
       .where(eq(deals.id, id))
       .returning();
     return deal;

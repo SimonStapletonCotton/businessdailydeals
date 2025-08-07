@@ -118,6 +118,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/supplier/expired-deals', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const expiredDeals = await storage.getExpiredDealsBySupplier(userId);
+      res.json(expiredDeals);
+    } catch (error) {
+      console.error("Error fetching expired deals:", error);
+      res.status(500).json({ message: "Failed to fetch expired deals" });
+    }
+  });
+
+  app.patch('/api/deals/:id/reactivate', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const dealId = req.params.id;
+      const { expiresAt } = req.body;
+
+      // Verify the deal belongs to this supplier
+      const existingDeal = await storage.getDeal(dealId);
+      if (!existingDeal || existingDeal.supplierId !== userId) {
+        return res.status(404).json({ message: "Deal not found or unauthorized" });
+      }
+
+      const reactivatedDeal = await storage.reactivateDeal(dealId, new Date(expiresAt));
+      res.json(reactivatedDeal);
+    } catch (error) {
+      console.error("Error reactivating deal:", error);
+      res.status(500).json({ message: "Failed to reactivate deal" });
+    }
+  });
+
   app.patch('/api/deals/:id', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
