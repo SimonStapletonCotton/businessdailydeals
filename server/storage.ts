@@ -89,7 +89,7 @@ export class DatabaseStorage implements IStorage {
     let whereCondition = eq(deals.status, 'active');
     
     if (dealType) {
-      whereCondition = and(eq(deals.status, 'active'), eq(deals.dealType, dealType));
+      whereCondition = and(eq(deals.status, 'active'), eq(deals.dealType, dealType))!;
     }
 
     const result = await db

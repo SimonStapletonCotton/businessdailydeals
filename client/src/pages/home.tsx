@@ -17,12 +17,20 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortBy, setSortBy] = useState("latest");
 
+  // Search deals query that updates based on search input
+  const { data: searchResults, isLoading: searchLoading } = useQuery({
+    queryKey: ["/api/deals", { search: searchQuery, category: selectedCategory !== "All Categories" ? selectedCategory : undefined }],
+    enabled: !!searchQuery.trim(),
+  });
+
   const { data: hotDeals, isLoading: hotDealsLoading } = useQuery({
     queryKey: ["/api/deals", { type: "hot" }],
+    enabled: !searchQuery.trim(),
   });
 
   const { data: regularDeals, isLoading: regularDealsLoading } = useQuery({
     queryKey: ["/api/deals", { type: "regular" }],
+    enabled: !searchQuery.trim(),
   });
 
   const categories = [
@@ -33,8 +41,26 @@ export default function Home() {
     "Software & Services"
   ];
 
+  // Filter and sort results
   const displayedHotDeals = Array.isArray(hotDeals) ? hotDeals.slice(0, 3) : [];
   const displayedRegularDeals = Array.isArray(regularDeals) ? regularDeals.slice(0, 4) : [];
+
+  // Sort search results
+  const sortedSearchResults = Array.isArray(searchResults) ? [...searchResults].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return parseFloat(a.price) - parseFloat(b.price);
+      case 'price-high':
+        return parseFloat(b.price) - parseFloat(a.price);
+      case 'expiry':
+        return new Date(a.expiresAt || '').getTime() - new Date(b.expiresAt || '').getTime();
+      default:
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+  }) : [];
+
+  const isSearching = !!searchQuery.trim();
+  const showLoading = isSearching ? searchLoading : (hotDealsLoading || regularDealsLoading);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -60,7 +86,7 @@ export default function Home() {
               <div className="relative">
                 <Input
                   type="text"
-                  placeholder="Search deals by keyword, category, or supplier..."
+                  placeholder="Search products alphabetically (e.g., laptops, office chairs, software)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
@@ -99,8 +125,79 @@ export default function Home() {
       </section>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search Results Section */}
+        {isSearching && (
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900 flex items-center" data-testid="text-search-results-title">
+                  <Search className="text-blue-500 mr-3" />
+                  Search Results
+                  {!searchLoading && (
+                    <span className="ml-3 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                      {sortedSearchResults.length} found
+                    </span>
+                  )}
+                </h3>
+                <p className="text-muted-foreground mt-1">
+                  Results for "{searchQuery}"
+                </p>
+              </div>
+              {sortedSearchResults.length > 0 && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => setSearchQuery("")}
+                  data-testid="button-clear-search"
+                >
+                  Clear Search
+                </Button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {searchLoading ? (
+                <div className="col-span-full flex items-center justify-center py-12">
+                  <p className="text-muted-foreground" data-testid="text-loading-search">
+                    Searching products...
+                  </p>
+                </div>
+              ) : sortedSearchResults.length > 0 ? (
+                sortedSearchResults.map((deal: DealWithSupplier) => (
+                  <DealCard 
+                    key={deal.id} 
+                    deal={deal} 
+                    variant={deal.dealType === 'hot' ? 'hot' : 'regular'}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12">
+                  <Search className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                  <h4 className="text-lg font-semibold text-slate-900 mb-2">No products found</h4>
+                  <p className="text-muted-foreground mb-4">
+                    Try searching with different keywords or check the spelling
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2 text-sm">
+                    <span className="text-muted-foreground">Popular searches:</span>
+                    {["laptops", "office supplies", "software", "equipment"].map((term) => (
+                      <button
+                        key={term}
+                        onClick={() => setSearchQuery(term)}
+                        className="text-primary hover:underline"
+                        data-testid={`button-popular-search-${term}`}
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* Hot Deals Section */}
-        <section className="mb-12">
+        {!isSearching && (
+          <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-2xl font-bold text-slate-900 flex items-center" data-testid="text-hot-deals-title">
@@ -138,10 +235,12 @@ export default function Home() {
               ))
             )}
           </div>
-        </section>
+          </section>
+        )}
 
         {/* Regular Deals Section */}
-        <section className="mb-12">
+        {!isSearching && (
+          <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-2xl font-bold text-slate-900" data-testid="text-regular-deals-title">
@@ -175,7 +274,8 @@ export default function Home() {
               ))
             )}
           </div>
-        </section>
+          </section>
+        )}
 
         {/* Notification Section */}
         <section className="mb-12">
