@@ -581,8 +581,8 @@ export default function PostDeal() {
               <div>
                 <h4 className="font-semibold text-amber-800 mb-2">Pricing Guidelines</h4>
                 <ul className="text-sm text-amber-700 space-y-1">
-                  <li>• Hot deals typically offer 30%+ discounts for premium placement</li>
-                  <li>• Regular deals should still provide competitive pricing</li>
+                  <li>• Hot deals get premium placement and visibility on the platform</li>
+                  <li>• Regular deals should provide competitive pricing</li>
                   <li>• Include shipping costs in your pricing or specify shipping terms</li>
                   <li>• Set realistic minimum order quantities to attract buyers</li>
                 </ul>
