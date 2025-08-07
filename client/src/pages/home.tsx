@@ -12,8 +12,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
 import { DealWithSupplier } from "@shared/schema";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Home() {
+  const { isAuthenticated, isLoading } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortBy, setSortBy] = useState("latest");
@@ -30,7 +32,7 @@ export default function Home() {
       if (!response.ok) throw new Error('Failed to fetch search results');
       return response.json();
     },
-    enabled: !!searchQuery.trim(),
+    enabled: !!searchQuery.trim() && isAuthenticated,
   });
 
   const { data: hotDeals, isLoading: hotDealsLoading } = useQuery({
@@ -40,7 +42,7 @@ export default function Home() {
       if (!response.ok) throw new Error('Failed to fetch hot deals');
       return response.json();
     },
-    enabled: !searchQuery.trim(),
+    enabled: (!searchQuery.trim() && isAuthenticated) || !isAuthenticated,
   });
 
   const categories = [
@@ -133,57 +135,59 @@ export default function Home() {
         <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-purple-300/20 rounded-full blur-sm"></div>
       </section>
 
-      {/* Enhanced Search Bar */}
-      <section className="bg-white/80 backdrop-blur-sm border-b border-slate-200/50 py-6 -mt-6 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200/50 p-6">
-            <div className="flex flex-col lg:flex-row gap-6 items-center">
-              <div className="flex-1">
-                <div className="relative">
-                  <Input
-                    type="text"
-                    placeholder="Search thousands of products and services..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 pr-4 py-4 text-lg border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
-                    data-testid="input-search"
-                  />
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+      {/* Enhanced Search Bar - Only show for authenticated users */}
+      {isAuthenticated && (
+        <section className="bg-white/80 backdrop-blur-sm border-b border-slate-200/50 py-6 -mt-6 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-200/50 p-6">
+              <div className="flex flex-col lg:flex-row gap-6 items-center">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Input
+                      type="text"
+                      placeholder="Search thousands of products and services..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-12 pr-4 py-4 text-lg border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
+                      data-testid="input-search"
+                    />
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-60 py-4 rounded-xl border-slate-300" data-testid="select-category">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-60 py-4 rounded-xl border-slate-300" data-testid="select-sort">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="latest">Sort by: Latest</SelectItem>
-                    <SelectItem value="price-low">Price: Low to High</SelectItem>
-                    <SelectItem value="price-high">Price: High to Low</SelectItem>
-                    <SelectItem value="expiry">Expiry Date</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="w-60 py-4 rounded-xl border-slate-300" data-testid="select-category">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-60 py-4 rounded-xl border-slate-300" data-testid="select-sort">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="latest">Sort by: Latest</SelectItem>
+                      <SelectItem value="price-low">Price: Low to High</SelectItem>
+                      <SelectItem value="price-high">Price: High to Low</SelectItem>
+                      <SelectItem value="expiry">Expiry Date</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Search Results Section */}
-        {isSearching && (
+        {/* Search Results Section - Only show for authenticated users */}
+        {isAuthenticated && isSearching && (
           <section className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -252,8 +256,8 @@ export default function Home() {
           </section>
         )}
 
-        {/* Hot Deals Section */}
-        {!isSearching && (
+        {/* Hot Deals Section - Always show for non-authenticated users, show when not searching for authenticated users */}
+        {(!isAuthenticated || (isAuthenticated && !isSearching)) && (
           <section className="mb-16">
             <div className="text-center mb-12">
               <Badge variant="destructive" className="mb-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2">
@@ -310,15 +314,19 @@ export default function Home() {
           </section>
         )}
 
-        {/* Notification Section */}
-        <section className="mb-12">
-          <KeywordNotifications />
-        </section>
+        {/* Notification Section - Only show for authenticated users */}
+        {isAuthenticated && (
+          <section className="mb-12">
+            <KeywordNotifications />
+          </section>
+        )}
 
-        {/* Supplier Section */}
-        <section className="mb-12">
-          <SupplierOnboarding />
-        </section>
+        {/* Supplier Section - Only show for authenticated users */}
+        {isAuthenticated && (
+          <section className="mb-12">
+            <SupplierOnboarding />
+          </section>
+        )}
 
         {/* Features Section */}
         <section className="mb-16">
