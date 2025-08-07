@@ -80,15 +80,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Only suppliers can create deals" });
       }
 
+      console.log("Received request body:", JSON.stringify(req.body, null, 2));
+
       const dealData = insertDealSchema.parse({
         ...req.body,
         supplierId: userId
       });
 
+      console.log("Parsed deal data:", JSON.stringify(dealData, null, 2));
+
       const deal = await storage.createDeal(dealData);
       res.status(201).json(deal);
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.error("Validation errors:", JSON.stringify(error.errors, null, 2));
         return res.status(400).json({ message: "Invalid deal data", errors: error.errors });
       }
       console.error("Error creating deal:", error);

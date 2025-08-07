@@ -142,7 +142,12 @@ export const inquiriesRelations = relations(inquiries, ({ one }) => ({
 
 // Insert schemas
 export const upsertUserSchema = createInsertSchema(users);
-export const insertDealSchema = createInsertSchema(deals).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertDealSchema = createInsertSchema(deals)
+  .omit({ id: true, createdAt: true, updatedAt: true })
+  .extend({
+    price: z.string().transform((val) => val),
+    originalPrice: z.string().optional().transform((val) => val || undefined),
+  });
 export const insertKeywordSchema = createInsertSchema(keywords).omit({ id: true, createdAt: true });
 export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true, createdAt: true });
 export const insertInquirySchema = createInsertSchema(inquiries).omit({ id: true, createdAt: true });
