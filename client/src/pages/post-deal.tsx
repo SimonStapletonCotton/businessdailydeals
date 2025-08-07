@@ -58,6 +58,8 @@ export default function PostDeal() {
   const [, setLocation] = useLocation();
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
+  const [productImageInput, setProductImageInput] = useState("");
+  const [productImages, setProductImages] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -94,6 +96,10 @@ export default function PostDeal() {
       dealType: "regular",
       imageUrl: "",
       keywords: [],
+      productImages: [],
+      size: "",
+      quantityAvailable: undefined,
+      productSpecifications: "",
     },
   });
 
@@ -111,6 +117,10 @@ export default function PostDeal() {
         imageUrl: data.imageUrl || "",
         keywords: keywords.length > 0 ? keywords : [],
         expiresAt: data.expiresAt,
+        productImages: productImages.length > 0 ? productImages : [],
+        size: data.size || undefined,
+        quantityAvailable: data.quantityAvailable || undefined,
+        productSpecifications: data.productSpecifications || undefined,
       };
       console.log("Sending to API:", dealData);
       await apiRequest("POST", "/api/deals", dealData);
@@ -156,6 +166,15 @@ export default function PostDeal() {
       });
       return;
     }
+
+    if (productImages.length === 0) {
+      toast({
+        title: "Product Images Required",
+        description: "Please add at least one product image.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     createDealMutation.mutate(data);
   };
@@ -169,6 +188,17 @@ export default function PostDeal() {
 
   const removeKeyword = (keywordToRemove: string) => {
     setKeywords(keywords.filter(k => k !== keywordToRemove));
+  };
+
+  const addProductImage = () => {
+    if (productImageInput.trim() && !productImages.includes(productImageInput.trim())) {
+      setProductImages([...productImages, productImageInput.trim()]);
+      setProductImageInput("");
+    }
+  };
+
+  const removeProductImage = (imageToRemove: string) => {
+    setProductImages(productImages.filter(img => img !== imageToRemove));
   };
 
   const calculateDiscount = () => {
@@ -494,7 +524,7 @@ export default function PostDeal() {
                     name="imageUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Image URL</FormLabel>
+                        <FormLabel>Cover Image URL</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://example.com/image.jpg"
@@ -504,13 +534,138 @@ export default function PostDeal() {
                           />
                         </FormControl>
                         <FormDescription>
-                          Optional: Direct link to product image
+                          Optional: Cover image for the deal card
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
+
+                {/* Product Images Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Package className="h-5 w-5 text-olive-600" />
+                    <h3 className="text-lg font-semibold text-charcoal-900">Product Images *</h3>
+                  </div>
+                  <div className="bg-olive-50 border border-olive-200 rounded-lg p-4">
+                    <div className="flex gap-2 mb-3">
+                      <Input
+                        placeholder="Enter product image URL..."
+                        value={productImageInput}
+                        onChange={(e) => setProductImageInput(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addProductImage())}
+                        data-testid="input-product-image"
+                      />
+                      <Button 
+                        type="button" 
+                        onClick={addProductImage}
+                        variant="outline"
+                        className="border-olive-600 text-olive-600 hover:bg-olive-50"
+                        data-testid="button-add-product-image"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    {productImages.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {productImages.map((image, index) => (
+                          <Badge 
+                            key={index} 
+                            variant="secondary" 
+                            className="bg-white border border-charcoal-200 text-charcoal-700 px-3 py-1"
+                          >
+                            <span className="mr-2 truncate max-w-[200px]">{image}</span>
+                            <button
+                              type="button"
+                              onClick={() => removeProductImage(image)}
+                              className="text-red-500 hover:text-red-700"
+                              data-testid={`button-remove-product-image-${index}`}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                    <p className="text-sm text-charcoal-600 mt-2">
+                      Add multiple product image URLs. At least one image is required.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Product Details Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="size"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Size/Dimensions</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g., L x W x H: 50cm x 30cm x 20cm"
+                            {...field}
+                            value={field.value || ""}
+                            data-testid="input-size"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Optional: Product size or dimensions
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="quantityAvailable"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Quantity Available</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min="1"
+                            placeholder="e.g., 100"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) => field.onChange(parseInt(e.target.value) || undefined)}
+                            data-testid="input-quantity-available"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Optional: Total units available for this deal
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="productSpecifications"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Product Specifications</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter detailed product specifications, features, materials, etc..."
+                          className="min-h-[100px]"
+                          {...field}
+                          value={field.value || ""}
+                          data-testid="textarea-product-specifications"
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Optional: Detailed product specifications, features, materials, technical details, etc.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 {/* Expiry Date */}
                 <FormField

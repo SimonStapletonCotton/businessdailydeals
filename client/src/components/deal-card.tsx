@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Building, Star, Clock, Percent, Download } from "lucide-react";
+import { Building, Star, Clock, Percent, Download, Package, Ruler, Box } from "lucide-react";
 import { DealWithSupplier } from "@shared/schema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -114,11 +114,14 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               <p><strong>Supplier:</strong> ${deal.supplier.companyName || deal.supplier.firstName}</p>
               <p><strong>Category:</strong> ${deal.category}</p>
               <p><strong>Min Order:</strong> ${deal.minOrder} unit${deal.minOrder !== 1 ? 's' : ''}</p>
+              ${deal.size ? `<p><strong>Size:</strong> ${deal.size}</p>` : ''}
+              ${deal.quantityAvailable ? `<p><strong>Available Qty:</strong> ${deal.quantityAvailable} units</p>` : ''}
             </div>
             <div class="code">Coupon Code: ${coupon.couponCode}</div>
             <div class="details">
               <p><strong>Valid Until:</strong> ${new Date(coupon.expiresAt).toLocaleDateString('en-ZA')}</p>
               <p><strong>Description:</strong> ${deal.description}</p>
+              ${deal.productSpecifications ? `<p><strong>Specifications:</strong> ${deal.productSpecifications}</p>` : ''}
             </div>
             <div class="footer">
               <p>Present this coupon to the supplier to redeem this offer</p>
@@ -280,6 +283,62 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         <p className="text-muted-foreground text-sm mb-4" data-testid="text-description">
           {deal.description}
         </p>
+
+        {/* Product Images Gallery */}
+        {deal.productImages && deal.productImages.length > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Package className="h-4 w-4 text-olive-600" />
+              <span className="text-sm font-medium text-charcoal-700">Product Images</span>
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {deal.productImages.slice(0, 4).map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`${deal.title} - Image ${index + 1}`}
+                  className="w-16 h-16 object-cover rounded-lg flex-shrink-0 border border-charcoal-200"
+                  data-testid={`img-product-${index}`}
+                />
+              ))}
+              {deal.productImages.length > 4 && (
+                <div className="w-16 h-16 bg-charcoal-100 rounded-lg flex-shrink-0 border border-charcoal-200 flex items-center justify-center text-xs text-charcoal-600">
+                  +{deal.productImages.length - 4}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Product Details */}
+        {(deal.size || deal.quantityAvailable || deal.productSpecifications) && (
+          <div className="mb-4 p-3 bg-olive-50 rounded-lg border border-olive-200">
+            {deal.size && (
+              <div className="flex items-center gap-2 mb-2">
+                <Ruler className="h-4 w-4 text-olive-600" />
+                <span className="text-sm text-charcoal-700">
+                  <span className="font-medium">Size:</span> {deal.size}
+                </span>
+              </div>
+            )}
+            {deal.quantityAvailable && (
+              <div className="flex items-center gap-2 mb-2">
+                <Box className="h-4 w-4 text-olive-600" />
+                <span className="text-sm text-charcoal-700">
+                  <span className="font-medium">Available:</span> {deal.quantityAvailable} units
+                </span>
+              </div>
+            )}
+            {deal.productSpecifications && (
+              <div className="mt-2">
+                <span className="text-sm font-medium text-charcoal-700">Specifications:</span>
+                <p className="text-sm text-charcoal-600 mt-1 line-clamp-2">
+                  {deal.productSpecifications}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex items-center justify-between mb-4">
           <div>
             <span className="text-2xl font-bold text-primary" data-testid="text-price">

@@ -55,6 +55,11 @@ export const deals = pgTable("deals", {
   status: dealStatusEnum("deal_status").notNull().default('active'),
   supplierId: varchar("supplier_id").notNull().references(() => users.id),
   imageUrl: varchar("image_url"),
+  // New fields for enhanced product details
+  productImages: text("product_images").array(),
+  size: varchar("size"),
+  quantityAvailable: integer("quantity_available"),
+  productSpecifications: text("product_specifications"),
   keywords: text("keywords").array(),
   expiresAt: timestamp("expires_at"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -184,6 +189,10 @@ export const insertDealSchema = createInsertSchema(deals)
     originalPrice: z.string().optional().nullable(),
     keywords: z.array(z.string()).optional().default([]),
     expiresAt: z.date().optional().nullable(),
+    productImages: z.array(z.string()).min(1, "At least one product image is required").optional().default([]),
+    size: z.string().optional(),
+    quantityAvailable: z.number().positive().optional(),
+    productSpecifications: z.string().optional(),
   });
 export const insertKeywordSchema = createInsertSchema(keywords).omit({ id: true, createdAt: true });
 export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true, createdAt: true });
