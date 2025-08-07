@@ -18,6 +18,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - Expanded business categories to 19 South African B2B categories
 - Added expired deals dropdown with reactivation functionality for suppliers
 - Removed buyer dashboard - only suppliers have dashboards now
+- Fixed expired deals dropdown visibility and functionality on supplier dashboard
 - All core features are now working: authentication, deal management, role switching, notifications, deal posting, deal browsing, expired deal management
 
 ## User Preferences
