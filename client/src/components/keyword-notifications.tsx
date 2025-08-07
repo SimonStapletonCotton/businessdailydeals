@@ -150,8 +150,8 @@ export default function KeywordNotifications() {
             <div className="flex flex-wrap gap-2 mb-4">
               {isLoading ? (
                 <p className="text-muted-foreground">Loading keywords...</p>
-              ) : keywords && keywords.length > 0 ? (
-                keywords.map((keyword: Keyword) => (
+              ) : Array.isArray(keywords) && keywords.length > 0 ? (
+                keywords.map((keyword: any) => (
                   <Badge
                     key={keyword.id}
                     variant="secondary"

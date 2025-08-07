@@ -2,9 +2,16 @@
 
 ## Overview
 
-This is a full-stack B2B marketplace application that connects suppliers with buyers through targeted deal notifications and special pricing. The platform enables suppliers to post deals (both hot deals and regular deals) while allowing buyers to discover opportunities through search, categories, and keyword-based notifications.
+This is a full-stack B2B marketplace application called "Business Deals" that connects suppliers with buyers through targeted deal notifications and special pricing. The platform enables suppliers to post deals (both hot deals with premium pricing and regular deals) while allowing buyers to discover opportunities through search, categories, and keyword-based notifications.
 
-The application is built with a modern web stack featuring React frontend, Express.js backend, PostgreSQL database with Drizzle ORM, and uses Replit's authentication system for user management.
+The application is built with a modern web stack featuring React frontend, Express.js backend, PostgreSQL database with Drizzle ORM, and uses Replit's authentication system for user management. The platform is fully operational with database migrations completed and authentication working correctly.
+
+## Recent Changes (Aug 7, 2025)
+- Fixed CSS compilation errors by updating Tailwind opacity classes
+- Completed PostgreSQL database setup and ran migrations successfully  
+- Resolved TypeScript errors in frontend components for proper type safety
+- Fixed server port configuration (running on port 5000 as configured)
+- All core features are now working: authentication, deal management, role switching, notifications
 
 ## User Preferences
 

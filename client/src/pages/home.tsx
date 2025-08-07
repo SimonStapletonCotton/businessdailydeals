@@ -33,8 +33,8 @@ export default function Home() {
     "Software & Services"
   ];
 
-  const displayedHotDeals = hotDeals?.slice(0, 3) || [];
-  const displayedRegularDeals = regularDeals?.slice(0, 4) || [];
+  const displayedHotDeals = Array.isArray(hotDeals) ? hotDeals.slice(0, 3) : [];
+  const displayedRegularDeals = Array.isArray(regularDeals) ? regularDeals.slice(0, 4) : [];
 
   return (
     <div className="min-h-screen bg-slate-50">

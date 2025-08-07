@@ -20,7 +20,7 @@ export default function Navbar() {
     enabled: isAuthenticated,
   });
 
-  const unreadCount = notifications?.filter((n: any) => !n.isRead).length || 0;
+  const unreadCount = Array.isArray(notifications) ? notifications.filter((n: any) => !n.isRead).length : 0;
 
   const updateUserTypeMutation = useMutation({
     mutationFn: async (userType: string) => {
@@ -59,7 +59,7 @@ export default function Navbar() {
           Regular Deals
         </Button>
       </Link>
-      {user?.userType === "supplier" ? (
+      {(user as UserType)?.userType === "supplier" ? (
         <Link href="/supplier-dashboard">
           <Button
             variant={location === "/supplier-dashboard" ? "default" : "ghost"}
@@ -103,7 +103,7 @@ export default function Navbar() {
               <>
                 <div className="hidden md:block">
                   <Select
-                    value={user?.userType || "buyer"}
+                    value={(user as UserType)?.userType || "buyer"}
                     onValueChange={handleUserTypeChange}
                   >
                     <SelectTrigger className="w-48" data-testid="select-user-type">
@@ -125,7 +125,7 @@ export default function Navbar() {
                   )}
                 </Button>
 
-                {user?.userType === "supplier" && (
+                {(user as UserType)?.userType === "supplier" && (
                   <Link href="/post-deal">
                     <Button className="bg-accent hover:bg-accent/90" data-testid="button-post-deal">
                       <Plus className="h-4 w-4 mr-2" />
@@ -165,7 +165,7 @@ export default function Navbar() {
                   {isAuthenticated && (
                     <div className="pt-4 border-t">
                       <Select
-                        value={user?.userType || "buyer"}
+                        value={(user as UserType)?.userType || "buyer"}
                         onValueChange={handleUserTypeChange}
                       >
                         <SelectTrigger className="w-full">
