@@ -23,7 +23,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { z } from "zod";
 
-const formSchema = insertDealSchema.extend({
+const formSchema = insertDealSchema.omit({ supplierId: true }).extend({
   keywords: z.array(z.string()).optional(),
   expiresAt: z.date().optional(),
 });
@@ -78,9 +78,9 @@ export default function PostDeal() {
     defaultValues: {
       title: "",
       description: "",
-      category: "",
-      price: "0",
-      originalPrice: "0",
+      category: "Electronics",
+      price: "",
+      originalPrice: "",
       discount: 0,
       minOrder: 1,
       dealType: "regular",
@@ -94,7 +94,13 @@ export default function PostDeal() {
       const dealData = {
         ...data,
         keywords: keywords.length > 0 ? keywords : undefined,
+        // Convert strings to numbers for API
+        price: data.price?.toString() || "0",
+        originalPrice: data.originalPrice?.toString() || "0",
+        minOrder: Number(data.minOrder) || 1,
+        discount: Number(data.discount) || 0,
       };
+      console.log("Sending to API:", dealData);
       await apiRequest("POST", "/api/deals", dealData);
     },
     onSuccess: () => {
@@ -125,6 +131,20 @@ export default function PostDeal() {
   });
 
   const onSubmit = (data: FormData) => {
+    console.log("Form submitted with data:", data);
+    console.log("User:", user);
+    console.log("Keywords:", keywords);
+    console.log("Authentication status:", { isAuthenticated, userType: (user as any)?.userType });
+    
+    if (!data.title || !data.description || !data.category || !data.price) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields (Title, Description, Category, Price).",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     createDealMutation.mutate(data);
   };
 
