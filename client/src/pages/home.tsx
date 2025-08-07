@@ -63,7 +63,9 @@ export default function Home() {
     "Retail & Wholesale",
     "Software & IT Services",
     "Telecommunications",
-    "Textiles & Apparel"
+    "Textiles & Apparel",
+    "Water",
+    "Other"
   ];
 
   // Filter and sort results

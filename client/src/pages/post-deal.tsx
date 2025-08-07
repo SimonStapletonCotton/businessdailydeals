@@ -49,6 +49,7 @@ const categories = [
   "Printing & Advertising",
   "Hospitality & Tourism",
   "Sports & Recreation",
+  "Water",
   "Other"
 ];
 

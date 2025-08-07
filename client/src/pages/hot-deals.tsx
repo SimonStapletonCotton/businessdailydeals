@@ -73,6 +73,7 @@ export default function HotDeals() {
     "Printing & Advertising",
     "Hospitality & Tourism",
     "Sports & Recreation",
+    "Water",
     "Other"
   ];
 

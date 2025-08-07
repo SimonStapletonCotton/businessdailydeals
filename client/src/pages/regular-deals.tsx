@@ -73,6 +73,7 @@ export default function RegularDeals() {
     "Printing & Advertising",
     "Hospitality & Tourism",
     "Sports & Recreation",
+    "Water",
     "Other"
   ];
 
