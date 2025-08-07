@@ -87,6 +87,21 @@ export const inquiries = pgTable("inquiries", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const coupons = pgTable("coupons", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  dealId: varchar("deal_id").notNull().references(() => deals.id),
+  buyerId: varchar("buyer_id").notNull().references(() => users.id),
+  supplierId: varchar("supplier_id").notNull().references(() => users.id),
+  couponCode: varchar("coupon_code").notNull().unique(),
+  status: varchar("status").notNull().default("active"), // "active", "redeemed", "expired"
+  downloadedAt: timestamp("downloaded_at").defaultNow(),
+  redeemedAt: timestamp("redeemed_at"),
+  expiresAt: timestamp("expires_at").notNull(),
+  redemptionNotes: text("redemption_notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   deals: many(deals),
@@ -94,6 +109,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   notifications: many(notifications),
   inquiriesAsBuyer: many(inquiries, { relationName: "buyer" }),
   inquiriesAsSupplier: many(inquiries, { relationName: "supplier" }),
+  couponsAsBuyer: many(coupons, { relationName: "buyer" }),
+  couponsAsSupplier: many(coupons, { relationName: "supplier" }),
 }));
 
 export const dealsRelations = relations(deals, ({ one, many }) => ({
@@ -103,6 +120,7 @@ export const dealsRelations = relations(deals, ({ one, many }) => ({
   }),
   notifications: many(notifications),
   inquiries: many(inquiries),
+  coupons: many(coupons),
 }));
 
 export const keywordsRelations = relations(keywords, ({ one }) => ({
@@ -140,6 +158,23 @@ export const inquiriesRelations = relations(inquiries, ({ one }) => ({
   }),
 }));
 
+export const couponsRelations = relations(coupons, ({ one }) => ({
+  deal: one(deals, {
+    fields: [coupons.dealId],
+    references: [deals.id],
+  }),
+  buyer: one(users, {
+    fields: [coupons.buyerId],
+    references: [users.id],
+    relationName: "buyer",
+  }),
+  supplier: one(users, {
+    fields: [coupons.supplierId],
+    references: [users.id],
+    relationName: "supplier",
+  }),
+}));
+
 // Insert schemas
 export const upsertUserSchema = createInsertSchema(users);
 export const insertDealSchema = createInsertSchema(deals)
@@ -153,6 +188,7 @@ export const insertDealSchema = createInsertSchema(deals)
 export const insertKeywordSchema = createInsertSchema(keywords).omit({ id: true, createdAt: true });
 export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true, createdAt: true });
 export const insertInquirySchema = createInsertSchema(inquiries).omit({ id: true, createdAt: true });
+export const insertCouponSchema = createInsertSchema(coupons).omit({ id: true, createdAt: true, updatedAt: true });
 
 // Types
 export type UpsertUser = z.infer<typeof upsertUserSchema>;
@@ -168,3 +204,6 @@ export type NotificationWithDeal = Notification & { deal: Deal };
 export type InsertInquiry = z.infer<typeof insertInquirySchema>;
 export type Inquiry = typeof inquiries.$inferSelect;
 export type InquiryWithDetails = Inquiry & { deal: Deal; buyer: User; supplier: User };
+export type InsertCoupon = z.infer<typeof insertCouponSchema>;
+export type Coupon = typeof coupons.$inferSelect;
+export type CouponWithDetails = Coupon & { deal: Deal; buyer: User; supplier: User };

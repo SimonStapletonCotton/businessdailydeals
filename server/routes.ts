@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { insertDealSchema, insertKeywordSchema, insertInquirySchema } from "@shared/schema";
+import { insertDealSchema, insertKeywordSchema, insertInquirySchema, insertCouponSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -296,6 +296,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating inquiry status:", error);
       res.status(500).json({ message: "Failed to update inquiry status" });
+    }
+  });
+
+  // Coupon routes
+  app.post('/api/coupons', isAuthenticated, async (req: any, res) => {
+    try {
+      const buyerId = req.user.claims.sub;
+      
+      // Generate unique coupon code
+      const couponCode = `BDD-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+      
+      // Set expiration date (30 days from now)
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 30);
+      
+      const couponData = insertCouponSchema.parse({
+        ...req.body,
+        buyerId,
+        couponCode,
+        expiresAt
+      });
+
+      const coupon = await storage.createCoupon(couponData);
+      res.status(201).json(coupon);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid coupon data", errors: error.errors });
+      }
+      console.error("Error creating coupon:", error);
+      res.status(500).json({ message: "Failed to create coupon" });
+    }
+  });
+
+  app.get('/api/buyer/coupons', isAuthenticated, async (req: any, res) => {
+    try {
+      const buyerId = req.user.claims.sub;
+      const coupons = await storage.getCouponsByBuyer(buyerId);
+      res.json(coupons);
+    } catch (error) {
+      console.error("Error fetching buyer coupons:", error);
+      res.status(500).json({ message: "Failed to fetch coupons" });
+    }
+  });
+
+  app.get('/api/supplier/coupons', isAuthenticated, async (req: any, res) => {
+    try {
+      const supplierId = req.user.claims.sub;
+      const coupons = await storage.getCouponsBySupplier(supplierId);
+      res.json(coupons);
+    } catch (error) {
+      console.error("Error fetching supplier coupons:", error);
+      res.status(500).json({ message: "Failed to fetch coupons" });
+    }
+  });
+
+  app.get('/api/coupons/:code', async (req, res) => {
+    try {
+      const coupon = await storage.getCouponByCode(req.params.code);
+      if (!coupon) {
+        return res.status(404).json({ message: "Coupon not found" });
+      }
+      res.json(coupon);
+    } catch (error) {
+      console.error("Error fetching coupon:", error);
+      res.status(500).json({ message: "Failed to fetch coupon" });
+    }
+  });
+
+  app.post('/api/coupons/:code/redeem', async (req, res) => {
+    try {
+      const { redemptionNotes } = req.body;
+      const coupon = await storage.redeemCoupon(req.params.code, redemptionNotes);
+      res.json(coupon);
+    } catch (error) {
+      console.error("Error redeeming coupon:", error);
+      res.status(500).json({ message: "Failed to redeem coupon" });
     }
   });
 

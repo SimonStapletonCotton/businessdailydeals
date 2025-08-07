@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Building, Star, Clock, Percent } from "lucide-react";
+import { Building, Star, Clock, Percent, Download } from "lucide-react";
 import { DealWithSupplier } from "@shared/schema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -53,12 +53,107 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
     },
   });
 
+  const createCouponMutation = useMutation({
+    mutationFn: async (data: { dealId: string; supplierId: string }) => {
+      return await apiRequest("POST", "/api/coupons", data);
+    },
+    onSuccess: (coupon) => {
+      toast({
+        title: "Coupon Created",
+        description: "Your coupon has been generated successfully! You can download it from your coupons page.",
+      });
+      // Generate and download PDF coupon
+      generateCouponPDF(coupon);
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to create coupon. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const generateCouponPDF = (coupon: any) => {
+    // Create a simple HTML coupon that can be printed or saved as PDF
+    const couponHTML = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Business Daily Deals Coupon</title>
+          <style>
+            body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+            .coupon { border: 3px dashed #6B7280; padding: 30px; margin: 20px 0; background: #F9FAFB; }
+            .header { text-align: center; color: #059669; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+            .code { background: #374151; color: white; padding: 10px; font-family: monospace; font-size: 18px; text-align: center; margin: 20px 0; }
+            .details { margin: 15px 0; }
+            .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #6B7280; }
+            .deal-title { font-size: 20px; font-weight: bold; color: #111827; margin-bottom: 10px; }
+            .price { font-size: 24px; color: #059669; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <div class="coupon">
+            <div class="header">🎫 BUSINESS DAILY DEALS COUPON</div>
+            <div class="deal-title">${deal.title}</div>
+            <div class="details">
+              <p><strong>Deal Price:</strong> <span class="price">R${parseFloat(deal.price).toLocaleString()}</span></p>
+              ${deal.originalPrice ? `<p><strong>Original Price:</strong> R${parseFloat(deal.originalPrice).toLocaleString()}</p>` : ''}
+              ${deal.discount ? `<p><strong>Discount:</strong> ${deal.discount}% OFF</p>` : ''}
+              <p><strong>Supplier:</strong> ${deal.supplier.companyName || deal.supplier.firstName}</p>
+              <p><strong>Category:</strong> ${deal.category}</p>
+              <p><strong>Min Order:</strong> ${deal.minOrder} unit${deal.minOrder !== 1 ? 's' : ''}</p>
+            </div>
+            <div class="code">Coupon Code: ${coupon.couponCode}</div>
+            <div class="details">
+              <p><strong>Valid Until:</strong> ${new Date(coupon.expiresAt).toLocaleDateString('en-ZA')}</p>
+              <p><strong>Description:</strong> ${deal.description}</p>
+            </div>
+            <div class="footer">
+              <p>Present this coupon to the supplier to redeem this offer</p>
+              <p>www.businessdailydeals.com.za</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Open coupon in new window for printing/saving
+    const newWindow = window.open('', '_blank');
+    if (newWindow) {
+      newWindow.document.write(couponHTML);
+      newWindow.document.close();
+    }
+  };
+
   const handleInquiry = () => {
     if (!isAuthenticated) {
       window.location.href = "/api/login";
       return;
     }
     setShowInquiryForm(true);
+  };
+
+  const handleGetCoupon = () => {
+    if (!isAuthenticated) {
+      window.location.href = "/api/login";
+      return;
+    }
+    createCouponMutation.mutate({
+      dealId: deal.id,
+      supplierId: deal.supplierId,
+    });
   };
 
   const submitInquiry = () => {
@@ -212,14 +307,26 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         </div>
         
         {!showInquiryForm ? (
-          <Button
-            className="w-full"
-            onClick={handleInquiry}
-            disabled={createInquiryMutation.isPending}
-            data-testid="button-request-quote"
-          >
-            Request Quote
-          </Button>
+          <div className="space-y-3">
+            <Button
+              className="w-full bg-olive-600 hover:bg-olive-700 text-white"
+              onClick={handleGetCoupon}
+              disabled={createCouponMutation.isPending}
+              data-testid="button-get-coupon"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              {createCouponMutation.isPending ? "Creating Coupon..." : "Get Coupon"}
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full border-olive-600 text-olive-600 hover:bg-olive-50"
+              onClick={handleInquiry}
+              disabled={createInquiryMutation.isPending}
+              data-testid="button-request-quote"
+            >
+              Request Quote
+            </Button>
+          </div>
         ) : (
           <div className="space-y-3">
             <textarea

@@ -4,6 +4,7 @@ import {
   keywords,
   notifications,
   inquiries,
+  coupons,
   type User,
   type UpsertUser,
   type Deal,
@@ -17,6 +18,9 @@ import {
   type Inquiry,
   type InquiryWithDetails,
   type InsertInquiry,
+  type Coupon,
+  type InsertCoupon,
+  type CouponWithDetails,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, or, like, inArray } from "drizzle-orm";
@@ -53,6 +57,14 @@ export interface IStorage {
   getInquiriesByBuyer(buyerId: string): Promise<InquiryWithDetails[]>;
   createInquiry(inquiry: InsertInquiry): Promise<Inquiry>;
   updateInquiryStatus(id: string, status: string): Promise<Inquiry>;
+  
+  // Coupon operations
+  createCoupon(coupon: InsertCoupon): Promise<Coupon>;
+  getCouponsByBuyer(buyerId: string): Promise<CouponWithDetails[]>;
+  getCouponsBySupplier(supplierId: string): Promise<CouponWithDetails[]>;
+  getCouponByCode(couponCode: string): Promise<CouponWithDetails | undefined>;
+  redeemCoupon(couponCode: string, redemptionNotes?: string): Promise<Coupon>;
+  expireCoupon(id: string): Promise<Coupon>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -310,6 +322,104 @@ export class DatabaseStorage implements IStorage {
       .where(eq(inquiries.id, id))
       .returning();
     return inquiry;
+  }
+
+  // Coupon operations
+  async createCoupon(coupon: InsertCoupon): Promise<Coupon> {
+    const [newCoupon] = await db
+      .insert(coupons)
+      .values(coupon)
+      .returning();
+    
+    return newCoupon;
+  }
+
+  async getCouponsByBuyer(buyerId: string): Promise<CouponWithDetails[]> {
+    const result = await db
+      .select()
+      .from(coupons)
+      .leftJoin(deals, eq(coupons.dealId, deals.id))
+      .leftJoin(users, eq(coupons.supplierId, users.id))
+      .where(eq(coupons.buyerId, buyerId))
+      .orderBy(desc(coupons.createdAt));
+
+    return result.map(row => ({
+      ...row.coupons,
+      deal: row.deals!,
+      buyer: {} as User, // Already filtered by buyer
+      supplier: row.users!,
+    }));
+  }
+
+  async getCouponsBySupplier(supplierId: string): Promise<CouponWithDetails[]> {
+    const result = await db
+      .select()
+      .from(coupons)
+      .leftJoin(deals, eq(coupons.dealId, deals.id))
+      .leftJoin(users, eq(coupons.buyerId, users.id))
+      .where(eq(coupons.supplierId, supplierId))
+      .orderBy(desc(coupons.createdAt));
+
+    return result.map(row => ({
+      ...row.coupons,
+      deal: row.deals!,
+      buyer: row.users!,
+      supplier: {} as User, // Already filtered by supplier
+    }));
+  }
+
+  async getCouponByCode(couponCode: string): Promise<CouponWithDetails | undefined> {
+    const [result] = await db
+      .select()
+      .from(coupons)
+      .leftJoin(deals, eq(coupons.dealId, deals.id))
+      .leftJoin(users, eq(coupons.buyerId, users.id))
+      .where(eq(coupons.couponCode, couponCode));
+    
+    if (!result) return undefined;
+
+    return {
+      ...result.coupons,
+      deal: result.deals!,
+      buyer: result.users!,
+      supplier: {} as User,
+    };
+  }
+
+  async redeemCoupon(couponCode: string, redemptionNotes?: string): Promise<Coupon> {
+    const [coupon] = await db
+      .update(coupons)
+      .set({ 
+        status: "redeemed",
+        redeemedAt: new Date(),
+        redemptionNotes,
+        updatedAt: new Date(),
+      })
+      .where(eq(coupons.couponCode, couponCode))
+      .returning();
+    
+    if (!coupon) {
+      throw new Error("Coupon not found");
+    }
+    
+    return coupon;
+  }
+
+  async expireCoupon(id: string): Promise<Coupon> {
+    const [coupon] = await db
+      .update(coupons)
+      .set({ 
+        status: "expired",
+        updatedAt: new Date(),
+      })
+      .where(eq(coupons.id, id))
+      .returning();
+    
+    if (!coupon) {
+      throw new Error("Coupon not found");
+    }
+    
+    return coupon;
   }
 }
 
