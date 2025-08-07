@@ -1,7 +1,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Building, Star, Clock, Percent, Download, Package, Ruler, Box } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash } from "lucide-react";
 import { DealWithSupplier } from "@shared/schema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -19,6 +23,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
   const { toast } = useToast();
   const { isAuthenticated } = useAuth();
   const [showInquiryForm, setShowInquiryForm] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const [inquiryMessage, setInquiryMessage] = useState("");
 
   const createInquiryMutation = useMutation({
@@ -148,6 +153,10 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
     setShowInquiryForm(true);
   };
 
+  const handleViewDetails = () => {
+    setShowDetails(true);
+  };
+
   const handleGetCoupon = () => {
     if (!isAuthenticated) {
       window.location.href = "/api/login";
@@ -230,12 +239,134 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           <Button
             className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
             size="sm"
-            onClick={handleInquiry}
+            onClick={handleViewDetails}
             data-testid="button-view-details"
           >
             View Details
           </Button>
         </CardContent>
+
+        {/* Details Dialog */}
+        <Dialog open={showDetails} onOpenChange={setShowDetails}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Package className="h-5 w-5" />
+                {deal.title}
+              </DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-6">
+              {/* Deal Images */}
+              {deal.productImages && deal.productImages.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    Product Images
+                  </h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {deal.productImages.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`${deal.title} - Image ${index + 1}`}
+                        className="w-full h-32 object-cover rounded-lg border"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Basic Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm font-medium text-muted-foreground">Category</Label>
+                  <p className="text-sm">{deal.category}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-muted-foreground">Price</Label>
+                  <p className="text-lg font-bold text-primary">{formatPrice(deal.price)}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-muted-foreground">Minimum Order</Label>
+                  <p className="text-sm">{deal.minOrder} unit{deal.minOrder !== 1 ? 's' : ''}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-muted-foreground">Supplier</Label>
+                  <p className="text-sm">{deal.supplier.companyName || deal.supplier.firstName}</p>
+                </div>
+              </div>
+
+              {/* Product Details */}
+              {(deal.size || deal.quantityAvailable) && (
+                <div>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <Box className="h-4 w-4" />
+                    Product Information
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {deal.size && (
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
+                          <Ruler className="h-3 w-3" />
+                          Size
+                        </Label>
+                        <p className="text-sm">{deal.size}</p>
+                      </div>
+                    )}
+                    {deal.quantityAvailable && (
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
+                          <Hash className="h-3 w-3" />
+                          Available Quantity
+                        </Label>
+                        <p className="text-sm">{deal.quantityAvailable} units</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Description */}
+              <div>
+                <Label className="text-sm font-medium text-muted-foreground">Description</Label>
+                <p className="text-sm mt-1 leading-relaxed">{deal.description}</p>
+              </div>
+
+              {/* Product Specifications */}
+              {deal.productSpecifications && (
+                <div>
+                  <Label className="text-sm font-medium text-muted-foreground">Product Specifications</Label>
+                  <p className="text-sm mt-1 leading-relaxed bg-muted p-3 rounded">{deal.productSpecifications}</p>
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex gap-3 pt-4 border-t">
+                <Button
+                  onClick={() => {
+                    setShowDetails(false);
+                    handleInquiry();
+                  }}
+                  className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Send Inquiry
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowDetails(false);
+                    handleGetCoupon();
+                  }}
+                  className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Get Coupon
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </Card>
     );
   }
