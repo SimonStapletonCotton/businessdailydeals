@@ -12,7 +12,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <h1 className="text-2xl font-bold text-primary" data-testid="text-logo">
-              Business Deals
+              Business Daily Deals
             </h1>
             <Button
               onClick={() => (window.location.href = "/api/login")}
@@ -28,10 +28,10 @@ export default function Landing() {
       <section className="gradient-hero text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6" data-testid="text-hero-title">
-            B2B Marketplace for Exclusive Deals
+            Business Daily Deals
           </h2>
           <p className="text-xl mb-8 opacity-90" data-testid="text-hero-description">
-            Connect suppliers with buyers through targeted notifications and special pricing
+            South Africa's premier B2B marketplace connecting suppliers with buyers through exclusive daily deals
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button

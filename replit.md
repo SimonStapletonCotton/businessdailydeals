@@ -1,8 +1,8 @@
-# Business Deals B2B Marketplace
+# Business Daily Deals B2B Marketplace
 
 ## Overview
 
-This is a full-stack B2B marketplace application called "Business Deals" that connects suppliers with buyers through targeted deal notifications and special pricing. The platform enables suppliers to post deals (both hot deals with premium pricing and regular deals) while allowing buyers to discover opportunities through search, categories, and keyword-based notifications.
+This is a full-stack B2B marketplace application called "Business Daily Deals" (www.businessdailydeals.com.za) that connects suppliers with buyers through targeted deal notifications and special pricing. The platform serves the South African B2B market, enabling suppliers to post deals (both hot deals with premium pricing and regular deals) while allowing buyers to discover opportunities through search, categories, and keyword-based notifications.
 
 The application is built with a modern web stack featuring React frontend, Express.js backend, PostgreSQL database with Drizzle ORM, and uses Replit's authentication system for user management. The platform is fully operational with database migrations completed and authentication working correctly.
 
@@ -16,6 +16,9 @@ The application is built with a modern web stack featuring React frontend, Expre
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Brand name: Business Daily Deals
+Domain: www.businessdailydeals.com.za
+Target market: South African B2B marketplace
 
 ## System Architecture
 

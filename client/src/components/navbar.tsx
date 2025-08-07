@@ -90,7 +90,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-8">
             <Link href="/">
               <h1 className="text-2xl font-bold text-primary cursor-pointer" data-testid="text-logo">
-                Business Deals
+                Business Daily Deals
               </h1>
             </Link>
             <nav className="hidden md:flex space-x-2">
