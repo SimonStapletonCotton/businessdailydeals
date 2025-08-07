@@ -284,26 +284,27 @@ export default function SupplierDashboard() {
         </Card>
 
         {/* Expired Deals Dropdown */}
-        {expiredDeals && expiredDeals.length > 0 && (
-          <Card className="mt-8">
-            <CardHeader>
-              <Button
-                variant="ghost"
-                onClick={() => setShowExpiredDeals(!showExpiredDeals)}
-                className="w-full justify-between"
-                data-testid="button-toggle-expired-deals"
-              >
-                <span className="flex items-center">
-                  <RotateCcw className="h-5 w-5 mr-2" />
-                  Expired Deals ({expiredDeals.length})
-                </span>
-                {showExpiredDeals ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-              </Button>
-            </CardHeader>
+        <Card className="mt-8">
+          <CardHeader>
+            <Button
+              variant="ghost"
+              onClick={() => setShowExpiredDeals(!showExpiredDeals)}
+              className="w-full justify-between"
+              data-testid="button-toggle-expired-deals"
+            >
+              <span className="flex items-center">
+                <RotateCcw className="h-5 w-5 mr-2" />
+                Expired Deals ({expiredDeals?.length || 0})
+                {expiredDealsLoading && <span className="ml-2 text-muted-foreground">(Loading...)</span>}
+              </span>
+              {showExpiredDeals ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+          </CardHeader>
             {showExpiredDeals && (
               <CardContent>
-                <div className="space-y-4">
-                  {expiredDeals.map((deal: DealWithSupplier) => (
+                {expiredDeals && expiredDeals.length > 0 ? (
+                  <div className="space-y-4">
+                    {expiredDeals.map((deal: DealWithSupplier) => (
                     <div key={deal.id} className="flex items-center justify-between p-4 border border-border rounded-lg bg-slate-50">
                       <div className="flex-1">
                         <h4 className="font-semibold text-slate-900" data-testid={`text-expired-deal-title-${deal.id}`}>
@@ -379,12 +380,19 @@ export default function SupplierDashboard() {
                         )}
                       </div>
                     </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <RotateCcw className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground" data-testid="text-no-expired-deals">
+                      No expired deals to reactivate.
+                    </p>
+                  </div>
+                )}
               </CardContent>
             )}
-          </Card>
-        )}
+        </Card>
       </main>
     </div>
   );
