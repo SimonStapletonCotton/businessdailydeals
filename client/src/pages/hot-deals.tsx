@@ -33,7 +33,23 @@ export default function HotDeals() {
   }, [isAuthenticated, isLoading, toast]);
 
   const { data: deals, isLoading: dealsLoading } = useQuery<DealWithSupplier[]>({
-    queryKey: ["/api/deals", { type: "hot", search: searchQuery, category: selectedCategory }],
+    queryKey: ["/api/deals", "hot", searchQuery, selectedCategory],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      params.set("type", "hot");
+      if (searchQuery) params.set("search", searchQuery);
+      if (selectedCategory && selectedCategory !== "All Categories") params.set("category", selectedCategory);
+      
+      const res = await fetch(`/api/deals?${params.toString()}`, {
+        credentials: "include",
+      });
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
+      return await res.json();
+    },
     enabled: isAuthenticated,
   });
 

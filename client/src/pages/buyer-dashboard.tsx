@@ -49,12 +49,26 @@ export default function BuyerDashboard() {
   });
 
   const { data: hotDeals, isLoading: hotDealsLoading } = useQuery<DealWithSupplier[]>({
-    queryKey: ["/api/deals", { type: "hot" }],
+    queryKey: ["/api/deals", "hot"],
+    queryFn: async () => {
+      const res = await fetch("/api/deals?type=hot", {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      return await res.json();
+    },
     enabled: isAuthenticated && user?.userType === "buyer",
   });
 
   const { data: regularDeals, isLoading: regularDealsLoading } = useQuery<DealWithSupplier[]>({
-    queryKey: ["/api/deals", { type: "regular" }],
+    queryKey: ["/api/deals", "regular"],
+    queryFn: async () => {
+      const res = await fetch("/api/deals?type=regular", {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      return await res.json();
+    },
     enabled: isAuthenticated && user?.userType === "buyer",
   });
 
