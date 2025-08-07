@@ -101,7 +101,7 @@ export default function PostDeal() {
         minOrder: Number(data.minOrder) || 1,
         dealType: data.dealType,
         imageUrl: data.imageUrl || "",
-        keywords: keywords.length > 0 ? keywords : undefined,
+        keywords: keywords.length > 0 ? keywords : [],
         expiresAt: data.expiresAt,
       };
       console.log("Sending to API:", dealData);

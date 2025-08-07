@@ -82,10 +82,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log("Received request body:", JSON.stringify(req.body, null, 2));
 
-      const dealData = insertDealSchema.parse({
+      // Clean up data before validation
+      const cleanedData = {
         ...req.body,
-        supplierId: userId
-      });
+        supplierId: userId,
+        originalPrice: req.body.originalPrice || null,
+        keywords: Array.isArray(req.body.keywords) ? req.body.keywords : [],
+        expiresAt: req.body.expiresAt ? new Date(req.body.expiresAt) : null,
+      };
+
+      const dealData = insertDealSchema.parse(cleanedData);
 
       console.log("Parsed deal data:", JSON.stringify(dealData, null, 2));
 

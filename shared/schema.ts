@@ -145,8 +145,10 @@ export const upsertUserSchema = createInsertSchema(users);
 export const insertDealSchema = createInsertSchema(deals)
   .omit({ id: true, createdAt: true, updatedAt: true })
   .extend({
-    price: z.string().transform((val) => val),
-    originalPrice: z.string().optional().transform((val) => val || undefined),
+    price: z.string().min(1, "Price is required"),
+    originalPrice: z.string().optional().nullable(),
+    keywords: z.array(z.string()).optional().default([]),
+    expiresAt: z.date().optional().nullable(),
   });
 export const insertKeywordSchema = createInsertSchema(keywords).omit({ id: true, createdAt: true });
 export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true, createdAt: true });
