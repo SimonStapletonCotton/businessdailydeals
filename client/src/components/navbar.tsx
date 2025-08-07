@@ -59,22 +59,12 @@ export default function Navbar() {
           Regular Deals
         </Button>
       </Link>
-      {(user as UserType)?.userType === "supplier" ? (
+      {(user as UserType)?.userType === "supplier" && (
         <Link href="/supplier-dashboard">
           <Button
             variant={location === "/supplier-dashboard" ? "default" : "ghost"}
             className="text-sm font-medium"
             data-testid="link-supplier-dashboard"
-          >
-            Dashboard
-          </Button>
-        </Link>
-      ) : (
-        <Link href="/buyer-dashboard">
-          <Button
-            variant={location === "/buyer-dashboard" ? "default" : "ghost"}
-            className="text-sm font-medium"
-            data-testid="link-buyer-dashboard"
           >
             Dashboard
           </Button>

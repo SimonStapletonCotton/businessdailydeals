@@ -17,6 +17,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - Added "REGULAR" badges to regular deal cards for better visual identification
 - Expanded business categories to 19 South African B2B categories
 - Added expired deals dropdown with reactivation functionality for suppliers
+- Removed buyer dashboard - only suppliers have dashboards now
 - All core features are now working: authentication, deal management, role switching, notifications, deal posting, deal browsing, expired deal management
 
 ## User Preferences
@@ -65,7 +66,7 @@ Pricing structure: Hot deals (premium home page placement, higher pricing) vs Re
 - **Smart Notifications**: Keyword-based matching system that alerts buyers to relevant deals
 - **Search & Discovery**: Full-text search with category filtering
 - **Inquiry System**: Direct communication channel between buyers and suppliers
-- **Dashboard Views**: Role-specific dashboards for buyers and suppliers
+- **Supplier Dashboard**: Comprehensive dashboard for suppliers to manage deals, view inquiries, and reactivate expired deals
 - **Responsive Design**: Mobile-first approach with responsive navigation
 
 ## External Dependencies

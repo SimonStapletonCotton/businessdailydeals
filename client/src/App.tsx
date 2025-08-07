@@ -9,7 +9,6 @@ import Home from "@/pages/home";
 import HotDeals from "@/pages/hot-deals";
 import RegularDeals from "@/pages/regular-deals";
 import SupplierDashboard from "@/pages/supplier-dashboard";
-import BuyerDashboard from "@/pages/buyer-dashboard";
 import PostDeal from "@/pages/post-deal";
 import NotFound from "@/pages/not-found";
 
@@ -26,7 +25,6 @@ function Router() {
           <Route path="/hot-deals" component={HotDeals} />
           <Route path="/regular-deals" component={RegularDeals} />
           <Route path="/supplier-dashboard" component={SupplierDashboard} />
-          <Route path="/buyer-dashboard" component={BuyerDashboard} />
           <Route path="/post-deal" component={PostDeal} />
         </>
       )}
