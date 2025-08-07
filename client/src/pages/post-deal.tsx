@@ -156,20 +156,46 @@ export default function PostDeal() {
       <div className="min-h-screen bg-slate-50">
         <Navbar />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">Loading...</div>
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-300 rounded mb-4"></div>
+              <div className="h-4 bg-gray-300 rounded mb-8"></div>
+              <div className="h-64 bg-gray-300 rounded"></div>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
-  if (!isAuthenticated || (user as any)?.userType !== "supplier") {
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-slate-50">
         <Navbar />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-slate-900 mb-4">Access Denied</h1>
-            <p className="text-muted-foreground">Only suppliers can post deals.</p>
+            <h1 className="text-2xl font-bold text-slate-900 mb-4">Login Required</h1>
+            <p className="text-muted-foreground mb-4">Please log in to post deals.</p>
+            <Button onClick={() => window.location.href = "/api/login"}>
+              Login
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if ((user as any)?.userType !== "supplier") {
+    return (
+      <div className="min-h-screen bg-slate-50">
+        <Navbar />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-slate-900 mb-4">Supplier Access Required</h1>
+            <p className="text-muted-foreground mb-4">Only suppliers can post deals. Please switch to supplier mode.</p>
+            <Button onClick={() => setLocation("/")}>
+              Go Home
+            </Button>
           </div>
         </div>
       </div>
