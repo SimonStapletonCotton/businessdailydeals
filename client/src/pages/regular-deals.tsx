@@ -58,7 +58,22 @@ export default function RegularDeals() {
     "Electronics",
     "Industrial Equipment", 
     "Office Supplies",
-    "Software & Services"
+    "Software & Services",
+    "Construction & Building",
+    "Automotive & Transport",
+    "Food & Beverage",
+    "Healthcare & Medical",
+    "Agriculture & Farming",
+    "Textiles & Clothing",
+    "Energy & Utilities",
+    "Packaging & Logistics",
+    "Safety & Security",
+    "Cleaning & Maintenance",
+    "Manufacturing & Tools",
+    "Printing & Advertising",
+    "Hospitality & Tourism",
+    "Sports & Recreation",
+    "Other"
   ];
 
   if (isLoading) {
