@@ -12,7 +12,8 @@ The application is built with a modern web stack featuring React frontend, Expre
 - Resolved TypeScript errors in frontend components for proper type safety
 - Fixed server port configuration (running on port 5000 as configured)
 - Fixed deal posting validation issues with proper schema handling for decimal fields and arrays
-- All core features are now working: authentication, deal management, role switching, notifications, deal posting
+- Fixed TanStack Query URL construction issues causing "[object Object]" errors in deal browsing
+- All core features are now working: authentication, deal management, role switching, notifications, deal posting, deal browsing
 
 ## User Preferences
 
