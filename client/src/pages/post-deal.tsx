@@ -92,13 +92,17 @@ export default function PostDeal() {
   const createDealMutation = useMutation({
     mutationFn: async (data: FormData) => {
       const dealData = {
-        ...data,
-        keywords: keywords.length > 0 ? keywords : undefined,
-        // Convert strings to numbers for API
-        price: data.price?.toString() || "0",
-        originalPrice: data.originalPrice?.toString() || "0",
-        minOrder: Number(data.minOrder) || 1,
+        title: data.title,
+        description: data.description,
+        category: data.category,
+        price: data.price,
+        originalPrice: data.originalPrice || undefined,
         discount: Number(data.discount) || 0,
+        minOrder: Number(data.minOrder) || 1,
+        dealType: data.dealType,
+        imageUrl: data.imageUrl || "",
+        keywords: keywords.length > 0 ? keywords : undefined,
+        expiresAt: data.expiresAt,
       };
       console.log("Sending to API:", dealData);
       await apiRequest("POST", "/api/deals", dealData);
