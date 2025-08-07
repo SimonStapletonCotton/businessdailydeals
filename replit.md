@@ -19,6 +19,7 @@ Preferred communication style: Simple, everyday language.
 Brand name: Business Daily Deals
 Domain: www.businessdailydeals.com.za
 Target market: South African B2B marketplace
+Pricing structure: Hot deals (premium home page placement, higher pricing) vs Regular deals (dropdown sections, standard pricing)
 
 ## System Architecture
 

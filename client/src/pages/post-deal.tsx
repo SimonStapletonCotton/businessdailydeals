@@ -63,7 +63,7 @@ export default function PostDeal() {
       }, 500);
       return;
     }
-    if (!isLoading && isAuthenticated && user?.userType !== "supplier") {
+    if (!isLoading && isAuthenticated && (user as any)?.userType !== "supplier") {
       toast({
         title: "Access Denied",
         description: "Only suppliers can post deals.",
@@ -162,7 +162,7 @@ export default function PostDeal() {
     );
   }
 
-  if (!isAuthenticated || user?.userType !== "supplier") {
+  if (!isAuthenticated || (user as any)?.userType !== "supplier") {
     return (
       <div className="min-h-screen bg-slate-50">
         <Navbar />
@@ -340,6 +340,7 @@ export default function PostDeal() {
                             min="0"
                             placeholder="0.00"
                             {...field}
+                            value={field.value || ""}
                             onChange={(e) => {
                               field.onChange(e);
                               setTimeout(calculateDiscount, 100);
@@ -440,6 +441,7 @@ export default function PostDeal() {
                           <Input
                             placeholder="https://example.com/image.jpg"
                             {...field}
+                            value={field.value || ""}
                             data-testid="input-image-url"
                           />
                         </FormControl>
@@ -579,10 +581,10 @@ export default function PostDeal() {
             <div className="flex items-start space-x-3">
               <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
               <div>
-                <h4 className="font-semibold text-amber-800 mb-2">Pricing Guidelines</h4>
+                <h4 className="font-semibold text-amber-800 mb-2">Pricing Structure</h4>
                 <ul className="text-sm text-amber-700 space-y-1">
-                  <li>• Hot deals get premium placement and visibility on the platform</li>
-                  <li>• Regular deals should provide competitive pricing</li>
+                  <li>• <strong>Hot Deals:</strong> Premium placement on home page with higher pricing</li>
+                  <li>• <strong>Regular Deals:</strong> Listed in dropdown sections with standard pricing</li>
                   <li>• Include shipping costs in your pricing or specify shipping terms</li>
                   <li>• Set realistic minimum order quantities to attract buyers</li>
                 </ul>
