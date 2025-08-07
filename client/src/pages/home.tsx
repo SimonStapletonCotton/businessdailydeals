@@ -43,16 +43,6 @@ export default function Home() {
     enabled: !searchQuery.trim(),
   });
 
-  const { data: regularDeals, isLoading: regularDealsLoading } = useQuery({
-    queryKey: ["/api/deals", "regular"],
-    queryFn: async () => {
-      const response = await fetch('/api/deals?type=regular');
-      if (!response.ok) throw new Error('Failed to fetch regular deals');
-      return response.json();
-    },
-    enabled: !searchQuery.trim(),
-  });
-
   const categories = [
     "All Categories",
     "Agriculture & Farming",
@@ -77,8 +67,7 @@ export default function Home() {
   ];
 
   // Filter and sort results
-  const displayedHotDeals = Array.isArray(hotDeals) ? hotDeals.slice(0, 3) : [];
-  const displayedRegularDeals = Array.isArray(regularDeals) ? regularDeals.slice(0, 4) : [];
+  const displayedHotDeals = Array.isArray(hotDeals) ? hotDeals.slice(0, 6) : [];
 
   // Sort search results
   const sortedSearchResults = Array.isArray(searchResults) ? [...searchResults].sort((a, b) => {
@@ -95,7 +84,7 @@ export default function Home() {
   }) : [];
 
   const isSearching = !!searchQuery.trim();
-  const showLoading = isSearching ? searchLoading : (hotDealsLoading || regularDealsLoading);
+  const showLoading = isSearching ? searchLoading : hotDealsLoading;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
@@ -286,7 +275,7 @@ export default function Home() {
           
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {hotDealsLoading ? (
-                Array.from({ length: 3 }, (_, i) => (
+                Array.from({ length: 6 }, (_, i) => (
                   <Card key={i} className="animate-pulse overflow-hidden shadow-lg">
                     <div className="w-full h-48 bg-gradient-to-r from-slate-200 to-slate-300"></div>
                     <CardContent className="p-6">
@@ -297,55 +286,23 @@ export default function Home() {
                     </CardContent>
                   </Card>
                 ))
-              ) : (
+              ) : displayedHotDeals.length > 0 ? (
                 displayedHotDeals.map((deal: DealWithSupplier) => (
                   <DealCard key={deal.id} deal={deal} variant="hot" />
                 ))
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* Regular Deals Section */}
-        {!isSearching && (
-          <section className="mb-16">
-            <div className="text-center mb-12">
-              <Badge variant="secondary" className="mb-4 bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 px-4 py-2">
-                <TrendingUp className="w-4 h-4 mr-2" />
-                Marketplace Standards
-              </Badge>
-              <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4" data-testid="text-regular-deals-title">
-                Discover Quality Products
-              </h3>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Competitive pricing on everyday business essentials from verified suppliers
-              </p>
-            </div>
-            <div className="flex justify-end mb-6">
-              <Link href="/regular-deals">
-                <Button variant="outline" className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200 text-blue-700 hover:from-blue-100 hover:to-cyan-100" data-testid="button-view-all-regular">
-                  Browse All Products <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {regularDealsLoading ? (
-                Array.from({ length: 4 }, (_, i) => (
-                  <Card key={i} className="animate-pulse overflow-hidden shadow-md">
-                    <div className="w-full h-32 bg-gradient-to-r from-slate-200 to-slate-300"></div>
-                    <CardContent className="p-4">
-                      <div className="h-3 bg-slate-200 rounded mb-2"></div>
-                      <div className="h-4 bg-slate-200 rounded mb-2"></div>
-                      <div className="h-3 bg-slate-200 rounded mb-3"></div>
-                      <div className="h-8 bg-slate-200 rounded"></div>
-                    </CardContent>
-                  </Card>
-                ))
               ) : (
-                displayedRegularDeals.map((deal: DealWithSupplier) => (
-                  <DealCard key={deal.id} deal={deal} variant="regular" />
-                ))
+                <div className="col-span-full text-center py-12">
+                  <Flame className="mx-auto h-16 w-16 text-red-300 mb-4" />
+                  <h4 className="text-xl font-semibold text-slate-900 mb-2">No Hot Deals Available</h4>
+                  <p className="text-muted-foreground mb-6">
+                    Check back soon for exclusive premium deals from verified suppliers
+                  </p>
+                  <Link href="/regular-deals">
+                    <Button variant="outline">
+                      Browse Regular Deals <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
           </section>

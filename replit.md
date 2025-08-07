@@ -20,6 +20,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - Removed buyer dashboard - only suppliers have dashboards now
 - Fixed expired deals dropdown visibility and functionality on supplier dashboard
 - Modernized home page with contemporary design, gradients, better layouts, and enhanced user experience
+- Updated home page to show only hot deals (6 deals) - regular deals removed per user requirement
 - All core features are now working: authentication, deal management, role switching, notifications, deal posting, deal browsing, expired deal management
 
 ## User Preferences
