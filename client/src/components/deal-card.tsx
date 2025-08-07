@@ -97,7 +97,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
   if (variant === "regular") {
     return (
       <Card className={`hover:shadow-lg transition-all duration-300 ${cardClass} relative`}>
-        <div className="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold z-10">
+        <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-semibold z-10">
           REGULAR
         </div>
         {deal.imageUrl && (

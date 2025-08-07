@@ -78,7 +78,7 @@ export default function HotDeals() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 to-slate-50">
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">Loading...</div>
@@ -88,16 +88,16 @@ export default function HotDeals() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-slate-50">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 flex items-center mb-2" data-testid="text-page-title">
-            <Flame className="text-red-500 mr-3" />
+            <Flame className="text-primary mr-3" />
             Hot Deals
-            <span className="ml-3 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold">
+            <span className="ml-3 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
               Premium
             </span>
           </h1>
