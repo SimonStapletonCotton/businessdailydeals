@@ -189,7 +189,7 @@ export const insertDealSchema = createInsertSchema(deals)
     originalPrice: z.string().optional().nullable(),
     keywords: z.array(z.string()).optional().default([]),
     expiresAt: z.date().optional().nullable(),
-    productImages: z.array(z.string()).min(1, "At least one product image is required").optional().default([]),
+    productImages: z.array(z.string()).optional().default([]),
     size: z.string().optional(),
     quantityAvailable: z.number().positive().optional(),
     productSpecifications: z.string().optional(),

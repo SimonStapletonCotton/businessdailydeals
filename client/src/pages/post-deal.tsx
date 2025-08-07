@@ -168,14 +168,7 @@ export default function PostDeal() {
       return;
     }
 
-    if (productImages.length === 0) {
-      toast({
-        title: "Product Images Required",
-        description: "Please add at least one product image.",
-        variant: "destructive",
-      });
-      return;
-    }
+
     
     createDealMutation.mutate(data);
   };
