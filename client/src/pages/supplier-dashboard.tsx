@@ -36,12 +36,12 @@ export default function SupplierDashboard() {
     }
   }, [isAuthenticated, isLoading, user, toast]);
 
-  const { data: deals, isLoading: dealsLoading } = useQuery({
+  const { data: deals, isLoading: dealsLoading } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/supplier/deals"],
     enabled: isAuthenticated && user?.userType === "supplier",
   });
 
-  const { data: inquiries, isLoading: inquiriesLoading } = useQuery({
+  const { data: inquiries, isLoading: inquiriesLoading } = useQuery<InquiryWithDetails[]>({
     queryKey: ["/api/supplier/inquiries"],
     enabled: isAuthenticated && user?.userType === "supplier",
   });
@@ -175,7 +175,7 @@ export default function SupplierDashboard() {
                         {inquiry.status}
                       </Badge>
                       <div className="text-xs text-muted-foreground" data-testid={`text-inquiry-date-${inquiry.id}`}>
-                        {new Date(inquiry.createdAt).toLocaleDateString()}
+                        {inquiry.createdAt ? new Date(inquiry.createdAt).toLocaleDateString() : 'Unknown date'}
                       </div>
                     </div>
                   </div>

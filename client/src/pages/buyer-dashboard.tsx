@@ -38,22 +38,22 @@ export default function BuyerDashboard() {
     }
   }, [isAuthenticated, isLoading, user, toast]);
 
-  const { data: notifications, isLoading: notificationsLoading } = useQuery({
+  const { data: notifications, isLoading: notificationsLoading } = useQuery<NotificationWithDeal[]>({
     queryKey: ["/api/notifications"],
     enabled: isAuthenticated && user?.userType === "buyer",
   });
 
-  const { data: inquiries, isLoading: inquiriesLoading } = useQuery({
+  const { data: inquiries, isLoading: inquiriesLoading } = useQuery<InquiryWithDetails[]>({
     queryKey: ["/api/buyer/inquiries"],
     enabled: isAuthenticated && user?.userType === "buyer",
   });
 
-  const { data: hotDeals, isLoading: hotDealsLoading } = useQuery({
+  const { data: hotDeals, isLoading: hotDealsLoading } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/deals", { type: "hot" }],
     enabled: isAuthenticated && user?.userType === "buyer",
   });
 
-  const { data: regularDeals, isLoading: regularDealsLoading } = useQuery({
+  const { data: regularDeals, isLoading: regularDealsLoading } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/deals", { type: "regular" }],
     enabled: isAuthenticated && user?.userType === "buyer",
   });
@@ -227,7 +227,7 @@ export default function BuyerDashboard() {
                         </Button>
                       )}
                       <div className="text-xs text-muted-foreground" data-testid={`text-notification-date-${notification.id}`}>
-                        {new Date(notification.createdAt).toLocaleDateString()}
+                        {notification.createdAt ? new Date(notification.createdAt).toLocaleDateString() : 'Unknown date'}
                       </div>
                     </div>
                   </div>
@@ -280,7 +280,7 @@ export default function BuyerDashboard() {
                         {inquiry.status}
                       </Badge>
                       <div className="text-xs text-muted-foreground" data-testid={`text-inquiry-date-${inquiry.id}`}>
-                        {new Date(inquiry.createdAt).toLocaleDateString()}
+                        {inquiry.createdAt ? new Date(inquiry.createdAt).toLocaleDateString() : 'Unknown date'}
                       </div>
                     </div>
                   </div>

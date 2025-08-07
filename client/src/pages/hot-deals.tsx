@@ -32,7 +32,7 @@ export default function HotDeals() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: deals, isLoading: dealsLoading } = useQuery({
+  const { data: deals, isLoading: dealsLoading } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/deals", { type: "hot", search: searchQuery, category: selectedCategory }],
     enabled: isAuthenticated,
   });
