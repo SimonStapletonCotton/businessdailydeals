@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, ArrowRight, Flame } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Search, ArrowRight, Flame, TrendingUp, Users, Zap, Shield, Globe, Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
@@ -54,10 +55,25 @@ export default function Home() {
 
   const categories = [
     "All Categories",
-    "Electronics",
-    "Industrial Equipment", 
-    "Office Supplies",
-    "Software & Services"
+    "Agriculture & Farming",
+    "Automotive & Transportation",
+    "Construction & Building",
+    "Electronics & Technology",
+    "Energy & Utilities",
+    "Finance & Banking",
+    "Food & Beverages",
+    "Healthcare & Medical",
+    "Hospitality & Tourism",
+    "Industrial Equipment",
+    "Manufacturing",
+    "Mining & Resources",
+    "Office & Business Supplies",
+    "Professional Services",
+    "Real Estate & Property",
+    "Retail & Wholesale",
+    "Software & IT Services",
+    "Telecommunications",
+    "Textiles & Apparel"
   ];
 
   // Filter and sort results
@@ -82,68 +98,99 @@ export default function Home() {
   const showLoading = isSearching ? searchLoading : (hotDealsLoading || regularDealsLoading);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="gradient-hero text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6" data-testid="text-hero-title">
-            Business Daily Deals
-          </h2>
-          <p className="text-xl mb-8 opacity-90" data-testid="text-hero-description">
-            South Africa's premier B2B marketplace connecting suppliers with buyers through exclusive daily deals
-          </p>
+      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+          <div className="text-center">
+            <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30">
+              <Star className="w-4 h-4 mr-2" />
+              South Africa's #1 B2B Marketplace
+            </Badge>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight" data-testid="text-hero-title">
+              Business Daily
+              <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                Deals
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-description">
+              Connect with premium suppliers and discover exclusive daily deals that transform your business procurement
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link href="/hot-deals">
+                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 px-8 py-3 text-lg font-semibold shadow-lg">
+                  <Flame className="w-5 h-5 mr-2" />
+                  Browse Hot Deals
+                </Button>
+              </Link>
+              <Link href="/regular-deals">
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 px-8 py-3 text-lg">
+                  Explore Marketplace
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
+        {/* Floating geometric shapes */}
+        <div className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-sm"></div>
+        <div className="absolute bottom-20 right-10 w-32 h-32 bg-yellow-300/20 rounded-full blur-sm"></div>
+        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-purple-300/20 rounded-full blur-sm"></div>
       </section>
 
-      {/* Filter Bar */}
-      <section className="bg-white border-b border-slate-200 py-4">
+      {/* Enhanced Search Bar */}
+      <section className="bg-white/80 backdrop-blur-sm border-b border-slate-200/50 py-6 -mt-6 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="flex-1 max-w-lg">
-              <div className="relative">
-                <Input
-                  type="text"
-                  placeholder="Search products alphabetically (e.g., laptops, office chairs, software)..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                  data-testid="input-search"
-                />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200/50 p-6">
+            <div className="flex flex-col lg:flex-row gap-6 items-center">
+              <div className="flex-1">
+                <div className="relative">
+                  <Input
+                    type="text"
+                    placeholder="Search thousands of products and services..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 pr-4 py-4 text-lg border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    data-testid="input-search"
+                  />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-48" data-testid="select-category">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48" data-testid="select-sort">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="latest">Sort by: Latest</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="expiry">Expiry Date</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger className="w-60 py-4 rounded-xl border-slate-300" data-testid="select-category">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-60 py-4 rounded-xl border-slate-300" data-testid="select-sort">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="latest">Sort by: Latest</SelectItem>
+                    <SelectItem value="price-low">Price: Low to High</SelectItem>
+                    <SelectItem value="price-high">Price: High to Low</SelectItem>
+                    <SelectItem value="expiry">Expiry Date</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search Results Section */}
         {isSearching && (
           <section className="mb-12">
@@ -216,83 +263,91 @@ export default function Home() {
 
         {/* Hot Deals Section */}
         {!isSearching && (
-          <section className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="text-2xl font-bold text-slate-900 flex items-center" data-testid="text-hot-deals-title">
-                <Flame className="text-red-500 mr-3" />
-                Hot Deals
-                <span className="ml-3 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold">
-                  Premium
-                </span>
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <Badge variant="destructive" className="mb-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2">
+                <Flame className="w-4 h-4 mr-2" />
+                Premium Hot Deals
+              </Badge>
+              <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4" data-testid="text-hot-deals-title">
+                Trending Business Deals
               </h3>
-              <p className="text-muted-foreground mt-1">Limited time offers with premium visibility</p>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Exclusive time-limited offers with premium placement and maximum visibility
+              </p>
             </div>
-            <Link href="/hot-deals">
-              <Button variant="ghost" className="text-primary hover:text-blue-700" data-testid="button-view-all-hot">
-                View All <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
+            <div className="flex justify-end mb-6">
+              <Link href="/hot-deals">
+                <Button variant="outline" className="bg-gradient-to-r from-red-50 to-orange-50 border-red-200 text-red-700 hover:from-red-100 hover:to-orange-100" data-testid="button-view-all-hot">
+                  View All Hot Deals <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {hotDealsLoading ? (
-              Array.from({ length: 3 }, (_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <div className="w-full h-48 bg-muted rounded-t-xl"></div>
-                  <CardContent className="p-6">
-                    <div className="h-4 bg-muted rounded mb-4"></div>
-                    <div className="h-6 bg-muted rounded mb-2"></div>
-                    <div className="h-4 bg-muted rounded mb-4"></div>
-                    <div className="h-10 bg-muted rounded"></div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              displayedHotDeals.map((deal: DealWithSupplier) => (
-                <DealCard key={deal.id} deal={deal} variant="hot" />
-              ))
-            )}
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {hotDealsLoading ? (
+                Array.from({ length: 3 }, (_, i) => (
+                  <Card key={i} className="animate-pulse overflow-hidden shadow-lg">
+                    <div className="w-full h-48 bg-gradient-to-r from-slate-200 to-slate-300"></div>
+                    <CardContent className="p-6">
+                      <div className="h-4 bg-slate-200 rounded mb-4"></div>
+                      <div className="h-6 bg-slate-200 rounded mb-2"></div>
+                      <div className="h-4 bg-slate-200 rounded mb-4"></div>
+                      <div className="h-10 bg-slate-200 rounded"></div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                displayedHotDeals.map((deal: DealWithSupplier) => (
+                  <DealCard key={deal.id} deal={deal} variant="hot" />
+                ))
+              )}
+            </div>
           </section>
         )}
 
         {/* Regular Deals Section */}
         {!isSearching && (
-          <section className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="text-2xl font-bold text-slate-900" data-testid="text-regular-deals-title">
-                Regular Deals
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <Badge variant="secondary" className="mb-4 bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 px-4 py-2">
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Marketplace Standards
+              </Badge>
+              <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4" data-testid="text-regular-deals-title">
+                Discover Quality Products
               </h3>
-              <p className="text-muted-foreground mt-1">Standard marketplace listings with competitive pricing</p>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Competitive pricing on everyday business essentials from verified suppliers
+              </p>
             </div>
-            <Link href="/regular-deals">
-              <Button variant="ghost" className="text-primary hover:text-blue-700" data-testid="button-view-all-regular">
-                View All <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
+            <div className="flex justify-end mb-6">
+              <Link href="/regular-deals">
+                <Button variant="outline" className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200 text-blue-700 hover:from-blue-100 hover:to-cyan-100" data-testid="button-view-all-regular">
+                  Browse All Products <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {regularDealsLoading ? (
-              Array.from({ length: 4 }, (_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <div className="w-full h-32 bg-muted rounded-t-lg"></div>
-                  <CardContent className="p-4">
-                    <div className="h-3 bg-muted rounded mb-2"></div>
-                    <div className="h-4 bg-muted rounded mb-2"></div>
-                    <div className="h-3 bg-muted rounded mb-3"></div>
-                    <div className="h-8 bg-muted rounded"></div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              displayedRegularDeals.map((deal: DealWithSupplier) => (
-                <DealCard key={deal.id} deal={deal} variant="regular" />
-              ))
-            )}
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {regularDealsLoading ? (
+                Array.from({ length: 4 }, (_, i) => (
+                  <Card key={i} className="animate-pulse overflow-hidden shadow-md">
+                    <div className="w-full h-32 bg-gradient-to-r from-slate-200 to-slate-300"></div>
+                    <CardContent className="p-4">
+                      <div className="h-3 bg-slate-200 rounded mb-2"></div>
+                      <div className="h-4 bg-slate-200 rounded mb-2"></div>
+                      <div className="h-3 bg-slate-200 rounded mb-3"></div>
+                      <div className="h-8 bg-slate-200 rounded"></div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                displayedRegularDeals.map((deal: DealWithSupplier) => (
+                  <DealCard key={deal.id} deal={deal} variant="regular" />
+                ))
+              )}
+            </div>
           </section>
         )}
 
@@ -306,42 +361,131 @@ export default function Home() {
           <SupplierOnboarding />
         </section>
 
+        {/* Features Section */}
+        <section className="mb-16">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Why Choose Business Daily Deals?
+            </h3>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Transform your procurement process with South Africa's most trusted B2B marketplace
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="text-center p-8 border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-cyan-50 hover:shadow-xl transition-all duration-300">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="h-8 w-8 text-blue-600" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 mb-3">Verified Suppliers</h4>
+              <p className="text-muted-foreground">
+                All suppliers are thoroughly vetted and verified for quality and reliability
+              </p>
+            </Card>
+            <Card className="text-center p-8 border-2 border-green-100 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-xl transition-all duration-300">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Zap className="h-8 w-8 text-green-600" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 mb-3">Instant Connections</h4>
+              <p className="text-muted-foreground">
+                Connect directly with suppliers and get quotes within hours, not days
+              </p>
+            </Card>
+            <Card className="text-center p-8 border-2 border-purple-100 bg-gradient-to-br from-purple-50 to-pink-50 hover:shadow-xl transition-all duration-300">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Globe className="h-8 w-8 text-purple-600" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 mb-3">Local Focus</h4>
+              <p className="text-muted-foreground">
+                Designed specifically for South African businesses with local insights
+              </p>
+            </Card>
+          </div>
+        </section>
+
         {/* Stats Section */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2" data-testid="text-stat-suppliers">
+        <section className="bg-gradient-to-r from-slate-900 to-blue-900 rounded-3xl p-8 md:p-12 text-white mb-16">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">Trusted by Thousands</h3>
+            <p className="text-xl opacity-90">Real results from real businesses across South Africa</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <Users className="h-12 w-12 text-blue-300 mx-auto mb-4" />
+              <div className="text-4xl font-bold mb-2" data-testid="text-stat-suppliers">
                 2,150+
               </div>
-              <div className="text-muted-foreground text-sm">Active Suppliers</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-accent mb-2" data-testid="text-stat-deals">
+              <div className="text-blue-200 text-sm">Active Suppliers</div>
+            </div>
+            <div className="text-center">
+              <TrendingUp className="h-12 w-12 text-green-300 mx-auto mb-4" />
+              <div className="text-4xl font-bold mb-2" data-testid="text-stat-deals">
                 15,340+
               </div>
-              <div className="text-muted-foreground text-sm">Deals Posted</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-success mb-2" data-testid="text-stat-connections">
+              <div className="text-blue-200 text-sm">Deals Posted</div>
+            </div>
+            <div className="text-center">
+              <Zap className="h-12 w-12 text-yellow-300 mx-auto mb-4" />
+              <div className="text-4xl font-bold mb-2" data-testid="text-stat-connections">
                 89,250+
               </div>
-              <div className="text-muted-foreground text-sm">Successful Connections</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-secondary mb-2" data-testid="text-stat-savings">
-                $12.4M+
+              <div className="text-blue-200 text-sm">Successful Connections</div>
+            </div>
+            <div className="text-center">
+              <Globe className="h-12 w-12 text-purple-300 mx-auto mb-4" />
+              <div className="text-4xl font-bold mb-2" data-testid="text-stat-savings">
+                R12.4M+
               </div>
-              <div className="text-muted-foreground text-sm">Total Savings</div>
-            </CardContent>
-          </Card>
+              <div className="text-blue-200 text-sm">Total Savings</div>
+            </div>
+          </div>
         </section>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="col-span-1 md:col-span-2">
+              <h3 className="text-2xl font-bold mb-4">Business Daily Deals</h3>
+              <p className="text-slate-300 mb-6 max-w-md">
+                South Africa's premier B2B marketplace connecting suppliers with buyers through exclusive daily deals and innovative procurement solutions.
+              </p>
+              <div className="flex space-x-4">
+                <div className="bg-slate-800 p-3 rounded-lg">
+                  <Globe className="h-6 w-6" />
+                </div>
+                <div className="bg-slate-800 p-3 rounded-lg">
+                  <Shield className="h-6 w-6" />
+                </div>
+                <div className="bg-slate-800 p-3 rounded-lg">
+                  <Zap className="h-6 w-6" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Marketplace</h4>
+              <ul className="space-y-2 text-slate-300">
+                <li><Link href="/hot-deals" className="hover:text-white transition-colors">Hot Deals</Link></li>
+                <li><Link href="/regular-deals" className="hover:text-white transition-colors">Regular Deals</Link></li>
+                <li><a href="#" className="hover:text-white transition-colors">Categories</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Suppliers</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Support</h4>
+              <ul className="space-y-2 text-slate-300">
+                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-slate-800 pt-8 mt-8 text-center text-slate-400">
+            <p>&copy; 2025 Business Daily Deals. All rights reserved. | www.businessdailydeals.com.za</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
