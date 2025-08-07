@@ -19,17 +19,36 @@ export default function Home() {
 
   // Search deals query that updates based on search input
   const { data: searchResults, isLoading: searchLoading } = useQuery({
-    queryKey: ["/api/deals", { search: searchQuery, category: selectedCategory !== "All Categories" ? selectedCategory : undefined }],
+    queryKey: ["/api/deals", "search", searchQuery, selectedCategory],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (searchQuery.trim()) params.append('search', searchQuery.trim());
+      if (selectedCategory !== "All Categories") params.append('category', selectedCategory);
+      
+      const response = await fetch(`/api/deals?${params.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch search results');
+      return response.json();
+    },
     enabled: !!searchQuery.trim(),
   });
 
   const { data: hotDeals, isLoading: hotDealsLoading } = useQuery({
-    queryKey: ["/api/deals", { type: "hot" }],
+    queryKey: ["/api/deals", "hot"],
+    queryFn: async () => {
+      const response = await fetch('/api/deals?type=hot');
+      if (!response.ok) throw new Error('Failed to fetch hot deals');
+      return response.json();
+    },
     enabled: !searchQuery.trim(),
   });
 
   const { data: regularDeals, isLoading: regularDealsLoading } = useQuery({
-    queryKey: ["/api/deals", { type: "regular" }],
+    queryKey: ["/api/deals", "regular"],
+    queryFn: async () => {
+      const response = await fetch('/api/deals?type=regular');
+      if (!response.ok) throw new Error('Failed to fetch regular deals');
+      return response.json();
+    },
     enabled: !searchQuery.trim(),
   });
 
