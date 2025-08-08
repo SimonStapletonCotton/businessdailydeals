@@ -1,0 +1,6 @@
+
+To inspect the header width issue, open browser dev tools and run:
+const script = document.createElement('script');
+script.src = '/debug-inspect.js';
+document.head.appendChild(script);
+
