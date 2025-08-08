@@ -4,25 +4,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Remove default body margins that limit header width */
-html, body {
+/* Remove default body margins and force full width */
+* {
   margin: 0;
   padding: 0;
-  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Force full-width header to viewport edges */
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Force header to full viewport width */
 header {
   width: 100vw !important;
-  margin-left: calc(50% - 50vw) !important;
-  margin-right: calc(50% - 50vw) !important;
+  position: relative !important;
+  left: 50% !important;
+  right: 50% !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
 }
 
-/* Ensure header content spans full width */
+/* Remove container constraints on header content */
 header > div {
-  width: 100% !important;
   max-width: none !important;
-  margin: 0 !important;
+  width: 100% !important;
 }
 
 /* Line clamp utility */
