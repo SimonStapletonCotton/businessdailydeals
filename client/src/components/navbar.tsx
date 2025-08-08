@@ -53,32 +53,28 @@ export default function Navbar() {
         </Button>
       </Link>
 
-      {!isAuthenticated ? (
-        <>
-          <Link href="/register-supplier">
-            <Button
-              variant="ghost"
-              className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
-              data-testid="link-register-supplier"
-              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-            >
-              <UserPlus className="h-4 w-4 mr-2" />
-              Register as SUPPLIER
-            </Button>
-          </Link>
-          <Link href="/register-buyer">
-            <Button
-              variant="ghost"
-              className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
-              data-testid="link-register-buyer"
-              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-            >
-              <ShoppingBag className="h-4 w-4 mr-2" />
-              Register as BUYER
-            </Button>
-          </Link>
-        </>
-      ) : null}
+      <Link href="/register-supplier">
+        <Button
+          variant="ghost"
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+          data-testid="link-register-supplier"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <UserPlus className="h-4 w-4 mr-2" />
+          Register as SUPPLIER
+        </Button>
+      </Link>
+      <Link href="/register-buyer">
+        <Button
+          variant="ghost"
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+          data-testid="link-register-buyer"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <ShoppingBag className="h-4 w-4 mr-2" />
+          Register as BUYER
+        </Button>
+      </Link>
       
       <Link href="/regular-deals">
         <Button
