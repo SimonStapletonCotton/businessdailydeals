@@ -75,6 +75,53 @@
   }
 }
 
+@layer components {
+  /* Page-specific background styles */
+  .page-home {
+    @apply bg-gradient-to-br from-slate-50 via-emerald-50 to-green-50;
+  }
+  
+  .page-landing {
+    @apply bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50;
+  }
+  
+  .page-deals {
+    @apply bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50;
+  }
+  
+  .page-dashboard {
+    @apply bg-gradient-to-br from-slate-50 via-stone-50 to-gray-50;
+  }
+  
+  .page-credits {
+    @apply bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50;
+  }
+  
+  .page-rates {
+    @apply bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-50;
+  }
+  
+  .page-search {
+    @apply bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50;
+  }
+  
+  .page-contact {
+    @apply bg-gradient-to-br from-rose-50 via-pink-50 to-red-50;
+  }
+  
+  .page-directory {
+    @apply bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50;
+  }
+  
+  .page-pricing {
+    @apply bg-gradient-to-br from-emerald-50 via-green-50 to-lime-50;
+  }
+  
+  .page-post {
+    @apply bg-gradient-to-br from-slate-50 via-stone-50 to-gray-50;
+  }
+}
+
 /* Custom styles for B2B platform */
 .deal-card-hot {
   @apply border-2 border-accent border-opacity-20 hover:border-opacity-40 transition-all duration-300;

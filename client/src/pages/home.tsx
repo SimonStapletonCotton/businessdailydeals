@@ -91,7 +91,7 @@ export default function Home() {
   const showLoading = isSearching ? searchLoading : hotDealsLoading;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
+    <div className="min-h-screen page-home">
       <Navbar />
 
       {/* Modern Hero Section */}

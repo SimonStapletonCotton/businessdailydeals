@@ -6,7 +6,7 @@ import SupplierOnboarding from "@/components/supplier-onboarding";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
+    <div className="min-h-screen page-landing">
       {/* Modern Header */}
       <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-slate-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

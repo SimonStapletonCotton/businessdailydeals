@@ -98,7 +98,7 @@ export default function Pricing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
+    <div className="min-h-screen page-pricing">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
