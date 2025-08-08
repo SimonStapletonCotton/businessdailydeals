@@ -4,25 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Simple full-width header solution */
+/* Simple approach - remove constraints */
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+}
+
+/* Ensure header spans full width */
 header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100vw !important;
-  z-index: 1000 !important;
-}
-
-/* Add top padding to body to compensate for fixed header */
-body {
-  padding-top: 64px;
-}
-
-/* Ensure header content doesn't overflow */
-header > div {
-  width: 100% !important;
-  max-width: none !important;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 /* Line clamp utility */
