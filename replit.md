@@ -41,6 +41,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - **COMPLETED: Comprehensive rates per advert system** - Built complete advertising rates marketplace with Excel-based pricing structure (1-30 days for regular deals, 1-7 days for hot deals), shopping basket functionality, and local South African payment processing (no Stripe needed)
 - **IMPLEMENTED: Local payment solution** - Created ZAR-based credit purchase system specifically for South African market, bypassing international payment gateway limitations
 - **ADDED: Credit balance display** - Suppliers can view current credit balance and purchase additional credits directly from rates page
+- **COMPLETED: Enhanced My Credits page** - Restructured credits page with transaction history prominently displayed at the top, clear supplier identification in each transaction, account summary with company name/email, and improved navigation through "My Credits" menu item
 - **NEW FEATURES PLANNED**: Image upload for products, banner advertising system, analytics/hit counters, direct purchasing with delivery options
 
 ## User Preferences
