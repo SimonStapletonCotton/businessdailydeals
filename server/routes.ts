@@ -880,12 +880,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Deal Requests API
   app.post("/api/deal-requests", isAuthenticated, async (req, res) => {
     try {
-      if (!req.user?.id) {
+      const user = req.user as any;
+      if (!user?.id) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
       const requestData = {
-        requesterId: req.user.id,
+        requesterId: user.id,
         productName: req.body.productName,
         productSize: req.body.productSize,
         quantityRequired: req.body.quantityRequired,
@@ -909,11 +910,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/deal-requests", isAuthenticated, async (req, res) => {
     try {
-      if (!req.user?.id) {
+      const user = req.user as any;
+      if (!user?.id) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      const userRequests = await storage.getDealRequestsByUser(req.user.id);
+      const userRequests = await storage.getDealRequestsByUser(user.id);
       res.json(userRequests);
     } catch (error) {
       console.error("Error fetching deal requests:", error);
