@@ -34,9 +34,9 @@ Color scheme preference: Charcoal/slate theme throughout application (header, co
 - **Development**: Hot reload with Vite integration in development mode
 
 ### Database Schema
-- **Users**: User profiles with buyer/supplier roles, including comprehensive registration fields.
+- **Users**: User profiles with buyer/supplier roles, including comprehensive registration fields and notification preferences (email, SMS, WhatsApp).
 - **Deals**: Central entity with categories, pricing, and deal types (hot/regular).
-- **Keywords**: User-defined keywords for deal notifications.
+- **Keywords**: User-defined keywords for deal notifications with multi-channel alert support.
 - **Notifications**: System-generated alerts for keyword matches.
 - **Inquiries**: Communication system between buyers and suppliers.
 - **Sessions**: Secure session storage in PostgreSQL.
@@ -51,7 +51,7 @@ Color scheme preference: Charcoal/slate theme throughout application (header, co
 
 ### Key Features
 - **Deal Management**: Suppliers can create, edit, manage hot and regular deals, and reactivate expired deals.
-- **Smart Notifications**: Keyword-based matching system for relevant deal alerts.
+- **Smart Notifications**: Keyword-based matching system for relevant deal alerts with multi-channel support (email, SMS, WhatsApp).
 - **Search & Discovery**: Comprehensive search for products, companies, and hot deals with category filters.
 - **Inquiry System**: Direct communication between buyers and suppliers.
 - **Supplier Dashboard**: For managing deals, inquiries, and expired deals.
@@ -59,7 +59,7 @@ Color scheme preference: Charcoal/slate theme throughout application (header, co
 - **Image Upload**: Professional file upload with Google Cloud Storage integration, drag-and-drop, and previews.
 - **"Find Me a Deal"**: System for buyers to submit specific product requirements with email notifications to admin.
 - **Rates per Advert**: Comprehensive advertising rates marketplace with Excel-based pricing and shopping basket functionality.
-- **Registration System**: Detailed buyer and supplier registration pages.
+- **Registration System**: Detailed buyer and supplier registration pages with keyword notification setup and multi-channel alert preferences.
 - **Navigation Structure**: Home/HOT deals, Register as SUPPLIER, Register as BUYER, REGULAR deals, Supplier dashboard. Consistent navigation across all pages.
 - **Information Pages**: About Us and professional Contact page.
 - **Home Page**: Modernized design, showing only hot deals for authenticated users.
