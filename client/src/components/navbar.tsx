@@ -39,13 +39,14 @@ export default function Navbar() {
     window.location.href = "/api/logout";
   };
 
-  const NavLinks = () => (
+  const NavLinks = ({ mobile = false }: { mobile?: boolean }) => (
     <>
       <Link href="/hot-deals">
         <Button
           variant={location === "/hot-deals" ? "default" : "ghost"}
-          className="text-sm font-medium"
+          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
           data-testid="link-hot-deals"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           Hot Deals
         </Button>
@@ -53,8 +54,9 @@ export default function Navbar() {
       <Link href="/regular-deals">
         <Button
           variant={location === "/regular-deals" ? "default" : "ghost"}
-          className="text-sm font-medium"
+          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
           data-testid="link-regular-deals"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           Regular Deals
         </Button>
@@ -62,8 +64,9 @@ export default function Navbar() {
       <Link href="/pricing">
         <Button
           variant={location === "/pricing" ? "default" : "ghost"}
-          className="text-sm font-medium"
+          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
           data-testid="link-pricing"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           <DollarSign className="h-4 w-4 mr-2" />
           Pricing
@@ -73,8 +76,9 @@ export default function Navbar() {
         <Link href="/my-coupons">
           <Button
             variant={location === "/my-coupons" ? "default" : "ghost"}
-            className="text-sm font-medium"
+            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
             data-testid="link-my-coupons"
+            onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
             <Ticket className="h-4 w-4 mr-2" />
             My Coupons
@@ -86,8 +90,9 @@ export default function Navbar() {
           <Link href="/supplier-dashboard">
             <Button
               variant={location === "/supplier-dashboard" ? "default" : "ghost"}
-              className="text-sm font-medium"
+              className={mobile ? "w-full justify-start" : "text-sm font-medium"}
               data-testid="link-supplier-dashboard"
+              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
             >
               Dashboard
             </Button>
@@ -95,8 +100,9 @@ export default function Navbar() {
           <Link href="/rates-management">
             <Button
               variant={location === "/rates-management" ? "default" : "ghost"}
-              className="text-sm font-medium"
+              className={mobile ? "w-full justify-start" : "text-sm font-medium"}
               data-testid="link-rates-management"
+              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
             >
               Rates
             </Button>
@@ -122,6 +128,83 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" data-testid="button-mobile-menu">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-72">
+                  <div className="flex flex-col space-y-4 mt-8">
+                    <div className="text-lg font-semibold text-slate-900 mb-4">Navigation</div>
+                    <div className="flex flex-col space-y-2">
+                      <NavLinks mobile={true} />
+                    </div>
+                    
+                    {isAuthenticated && (
+                      <>
+                        <div className="border-t pt-4 mt-6">
+                          <div className="text-sm font-medium text-slate-700 mb-3">Account Settings</div>
+                          <Select
+                            value={(user as UserType)?.userType || "buyer"}
+                            onValueChange={handleUserTypeChange}
+                          >
+                            <SelectTrigger className="w-full mb-3" data-testid="select-user-type-mobile">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="buyer">Switch to Buyer</SelectItem>
+                              <SelectItem value="supplier">Switch to Supplier</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          
+                          <div className="flex flex-col space-y-2">
+                            <Button variant="ghost" className="justify-start" data-testid="button-notifications-mobile">
+                              <Bell className="h-4 w-4 mr-2" />
+                              Notifications
+                              {unreadCount > 0 && (
+                                <Badge className="ml-auto" data-testid="badge-notification-count-mobile">
+                                  {unreadCount}
+                                </Badge>
+                              )}
+                            </Button>
+                            
+                            {(user as UserType)?.userType === "supplier" && (
+                              <Link href="/post-deal">
+                                <Button className="w-full bg-accent hover:bg-accent/90" onClick={() => setMobileMenuOpen(false)} data-testid="button-post-deal-mobile">
+                                  <Plus className="h-4 w-4 mr-2" />
+                                  Post Deal
+                                </Button>
+                              </Link>
+                            )}
+                            
+                            <Button variant="ghost" className="justify-start" onClick={handleLogout} data-testid="button-logout-mobile">
+                              <User className="h-4 w-4 mr-2" />
+                              Logout
+                            </Button>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    
+                    {!isAuthenticated && (
+                      <div className="border-t pt-4 mt-6">
+                        <Button
+                          className="w-full"
+                          onClick={() => (window.location.href = "/api/login")}
+                          data-testid="button-login-mobile"
+                        >
+                          <User className="h-4 w-4 mr-2" />
+                          Login
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
             {isAuthenticated && (
               <>
                 <div className="hidden md:block">
