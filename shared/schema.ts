@@ -37,7 +37,7 @@ export const users = pgTable("users", {
   companyName: varchar("company_name"),
   // Credits system for advertising
   creditBalance: decimal("credit_balance", { precision: 10, scale: 2 }).default('0.00'),
-  totalCreditsSpent: decimal("total_credits_spent", { precision: 10, scale 2 }).default('0.00'),
+  totalCreditsSpent: decimal("total_credits_spent", { precision: 10, scale: 2 }).default('0.00'),
   // Stripe payment integration
   stripeCustomerId: varchar("stripe_customer_id"),
   stripeSubscriptionId: varchar("stripe_subscription_id"),
@@ -85,6 +85,52 @@ export const keywords = pgTable("keywords", {
   userId: varchar("user_id").notNull().references(() => users.id),
   keyword: varchar("keyword").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const notifications = pgTable("notifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  title: varchar("title").notNull(),
+  message: text("message").notNull(),
+  dealId: varchar("deal_id").references(() => deals.id),
+  isRead: boolean("is_read").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const inquiries = pgTable("inquiries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  dealId: varchar("deal_id").notNull().references(() => deals.id),
+  buyerId: varchar("buyer_id").notNull().references(() => users.id),
+  message: text("message").notNull(),
+  contactInfo: text("contact_info"),
+  status: varchar("status").default("pending"), // pending, responded, closed
+  supplierResponse: text("supplier_response"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const coupons = pgTable("coupons", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  dealId: varchar("deal_id").notNull().references(() => deals.id),
+  buyerId: varchar("buyer_id").notNull().references(() => users.id),
+  couponCode: varchar("coupon_code").notNull().unique(),
+  discountAmount: decimal("discount_amount", { precision: 10, scale: 2 }),
+  isRedeemed: boolean("is_redeemed").default(false),
+  redeemedAt: timestamp("redeemed_at"),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const rates = pgTable("rates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  product: varchar("product").notNull(),
+  category: varchar("category").notNull(),
+  dailyRate: decimal("daily_rate", { precision: 10, scale: 2 }).notNull(),
+  weeklyRate: decimal("weekly_rate", { precision: 10, scale: 2 }).default('0.00'),
+  monthlyRate: decimal("monthly_rate", { precision: 10, scale: 2 }).default('0.00'),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Credits and payment transactions
@@ -161,162 +207,113 @@ export const companies = pgTable("companies", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const notifications = pgTable("notifications", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  dealId: varchar("deal_id").notNull().references(() => deals.id),
-  message: text("message").notNull(),
-  isRead: boolean("is_read").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-export const inquiries = pgTable("inquiries", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  dealId: varchar("deal_id").notNull().references(() => deals.id),
-  buyerId: varchar("buyer_id").notNull().references(() => users.id),
-  supplierId: varchar("supplier_id").notNull().references(() => users.id),
-  message: text("message"),
-  status: varchar("status").notNull().default("pending"), // "pending", "responded", "closed"
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-export const coupons = pgTable("coupons", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  dealId: varchar("deal_id").notNull().references(() => deals.id),
-  buyerId: varchar("buyer_id").notNull().references(() => users.id),
-  supplierId: varchar("supplier_id").notNull().references(() => users.id),
-  couponCode: varchar("coupon_code").notNull().unique(),
-  status: varchar("status").notNull().default("active"), // "active", "redeemed", "expired"
-  downloadedAt: timestamp("downloaded_at").defaultNow(),
-  redeemedAt: timestamp("redeemed_at"),
-  expiresAt: timestamp("expires_at").notNull(),
-  redemptionNotes: text("redemption_notes"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Relations
+// Relations for all tables
 export const usersRelations = relations(users, ({ many }) => ({
   deals: many(deals),
   keywords: many(keywords),
   notifications: many(notifications),
-  inquiriesAsBuyer: many(inquiries, { relationName: "buyer" }),
-  inquiriesAsSupplier: many(inquiries, { relationName: "supplier" }),
-  couponsAsBuyer: many(coupons, { relationName: "buyer" }),
-  couponsAsSupplier: many(coupons, { relationName: "supplier" }),
+  inquiries: many(inquiries),
+  coupons: many(coupons),
+  creditTransactions: many(creditTransactions),
+  orders: many(orders),
+  bannerAds: many(bannerAds),
+  companies: many(companies),
 }));
 
 export const dealsRelations = relations(deals, ({ one, many }) => ({
-  supplier: one(users, {
-    fields: [deals.supplierId],
-    references: [users.id],
-  }),
+  supplier: one(users, { fields: [deals.supplierId], references: [users.id] }),
   notifications: many(notifications),
   inquiries: many(inquiries),
   coupons: many(coupons),
-}));
-
-export const keywordsRelations = relations(keywords, ({ one }) => ({
-  user: one(users, {
-    fields: [keywords.userId],
-    references: [users.id],
-  }),
+  orders: many(orders),
+  creditTransactions: many(creditTransactions),
 }));
 
 export const notificationsRelations = relations(notifications, ({ one }) => ({
-  user: one(users, {
-    fields: [notifications.userId],
-    references: [users.id],
-  }),
-  deal: one(deals, {
-    fields: [notifications.dealId],
-    references: [deals.id],
-  }),
+  user: one(users, { fields: [notifications.userId], references: [users.id] }),
+  deal: one(deals, { fields: [notifications.dealId], references: [deals.id] }),
 }));
 
 export const inquiriesRelations = relations(inquiries, ({ one }) => ({
-  deal: one(deals, {
-    fields: [inquiries.dealId],
-    references: [deals.id],
-  }),
-  buyer: one(users, {
-    fields: [inquiries.buyerId],
-    references: [users.id],
-    relationName: "buyer",
-  }),
-  supplier: one(users, {
-    fields: [inquiries.supplierId],
-    references: [users.id],
-    relationName: "supplier",
-  }),
+  deal: one(deals, { fields: [inquiries.dealId], references: [deals.id] }),
+  buyer: one(users, { fields: [inquiries.buyerId], references: [users.id] }),
 }));
 
 export const couponsRelations = relations(coupons, ({ one }) => ({
-  deal: one(deals, {
-    fields: [coupons.dealId],
-    references: [deals.id],
-  }),
-  buyer: one(users, {
-    fields: [coupons.buyerId],
-    references: [users.id],
-    relationName: "buyer",
-  }),
-  supplier: one(users, {
-    fields: [coupons.supplierId],
-    references: [users.id],
-    relationName: "supplier",
-  }),
+  deal: one(deals, { fields: [coupons.dealId], references: [deals.id] }),
+  buyer: one(users, { fields: [coupons.buyerId], references: [users.id] }),
 }));
 
-// Advertising rates table for product advertising pricing
-export const rates = pgTable("rates", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  product: varchar("product").notNull(),
-  category: varchar("category").notNull(),
-  dailyRate: decimal("daily_rate", { precision: 10, scale: 2 }).notNull(),
-  weeklyRate: decimal("weekly_rate", { precision: 10, scale: 2 }).notNull(),
-  monthlyRate: decimal("monthly_rate", { precision: 10, scale: 2 }).notNull(),
-  description: text("description"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
+export const keywordsRelations = relations(keywords, ({ one }) => ({
+  user: one(users, { fields: [keywords.userId], references: [users.id] }),
+}));
 
-// Insert schemas
-export const upsertUserSchema = createInsertSchema(users);
-export const insertDealSchema = createInsertSchema(deals)
-  .omit({ id: true, createdAt: true, updatedAt: true })
-  .extend({
-    price: z.string().min(1, "Price is required"),
-    originalPrice: z.string().optional().nullable(),
-    keywords: z.array(z.string()).optional().default([]),
-    expiresAt: z.date().optional().nullable(),
-    productImages: z.array(z.string()).optional().default([]),
-    size: z.string().optional(),
-    quantityAvailable: z.number().positive().optional(),
-    productSpecifications: z.string().optional(),
-  });
-export const insertKeywordSchema = createInsertSchema(keywords).omit({ id: true, createdAt: true });
-export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true, createdAt: true });
-export const insertInquirySchema = createInsertSchema(inquiries).omit({ id: true, createdAt: true });
-export const insertCouponSchema = createInsertSchema(coupons).omit({ id: true, createdAt: true, updatedAt: true });
-export const insertRateSchema = createInsertSchema(rates).omit({ id: true, createdAt: true, updatedAt: true });
+export const ordersRelations = relations(orders, ({ one }) => ({
+  buyer: one(users, { fields: [orders.buyerId], references: [users.id] }),
+  deal: one(deals, { fields: [orders.dealId], references: [deals.id] }),
+}));
 
-// Types
-export type UpsertUser = z.infer<typeof upsertUserSchema>;
+export const creditTransactionsRelations = relations(creditTransactions, ({ one }) => ({
+  user: one(users, { fields: [creditTransactions.userId], references: [users.id] }),
+  deal: one(deals, { fields: [creditTransactions.dealId], references: [deals.id] }),
+}));
+
+export const bannerAdsRelations = relations(bannerAds, ({ one }) => ({
+  advertiser: one(users, { fields: [bannerAds.advertiserId], references: [users.id] }),
+}));
+
+export const companiesRelations = relations(companies, ({ one }) => ({
+  user: one(users, { fields: [companies.userId], references: [users.id] }),
+}));
+
+// Type exports
 export type User = typeof users.$inferSelect;
-export type InsertDeal = z.infer<typeof insertDealSchema>;
+export type UpsertUser = typeof users.$inferInsert;
 export type Deal = typeof deals.$inferSelect;
-export type DealWithSupplier = Deal & { supplier: User };
-export type InsertKeyword = z.infer<typeof insertKeywordSchema>;
-export type Keyword = typeof keywords.$inferSelect;
-export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+export type InsertDeal = typeof deals.$inferInsert;
 export type Notification = typeof notifications.$inferSelect;
-export type NotificationWithDeal = Notification & { deal: Deal };
-export type InsertInquiry = z.infer<typeof insertInquirySchema>;
+export type InsertNotification = typeof notifications.$inferInsert;
 export type Inquiry = typeof inquiries.$inferSelect;
-export type InquiryWithDetails = Inquiry & { deal: Deal; buyer: User; supplier: User };
-export type InsertCoupon = z.infer<typeof insertCouponSchema>;
+export type InsertInquiry = typeof inquiries.$inferInsert;
 export type Coupon = typeof coupons.$inferSelect;
-export type CouponWithDetails = Coupon & { deal: Deal; buyer: User; supplier: User };
-export type InsertRate = z.infer<typeof insertRateSchema>;
+export type InsertCoupon = typeof coupons.$inferInsert;
+export type Keyword = typeof keywords.$inferSelect;
+export type InsertKeyword = typeof keywords.$inferInsert;
 export type Rate = typeof rates.$inferSelect;
+export type InsertRate = typeof rates.$inferInsert;
+export type Order = typeof orders.$inferSelect;
+export type InsertOrder = typeof orders.$inferInsert;
+export type CreditTransaction = typeof creditTransactions.$inferSelect;
+export type InsertCreditTransaction = typeof creditTransactions.$inferInsert;
+export type BannerAd = typeof bannerAds.$inferSelect;
+export type InsertBannerAd = typeof bannerAds.$inferInsert;
+export type Company = typeof companies.$inferSelect;
+export type InsertCompany = typeof companies.$inferInsert;
+export type SiteAnalytics = typeof siteAnalytics.$inferSelect;
+export type InsertSiteAnalytics = typeof siteAnalytics.$inferInsert;
+
+// Insert schemas with Zod validation
+export const insertUserSchema = createInsertSchema(users);
+export const insertDealSchema = createInsertSchema(deals);
+export const insertNotificationSchema = createInsertSchema(notifications);
+export const insertInquirySchema = createInsertSchema(inquiries);
+export const insertCouponSchema = createInsertSchema(coupons);
+export const insertKeywordSchema = createInsertSchema(keywords);
+export const insertRateSchema = createInsertSchema(rates);
+export const insertOrderSchema = createInsertSchema(orders);
+export const insertCreditTransactionSchema = createInsertSchema(creditTransactions);
+export const insertBannerAdSchema = createInsertSchema(bannerAds);
+export const insertCompanySchema = createInsertSchema(companies);
+
+// Zod inferred types for inserts
+export type InsertUserType = z.infer<typeof insertUserSchema>;
+export type InsertDealType = z.infer<typeof insertDealSchema>;
+export type InsertNotificationType = z.infer<typeof insertNotificationSchema>;
+export type InsertInquiryType = z.infer<typeof insertInquirySchema>;
+export type InsertCouponType = z.infer<typeof insertCouponSchema>;
+export type InsertKeywordType = z.infer<typeof insertKeywordSchema>;
+export type InsertRateType = z.infer<typeof insertRateSchema>;
+export type InsertOrderType = z.infer<typeof insertOrderSchema>;
+export type InsertCreditTransactionType = z.infer<typeof insertCreditTransactionSchema>;
+export type InsertBannerAdType = z.infer<typeof insertBannerAdSchema>;
+export type InsertCompanyType = z.infer<typeof insertCompanySchema>;

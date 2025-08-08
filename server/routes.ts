@@ -2,8 +2,23 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { insertDealSchema, insertKeywordSchema, insertInquirySchema, insertCouponSchema } from "@shared/schema";
+import Stripe from "stripe";
+import { 
+  insertDealSchema, 
+  insertKeywordSchema, 
+  insertInquirySchema, 
+  insertCouponSchema,
+  insertCreditTransactionSchema, 
+  insertOrderSchema, 
+  insertBannerAdSchema 
+} from "@shared/schema";
 import { z } from "zod";
+
+// Initialize Stripe if keys are available
+let stripe: Stripe | null = null;
+if (process.env.STRIPE_SECRET_KEY) {
+  stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -441,6 +456,308 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error clearing rates:", error);
       res.status(500).json({ message: "Failed to clear rates" });
+    }
+  });
+
+  // Advanced Search Endpoints
+  app.get('/api/search', async (req, res) => {
+    try {
+      const { query, type = 'deals', category, dealType, minPrice, maxPrice } = req.query;
+      
+      if (!query) {
+        return res.status(400).json({ message: "Search query required" });
+      }
+
+      let results = [];
+      
+      if (type === 'deals') {
+        const filters: any = {};
+        if (category && category !== 'All') filters.category = category as string;
+        if (dealType && dealType !== 'all') filters.dealType = dealType as 'hot' | 'regular';
+        if (minPrice || maxPrice) {
+          filters.priceRange = {
+            min: minPrice ? parseFloat(minPrice as string) : 0,
+            max: maxPrice ? parseFloat(maxPrice as string) : 0
+          };
+        }
+        
+        results = await storage.searchDealsAdvanced(query as string, filters);
+      } else if (type === 'companies') {
+        results = await storage.searchCompanies(query as string);
+      }
+      
+      res.json(results);
+    } catch (error) {
+      console.error("Error in advanced search:", error);
+      res.status(500).json({ message: "Search failed" });
+    }
+  });
+
+  app.get('/api/deals/hottest', async (req, res) => {
+    try {
+      const deals = await storage.getDeals('hot');
+      // Sort by view count for hottest deals
+      const hottestDeals = deals.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+      res.json(hottestDeals);
+    } catch (error) {
+      console.error("Error fetching hottest deals:", error);
+      res.status(500).json({ message: "Failed to fetch hottest deals" });
+    }
+  });
+
+  // Credits Management Endpoints
+  app.get('/api/credits/balance', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const balance = await storage.getUserCreditBalance(userId);
+      res.json(balance);
+    } catch (error) {
+      console.error("Error fetching credit balance:", error);
+      res.status(500).json({ message: "Failed to fetch credit balance" });
+    }
+  });
+
+  app.get('/api/credits/transactions', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const transactions = await storage.getUserCreditTransactions(userId);
+      res.json(transactions);
+    } catch (error) {
+      console.error("Error fetching credit transactions:", error);
+      res.status(500).json({ message: "Failed to fetch credit transactions" });
+    }
+  });
+
+  app.post('/api/credits/purchase', isAuthenticated, async (req: any, res) => {
+    if (!stripe) {
+      return res.status(500).json({ 
+        message: "Payment system not configured. Please contact support." 
+      });
+    }
+
+    try {
+      const userId = req.user.claims.sub;
+      const { packageId, customAmount } = req.body;
+
+      let amount: number;
+      let credits: number;
+      let description: string;
+
+      if (packageId) {
+        // Predefined packages
+        const packages: any = {
+          'starter': { credits: 100, price: 250 },
+          'business': { credits: 550, price: 1000 }, // 500 + 50 bonus
+          'enterprise': { credits: 1200, price: 1800 }, // 1000 + 200 bonus
+          'premium': { credits: 2500, price: 3200 }, // 2000 + 500 bonus
+        };
+        
+        const pkg = packages[packageId];
+        if (!pkg) {
+          return res.status(400).json({ message: "Invalid package" });
+        }
+        
+        amount = pkg.price * 100; // Convert to cents
+        credits = pkg.credits;
+        description = `${packageId.charAt(0).toUpperCase() + packageId.slice(1)} Package - ${credits} Credits`;
+      } else if (customAmount) {
+        if (customAmount < 50) {
+          return res.status(400).json({ message: "Minimum purchase is R50" });
+        }
+        amount = Math.round(customAmount * 100); // Convert to cents
+        credits = Math.floor(customAmount / 2.5); // R2.50 per credit
+        description = `Custom Credit Purchase - ${credits} Credits`;
+      } else {
+        return res.status(400).json({ message: "Package ID or custom amount required" });
+      }
+
+      // Create payment intent
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount,
+        currency: 'zar',
+        metadata: {
+          userId,
+          credits: credits.toString(),
+          type: 'credit_purchase'
+        }
+      });
+
+      // Create pending transaction record
+      await storage.createCreditTransaction({
+        userId,
+        amount: (amount / 100).toFixed(2),
+        type: 'purchase',
+        description,
+        stripePaymentIntentId: paymentIntent.id
+      });
+
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        credits 
+      });
+    } catch (error) {
+      console.error("Error creating credit purchase:", error);
+      res.status(500).json({ message: "Failed to create purchase" });
+    }
+  });
+
+  // Direct Purchase Endpoints
+  app.post('/api/orders', isAuthenticated, async (req: any, res) => {
+    try {
+      const buyerId = req.user.claims.sub;
+      const orderData = insertOrderSchema.parse({ ...req.body, buyerId });
+      
+      const order = await storage.createOrder(orderData);
+      res.json(order);
+    } catch (error) {
+      console.error("Error creating order:", error);
+      res.status(500).json({ message: "Failed to create order" });
+    }
+  });
+
+  app.get('/api/orders', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { type = 'buyer' } = req.query;
+      
+      const orders = await storage.getUserOrders(userId, type as 'buyer' | 'seller');
+      res.json(orders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      res.status(500).json({ message: "Failed to fetch orders" });
+    }
+  });
+
+  // Directory Endpoints
+  app.get('/api/directory', async (req, res) => {
+    try {
+      const { type = 'products', letter, category, search } = req.query;
+      
+      if (type === 'products') {
+        let deals = await storage.getDeals();
+        
+        // Apply filters
+        if (letter) {
+          deals = deals.filter(deal => 
+            deal.title.toUpperCase().startsWith(letter as string)
+          );
+        }
+        
+        if (category && category !== 'All') {
+          deals = deals.filter(deal => deal.category === category);
+        }
+        
+        if (search) {
+          deals = deals.filter(deal =>
+            deal.title.toLowerCase().includes((search as string).toLowerCase()) ||
+            deal.description.toLowerCase().includes((search as string).toLowerCase())
+          );
+        }
+        
+        res.json(deals);
+      } else if (type === 'companies') {
+        const companies = await storage.getCompanies(
+          category !== 'All' ? category as string : undefined,
+          true // alphabetical
+        );
+        res.json(companies);
+      }
+    } catch (error) {
+      console.error("Error fetching directory data:", error);
+      res.status(500).json({ message: "Failed to fetch directory" });
+    }
+  });
+
+  app.get('/api/directory/featured', async (req, res) => {
+    try {
+      const hotDeals = await storage.getDeals('hot');
+      // Get top viewed hot deals as featured
+      const featured = hotDeals
+        .sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0))
+        .slice(0, 12);
+      res.json(featured);
+    } catch (error) {
+      console.error("Error fetching featured products:", error);
+      res.status(500).json({ message: "Failed to fetch featured products" });
+    }
+  });
+
+  // Banner Advertising Endpoints
+  app.get('/api/banner-ads', async (req, res) => {
+    try {
+      const { position } = req.query;
+      const bannerAds = await storage.getActiveBannerAds(position as string);
+      res.json(bannerAds);
+    } catch (error) {
+      console.error("Error fetching banner ads:", error);
+      res.status(500).json({ message: "Failed to fetch banner ads" });
+    }
+  });
+
+  app.post('/api/banner-ads', isAuthenticated, async (req: any, res) => {
+    try {
+      const advertiserId = req.user.claims.sub;
+      const bannerData = insertBannerAdSchema.parse({ ...req.body, advertiserId });
+      
+      const bannerAd = await storage.createBannerAd(bannerData);
+      res.json(bannerAd);
+    } catch (error) {
+      console.error("Error creating banner ad:", error);
+      res.status(500).json({ message: "Failed to create banner ad" });
+    }
+  });
+
+  app.put('/api/banner-ads/:id/stats', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { type } = req.body; // 'click' or 'impression'
+      
+      const updated = await storage.updateBannerAdStats(id, type);
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating banner ad stats:", error);
+      res.status(500).json({ message: "Failed to update stats" });
+    }
+  });
+
+  // Analytics Endpoints
+  app.get('/api/analytics/site', async (req, res) => {
+    try {
+      const { startDate, endDate } = req.query;
+      const analytics = await storage.getSiteAnalytics(
+        startDate as string, 
+        endDate as string
+      );
+      res.json(analytics);
+    } catch (error) {
+      console.error("Error fetching site analytics:", error);
+      res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
+  app.post('/api/analytics/record', async (req, res) => {
+    try {
+      const { type } = req.body; // 'visit', 'unique_visitor', 'deal_view', 'search_query'
+      const today = new Date().toISOString().split('T')[0];
+      
+      await storage.recordSiteAnalytics(today, type);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error recording analytics:", error);
+      res.status(500).json({ message: "Failed to record analytics" });
+    }
+  });
+
+  app.put('/api/deals/:id/analytics', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { type } = req.body; // 'view' or 'click'
+      
+      const updated = await storage.updateDealAnalytics(id, type);
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating deal analytics:", error);
+      res.status(500).json({ message: "Failed to update analytics" });
     }
   });
 

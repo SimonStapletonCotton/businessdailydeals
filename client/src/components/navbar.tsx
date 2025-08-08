@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Plus, User, Menu, Ticket, DollarSign } from "lucide-react";
+import { Bell, Plus, User, Menu, Ticket, DollarSign, Search, CreditCard, Building2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -61,6 +61,28 @@ export default function Navbar() {
           Regular Deals
         </Button>
       </Link>
+      <Link href="/search">
+        <Button
+          variant={location === "/search" ? "default" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          data-testid="link-search"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Search className="h-4 w-4 mr-2" />
+          Search
+        </Button>
+      </Link>
+      <Link href="/directory">
+        <Button
+          variant={location === "/directory" ? "default" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          data-testid="link-directory"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Building2 className="h-4 w-4 mr-2" />
+          Directory
+        </Button>
+      </Link>
       <Link href="/pricing">
         <Button
           variant={location === "/pricing" ? "default" : "ghost"}
@@ -72,6 +94,19 @@ export default function Navbar() {
           Pricing
         </Button>
       </Link>
+      {isAuthenticated && (
+        <Link href="/credits">
+          <Button
+            variant={location === "/credits" ? "default" : "ghost"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            data-testid="link-credits"
+            onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+          >
+            <CreditCard className="h-4 w-4 mr-2" />
+            Credits
+          </Button>
+        </Link>
+      )}
       {isAuthenticated && (user as UserType)?.userType === "buyer" && (
         <Link href="/my-coupons">
           <Button
