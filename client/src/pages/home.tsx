@@ -255,8 +255,8 @@ export default function Home() {
           </section>
         )}
 
-        {/* Hot Deals Section - Always show for non-authenticated users, show when not searching for authenticated users */}
-        {(!isAuthenticated || (isAuthenticated && !isSearching)) && (
+        {/* Hot Deals Section - Only show for authenticated users when not searching */}
+        {(isAuthenticated && !isSearching) && (
           <section className="mb-16">
             <div className="text-center mb-12">
               <Badge variant="destructive" className="mb-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2">

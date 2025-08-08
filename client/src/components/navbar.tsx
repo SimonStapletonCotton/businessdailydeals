@@ -109,6 +109,18 @@ export default function Navbar() {
         </Button>
       </Link>
       
+      <Link href="/regular-deals">
+        <Button
+          variant={location === "/regular-deals" ? "default" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          data-testid="link-regular-deals"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Ticket className="h-4 w-4 mr-2" />
+          Regular Deals
+        </Button>
+      </Link>
+      
       <Link href="/pricing">
         <Button
           variant={location === "/pricing" ? "default" : "ghost"}

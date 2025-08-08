@@ -33,9 +33,11 @@ The application is built with a modern web stack featuring React frontend, Expre
 - **COMPLETED: Advanced search system** - Built comprehensive search functionality for products, companies, and hot deals with category filters and modern UI
 - **COMPLETED: Credits system with payment integration** - Implemented credit packages, Stripe payment gateway integration, credit balance management, and top-up functionality
 - **COMPLETED: Alphabetical product directory** - Created organized directory with company listings, product categories, and easy navigation
-- **UPDATED: Main navigation structure** - Reorganized menu to match user specifications: Home/How Site Works, Register as Supplier/Buyer, Find Me a Deal, Rates per Advert, Coupons Downloaded, Contact Us
+- **UPDATED: Main navigation structure** - Reorganized menu to match user specifications: Home/How Site Works, Register as Supplier/Buyer, Find Me a Deal, Regular Deals, Rates per Advert, Coupons Downloaded, Contact Us
 - **ADDED: Professional contact page** - Comprehensive contact form with business information, hours, and multiple contact methods
 - **ADDED: Home page bottom features section** - Six community support cards: View Expired Deals, Report Bad Deals, Comment on Site, Share & Earn Credits, Membership Counters (suppliers/buyers), Products Listed Counter
+- **UPDATED: Hot deals visibility** - Hot deals now only visible on home page for authenticated users; non-authenticated users see navigation to register instead
+- **ADDED: Regular Deals to navigation** - Added Regular Deals menu item for buyers to browse all regular deals listings
 - **NEW FEATURES PLANNED**: Image upload for products, banner advertising system, analytics/hit counters, direct purchasing with delivery options
 
 ## User Preferences
