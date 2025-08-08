@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
-import { Phone, Mail, MessageCircle, HelpCircle, DollarSign, Users, Zap } from "lucide-react";
+import { Phone, Mail, MessageCircle, HelpCircle, Users, Zap } from "lucide-react";
 
 const pricingPlans = [
   {
@@ -66,7 +66,7 @@ const pricingPlans = [
 
 const buyerFeatures = [
   {
-    icon: <DollarSign className="w-6 h-6 text-green-600" />,
+    icon: <span className="w-6 h-6 text-green-600 text-xl font-bold">R</span>,
     title: "Always Free for Buyers",
     description: "Browse deals, download coupons, and connect with suppliers at no cost"
   },
