@@ -43,8 +43,8 @@ export default function Navbar() {
     <>
       <Link href="/">
         <Button
-          variant={location === "/" ? "default" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          variant={location === "/" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
           data-testid="link-home"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -57,7 +57,7 @@ export default function Navbar() {
         <>
           <Button
             variant="ghost"
-            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
             data-testid="link-register-supplier"
             onClick={() => {
               window.location.href = "/api/login";
@@ -69,7 +69,7 @@ export default function Navbar() {
           </Button>
           <Button
             variant="ghost"
-            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
             data-testid="link-register-buyer"
             onClick={() => {
               window.location.href = "/api/login";
@@ -84,8 +84,8 @@ export default function Navbar() {
 
       <Link href="/search">
         <Button
-          variant={location === "/search" ? "default" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          variant={location === "/search" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
           data-testid="link-search"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -96,8 +96,8 @@ export default function Navbar() {
       
       <Link href="/regular-deals">
         <Button
-          variant={location === "/regular-deals" ? "default" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          variant={location === "/regular-deals" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
           data-testid="link-regular-deals"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -109,8 +109,8 @@ export default function Navbar() {
       {isAuthenticated && (user as UserType)?.userType === "supplier" && (
         <Link href="/supplier-dashboard">
           <Button
-            variant={location === "/supplier-dashboard" ? "default" : "ghost"}
-            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            variant={location === "/supplier-dashboard" ? "secondary" : "ghost"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
             data-testid="link-supplier-dashboard"
             onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
@@ -121,8 +121,8 @@ export default function Navbar() {
       
       <Link href="/rates-management">
         <Button
-          variant={location === "/rates-management" ? "default" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          variant={location === "/rates-management" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
           data-testid="link-rates"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -134,8 +134,8 @@ export default function Navbar() {
       {isAuthenticated && (user as UserType)?.userType === "supplier" && (
         <Link href="/credits">
           <Button
-            variant={location === "/credits" ? "default" : "ghost"}
-            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            variant={location === "/credits" ? "secondary" : "ghost"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
             data-testid="link-my-credits"
             onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
@@ -148,8 +148,8 @@ export default function Navbar() {
       {isAuthenticated && (user as UserType)?.userType === "buyer" && (
         <Link href="/my-coupons">
           <Button
-            variant={location === "/my-coupons" ? "default" : "ghost"}
-            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            variant={location === "/my-coupons" ? "secondary" : "ghost"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
             data-testid="link-my-coupons"
             onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
@@ -161,8 +161,8 @@ export default function Navbar() {
       
       <Link href="/contact">
         <Button
-          variant={location === "/contact" ? "default" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          variant={location === "/contact" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
           data-testid="link-contact"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -174,16 +174,16 @@ export default function Navbar() {
   );
 
   return (
-    <header className="bg-white shadow-sm border-b border-border">
+    <header className="bg-gradient-to-r from-olive-600 via-olive-500 to-olive-600 shadow-lg border-b border-olive-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-8 flex-1">
             <Link href="/">
-              <h1 className="text-2xl font-bold text-primary cursor-pointer" data-testid="text-logo">
+              <h1 className="text-2xl font-bold text-white cursor-pointer" data-testid="text-logo">
                 Business Daily Deals
               </h1>
             </Link>
-            <nav className="hidden md:flex space-x-2">
+            <nav className="hidden md:flex space-x-2 flex-1">
               <NavLinks />
             </nav>
           </div>
@@ -193,7 +193,7 @@ export default function Navbar() {
             <div className="md:hidden">
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" data-testid="button-mobile-menu">
+                  <Button variant="ghost" size="icon" className="text-white hover:text-olive-900 hover:bg-white/20" data-testid="button-mobile-menu">
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
@@ -273,7 +273,7 @@ export default function Navbar() {
                     value={(user as UserType)?.userType || "buyer"}
                     onValueChange={handleUserTypeChange}
                   >
-                    <SelectTrigger className="w-48" data-testid="select-user-type">
+                    <SelectTrigger className="w-48 bg-white/10 border-white/20 text-white hover:bg-white/20" data-testid="select-user-type">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -283,7 +283,7 @@ export default function Navbar() {
                   </Select>
                 </div>
 
-                <Button variant="ghost" size="icon" className="relative" data-testid="button-notifications">
+                <Button variant="ghost" size="icon" className="relative text-white hover:text-olive-900 hover:bg-white/20" data-testid="button-notifications">
                   <Bell className="h-5 w-5" />
                   {unreadCount > 0 && (
                     <Badge className="notification-badge" data-testid="badge-notification-count">
@@ -294,14 +294,14 @@ export default function Navbar() {
 
                 {(user as UserType)?.userType === "supplier" && (
                   <Link href="/post-deal">
-                    <Button className="bg-accent hover:bg-accent/90" data-testid="button-post-deal">
+                    <Button className="bg-white text-olive-600 hover:bg-white/90 hover:text-olive-700 font-medium" data-testid="button-post-deal">
                       <Plus className="h-4 w-4 mr-2" />
                       Post Deal
                     </Button>
                   </Link>
                 )}
 
-                <Button variant="ghost" size="icon" onClick={handleLogout} data-testid="button-logout">
+                <Button variant="ghost" size="icon" className="text-white hover:text-olive-900 hover:bg-white/20" onClick={handleLogout} data-testid="button-logout">
                   <User className="h-5 w-5" />
                 </Button>
               </>
@@ -309,6 +309,7 @@ export default function Navbar() {
 
             {!isAuthenticated && (
               <Button
+                className="bg-white text-olive-600 hover:bg-white/90 hover:text-olive-700 font-medium"
                 onClick={() => (window.location.href = "/api/login")}
                 data-testid="button-login"
               >
