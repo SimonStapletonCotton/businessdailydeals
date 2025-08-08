@@ -64,7 +64,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen bg-background overflow-x-auto">
+        <div className="min-h-screen bg-background overflow-x-auto" style={{ width: '100%', maxWidth: 'none' }}>
           <Router />
         </div>
         <Toaster />
