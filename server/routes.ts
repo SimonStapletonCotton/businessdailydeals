@@ -734,7 +734,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Calculate total credits (1:1 ratio with ZAR for now)
       const totalCredits = parseFloat(totalAmount);
 
-      // Create credit transaction record
+      // Create credit transaction record (without dealId for basket purchases)
       const transaction = await storage.createCreditTransaction({
         userId,
         amount: totalAmount.toString(),

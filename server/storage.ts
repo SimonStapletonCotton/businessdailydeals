@@ -172,9 +172,15 @@ export class DatabaseStorage implements IStorage {
     };
   }
 
-  async createCreditTransaction(transaction: InsertCreditTransaction): Promise<CreditTransaction> {
-    const [result] = await db.insert(creditTransactions).values(transaction).returning();
-    return result;
+  async createCreditTransaction(transactionData: InsertCreditTransaction): Promise<CreditTransaction> {
+    // Remove dealId if it's null to avoid database constraint issues
+    const cleanData = { ...transactionData };
+    if (cleanData.dealId === null) {
+      delete cleanData.dealId;
+    }
+    
+    const [transaction] = await db.insert(creditTransactions).values(cleanData).returning();
+    return transaction;
   }
 
   async getUserCreditTransactions(userId: string): Promise<CreditTransaction[]> {
