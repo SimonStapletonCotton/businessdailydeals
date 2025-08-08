@@ -81,6 +81,10 @@ export async function setupAuth(app: Express) {
     verified: passport.AuthenticateCallback
   ) => {
     const claims = tokens.claims();
+    if (!claims) {
+      verified(new Error("No claims in token"), false);
+      return;
+    }
     const user = {
       id: claims.sub,
       email: claims.email,
@@ -139,8 +143,13 @@ export async function setupAuth(app: Express) {
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
   const user = req.user as any;
+  
+  console.log(`[AUTH DEBUG] isAuthenticated: ${req.isAuthenticated()}`);
+  console.log(`[AUTH DEBUG] user:`, user);
+  console.log(`[AUTH DEBUG] session:`, req.session.passport);
 
   if (!req.isAuthenticated()) {
+    console.log(`[AUTH DEBUG] Authentication failed - not authenticated`);
     return res.status(401).json({ 
       message: "Unauthorized",
       loginUrl: "/api/login",
