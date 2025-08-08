@@ -228,7 +228,16 @@ export default function Rates() {
       return;
     }
 
-    purchaseCreditsMutation.mutate();
+    // For South African market - simulate payment card entry
+    const confirmed = window.confirm(
+      `You are about to purchase R${totalBasketValue.toFixed(2)} worth of advertising credits.\n\n` +
+      `In a real system, you would be redirected to a secure payment gateway to enter your card details.\n\n` +
+      `For demo purposes, click OK to simulate successful payment.`
+    );
+
+    if (confirmed) {
+      purchaseCreditsMutation.mutate();
+    }
   };
 
   return (
