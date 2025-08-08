@@ -104,7 +104,132 @@ export default function CreditsPage() {
           </p>
         </div>
 
-        {/* Current Balance - Enhanced with user info */}
+        {/* Supplier Credit Summary - Moved to top */}
+        <Card className="mb-8 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+          <CardHeader className="text-center pb-3">
+            <div className="flex items-center justify-center mb-2">
+              <CreditCard className="w-6 h-6 text-blue-600 mr-2" />
+              <CardTitle className="text-blue-800 text-xl">Supplier Credit Account</CardTitle>
+            </div>
+            <div className="text-center space-y-1">
+              <p className="text-lg font-semibold text-blue-800">
+                {user?.companyName || user?.email || 'Supplier Account'}
+              </p>
+              <p className="text-sm text-blue-600">Account ID: {user?.id || 'N/A'}</p>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div className="p-4 bg-white rounded-lg border">
+                <div className="text-2xl font-bold text-green-600">
+                  R{(creditBalance as any)?.creditBalance || '0.00'}
+                </div>
+                <p className="text-sm text-slate-600">Available Balance</p>
+              </div>
+              <div className="p-4 bg-white rounded-lg border">
+                <div className="text-2xl font-bold text-orange-600">
+                  R{(creditBalance as any)?.totalCreditsSpent || '0.00'}
+                </div>
+                <p className="text-sm text-slate-600">Total Spent</p>
+              </div>
+              <div className="p-4 bg-white rounded-lg border">
+                <Button onClick={() => window.location.href = '/rates-management'} className="w-full bg-blue-600 hover:bg-blue-700">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Buy More Credits
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Transaction History - Moved to top priority */}
+        <Card className="mb-8">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <History className="h-6 w-6 text-slate-600" />
+              <div>
+                <CardTitle className="text-2xl">Transaction History</CardTitle>
+                <p className="text-sm text-slate-600 mt-1">
+                  All credit transactions for: {user?.companyName || user?.email || 'Supplier Account'}
+                </p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            {isLoadingTransactions ? (
+              <div className="p-8 text-center">
+                <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+                <p className="text-slate-600">Loading transactions...</p>
+              </div>
+            ) : transactions && Array.isArray(transactions) && transactions.length > 0 ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date & Time</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead className="text-right">Amount (ZAR)</TableHead>
+                    <TableHead className="text-right">Credits</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {transactions.map((transaction: CreditTransaction) => (
+                    <TableRow key={transaction.id}>
+                      <TableCell>
+                        <div className="font-medium">
+                          {transaction.createdAt ? new Date(transaction.createdAt).toLocaleDateString() : 'N/A'}
+                        </div>
+                        <div className="text-xs text-slate-500">
+                          {transaction.createdAt ? new Date(transaction.createdAt).toLocaleTimeString() : ''}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={
+                          transaction.type === 'purchase' ? 'default' : 
+                          transaction.type === 'spend' ? 'secondary' : 
+                          'destructive'
+                        }>
+                          {transaction.type}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          <div className="font-medium">{transaction.description}</div>
+                          <div className="text-xs text-slate-500 mt-1">
+                            Supplier: {user?.companyName || user?.email || 'Account'}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span className={transaction.type === 'purchase' ? 'text-green-600 font-semibold' : 'text-red-600'}>
+                          {transaction.type === 'purchase' ? '+' : '-'}R{Math.abs(parseFloat(transaction.amount)).toFixed(2)}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span className={transaction.type === 'purchase' ? 'text-green-600 font-semibold' : 'text-red-600'}>
+                          {transaction.type === 'purchase' ? '+' : '-'}
+                          {Math.abs(parseFloat(transaction.amount)).toFixed(0)} credits
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <div className="p-8 text-center">
+                <p className="text-slate-600">No transactions found for this account.</p>
+                <Button 
+                  onClick={() => window.location.href = '/rates-management'} 
+                  className="mt-4"
+                >
+                  Make Your First Purchase
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Current Balance Cards - Moved lower */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
             <CardHeader className="text-center">
@@ -112,9 +237,6 @@ export default function CreditsPage() {
                 <CreditCard className="h-5 w-5 text-green-600" />
                 Available Credits
               </CardTitle>
-              <p className="text-sm text-green-600 mt-1">
-                Account: {user?.companyName || user?.email || 'Supplier Account'}
-              </p>
             </CardHeader>
             <CardContent className="text-center">
               {isLoadingBalance ? (
