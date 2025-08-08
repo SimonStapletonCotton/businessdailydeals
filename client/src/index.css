@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Full width header that extends beyond container */
+.full-width-header {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
 
 
 
