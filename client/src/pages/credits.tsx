@@ -104,14 +104,17 @@ export default function CreditsPage() {
           </p>
         </div>
 
-        {/* Current Balance */}
+        {/* Current Balance - Enhanced with user info */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+          <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
             <CardHeader className="text-center">
               <CardTitle className="flex items-center justify-center gap-2">
-                <Zap className="h-5 w-5" />
-                Current Balance
+                <CreditCard className="h-5 w-5 text-green-600" />
+                Available Credits
               </CardTitle>
+              <p className="text-sm text-green-600 mt-1">
+                Account: {user?.companyName || user?.email || 'Supplier Account'}
+              </p>
             </CardHeader>
             <CardContent className="text-center">
               {isLoadingBalance ? (
@@ -119,11 +122,11 @@ export default function CreditsPage() {
                   <div className="h-8 bg-slate-200 rounded w-24 mx-auto"></div>
                 </div>
               ) : (
-                <p className="text-3xl font-bold text-primary" data-testid="text-credit-balance">
-                  {creditBalance?.creditBalance || '0'} Credits
+                <p className="text-4xl font-bold text-green-800 mb-2" data-testid="text-credit-balance">
+                  R{(creditBalance as any)?.creditBalance || '0.00'}
                 </p>
               )}
-              <p className="text-sm text-slate-600 mt-2">Available for advertising</p>
+              <p className="text-sm text-green-600 mt-2">Ready for advertising</p>
             </CardContent>
           </Card>
 
@@ -141,7 +144,7 @@ export default function CreditsPage() {
                 </div>
               ) : (
                 <p className="text-3xl font-bold text-green-600">
-                  R{creditBalance?.totalCreditsSpent || '0.00'}
+                  R{(creditBalance as any)?.totalCreditsSpent || '0.00'}
                 </p>
               )}
               <p className="text-sm text-slate-600 mt-2">Lifetime advertising spend</p>
@@ -263,7 +266,7 @@ export default function CreditsPage() {
                   <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
                   <p className="text-slate-600">Loading transactions...</p>
                 </div>
-              ) : transactions && transactions.length > 0 ? (
+              ) : transactions && Array.isArray(transactions) && transactions.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -278,7 +281,10 @@ export default function CreditsPage() {
                     {transactions.map((transaction: CreditTransaction) => (
                       <TableRow key={transaction.id}>
                         <TableCell>
-                          {new Date(transaction.createdAt).toLocaleDateString()}
+                          {transaction.createdAt ? new Date(transaction.createdAt).toLocaleDateString() : 'N/A'}
+                          <div className="text-xs text-slate-500">
+                            {transaction.createdAt ? new Date(transaction.createdAt).toLocaleTimeString() : ''}
+                          </div>
                         </TableCell>
                         <TableCell>
                           <Badge variant={
@@ -289,14 +295,23 @@ export default function CreditsPage() {
                             {transaction.type}
                           </Badge>
                         </TableCell>
-                        <TableCell>{transaction.description}</TableCell>
-                        <TableCell className="text-right">
-                          R{Math.abs(parseFloat(transaction.amount)).toFixed(2)}
+                        <TableCell>
+                          <div>
+                            {transaction.description}
+                            <div className="text-xs text-slate-500 mt-1">
+                              By: {user?.companyName || user?.email || 'Supplier Account'}
+                            </div>
+                          </div>
                         </TableCell>
                         <TableCell className="text-right">
-                          <span className={transaction.type === 'purchase' ? 'text-green-600' : 'text-red-600'}>
+                          <span className={transaction.type === 'purchase' ? 'text-green-600 font-semibold' : 'text-red-600'}>
+                            {transaction.type === 'purchase' ? '+' : '-'}R{Math.abs(parseFloat(transaction.amount)).toFixed(2)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <span className={transaction.type === 'purchase' ? 'text-green-600 font-semibold' : 'text-red-600'}>
                             {transaction.type === 'purchase' ? '+' : '-'}
-                            {Math.abs(parseFloat(transaction.amount) / 2.5).toFixed(0)}
+                            {Math.abs(parseFloat(transaction.amount)).toFixed(0)} credits
                           </span>
                         </TableCell>
                       </TableRow>

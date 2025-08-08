@@ -32,6 +32,7 @@ function Router() {
       <Route path="/directory" component={ProductDirectoryPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/credits" component={CreditsPage} />
       
       {/* Authentication-based routing */}
       {isLoading || !isAuthenticated ? (
