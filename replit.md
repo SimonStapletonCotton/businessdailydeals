@@ -29,7 +29,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - **COMPLETED: Comprehensive UI modernization across ALL pages** - Applied contemporary design patterns, modern gradients, enhanced layouts, and improved visual hierarchy throughout entire application
 - **ADDED: Professional rates card (pricing table) feature** - Created reusable RatesCard component and dedicated /pricing page with supplier plans, buyer benefits, FAQ section, and South African Rand pricing
 - **IMPLEMENTED: Dynamic rates management system** - Built complete rates table upload functionality with CSV/Excel support, database schema, API endpoints, and admin interface for uploading actual advertising rates data
-- **ENHANCED: Browse Regular Deals button visibility** - Fixed contrast and styling issues on home page hero section
+- **ENHANCED: Browse Regular Deals button visibility** - Fixed contrast and styling issues on home page hero section, ensured both hero buttons have consistent white backgrounds for optimal visibility
 - **COMPLETED: Advanced search system** - Built comprehensive search functionality for products, companies, and hot deals with category filters and modern UI
 - **COMPLETED: Credits system with payment integration** - Implemented credit packages, Stripe payment gateway integration, credit balance management, and top-up functionality
 - **COMPLETED: Alphabetical product directory** - Created organized directory with company listings, product categories, and easy navigation
