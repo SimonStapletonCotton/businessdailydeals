@@ -104,13 +104,13 @@ export default function Home() {
               South Africa's #1 B2B Marketplace
             </Badge>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight" data-testid="text-hero-title">
-              Trending Business
+              Business Daily
               <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Deals
               </span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-description">
-              Exclusive time-limited offers with premium placement and maximum visibility
+              Connect with premium suppliers and discover exclusive daily deals that transform your business procurement
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/hot-deals">
