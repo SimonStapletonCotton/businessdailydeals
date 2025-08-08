@@ -39,8 +39,9 @@ export function getSession() {
     rolling: true, // Extend session on activity
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production', // Only secure in production
       maxAge: sessionTtl,
+      sameSite: 'lax', // Allow cross-site requests for authentication
     },
   });
 }
