@@ -3,34 +3,25 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
 import KeywordNotifications from "@/components/keyword-notifications";
 import SupplierOnboarding from "@/components/supplier-onboarding";
+import Navbar from "@/components/navbar";
 
 export default function Landing() {
   return (
     <div className="min-h-screen page-landing">
-      {/* Modern Header */}
-      <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-slate-200/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-r from-accent to-primary p-2 rounded-lg">
-                <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
-                  <span className="text-primary font-bold text-lg">B</span>
-                </div>
-              </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent" data-testid="text-logo">
-                Business Daily Deals
-              </h1>
-            </div>
-            <Button
-              onClick={() => (window.location.href = "/api/login")}
-              className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-6 py-2 shadow-lg"
-              data-testid="button-login"
-            >
-              Login
-            </Button>
-          </div>
+      <Navbar />
+      
+      {/* Landing-specific login section */}
+      <div className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-slate-200/50 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Button
+            onClick={() => (window.location.href = "/api/login")}
+            className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-3 shadow-lg text-lg"
+            data-testid="button-login"
+          >
+            Login to Access Deals
+          </Button>
         </div>
-      </header>
+      </div>
 
       {/* Modern Hero Section */}
       <section className="relative py-24 overflow-hidden">

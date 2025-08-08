@@ -71,6 +71,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - **CREATED: Comprehensive registration system** - Built detailed buyer and supplier registration pages with all required fields from user specifications including personal info, company details, deal preferences, and data offer integration
 - **ADDED: About Us page** - Created professional About Us page using provided content with sections for mission, values, deal types, and Find Me a Deal explanation
 - **EXPANDED: User database schema** - Added all buyer fields (mobile, province, newsletter subscription, data offer preferences) and supplier fields (company details, item information, deal type preferences)
+- **FIXED: Navigation menu consistency** - Ensured navbar is visible on ALL pages including landing and 404 pages for easy navigation between sections
 
 ## User Preferences
 
