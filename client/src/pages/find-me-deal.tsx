@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Badge } from "@/components/ui/badge";
-import { Search, MapPin, Package, DollarSign, Ruler, Hash, Send } from "lucide-react";
+import { Search, MapPin, Package, CreditCard, Ruler, Hash, Send } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -292,7 +292,7 @@ export default function FindMeDeal() {
                 {/* Price Range */}
                 <div className="space-y-4">
                   <div className="flex items-center mb-2">
-                    <DollarSign className="mr-2 h-5 w-5 text-violet-600" />
+                    <CreditCard className="mr-2 h-5 w-5 text-violet-600" />
                     <h3 className="text-lg font-semibold">Budget Range (ZAR)</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

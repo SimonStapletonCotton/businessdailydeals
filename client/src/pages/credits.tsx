@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreditCard, Plus, Minus, DollarSign, History, Zap, ShoppingCart } from "lucide-react";
+import { CreditCard, Plus, Minus, Coins, History, Zap, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -255,7 +255,7 @@ export default function CreditsPage() {
           <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
             <CardHeader className="text-center">
               <CardTitle className="flex items-center justify-center gap-2">
-                <DollarSign className="h-5 w-5" />
+                <Coins className="h-5 w-5 text-green-600" />
                 Total Spent
               </CardTitle>
             </CardHeader>
