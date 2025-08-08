@@ -512,9 +512,9 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               className="w-full border-olive-600 text-olive-600 hover:bg-olive-50"
               onClick={handleInquiry}
               disabled={createInquiryMutation.isPending}
-              data-testid="button-request-quote"
+              data-testid="button-view-details"
             >
-              Request Quote
+              View Details
             </Button>
           </div>
         ) : (
