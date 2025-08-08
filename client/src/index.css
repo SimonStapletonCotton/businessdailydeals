@@ -4,27 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Final approach - force header outside all constraints */
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
+/* Clean header styling - accepting framework limitations */
 .full-width-header {
   background: linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105));
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgb(30, 41, 59);
-  width: 100vw !important;
-  min-width: 100vw !important;
-  max-width: none !important;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 
