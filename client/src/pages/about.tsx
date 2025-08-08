@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Target, Users, Zap, Search, TrendingUp } from "lucide-react";
@@ -5,6 +6,7 @@ import { Heart, Target, Users, Zap, Search, TrendingUp } from "lucide-react";
 export default function About() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200">
+      <Navbar />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header Section */}
         <div className="text-center mb-12">

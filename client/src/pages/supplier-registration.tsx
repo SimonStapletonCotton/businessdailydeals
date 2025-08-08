@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "@/components/navbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -100,6 +101,7 @@ export default function SupplierRegistration() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-100 py-12">
+      <Navbar />
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-8">
           <Badge variant="outline" className="mb-4 text-emerald-600 border-emerald-200">

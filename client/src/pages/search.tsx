@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import Navbar from "@/components/navbar";
 import { Search, Filter, Building2, Package, TrendingUp, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +41,7 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen page-search">
+      <Navbar />
       {/* Header */}
       <div className="bg-white border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">

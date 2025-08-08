@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { DealWithSupplier, InquiryWithDetails } from "@shared/schema";
+import type { DealWithSupplier, InquiryWithDetails } from "@/../../server/storage";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Navbar from "@/components/navbar";
 import { CreditCard, Plus, Minus, Coins, History, Zap, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,6 +89,7 @@ export default function CreditsPage() {
 
   return (
     <div className="min-h-screen page-credits">
+      <Navbar />
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">

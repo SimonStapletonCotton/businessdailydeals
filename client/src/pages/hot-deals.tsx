@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Search, Flame } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { DealWithSupplier } from "@shared/schema";
+import type { DealWithSupplier } from "@/../../server/storage";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 

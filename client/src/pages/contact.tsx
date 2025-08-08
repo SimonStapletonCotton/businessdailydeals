@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen page-contact">
+      <Navbar />
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12">
