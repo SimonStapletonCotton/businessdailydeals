@@ -44,11 +44,15 @@ export const getQueryFn: <T>(options: {
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      queryFn: getQueryFn({ on401: "throw" }),
-      refetchInterval: false,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
+      queryFn: getQueryFn({ on401: "returnNull" }), // Changed to returnNull for better auth handling
+      refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes to keep session alive
+      refetchOnWindowFocus: true, // Refetch when user returns to tab
+      staleTime: 2 * 60 * 1000, // Consider data stale after 2 minutes
+      retry: (failureCount, error: any) => {
+        // Don't retry on authentication errors
+        if (error?.message?.includes('401')) return false;
+        return failureCount < 2;
+      },
     },
     mutations: {
       retry: false,

@@ -42,6 +42,8 @@ The application is built with a modern web stack featuring React frontend, Expre
 - **IMPLEMENTED: Local payment solution** - Created ZAR-based credit purchase system specifically for South African market, bypassing international payment gateway limitations
 - **ADDED: Credit balance display** - Suppliers can view current credit balance and purchase additional credits directly from rates page
 - **COMPLETED: Enhanced My Credits page** - Restructured credits page with transaction history prominently displayed at the top, clear supplier identification in each transaction, account summary with company name/email, and improved navigation through "My Credits" menu item
+- **ENHANCED: Authentication & session management** - Extended session duration to 30 days, added rolling sessions that refresh on activity, improved session timeout handling with better error messages, and enhanced query client to keep sessions alive with periodic refetching
+- **COMPLETED: Unique page backgrounds** - Applied distinctive gradient backgrounds to all pages (home: emerald-green, deals: orange-yellow, credits: green-teal, rates: blue-sky, search: violet-indigo, etc.) for enhanced visual experience and better page identification
 - **NEW FEATURES PLANNED**: Image upload for products, banner advertising system, analytics/hit counters, direct purchasing with delivery options
 
 ## User Preferences

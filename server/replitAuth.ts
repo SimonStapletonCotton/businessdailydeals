@@ -23,7 +23,7 @@ const getOidcConfig = memoize(
 );
 
 export function getSession() {
-  const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+  const sessionTtl = 30 * 24 * 60 * 60 * 1000; // 30 days - extended for better UX
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
     conString: process.env.DATABASE_URL,
@@ -34,8 +34,9 @@ export function getSession() {
   return session({
     secret: process.env.SESSION_SECRET!,
     store: sessionStore,
-    resave: false,
+    resave: true, // Changed to true to refresh session on activity
     saveUninitialized: false,
+    rolling: true, // Extend session on activity
     cookie: {
       httpOnly: true,
       secure: true,
@@ -134,28 +135,49 @@ export async function setupAuth(app: Express) {
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
   const user = req.user as any;
 
-  if (!req.isAuthenticated() || !user.expires_at) {
-    return res.status(401).json({ message: "Unauthorized" });
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ 
+      message: "Unauthorized",
+      loginUrl: "/api/login",
+      redirectReason: "Not authenticated"
+    });
+  }
+
+  if (!user.expires_at) {
+    return res.status(401).json({ 
+      message: "Unauthorized",
+      loginUrl: "/api/login",
+      redirectReason: "Session expired"
+    });
   }
 
   const now = Math.floor(Date.now() / 1000);
   if (now <= user.expires_at) {
+    // Session is still valid, refresh it by touching the session
+    req.session.touch();
     return next();
   }
 
   const refreshToken = user.refresh_token;
   if (!refreshToken) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
+    return res.status(401).json({ 
+      message: "Unauthorized",
+      loginUrl: "/api/login",
+      redirectReason: "Session expired, please login again"
+    });
   }
 
   try {
     const config = await getOidcConfig();
     const tokenResponse = await client.refreshTokenGrant(config, refreshToken);
     updateUserSession(user, tokenResponse);
+    req.session.touch(); // Touch session after refresh
     return next();
   } catch (error) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
+    return res.status(401).json({ 
+      message: "Unauthorized",
+      loginUrl: "/api/login",
+      redirectReason: "Failed to refresh session, please login again"
+    });
   }
 };
