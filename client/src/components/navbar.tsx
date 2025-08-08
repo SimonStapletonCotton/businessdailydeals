@@ -173,21 +173,21 @@ export default function Navbar() {
   );
 
   return (
-    <header className="bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 shadow-lg border-b border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-8 flex-1">
-            <Link href="/">
-              <h1 className="text-2xl font-bold text-white cursor-pointer" data-testid="text-logo">
+    <header className="bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 shadow-lg border-b border-slate-800 w-full min-w-full">
+      <div className="w-full min-w-full px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16 w-full min-w-full">
+          <div className="flex items-center space-x-4 flex-1 w-full">
+            <Link href="/" className="flex-shrink-0">
+              <h1 className="text-xl md:text-2xl font-bold text-white cursor-pointer whitespace-nowrap" data-testid="text-logo">
                 Business Daily Deals
               </h1>
             </Link>
-            <nav className="hidden md:flex space-x-2 flex-1">
+            <nav className="hidden md:flex space-x-1 flex-1 justify-start ml-8">
               <NavLinks />
             </nav>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 flex-shrink-0">
             {/* Mobile menu button */}
             <div className="md:hidden">
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -272,7 +272,7 @@ export default function Navbar() {
                     value={(user as UserType)?.userType || "buyer"}
                     onValueChange={handleUserTypeChange}
                   >
-                    <SelectTrigger className="w-48 bg-white/10 border-white/20 text-white hover:bg-white/20" data-testid="select-user-type">
+                    <SelectTrigger className="w-40 lg:w-48 bg-white/10 border-white/20 text-white hover:bg-white/20" data-testid="select-user-type">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
