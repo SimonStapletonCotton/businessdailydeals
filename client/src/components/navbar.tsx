@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Plus, User, Menu, Ticket } from "lucide-react";
+import { Bell, Plus, User, Menu, Ticket, DollarSign } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -57,6 +57,16 @@ export default function Navbar() {
           data-testid="link-regular-deals"
         >
           Regular Deals
+        </Button>
+      </Link>
+      <Link href="/pricing">
+        <Button
+          variant={location === "/pricing" ? "default" : "ghost"}
+          className="text-sm font-medium"
+          data-testid="link-pricing"
+        >
+          <DollarSign className="h-4 w-4 mr-2" />
+          Pricing
         </Button>
       </Link>
       {isAuthenticated && (user as UserType)?.userType === "buyer" && (
