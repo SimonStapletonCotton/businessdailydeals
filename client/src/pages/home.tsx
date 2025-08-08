@@ -112,6 +112,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-description">
               Connect with premium suppliers and discover exclusive daily deals that transform your business procurement
             </p>
+            <div className="mb-4 text-sm opacity-75">Mobile Update v2.1 - Latest Changes Applied</div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/hot-deals">
                 <Button size="lg" className="bg-white text-primary hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg">
