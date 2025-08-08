@@ -128,9 +128,9 @@ export const basketItems = pgTable("basket_items", {
   rateType: varchar("rate_type").notNull(), // 'regular' or 'hot'
   duration: integer("duration").notNull(), // days
   quantity: integer("quantity").notNull(), // number of items
-  ratePerDay: decimal("rate_per_day", { precision: 10, scale: 2 }).notNull(),
-  totalCost: decimal("total_cost", { precision: 10, scale: 2 }).notNull(),
-  creditsRequired: decimal("credits_required", { precision: 10, scale: 2 }).notNull(),
+  ratePerDay: varchar("rate_per_day").notNull(), // Store as string to avoid precision issues
+  totalCost: varchar("total_cost").notNull(), // Store as string to avoid precision issues
+  creditsRequired: varchar("credits_required").notNull(), // Store as string to avoid precision issues
   createdAt: timestamp("created_at").defaultNow(),
 });
 

@@ -135,9 +135,9 @@ export default function Rates() {
       rateType,
       duration,
       quantity,
-      ratePerDay,
-      totalCost,
-      creditsRequired,
+      ratePerDay: ratePerDay.toString(),
+      totalCost: totalCost.toString(),
+      creditsRequired: creditsRequired.toString(),
     });
   };
 
@@ -198,7 +198,7 @@ export default function Rates() {
     </TableRow>
   );
 
-  const totalBasketValue = Array.isArray(basketItems) ? basketItems.reduce((total: number, item: any) => total + parseFloat(item.totalCost), 0) : 0;
+  const totalBasketValue = Array.isArray(basketItems) ? basketItems.reduce((total: number, item: any) => total + parseFloat(item.totalCost || '0'), 0) : 0;
 
   const handlePurchaseCredits = () => {
     if (!isAuthenticated) {
@@ -367,10 +367,10 @@ export default function Rates() {
                         </div>
                         <div className="text-sm text-slate-600">
                           <p>{item.duration} days × {item.quantity} items</p>
-                          <p>R{item.ratePerDay}/day</p>
+                          <p>R{parseFloat(item.ratePerDay).toFixed(2)}/day</p>
                         </div>
                         <div className="font-semibold text-right">
-                          R{item.totalCost}
+                          R{parseFloat(item.totalCost).toFixed(2)}
                         </div>
                       </div>
                     ))}
