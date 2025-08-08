@@ -4,18 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Remove all container constraints */
-body, html, #root, * {
-  margin: 0;
-  padding: 0;
-}
-
+/* Force header to span entire screen */
 .header-full-width {
   background: linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105));
-  width: 100vw;
+  width: 100vw !important;
+  margin-left: calc(-50vw + 50%) !important;
+  margin-right: calc(-50vw + 50%) !important;
   position: relative;
-  left: 0;
-  right: 0;
+  box-sizing: border-box !important;
+}
+
+.header-full-width > div {
+  max-width: none !important;
+  margin-left: calc(50vw - 50%) !important;
+  margin-right: calc(50vw - 50%) !important;
 }
 
 /* Line clamp utility */
