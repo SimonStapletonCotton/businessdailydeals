@@ -12,6 +12,7 @@ import {
   bannerAds,
   companies,
   siteAnalytics,
+  dealRequests,
   type User,
   type UpsertUser,
   type Deal,
@@ -36,6 +37,8 @@ import {
   type InsertCompany,
   type SiteAnalytics,
   type InsertSiteAnalytics,
+  type DealRequest,
+  type InsertDealRequest,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, or, like, inArray, sql } from "drizzle-orm";
@@ -126,6 +129,12 @@ export interface IStorage {
   updateRate(id: string, rate: Partial<InsertRate>): Promise<Rate>;
   deleteRate(id: string): Promise<void>;
   clearAllRates(): Promise<void>;
+  
+  // Deal request operations
+  createDealRequest(request: InsertDealRequest): Promise<DealRequest>;
+  getDealRequests(): Promise<DealRequest[]>;
+  getDealRequestsByUser(userId: string): Promise<DealRequest[]>;
+  updateDealRequestStatus(id: string, status: string): Promise<DealRequest>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -848,6 +857,38 @@ export class DatabaseStorage implements IStorage {
 
   async clearBasket(userId: string) {
     await db.delete(basketItems).where(eq(basketItems.userId, userId));
+  }
+
+  // Deal request operations
+  async createDealRequest(request: InsertDealRequest): Promise<DealRequest> {
+    const [dealRequest] = await db.insert(dealRequests).values(request).returning();
+    return dealRequest;
+  }
+
+  async getDealRequests(): Promise<DealRequest[]> {
+    return await db.select().from(dealRequests).orderBy(desc(dealRequests.createdAt));
+  }
+
+  async getDealRequestsByUser(userId: string): Promise<DealRequest[]> {
+    return await db
+      .select()
+      .from(dealRequests)
+      .where(eq(dealRequests.requesterId, userId))
+      .orderBy(desc(dealRequests.createdAt));
+  }
+
+  async updateDealRequestStatus(id: string, status: string): Promise<DealRequest> {
+    const [updatedRequest] = await db
+      .update(dealRequests)
+      .set({ status, updatedAt: new Date() })
+      .where(eq(dealRequests.id, id))
+      .returning();
+    
+    if (!updatedRequest) {
+      throw new Error("Deal request not found");
+    }
+    
+    return updatedRequest;
   }
 }
 

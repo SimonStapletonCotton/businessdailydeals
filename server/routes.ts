@@ -877,6 +877,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Deal Requests API
+  app.post("/api/deal-requests", isAuthenticated, async (req, res) => {
+    try {
+      if (!req.user?.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const requestData = {
+        requesterId: req.user.id,
+        productName: req.body.productName,
+        productSize: req.body.productSize,
+        quantityRequired: req.body.quantityRequired,
+        deliveryDestination: req.body.deliveryDestination,
+        priceRangeMin: req.body.priceRangeMin,
+        priceRangeMax: req.body.priceRangeMax,
+        additionalRequirements: req.body.additionalRequirements,
+      };
+
+      const dealRequest = await storage.createDealRequest(requestData);
+
+      // TODO: Notify relevant suppliers about this request
+      // This could be done by matching keywords, categories, or other criteria
+
+      res.status(201).json(dealRequest);
+    } catch (error) {
+      console.error("Error creating deal request:", error);
+      res.status(500).json({ message: "Failed to create deal request" });
+    }
+  });
+
+  app.get("/api/deal-requests", isAuthenticated, async (req, res) => {
+    try {
+      if (!req.user?.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const userRequests = await storage.getDealRequestsByUser(req.user.id);
+      res.json(userRequests);
+    } catch (error) {
+      console.error("Error fetching deal requests:", error);
+      res.status(500).json({ message: "Failed to fetch deal requests" });
+    }
+  });
+
   // Upload routes - import at top level
   const uploadRoutes = (await import('./routes/upload')).default;
   app.use('/api/upload', uploadRoutes);

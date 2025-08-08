@@ -82,11 +82,11 @@ export default function Navbar() {
         </>
       ) : null}
 
-      <Link href="/search">
+      <Link href="/find-me-deal">
         <Button
-          variant={location === "/search" ? "secondary" : "ghost"}
+          variant={location === "/find-me-deal" ? "secondary" : "ghost"}
           className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
-          data-testid="link-search"
+          data-testid="link-find-me-deal"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           <Search className="h-4 w-4 mr-2" />

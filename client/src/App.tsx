@@ -8,6 +8,7 @@ import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import HotDeals from "@/pages/hot-deals";
 import RegularDeals from "@/pages/regular-deals";
+import FindMeDeal from "@/pages/find-me-deal";
 import SupplierDashboard from "@/pages/supplier-dashboard";
 import PostDeal from "@/pages/post-deal";
 import MyCoupons from "@/pages/my-coupons";
@@ -28,6 +29,7 @@ function Router() {
       {/* Public routes available to everyone */}
       <Route path="/rates-management" component={Rates} />
       <Route path="/regular-deals" component={RegularDeals} />
+      <Route path="/find-me-deal" component={FindMeDeal} />
       <Route path="/search" component={SearchPage} />
       <Route path="/directory" component={ProductDirectoryPage} />
       <Route path="/contact" component={ContactPage} />
