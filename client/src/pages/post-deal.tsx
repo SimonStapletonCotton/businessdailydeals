@@ -259,60 +259,69 @@ export default function PostDeal() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
       <Navbar />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900" data-testid="text-page-title">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Modern Header */}
+        <div className="mb-12 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="bg-gradient-to-r from-accent/20 to-primary/20 p-4 rounded-full">
+              <Plus className="h-10 w-10 text-accent" />
+            </div>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4" data-testid="text-page-title">
             Post New Deal
           </h1>
-          <p className="text-muted-foreground mt-1">
-            Create a new deal to showcase your products to potential buyers
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+            Create compelling deal listings to attract buyers and grow your business in the South African B2B marketplace
           </p>
         </div>
 
-        {/* Deal Type Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card className="border-accent/20">
-            <CardHeader>
-              <CardTitle className="flex items-center text-accent" data-testid="text-hot-deal-title">
-                <Flame className="h-5 w-5 mr-2" />
+        {/* Modern Deal Type Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <Card className="bg-gradient-to-br from-white to-orange-50 border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-accent text-xl" data-testid="text-hot-deal-title">
+                <div className="bg-gradient-to-br from-accent/10 to-accent/20 p-3 rounded-full mr-3">
+                  <Flame className="h-6 w-6 text-accent" />
+                </div>
                 Hot Deal - Premium
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Premium placement on homepage</li>
-                <li>• Enhanced visibility</li>
-                <li>• Priority in search results</li>
-                <li>• Immediate buyer notifications</li>
+              <ul className="space-y-3 text-slate-600">
+                <li className="flex items-center"><span className="text-accent mr-2">✓</span> Premium placement on homepage</li>
+                <li className="flex items-center"><span className="text-accent mr-2">✓</span> Enhanced visibility</li>
+                <li className="flex items-center"><span className="text-accent mr-2">✓</span> Priority in search results</li>
+                <li className="flex items-center"><span className="text-accent mr-2">✓</span> Immediate buyer notifications</li>
               </ul>
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-primary" data-testid="text-regular-deal-title">
-                <Package className="h-5 w-5 mr-2" />
+          <Card className="bg-gradient-to-br from-white to-slate-50 border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-primary text-xl" data-testid="text-regular-deal-title">
+                <div className="bg-gradient-to-br from-primary/10 to-primary/20 p-3 rounded-full mr-3">
+                  <Package className="h-6 w-6 text-primary" />
+                </div>
                 Regular Deal - Standard
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Standard marketplace listing</li>
-                <li>• Competitive pricing</li>
-                <li>• Standard search visibility</li>
-                <li>• Keyword-based notifications</li>
+              <ul className="space-y-3 text-slate-600">
+                <li className="flex items-center"><span className="text-primary mr-2">✓</span> Standard marketplace listing</li>
+                <li className="flex items-center"><span className="text-primary mr-2">✓</span> Competitive pricing</li>
+                <li className="flex items-center"><span className="text-primary mr-2">✓</span> Standard search visibility</li>
+                <li className="flex items-center"><span className="text-primary mr-2">✓</span> Keyword-based notifications</li>
               </ul>
             </CardContent>
           </Card>
         </div>
 
-        {/* Deal Form */}
-        <Card>
-          <CardHeader>
-            <CardTitle data-testid="text-deal-details-title">Deal Details</CardTitle>
+        {/* Modern Deal Form */}
+        <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+          <CardHeader className="pb-6">
+            <CardTitle className="text-2xl text-slate-900" data-testid="text-deal-details-title">Deal Details</CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...form}>

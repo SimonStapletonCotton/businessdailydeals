@@ -94,10 +94,20 @@ export default function SupplierDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 to-slate-50">
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">Loading...</div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-8 bg-slate-200 rounded mb-4 max-w-md mx-auto"></div>
+              <div className="h-4 bg-slate-200 rounded mb-8 max-w-sm mx-auto"></div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {Array.from({ length: 3 }, (_, i) => (
+                  <div key={i} className="h-24 bg-slate-200 rounded-lg"></div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -123,55 +133,64 @@ export default function SupplierDashboard() {
   const pendingInquiries = inquiries?.filter((inquiry: InquiryWithDetails) => inquiry.status === "pending") || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900" data-testid="text-page-title">
-              Supplier Dashboard
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Welcome back, {user.firstName || user.companyName || "Supplier"}
-            </p>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Modern Header */}
+        <div className="mb-12 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="bg-gradient-to-r from-accent/20 to-primary/20 p-4 rounded-full">
+              <TrendingUp className="h-10 w-10 text-accent" />
+            </div>
           </div>
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4" data-testid="text-page-title">
+            Supplier Dashboard
+          </h1>
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto mb-8">
+            Welcome back, {user.firstName || user.companyName || "Supplier"}. Manage your deals and connect with buyers.
+          </p>
           <Link href="/post-deal">
-            <Button className="bg-accent hover:bg-accent/90" data-testid="button-post-deal">
-              <Plus className="h-4 w-4 mr-2" />
+            <Button className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-3 text-lg shadow-lg" data-testid="button-post-deal">
+              <Plus className="h-5 w-5 mr-2" />
               Post New Deal
             </Button>
           </Link>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardContent className="p-6 text-center">
-              <Package className="h-8 w-8 text-primary mx-auto mb-2" />
-              <div className="text-2xl font-bold text-slate-900" data-testid="text-stat-total-deals">
+        {/* Modern Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <Card className="bg-gradient-to-br from-white to-slate-50 border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-8 text-center">
+              <div className="bg-gradient-to-br from-primary/10 to-primary/20 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Package className="h-8 w-8 text-primary" />
+              </div>
+              <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-total-deals">
                 {deals?.length || 0}
               </div>
-              <div className="text-sm text-muted-foreground">Total Deals</div>
+              <div className="text-sm text-slate-600 font-medium">Total Deals</div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <TrendingUp className="h-8 w-8 text-success mx-auto mb-2" />
-              <div className="text-2xl font-bold text-slate-900" data-testid="text-stat-active-deals">
+          <Card className="bg-gradient-to-br from-white to-green-50 border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-8 text-center">
+              <div className="bg-gradient-to-br from-green-100 to-green-200 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <TrendingUp className="h-8 w-8 text-green-600" />
+              </div>
+              <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-active-deals">
                 {activeDeals.length}
               </div>
-              <div className="text-sm text-muted-foreground">Active Deals</div>
+              <div className="text-sm text-slate-600 font-medium">Active Deals</div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <Flame className="h-8 w-8 text-accent mx-auto mb-2" />
-              <div className="text-2xl font-bold text-slate-900" data-testid="text-stat-hot-deals">
+          <Card className="bg-gradient-to-br from-white to-orange-50 border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-8 text-center">
+              <div className="bg-gradient-to-br from-accent/10 to-accent/20 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Flame className="h-8 w-8 text-accent" />
+              </div>
+              <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-hot-deals">
                 {hotDeals.length}
               </div>
-              <div className="text-sm text-muted-foreground">Hot Deals</div>
+              <div className="text-sm text-slate-600 font-medium">Hot Deals</div>
             </CardContent>
           </Card>
           <Card>

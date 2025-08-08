@@ -89,20 +89,29 @@ export default function HotDeals() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 flex items-center mb-2" data-testid="text-page-title">
-            <Flame className="text-primary mr-3" />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Modern Header Section */}
+        <div className="mb-12 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="bg-gradient-to-r from-accent/20 to-primary/20 p-3 rounded-full">
+              <Flame className="h-8 w-8 text-accent" />
+            </div>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4" data-testid="text-page-title">
             Hot Deals
-            <span className="ml-3 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
-              Premium
-            </span>
           </h1>
-          <p className="text-muted-foreground">
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <span className="bg-gradient-to-r from-accent to-primary text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+              Premium Marketplace
+            </span>
+            <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">
+              Featured Listings
+            </span>
+          </div>
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
             Limited time offers with premium visibility and exclusive pricing
           </p>
         </div>
@@ -154,35 +163,37 @@ export default function HotDeals() {
         {/* Deals Grid */}
         <section>
           {dealsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }, (_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <div className="w-full h-48 bg-muted rounded-t-xl"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }, (_, i) => (
+                <Card key={i} className="animate-pulse shadow-lg border-0 bg-gradient-to-br from-white to-slate-50">
+                  <div className="w-full h-56 bg-gradient-to-br from-slate-200 to-slate-300 rounded-t-xl"></div>
                   <CardContent className="p-6">
-                    <div className="h-4 bg-muted rounded mb-4"></div>
-                    <div className="h-6 bg-muted rounded mb-2"></div>
-                    <div className="h-4 bg-muted rounded mb-4"></div>
-                    <div className="h-10 bg-muted rounded"></div>
+                    <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-4"></div>
+                    <div className="h-6 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-2"></div>
+                    <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-4"></div>
+                    <div className="h-10 bg-gradient-to-r from-slate-200 to-slate-300 rounded"></div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : deals && deals.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {deals.map((deal: DealWithSupplier) => (
                 <DealCard key={deal.id} deal={deal} variant="hot" />
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <Flame className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-slate-900 mb-2" data-testid="text-no-deals">
-                No hot deals found
+            <div className="text-center py-20">
+              <div className="bg-gradient-to-br from-accent/10 to-primary/10 p-6 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+                <Flame className="h-12 w-12 text-accent" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3" data-testid="text-no-deals">
+                No Hot Deals Available
               </h3>
-              <p className="text-muted-foreground" data-testid="text-no-deals-description">
+              <p className="text-slate-600 text-lg max-w-md mx-auto" data-testid="text-no-deals-description">
                 {searchQuery || selectedCategory !== "All Categories"
-                  ? "Try adjusting your search or filter criteria"
-                  : "Check back soon for new hot deals from our suppliers"}
+                  ? "Try adjusting your search or filter criteria to find more deals"
+                  : "Check back soon for exclusive hot deals from our premium suppliers"}
               </p>
             </div>
           )}

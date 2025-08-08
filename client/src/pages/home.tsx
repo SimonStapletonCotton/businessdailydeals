@@ -91,14 +91,13 @@ export default function Home() {
   const showLoading = isSearching ? searchLoading : hotDealsLoading;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-stone-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-slate-800 via-slate-700 to-stone-800 text-white">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+      {/* Modern Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-accent via-primary to-slate-700 text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
             <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30">
               <Star className="w-4 h-4 mr-2" />

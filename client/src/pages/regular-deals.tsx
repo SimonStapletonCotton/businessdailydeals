@@ -89,40 +89,52 @@ export default function RegularDeals() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-slate-50 to-stone-100">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 flex items-center mb-2" data-testid="text-page-title">
-            <Package className="text-primary mr-3" />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Modern Header Section */}
+        <div className="mb-12 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="bg-gradient-to-r from-primary/20 to-slate/20 p-3 rounded-full">
+              <Package className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4" data-testid="text-page-title">
             Regular Deals
           </h1>
-          <p className="text-muted-foreground">
-            Standard marketplace listings with competitive pricing
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <span className="bg-gradient-to-r from-primary to-slate-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+              Standard Marketplace
+            </span>
+            <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">
+              Competitive Pricing
+            </span>
+          </div>
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+            Browse our comprehensive marketplace with competitive pricing and quality products from verified suppliers
           </p>
         </div>
 
-        {/* Filter Bar */}
-        <section className="bg-white border border-slate-200 rounded-lg p-4 mb-8">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+        {/* Modern Filter Bar */}
+        <section className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-xl p-6 mb-8 shadow-lg">
+          <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
             <div className="flex-1 max-w-lg">
               <div className="relative">
                 <Input
                   type="text"
-                  placeholder="Search regular deals..."
+                  placeholder="Search regular deals and products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-12 h-12 text-base border-slate-300 focus:border-primary focus:ring-primary/20"
                   data-testid="input-search"
                 />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-4">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-48" data-testid="select-category">
+                <SelectTrigger className="w-52 h-12" data-testid="select-category">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,7 +146,7 @@ export default function RegularDeals() {
                 </SelectContent>
               </Select>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48" data-testid="select-sort">
+                <SelectTrigger className="w-52 h-12" data-testid="select-sort">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -151,35 +163,37 @@ export default function RegularDeals() {
         {/* Deals Grid */}
         <section>
           {dealsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {Array.from({ length: 8 }, (_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <div className="w-full h-32 bg-muted rounded-t-lg"></div>
-                  <CardContent className="p-4">
-                    <div className="h-3 bg-muted rounded mb-2"></div>
-                    <div className="h-4 bg-muted rounded mb-2"></div>
-                    <div className="h-3 bg-muted rounded mb-3"></div>
-                    <div className="h-8 bg-muted rounded"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 12 }, (_, i) => (
+                <Card key={i} className="animate-pulse shadow-md border-0 bg-gradient-to-br from-white to-slate-50">
+                  <div className="w-full h-48 bg-gradient-to-br from-slate-200 to-slate-300 rounded-t-xl"></div>
+                  <CardContent className="p-5">
+                    <div className="h-3 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-3"></div>
+                    <div className="h-5 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-3"></div>
+                    <div className="h-3 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-4"></div>
+                    <div className="h-9 bg-gradient-to-r from-slate-200 to-slate-300 rounded"></div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : deals && deals.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {deals.map((deal: DealWithSupplier) => (
                 <DealCard key={deal.id} deal={deal} variant="regular" />
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-slate-900 mb-2" data-testid="text-no-deals">
-                No regular deals found
+            <div className="text-center py-20">
+              <div className="bg-gradient-to-br from-primary/10 to-slate/10 p-6 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+                <Package className="h-12 w-12 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3" data-testid="text-no-deals">
+                No Regular Deals Available
               </h3>
-              <p className="text-muted-foreground" data-testid="text-no-deals-description">
+              <p className="text-slate-600 text-lg max-w-md mx-auto" data-testid="text-no-deals-description">
                 {searchQuery || selectedCategory !== "All Categories"
-                  ? "Try adjusting your search or filter criteria"
-                  : "Check back soon for new deals from our suppliers"}
+                  ? "Try adjusting your search or filter criteria to find more deals"
+                  : "Check back soon for new deals from our verified suppliers"}
               </p>
             </div>
           )}

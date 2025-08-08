@@ -133,16 +133,20 @@ export default function MyCoupons() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-olive-50 to-charcoal-50 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Ticket className="h-8 w-8 text-olive-600" />
-            <h1 className="text-3xl font-bold text-charcoal-900">My Coupons</h1>
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Modern Header */}
+        <div className="mb-12 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="bg-gradient-to-r from-primary/20 to-accent/20 p-4 rounded-full">
+              <Ticket className="h-10 w-10 text-primary" />
+            </div>
           </div>
-          <p className="text-charcoal-600">
-            Manage and download your deal coupons. Present these to suppliers to redeem your offers.
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4">
+            My Coupons
+          </h1>
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+            View, download, and manage your deal coupons from South African suppliers. Present these to redeem your offers.
           </p>
         </div>
 
@@ -277,7 +281,7 @@ export default function MyCoupons() {
             )}
           </TabsContent>
         </Tabs>
-      </div>
+      </main>
     </div>
   );
 }

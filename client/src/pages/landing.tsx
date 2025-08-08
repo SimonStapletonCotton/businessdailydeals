@@ -6,16 +6,24 @@ import SupplierOnboarding from "@/components/supplier-onboarding";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-slate-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-slate-200">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
+      {/* Modern Header */}
+      <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-slate-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-bold text-primary" data-testid="text-logo">
-              Business Daily Deals
-            </h1>
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center gap-3">
+              <div className="bg-gradient-to-r from-accent to-primary p-2 rounded-lg">
+                <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
+                  <span className="text-primary font-bold text-lg">B</span>
+                </div>
+              </div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent" data-testid="text-logo">
+                Business Daily Deals
+              </h1>
+            </div>
             <Button
               onClick={() => (window.location.href = "/api/login")}
+              className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-6 py-2 shadow-lg"
               data-testid="button-login"
             >
               Login
@@ -24,26 +32,32 @@ export default function Landing() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="gradient-hero text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6" data-testid="text-hero-title">
-            Business Daily Deals
-          </h2>
-          <p className="text-xl mb-8 opacity-90" data-testid="text-hero-description">
-            South Africa's premier B2B marketplace connecting suppliers with buyers through exclusive daily deals
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      {/* Modern Hero Section */}
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-accent via-primary to-slate-700 opacity-90"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-8">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight" data-testid="text-hero-title">
+              Business Daily
+              <span className="block bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                Deals
+              </span>
+            </h2>
+            <p className="text-xl md:text-2xl mb-12 text-white/90 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-description">
+              South Africa's premier B2B marketplace connecting suppliers with buyers through exclusive daily deals and competitive pricing
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Button
-              className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 py-3 text-lg"
+              className="bg-white text-accent hover:bg-slate-100 px-10 py-4 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all"
               onClick={() => (window.location.href = "/api/login")}
               data-testid="button-start-buying"
             >
               Start Buying
             </Button>
             <Button
-              variant="secondary"
-              className="bg-white text-primary hover:bg-slate-100 px-8 py-3 text-lg"
+              variant="outline"
+              className="border-2 border-white text-white hover:bg-white hover:text-accent px-10 py-4 text-xl font-semibold backdrop-blur-sm"
               onClick={() => (window.location.href = "/api/login")}
               data-testid="button-become-supplier"
             >
