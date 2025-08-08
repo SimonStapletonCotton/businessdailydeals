@@ -85,6 +85,19 @@ export default function FindMeDeal() {
   });
 
   const onSubmit = (data: FindDealForm) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to submit a deal request.",
+        variant: "destructive",
+      });
+      // Redirect to login
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 1500);
+      return;
+    }
+
     if (!data.productName || !data.quantityRequired || !data.deliveryDestination) {
       toast({
         title: "Missing Information",
@@ -372,7 +385,7 @@ export default function FindMeDeal() {
                     ) : (
                       <>
                         <Send className="mr-2 h-5 w-5" />
-                        Submit Deal Request
+                        {!isAuthenticated ? "Login to Submit Request" : "Submit Deal Request"}
                       </>
                     )}
                   </Button>
