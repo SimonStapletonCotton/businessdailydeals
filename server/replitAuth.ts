@@ -146,13 +146,7 @@ export async function setupAuth(app: Express) {
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
   const user = req.user as any;
   
-  console.log(`[AUTH DEBUG] isAuthenticated: ${req.isAuthenticated()}`);
-  console.log(`[AUTH DEBUG] user:`, user);
-  console.log(`[AUTH DEBUG] user.id:`, user?.id);
-  console.log(`[AUTH DEBUG] user.claims.sub:`, user?.claims?.sub);
-
   if (!req.isAuthenticated()) {
-    console.log(`[AUTH DEBUG] Authentication failed - not authenticated`);
     return res.status(401).json({ 
       message: "Unauthorized",
       loginUrl: "/api/login",

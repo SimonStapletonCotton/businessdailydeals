@@ -57,6 +57,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - **UPDATED: Header design to full-width charcoal gradient** - Extended header background to span entire navigation width with modern charcoal/slate color scheme for professional appearance
 - **COMPLETED: Find Me a Deal feature** - Built comprehensive deal request system where buyers can submit specific product requirements (name, size, quantity, delivery destination, price range) with proper authentication, form validation, and database storage
 - **FIXED: Session authentication issues** - Resolved cookie security settings for development environment to ensure proper authentication persistence and API request authorization
+- **RESOLVED: User ID extraction in authentication** - Fixed authentication middleware to properly extract user ID from session claims (user.claims.sub) enabling successful deal request submissions
 
 ## User Preferences
 
