@@ -48,6 +48,11 @@ export default function Rates() {
     enabled: isAuthenticated,
   });
 
+  const { data: userCredits } = useQuery({
+    queryKey: ["/api/credits"],
+    enabled: isAuthenticated,
+  });
+
   const addToBasketMutation = useMutation({
     mutationFn: async (item: Omit<BasketItem, 'id'>) => {
       const response = await apiRequest("POST", "/api/basket", item);
@@ -71,6 +76,31 @@ export default function Rates() {
       toast({
         title: "Removed from Basket",
         description: "Item removed from your basket",
+      });
+    },
+  });
+
+  const purchaseCreditsMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("POST", "/api/purchase-basket-credits", {
+        totalAmount: totalBasketValue,
+        currency: 'ZAR'
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/basket"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/credits"] });
+      toast({
+        title: "Credits Purchased Successfully",
+        description: `${totalBasketValue.toFixed(0)} credits added to your account`,
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Purchase Failed",
+        description: "Unable to process credit purchase. Please try again.",
+        variant: "destructive",
       });
     },
   });
@@ -170,6 +200,37 @@ export default function Rates() {
 
   const totalBasketValue = Array.isArray(basketItems) ? basketItems.reduce((total: number, item: any) => total + parseFloat(item.totalCost), 0) : 0;
 
+  const handlePurchaseCredits = () => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Please Login",
+        description: "You need to login to purchase credits",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (user?.userType !== 'supplier') {
+      toast({
+        title: "Suppliers Only",
+        description: "Only suppliers can purchase advertising credits",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (totalBasketValue === 0) {
+      toast({
+        title: "Empty Basket",
+        description: "Please add items to your basket before purchasing",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    purchaseCreditsMutation.mutate();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-stone-50 to-slate-100">
       <Navbar />
@@ -177,7 +238,7 @@ export default function Rates() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
           <Badge variant="secondary" className="mb-6 bg-accent/10 text-accent border-accent/20">
-            Advertising Rates
+            Advertising Rates - South African Market
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-6">
             Rates per Advert per Day
@@ -185,6 +246,17 @@ export default function Rates() {
           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Choose your advertising duration and quantity. Add items to your basket and convert to credits for payment.
           </p>
+          {isAuthenticated && user?.userType === 'supplier' && (
+            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg max-w-md mx-auto">
+              <div className="text-center">
+                <p className="text-sm text-green-700">Your Current Balance</p>
+                <p className="text-2xl font-bold text-green-800">
+                  {Array.isArray(userCredits) ? userCredits.reduce((total: number, credit: any) => total + parseFloat(credit.amount), 0).toFixed(0) : '0'} credits
+                </p>
+                <p className="text-xs text-green-600 mt-1">≈ R{Array.isArray(userCredits) ? userCredits.reduce((total: number, credit: any) => total + parseFloat(credit.amount), 0).toFixed(2) : '0.00'}</p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -316,10 +388,22 @@ export default function Rates() {
                       </div>
                     </div>
                     
-                    <Button className="w-full" size="lg">
+                    <Button 
+                      className="w-full" 
+                      size="lg"
+                      onClick={() => handlePurchaseCredits()}
+                      disabled={totalBasketValue === 0 || purchaseCreditsMutation.isPending}
+                    >
                       <CreditCard className="w-4 h-4 mr-2" />
-                      Convert to Credits & Pay
+                      {purchaseCreditsMutation.isPending ? "Processing..." : `Purchase Credits (R${totalBasketValue.toFixed(2)})`}
                     </Button>
+                    
+                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                      <p className="text-xs text-blue-700 text-center">
+                        <strong>Local Payment Processing:</strong> Credits purchased directly without international payment gateways. 
+                        Perfect for South African businesses. 1 credit = R1.00
+                      </p>
+                    </div>
                   </div>
                 ) : (
                   <div className="text-center py-8 text-slate-500">

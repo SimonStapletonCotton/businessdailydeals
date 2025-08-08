@@ -25,22 +25,25 @@ function Router() {
 
   return (
     <Switch>
+      {/* Public routes available to everyone */}
+      <Route path="/rates-management" component={Rates} />
+      <Route path="/regular-deals" component={RegularDeals} />
+      <Route path="/search" component={SearchPage} />
+      <Route path="/directory" component={ProductDirectoryPage} />
+      <Route path="/contact" component={ContactPage} />
+      <Route path="/pricing" component={Pricing} />
+      
+      {/* Authentication-based routing */}
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
       ) : (
         <>
           <Route path="/" component={Home} />
           <Route path="/hot-deals" component={HotDeals} />
-          <Route path="/regular-deals" component={RegularDeals} />
           <Route path="/supplier-dashboard" component={SupplierDashboard} />
           <Route path="/post-deal" component={PostDeal} />
           <Route path="/my-coupons" component={MyCoupons} />
-          <Route path="/pricing" component={Pricing} />
-          <Route path="/rates-management" component={Rates} />
-          <Route path="/search" component={SearchPage} />
           <Route path="/credits" component={CreditsPage} />
-          <Route path="/directory" component={ProductDirectoryPage} />
-          <Route path="/contact" component={ContactPage} />
         </>
       )}
       <Route component={NotFound} />

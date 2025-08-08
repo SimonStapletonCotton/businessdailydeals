@@ -38,6 +38,9 @@ The application is built with a modern web stack featuring React frontend, Expre
 - **ADDED: Home page bottom features section** - Six community support cards: View Expired Deals, Report Bad Deals, Comment on Site, Share & Earn Credits, Membership Counters (suppliers/buyers), Products Listed Counter
 - **UPDATED: Hot deals visibility** - Hot deals now only visible on home page for authenticated users; non-authenticated users see navigation to register instead
 - **ADDED: Regular Deals to navigation** - Added Regular Deals menu item for buyers to browse all regular deals listings
+- **COMPLETED: Comprehensive rates per advert system** - Built complete advertising rates marketplace with Excel-based pricing structure (1-30 days for regular deals, 1-7 days for hot deals), shopping basket functionality, and local South African payment processing (no Stripe needed)
+- **IMPLEMENTED: Local payment solution** - Created ZAR-based credit purchase system specifically for South African market, bypassing international payment gateway limitations
+- **ADDED: Credit balance display** - Suppliers can view current credit balance and purchase additional credits directly from rates page
 - **NEW FEATURES PLANNED**: Image upload for products, banner advertising system, analytics/hit counters, direct purchasing with delivery options
 
 ## User Preferences

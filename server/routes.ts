@@ -718,6 +718,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Local payment processing for South African market
+  app.post('/api/purchase-basket-credits', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { totalAmount, currency = 'ZAR' } = req.body;
+
+      // Get basket items
+      const basketItems = await storage.getBasketItems(userId);
+      
+      if (!basketItems || basketItems.length === 0) {
+        return res.status(400).json({ message: "Basket is empty" });
+      }
+
+      // Calculate total credits (1:1 ratio with ZAR for now)
+      const totalCredits = parseFloat(totalAmount);
+
+      // Create credit transaction record
+      const transaction = await storage.createCreditTransaction({
+        userId,
+        amount: totalAmount.toString(),
+        type: 'purchase',
+        description: `Purchase of ${totalCredits} advertising credits from basket items`,
+      });
+
+      // Clear the basket after successful purchase
+      await storage.clearBasket(userId);
+
+      res.json({ 
+        message: "Credits purchased successfully",
+        credits: totalCredits,
+        transaction: transaction.id,
+        currency
+      });
+    } catch (error) {
+      console.error("Error processing credit purchase:", error);
+      res.status(500).json({ message: "Failed to process purchase" });
+    }
+  });
+
   app.get('/api/directory/featured', async (req, res) => {
     try {
       const hotDeals = await storage.getDeals('hot');
