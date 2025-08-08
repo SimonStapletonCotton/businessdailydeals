@@ -42,6 +42,12 @@ export const users = pgTable("users", {
   acceptDataOffer: boolean("accept_data_offer").default(false),
   mobileProvider: varchar("mobile_provider"), // "vodacom", "mtn", "telkom"
   
+  // Notification preferences for keyword matching
+  notificationMethod: varchar("notification_method").default("email"), // "email", "sms", "whatsapp"
+  allowEmailNotifications: boolean("allow_email_notifications").default(true),
+  allowSmsNotifications: boolean("allow_sms_notifications").default(false),
+  allowWhatsappNotifications: boolean("allow_whatsapp_notifications").default(false),
+  
   // Supplier-specific fields
   companyName: varchar("company_name"),
   address: text("address"),

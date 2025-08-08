@@ -42,6 +42,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, or, like, inArray, sql } from "drizzle-orm";
+import { nanoid } from "nanoid";
 
 // Extended types for joins
 export type DealWithSupplier = Deal & { supplier: User };
@@ -53,6 +54,7 @@ export interface IStorage {
   // User operations
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  createUser(user: any): Promise<User>;
   updateUserType(id: string, userType: string): Promise<User>;
   
   // Deal operations
@@ -69,6 +71,7 @@ export interface IStorage {
   // Keyword operations
   getUserKeywords(userId: string): Promise<Keyword[]>;
   addKeyword(keyword: InsertKeyword): Promise<Keyword>;
+  createKeyword(userId: string, keyword: string): Promise<Keyword>;
   removeKeyword(id: string): Promise<void>;
   
   // Notification operations
@@ -156,6 +159,18 @@ export class DatabaseStorage implements IStorage {
         },
       })
       .returning();
+    return user;
+  }
+
+  async createUser(userData: any): Promise<User> {
+    const userDataWithId = {
+      ...userData,
+      id: nanoid(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    
+    const [user] = await db.insert(users).values(userDataWithId).returning();
     return user;
   }
 
@@ -615,6 +630,17 @@ export class DatabaseStorage implements IStorage {
   async addKeyword(keywordData: InsertKeyword): Promise<Keyword> {
     const [keyword] = await db.insert(keywords).values(keywordData).returning();
     return keyword;
+  }
+
+  async createKeyword(userId: string, keyword: string): Promise<Keyword> {
+    const keywordData = {
+      id: nanoid(),
+      userId,
+      keyword,
+      createdAt: new Date(),
+    };
+    const [result] = await db.insert(keywords).values(keywordData).returning();
+    return result;
   }
 
   async removeKeyword(id: string): Promise<void> {

@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingBag, Gift, Smartphone } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { ShoppingBag, Gift, Smartphone, Bell, Mail, MessageSquare, X, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import Navbar from "@/components/navbar";
 
 const buyerRegistrationSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -27,6 +29,15 @@ const buyerRegistrationSchema = z.object({
   subscribeToNewsletter: z.boolean().default(false),
   acceptDataOffer: z.boolean().default(false),
   mobileProvider: z.string().optional(),
+  
+  // Keyword notifications and preferences
+  keywords: z.string().min(1, "Please add at least one keyword for notifications"),
+  notificationMethod: z.enum(["email", "sms", "whatsapp"], {
+    required_error: "Please select a notification method",
+  }),
+  allowEmailNotifications: z.boolean().default(true),
+  allowSmsNotifications: z.boolean().default(false),
+  allowWhatsappNotifications: z.boolean().default(false),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -52,6 +63,8 @@ const southAfricanProvinces = [
 export default function BuyerRegistration() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [keywordInput, setKeywordInput] = useState("");
+  const [keywords, setKeywords] = useState<string[]>([]);
 
   const form = useForm<BuyerRegistrationForm>({
     resolver: zodResolver(buyerRegistrationSchema),
@@ -66,13 +79,34 @@ export default function BuyerRegistration() {
       subscribeToNewsletter: false,
       acceptDataOffer: false,
       mobileProvider: "",
+      keywords: "",
+      notificationMethod: "email",
+      allowEmailNotifications: true,
+      allowSmsNotifications: false,
+      allowWhatsappNotifications: false,
     },
   });
+
+  const addKeyword = () => {
+    if (keywordInput.trim() && !keywords.includes(keywordInput.trim())) {
+      const newKeywords = [...keywords, keywordInput.trim()];
+      setKeywords(newKeywords);
+      form.setValue("keywords", newKeywords.join(", "));
+      setKeywordInput("");
+    }
+  };
+
+  const removeKeyword = (keywordToRemove: string) => {
+    const newKeywords = keywords.filter(k => k !== keywordToRemove);
+    setKeywords(newKeywords);
+    form.setValue("keywords", newKeywords.join(", "));
+  };
 
   const registerMutation = useMutation({
     mutationFn: async (data: BuyerRegistrationForm) => {
       const registrationData = {
         ...data,
+        keywordsList: keywords, // Send keywords as array
         userType: "buyer",
       };
       return await apiRequest("POST", "/api/auth/register", registrationData);
@@ -99,6 +133,7 @@ export default function BuyerRegistration() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 py-12">
+      <Navbar />
       <div className="container mx-auto px-4 max-w-2xl">
         <div className="text-center mb-8">
           <Badge variant="outline" className="mb-4 text-indigo-600 border-indigo-200">
@@ -324,6 +359,179 @@ export default function BuyerRegistration() {
                       />
                     </div>
                   )}
+                </div>
+
+                {/* Keywords and Notification Preferences */}
+                <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-4 rounded-lg border border-orange-200">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Bell className="h-5 w-5 text-orange-600" />
+                    <h3 className="font-semibold text-orange-800">Deal Notifications & Keywords</h3>
+                  </div>
+                  <p className="text-orange-700 mb-4 text-sm">
+                    Get notified when deals match your interests. Add keywords and choose how you want to be notified.
+                  </p>
+
+                  {/* Keywords Input */}
+                  <div className="mb-4">
+                    <Label className="text-orange-800 mb-2 block">Add Keywords for Deal Notifications</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="e.g., electronics, office supplies, machinery"
+                        value={keywordInput}
+                        onChange={(e) => setKeywordInput(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addKeyword())}
+                        data-testid="input-keyword"
+                      />
+                      <Button 
+                        type="button" 
+                        onClick={addKeyword}
+                        variant="outline"
+                        size="sm"
+                        data-testid="button-add-keyword"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    {keywords.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {keywords.map((keyword, index) => (
+                          <Badge key={index} variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">
+                            {keyword}
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-auto p-0 ml-2 hover:bg-transparent"
+                              onClick={() => removeKeyword(keyword)}
+                              data-testid={`button-remove-keyword-${index}`}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Hidden field for form validation */}
+                  <FormField
+                    control={form.control}
+                    name="keywords"
+                    render={({ field }) => (
+                      <FormItem className="hidden">
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Notification Method Selection */}
+                  <FormField
+                    control={form.control}
+                    name="notificationMethod"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-orange-800">How would you like to receive notifications?</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-notification-method">
+                              <SelectValue placeholder="Choose notification method" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="email">
+                              <div className="flex items-center gap-2">
+                                <Mail className="h-4 w-4" />
+                                Email Notifications
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="sms">
+                              <div className="flex items-center gap-2">
+                                <Smartphone className="h-4 w-4" />
+                                SMS Notifications
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="whatsapp">
+                              <div className="flex items-center gap-2">
+                                <MessageSquare className="h-4 w-4" />
+                                WhatsApp Notifications
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Additional Notification Preferences */}
+                  <div className="mt-4 space-y-3">
+                    <FormField
+                      control={form.control}
+                      name="allowEmailNotifications"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              data-testid="checkbox-allow-email"
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="cursor-pointer text-orange-800">
+                              Allow email notifications
+                            </FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="allowSmsNotifications"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              data-testid="checkbox-allow-sms"
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="cursor-pointer text-orange-800">
+                              Allow SMS notifications
+                            </FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="allowWhatsappNotifications"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              data-testid="checkbox-allow-whatsapp"
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="cursor-pointer text-orange-800">
+                              Allow WhatsApp notifications
+                            </FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
 
                 <Button 

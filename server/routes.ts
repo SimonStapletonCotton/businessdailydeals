@@ -65,6 +65,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Registration endpoint
+  app.post('/api/auth/register', async (req, res) => {
+    try {
+      const {
+        firstName,
+        surname,
+        email,
+        mobile,
+        province,
+        subscribeToNewsletter,
+        acceptDataOffer,
+        mobileProvider,
+        keywordsList,
+        notificationMethod,
+        allowEmailNotifications,
+        allowSmsNotifications,
+        allowWhatsappNotifications,
+        userType
+      } = req.body;
+
+      // Create user record
+      const userData = {
+        email,
+        firstName,
+        lastName: surname,
+        userType: userType || 'buyer',
+        mobile,
+        province,
+        subscribeToNewsletter: subscribeToNewsletter || false,
+        acceptDataOffer: acceptDataOffer || false,
+        mobileProvider,
+        notificationMethod: notificationMethod || 'email',
+        allowEmailNotifications: allowEmailNotifications !== false,
+        allowSmsNotifications: allowSmsNotifications || false,
+        allowWhatsappNotifications: allowWhatsappNotifications || false,
+      };
+
+      const user = await storage.createUser(userData);
+
+      // Create keywords for the user if provided
+      if (keywordsList && Array.isArray(keywordsList) && keywordsList.length > 0) {
+        for (const keyword of keywordsList) {
+          if (keyword.trim()) {
+            await storage.createKeyword(user.id, keyword.trim());
+          }
+        }
+      }
+
+      res.status(201).json({ 
+        message: "Registration successful", 
+        user: { id: user.id, email: user.email, userType: user.userType } 
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ message: "Failed to register user" });
+    }
+  });
+
   // User routes
   app.patch('/api/user/type', isAuthenticated, async (req: any, res) => {
     try {
