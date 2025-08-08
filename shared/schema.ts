@@ -232,6 +232,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   orders: many(orders),
   bannerAds: many(bannerAds),
   companies: many(companies),
+  dealRequests: many(dealRequests),
 }));
 
 export const basketItemsRelations = relations(basketItems, ({ one }) => ({
@@ -284,6 +285,26 @@ export const companiesRelations = relations(companies, ({ one }) => ({
   user: one(users, { fields: [companies.userId], references: [users.id] }),
 }));
 
+// Deal requests table for "Find Me a Deal" functionality
+export const dealRequests = pgTable("deal_requests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  requesterId: varchar("requester_id").notNull().references(() => users.id),
+  productName: varchar("product_name").notNull(),
+  productSize: varchar("product_size"),
+  quantityRequired: integer("quantity_required").notNull(),
+  deliveryDestination: varchar("delivery_destination").notNull(),
+  priceRangeMin: decimal("price_range_min", { precision: 10, scale: 2 }),
+  priceRangeMax: decimal("price_range_max", { precision: 10, scale: 2 }),
+  additionalRequirements: text("additional_requirements"),
+  status: varchar("status").notNull().default("active"), // active, fulfilled, expired
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const dealRequestsRelations = relations(dealRequests, ({ one }) => ({
+  requester: one(users, { fields: [dealRequests.requesterId], references: [users.id] }),
+}));
+
 // Type exports
 export type User = typeof users.$inferSelect;
 export type UpsertUser = typeof users.$inferInsert;
@@ -311,6 +332,8 @@ export type Company = typeof companies.$inferSelect;
 export type InsertCompany = typeof companies.$inferInsert;
 export type SiteAnalytics = typeof siteAnalytics.$inferSelect;
 export type InsertSiteAnalytics = typeof siteAnalytics.$inferInsert;
+export type DealRequest = typeof dealRequests.$inferSelect;
+export type InsertDealRequest = typeof dealRequests.$inferInsert;
 
 // Insert schemas with Zod validation
 export const insertUserSchema = createInsertSchema(users);
@@ -325,6 +348,7 @@ export const insertCreditTransactionSchema = createInsertSchema(creditTransactio
 export const insertBannerAdSchema = createInsertSchema(bannerAds);
 export const insertBasketItemSchema = createInsertSchema(basketItems);
 export const insertCompanySchema = createInsertSchema(companies);
+export const insertDealRequestSchema = createInsertSchema(dealRequests);
 
 // Zod inferred types for inserts
 export type InsertUserType = z.infer<typeof insertUserSchema>;
@@ -339,3 +363,4 @@ export type InsertCreditTransactionType = z.infer<typeof insertCreditTransaction
 export type InsertBannerAdType = z.infer<typeof insertBannerAdSchema>;
 export type InsertBasketItemType = z.infer<typeof insertBasketItemSchema>;
 export type InsertCompanyType = z.infer<typeof insertCompanySchema>;
+export type InsertDealRequestType = z.infer<typeof insertDealRequestSchema>;
