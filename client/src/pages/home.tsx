@@ -11,7 +11,7 @@ import { Search, ArrowRight, Flame, TrendingUp, Users, Zap, Shield, Globe, Star,
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
-import { DealWithSupplier } from "@shared/schema";
+import { Deal } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Home() {
@@ -223,7 +223,7 @@ export default function Home() {
                   </p>
                 </div>
               ) : sortedSearchResults.length > 0 ? (
-                sortedSearchResults.map((deal: DealWithSupplier) => (
+                sortedSearchResults.map((deal: any) => (
                   <DealCard 
                     key={deal.id} 
                     deal={deal} 
@@ -293,7 +293,7 @@ export default function Home() {
                   </Card>
                 ))
               ) : displayedHotDeals.length > 0 ? (
-                displayedHotDeals.map((deal: DealWithSupplier) => (
+                displayedHotDeals.map((deal: any) => (
                   <DealCard key={deal.id} deal={deal} variant="hot" />
                 ))
               ) : (
