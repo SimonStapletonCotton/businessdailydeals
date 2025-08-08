@@ -80,22 +80,7 @@ export default function Navbar() {
             Register as BUYER
           </Button>
         </>
-      ) : (
-        <>
-          {(user as UserType)?.userType === "supplier" && (
-            <Link href="/supplier-dashboard">
-              <Button
-                variant={location === "/supplier-dashboard" ? "default" : "ghost"}
-                className={mobile ? "w-full justify-start" : "text-sm font-medium"}
-                data-testid="link-supplier-dashboard"
-                onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-              >
-                Supplier Dashboard
-              </Button>
-            </Link>
-          )}
-        </>
-      )}
+      ) : null}
 
       <Link href="/search">
         <Button
@@ -120,6 +105,19 @@ export default function Navbar() {
           Regular Deals
         </Button>
       </Link>
+
+      {isAuthenticated && (user as UserType)?.userType === "supplier" && (
+        <Link href="/supplier-dashboard">
+          <Button
+            variant={location === "/supplier-dashboard" ? "default" : "ghost"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            data-testid="link-supplier-dashboard"
+            onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+          >
+            Supplier Dashboard
+          </Button>
+        </Link>
+      )}
       
       <Link href="/pricing">
         <Button
