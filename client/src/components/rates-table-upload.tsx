@@ -33,10 +33,10 @@ export default function RatesTableUpload() {
     mutationFn: async (rates: ParsedRate[]) => {
       return await apiRequest("POST", "/api/rates/bulk-upload", { rates });
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       toast({
         title: "Success!",
-        description: `Successfully uploaded ${data.rates.length} advertising rates`,
+        description: `Successfully uploaded ${data.rates?.length || 0} advertising rates`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/rates"] });
       setFile(null);
