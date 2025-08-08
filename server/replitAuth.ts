@@ -90,6 +90,8 @@ export async function setupAuth(app: Express) {
       email: claims.email,
     };
     updateUserSession(user, tokens);
+    // Ensure the ID is accessible after session updates
+    user.id = claims.sub;
     await upsertUser(claims);
     verified(null, user);
   };
@@ -146,7 +148,8 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   
   console.log(`[AUTH DEBUG] isAuthenticated: ${req.isAuthenticated()}`);
   console.log(`[AUTH DEBUG] user:`, user);
-  console.log(`[AUTH DEBUG] session:`, req.session.passport);
+  console.log(`[AUTH DEBUG] user.id:`, user?.id);
+  console.log(`[AUTH DEBUG] user.claims.sub:`, user?.claims?.sub);
 
   if (!req.isAuthenticated()) {
     console.log(`[AUTH DEBUG] Authentication failed - not authenticated`);
