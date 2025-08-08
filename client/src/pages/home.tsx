@@ -91,7 +91,7 @@ export default function Home() {
   const showLoading = isSearching ? searchLoading : hotDealsLoading;
 
   return (
-    <div className="min-h-screen page-home">
+    <div className="min-h-screen page-home mobile-update">
       <Navbar />
 
       {/* Modern Hero Section */}
