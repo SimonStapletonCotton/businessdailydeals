@@ -20,15 +20,15 @@ const supplierRegistrationSchema = z.object({
   address: z.string().min(10, "Please provide a complete address"),
   email: z.string().email("Please enter a valid email address"),
   mobile: z.string().min(10, "Mobile number must be at least 10 digits"),
-  representativeName: z.string().min(2, "Representative name must be at least 2 characters"),
+  representativeName: z.string().min(2, "Name of company representative must be at least 2 characters"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string().min(8, "Please confirm your password"),
-  numberOfItems: z.string().min(1, "Please specify number of items"),
-  rrpPerItem: z.string().min(1, "Please specify RRP per item"),
-  discountPerItem: z.string().min(2, "Minimum 20% discount required"),
-  itemDescriptions: z.string().min(10, "Please provide detailed item descriptions"),
+  numberOfItems: z.string().min(1, "Number of items to be uploaded is required"),
+  rrpPerItem: z.string().min(1, "RRP of each item is required"),
+  discountPerItem: z.string().min(2, "Discount on each item is required (minimum 20%)"),
+  itemDescriptions: z.string().min(10, "Detailed description of each item is required"),
   dealType: z.enum(["hot", "regular"], {
-    required_error: "Please select a deal type",
+    required_error: "Please select whether to load as 24hr deal or regular deal",
   }),
   regularDealDuration: z.string().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -41,7 +41,7 @@ const supplierRegistrationSchema = z.object({
   message: "Minimum discount of 20% is required",
   path: ["discountPerItem"],
 }).refine((data) => data.dealType !== "regular" || data.regularDealDuration, {
-  message: "Please select duration for regular deals",
+  message: "Please select duration for regular deals (7 or 14 days)",
   path: ["regularDealDuration"],
 });
 
