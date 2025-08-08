@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Plus, User, Menu, Ticket, DollarSign, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins } from "lucide-react";
+import { Bell, Plus, User, Menu, Ticket, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -121,7 +121,7 @@ export default function Navbar() {
           data-testid="link-rates"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
-          <DollarSign className="h-4 w-4 mr-2" />
+          <CreditCard className="h-4 w-4 mr-2" />
           Rates per Advert
         </Button>
       </Link>
