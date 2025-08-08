@@ -534,10 +534,10 @@ export default function PostDeal() {
                 {/* Product Images Section */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <Package className="h-5 w-5 text-olive-600" />
-                    <h3 className="text-lg font-semibold text-charcoal-900">Product Images *</h3>
+                    <Package className="h-5 w-5 text-slate-600" />
+                    <h3 className="text-lg font-semibold text-slate-900">Product Images *</h3>
                   </div>
-                  <div className="bg-olive-50 border border-olive-200 rounded-lg p-4">
+                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                     <ImageUpload
                       images={productImages}
                       onImagesChange={handleProductImagesChange}
