@@ -16,6 +16,7 @@ import RatesManagement from "@/pages/rates-management";
 import SearchPage from "@/pages/search";
 import CreditsPage from "@/pages/credits";
 import ProductDirectoryPage from "@/pages/product-directory";
+import ContactPage from "@/pages/contact";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -38,6 +39,7 @@ function Router() {
           <Route path="/search" component={SearchPage} />
           <Route path="/credits" component={CreditsPage} />
           <Route path="/directory" component={ProductDirectoryPage} />
+          <Route path="/contact" component={ContactPage} />
         </>
       )}
       <Route component={NotFound} />

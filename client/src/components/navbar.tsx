@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Plus, User, Menu, Ticket, DollarSign, Search, CreditCard, Building2 } from "lucide-react";
+import { Bell, Plus, User, Menu, Ticket, DollarSign, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -41,26 +41,62 @@ export default function Navbar() {
 
   const NavLinks = ({ mobile = false }: { mobile?: boolean }) => (
     <>
-      <Link href="/hot-deals">
+      <Link href="/">
         <Button
-          variant={location === "/hot-deals" ? "default" : "ghost"}
+          variant={location === "/" ? "default" : "ghost"}
           className={mobile ? "w-full justify-start" : "text-sm font-medium"}
-          data-testid="link-hot-deals"
+          data-testid="link-home"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
-          Hot Deals
+          <Home className="h-4 w-4 mr-2" />
+          Home / How Site Works
         </Button>
       </Link>
-      <Link href="/regular-deals">
-        <Button
-          variant={location === "/regular-deals" ? "default" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
-          data-testid="link-regular-deals"
-          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-        >
-          Regular Deals
-        </Button>
-      </Link>
+      
+      {!isAuthenticated ? (
+        <>
+          <Button
+            variant="ghost"
+            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            data-testid="link-register-supplier"
+            onClick={() => {
+              window.location.href = "/api/login";
+              if (mobile) setMobileMenuOpen(false);
+            }}
+          >
+            <UserPlus className="h-4 w-4 mr-2" />
+            Register as SUPPLIER
+          </Button>
+          <Button
+            variant="ghost"
+            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            data-testid="link-register-buyer"
+            onClick={() => {
+              window.location.href = "/api/login";
+              if (mobile) setMobileMenuOpen(false);
+            }}
+          >
+            <ShoppingBag className="h-4 w-4 mr-2" />
+            Register as BUYER
+          </Button>
+        </>
+      ) : (
+        <>
+          {(user as UserType)?.userType === "supplier" && (
+            <Link href="/supplier-dashboard">
+              <Button
+                variant={location === "/supplier-dashboard" ? "default" : "ghost"}
+                className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+                data-testid="link-supplier-dashboard"
+                onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+              >
+                Supplier Dashboard
+              </Button>
+            </Link>
+          )}
+        </>
+      )}
+
       <Link href="/search">
         <Button
           variant={location === "/search" ? "default" : "ghost"}
@@ -69,20 +105,10 @@ export default function Navbar() {
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           <Search className="h-4 w-4 mr-2" />
-          Search
+          Find Me a Deal
         </Button>
       </Link>
-      <Link href="/directory">
-        <Button
-          variant={location === "/directory" ? "default" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
-          data-testid="link-directory"
-          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-        >
-          <Building2 className="h-4 w-4 mr-2" />
-          Directory
-        </Button>
-      </Link>
+      
       <Link href="/pricing">
         <Button
           variant={location === "/pricing" ? "default" : "ghost"}
@@ -91,22 +117,10 @@ export default function Navbar() {
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           <DollarSign className="h-4 w-4 mr-2" />
-          Pricing
+          Rates per Advert
         </Button>
       </Link>
-      {isAuthenticated && (
-        <Link href="/credits">
-          <Button
-            variant={location === "/credits" ? "default" : "ghost"}
-            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
-            data-testid="link-credits"
-            onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-          >
-            <CreditCard className="h-4 w-4 mr-2" />
-            Credits
-          </Button>
-        </Link>
-      )}
+      
       {isAuthenticated && (user as UserType)?.userType === "buyer" && (
         <Link href="/my-coupons">
           <Button
@@ -116,34 +130,22 @@ export default function Navbar() {
             onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
             <Ticket className="h-4 w-4 mr-2" />
-            My Coupons
+            Coupons Downloaded
           </Button>
         </Link>
       )}
-      {(user as UserType)?.userType === "supplier" && (
-        <>
-          <Link href="/supplier-dashboard">
-            <Button
-              variant={location === "/supplier-dashboard" ? "default" : "ghost"}
-              className={mobile ? "w-full justify-start" : "text-sm font-medium"}
-              data-testid="link-supplier-dashboard"
-              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-            >
-              Dashboard
-            </Button>
-          </Link>
-          <Link href="/rates-management">
-            <Button
-              variant={location === "/rates-management" ? "default" : "ghost"}
-              className={mobile ? "w-full justify-start" : "text-sm font-medium"}
-              data-testid="link-rates-management"
-              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-            >
-              Rates
-            </Button>
-          </Link>
-        </>
-      )}
+      
+      <Link href="/contact">
+        <Button
+          variant={location === "/contact" ? "default" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+          data-testid="link-contact"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Mail className="h-4 w-4 mr-2" />
+          Contact Us
+        </Button>
+      </Link>
     </>
   );
 
