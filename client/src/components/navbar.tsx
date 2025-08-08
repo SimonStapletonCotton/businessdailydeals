@@ -173,16 +173,8 @@ export default function Navbar() {
   );
 
   return (
-    <header 
-      className="bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 shadow-lg border-b border-slate-800" 
-      style={{
-        width: '100vw',
-        position: 'relative',
-        left: '50%',
-        marginLeft: '-50vw',
-        marginRight: '-50vw'
-      }}
-    >
+    <header className="bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 shadow-lg border-b border-slate-800"
+      style={{ width: '100vw', position: 'absolute', left: 0, top: 0 }}>
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4 flex-1">
