@@ -173,10 +173,9 @@ export default function Navbar() {
   );
 
   return (
-    <div className="header-wrapper shadow-lg border-b border-slate-800">
-      <header className="max-w-none">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+    <div className="header-full-width shadow-lg border-b border-slate-800">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4 flex-1">
             <Link href="/" className="flex-shrink-0">
               <h1 className="text-xl md:text-2xl font-bold text-white cursor-pointer whitespace-nowrap" data-testid="text-logo">
@@ -350,9 +349,8 @@ export default function Navbar() {
               </SheetContent>
             </Sheet>
           </div>
-          </div>
         </div>
-      </header>
+      </div>
     </div>
   );
 }
