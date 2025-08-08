@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { sendDealRequestToAdmin } from "./email";
 import Stripe from "stripe";
 import { 
   insertDealSchema, 
@@ -899,10 +900,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const dealRequest = await storage.createDealRequest(requestData);
 
-      // TODO: Notify relevant suppliers about this request
-      // This could be done by matching keywords, categories, or other criteria
+      // Get user information for email
+      const userInfo = await storage.getUser(userId);
+      
+      // Send email notification to admin
+      const emailSuccess = await sendDealRequestToAdmin({
+        requesterName: userInfo ? `${userInfo.firstName || ''} ${userInfo.lastName || ''}`.trim() || 'Unknown' : 'Unknown',
+        requesterEmail: userInfo?.email || user?.claims?.email || 'unknown@unknown.com',
+        productName: requestData.productName,
+        productSize: requestData.productSize,
+        quantityRequired: requestData.quantityRequired,
+        deliveryDestination: requestData.deliveryDestination,
+        priceRangeMin: requestData.priceRangeMin ? Number(requestData.priceRangeMin) : undefined,
+        priceRangeMax: requestData.priceRangeMax ? Number(requestData.priceRangeMax) : undefined,
+        additionalRequirements: requestData.additionalRequirements,
+        submittedAt: new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })
+      });
 
-      res.status(201).json(dealRequest);
+      if (!emailSuccess) {
+        console.warn('Failed to send deal request email to admin');
+      }
+
+      res.status(201).json({
+        ...dealRequest,
+        emailSent: emailSuccess
+      });
     } catch (error) {
       console.error("Error creating deal request:", error);
       res.status(500).json({ message: "Failed to create deal request" });

@@ -49,10 +49,22 @@ export default function Navbar() {
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           <Home className="h-4 w-4 mr-2" />
-          Home / How Site Works
+          Home/HOT deals
         </Button>
       </Link>
       
+      <Link href="/regular-deals">
+        <Button
+          variant={location === "/regular-deals" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+          data-testid="link-regular-deals"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Ticket className="h-4 w-4 mr-2" />
+          REGULAR deals
+        </Button>
+      </Link>
+
       {!isAuthenticated ? (
         <>
           <Button
@@ -65,7 +77,7 @@ export default function Navbar() {
             }}
           >
             <UserPlus className="h-4 w-4 mr-2" />
-            Register as SUPPLIER
+            Register as a supplier
           </Button>
           <Button
             variant="ghost"
@@ -77,34 +89,10 @@ export default function Navbar() {
             }}
           >
             <ShoppingBag className="h-4 w-4 mr-2" />
-            Register as BUYER
+            Register as a buyer
           </Button>
         </>
       ) : null}
-
-      <Link href="/find-me-deal">
-        <Button
-          variant={location === "/find-me-deal" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
-          data-testid="link-find-me-deal"
-          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-        >
-          <Search className="h-4 w-4 mr-2" />
-          Find Me a Deal
-        </Button>
-      </Link>
-      
-      <Link href="/regular-deals">
-        <Button
-          variant={location === "/regular-deals" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
-          data-testid="link-regular-deals"
-          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-        >
-          <Ticket className="h-4 w-4 mr-2" />
-          Regular Deals
-        </Button>
-      </Link>
 
       {isAuthenticated && (user as UserType)?.userType === "supplier" && (
         <Link href="/supplier-dashboard">
@@ -114,7 +102,8 @@ export default function Navbar() {
             data-testid="link-supplier-dashboard"
             onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
-            Supplier Dashboard
+            <Building2 className="h-4 w-4 mr-2" />
+            Supplier dashboard
           </Button>
         </Link>
       )}
