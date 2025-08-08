@@ -20,6 +20,8 @@ import CreditsPage from "@/pages/credits";
 import ProductDirectoryPage from "@/pages/product-directory";
 import ContactPage from "@/pages/contact";
 import AboutPage from "@/pages/about";
+import BuyerRegistration from "@/pages/buyer-registration";
+import SupplierRegistration from "@/pages/supplier-registration";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -35,6 +37,8 @@ function Router() {
       <Route path="/directory" component={ProductDirectoryPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/about" component={AboutPage} />
+      <Route path="/register-buyer" component={BuyerRegistration} />
+      <Route path="/register-supplier" component={SupplierRegistration} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/credits" component={CreditsPage} />
       

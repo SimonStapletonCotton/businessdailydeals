@@ -67,30 +67,28 @@ export default function Navbar() {
 
       {!isAuthenticated ? (
         <>
-          <Button
-            variant="ghost"
-            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
-            data-testid="link-register-supplier"
-            onClick={() => {
-              window.location.href = "/api/login";
-              if (mobile) setMobileMenuOpen(false);
-            }}
-          >
-            <UserPlus className="h-4 w-4 mr-2" />
-            Register as a supplier
-          </Button>
-          <Button
-            variant="ghost"
-            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
-            data-testid="link-register-buyer"
-            onClick={() => {
-              window.location.href = "/api/login";
-              if (mobile) setMobileMenuOpen(false);
-            }}
-          >
-            <ShoppingBag className="h-4 w-4 mr-2" />
-            Register as a buyer
-          </Button>
+          <Link href="/register-supplier">
+            <Button
+              variant="ghost"
+              className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+              data-testid="link-register-supplier"
+              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              Register as a supplier
+            </Button>
+          </Link>
+          <Link href="/register-buyer">
+            <Button
+              variant="ghost"
+              className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+              data-testid="link-register-buyer"
+              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+            >
+              <ShoppingBag className="h-4 w-4 mr-2" />
+              Register as a buyer
+            </Button>
+          </Link>
         </>
       ) : null}
 

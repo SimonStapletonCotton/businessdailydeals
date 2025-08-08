@@ -34,7 +34,25 @@ export const users = pgTable("users", {
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
   userType: varchar("user_type").notNull().default("buyer"), // "buyer" or "supplier"
+  
+  // Buyer-specific fields
+  mobile: varchar("mobile"),
+  province: varchar("province"),
+  subscribeToNewsletter: boolean("subscribe_to_newsletter").default(false),
+  acceptDataOffer: boolean("accept_data_offer").default(false),
+  mobileProvider: varchar("mobile_provider"), // "vodacom", "mtn", "telkom"
+  
+  // Supplier-specific fields
   companyName: varchar("company_name"),
+  address: text("address"),
+  representativeName: varchar("representative_name"),
+  numberOfItems: varchar("number_of_items"),
+  rrpPerItem: varchar("rrp_per_item"),
+  discountPerItem: varchar("discount_per_item"),
+  itemDescriptions: text("item_descriptions"),
+  dealType: varchar("preferred_deal_type"), // "hot" or "regular"
+  regularDealDuration: varchar("regular_deal_duration"), // "7" or "14" days
+  
   // Credits system for advertising
   creditBalance: decimal("credit_balance", { precision: 10, scale: 2 }).default('0.00'),
   totalCreditsSpent: decimal("total_credits_spent", { precision: 10, scale: 2 }).default('0.00'),
