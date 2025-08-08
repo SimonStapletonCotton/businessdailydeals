@@ -35,6 +35,7 @@ The application is built with a modern web stack featuring React frontend, Expre
 - **COMPLETED: Alphabetical product directory** - Created organized directory with company listings, product categories, and easy navigation
 - **UPDATED: Main navigation structure** - Reorganized menu to match user specifications: Home/How Site Works, Register as Supplier/Buyer, Find Me a Deal, Rates per Advert, Coupons Downloaded, Contact Us
 - **ADDED: Professional contact page** - Comprehensive contact form with business information, hours, and multiple contact methods
+- **ADDED: Home page bottom features section** - Six community support cards: View Expired Deals, Report Bad Deals, Comment on Site, Share & Earn Credits, Membership Counters (suppliers/buyers), Products Listed Counter
 - **NEW FEATURES PLANNED**: Image upload for products, banner advertising system, analytics/hit counters, direct purchasing with delivery options
 
 ## User Preferences

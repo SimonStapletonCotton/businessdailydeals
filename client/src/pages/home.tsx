@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, ArrowRight, Flame, TrendingUp, Users, Zap, Shield, Globe, Star } from "lucide-react";
+import { Search, ArrowRight, Flame, TrendingUp, Users, Zap, Shield, Globe, Star, AlertTriangle, MessageCircle, Share2, UserCheck, Package } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
@@ -403,6 +403,142 @@ export default function Home() {
               </div>
               <div className="text-stone-200 text-sm">Total Savings</div>
             </div>
+          </div>
+        </section>
+
+        {/* Bottom Features Section */}
+        <section className="bg-gradient-to-br from-slate-50 to-stone-100 dark:from-slate-800 dark:to-slate-700 rounded-3xl p-8 md:p-12 mb-16">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+              Community & Support
+            </h3>
+            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+              Additional resources and tools to help you get the most from our marketplace
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* View Expired Deals */}
+            <Card className="text-center p-6 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300">
+              <div className="bg-orange-100 dark:bg-orange-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <AlertTriangle className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">View Expired Deals</h4>
+              <p className="text-slate-600 dark:text-slate-300 mb-6">
+                Browse deals that have expired to see what you might have missed
+              </p>
+              <Button 
+                variant="outline" 
+                className="w-full border-orange-200 dark:border-orange-700 text-orange-700 dark:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                data-testid="button-expired-deals"
+              >
+                View Expired Deals
+              </Button>
+            </Card>
+
+            {/* Report Bad Deals */}
+            <Card className="text-center p-6 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300">
+              <div className="bg-red-100 dark:bg-red-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Report Bad Deals</h4>
+              <p className="text-slate-600 dark:text-slate-300 mb-6">
+                Help keep our marketplace clean by reporting suspicious or fraudulent deals
+              </p>
+              <Button 
+                variant="outline" 
+                className="w-full border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+                data-testid="button-report-deals"
+              >
+                Report Bad Deal
+              </Button>
+            </Card>
+
+            {/* Comment on Site */}
+            <Card className="text-center p-6 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300">
+              <div className="bg-blue-100 dark:bg-blue-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <MessageCircle className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Comment on Site</h4>
+              <p className="text-slate-600 dark:text-slate-300 mb-6">
+                Share your feedback and suggestions to help us improve the platform
+              </p>
+              <Button 
+                variant="outline" 
+                className="w-full border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                data-testid="button-comment-site"
+              >
+                Leave Feedback
+              </Button>
+            </Card>
+
+            {/* Share on Social Media */}
+            <Card className="text-center p-6 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300">
+              <div className="bg-green-100 dark:bg-green-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Share2 className="h-8 w-8 text-green-600 dark:text-green-400" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Share & Earn Credits</h4>
+              <p className="text-slate-600 dark:text-slate-300 mb-6">
+                Share our platform on social media and earn advertising credits
+              </p>
+              <Button 
+                variant="outline" 
+                className="w-full border-green-200 dark:border-green-700 text-green-700 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20"
+                data-testid="button-share-credits"
+              >
+                Share & Earn
+              </Button>
+            </Card>
+
+            {/* Membership Counters */}
+            <Card className="text-center p-6 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300">
+              <div className="bg-purple-100 dark:bg-purple-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <UserCheck className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Membership Stats</h4>
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 dark:text-slate-300">Suppliers:</span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100" data-testid="text-supplier-count">2,150</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 dark:text-slate-300">Buyers:</span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100" data-testid="text-buyer-count">8,430</span>
+                </div>
+              </div>
+              <Button 
+                variant="outline" 
+                className="w-full border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                data-testid="button-membership-stats"
+              >
+                View Full Stats
+              </Button>
+            </Card>
+
+            {/* Products Listed Counter */}
+            <Card className="text-center p-6 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300">
+              <div className="bg-indigo-100 dark:bg-indigo-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Package className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Products Listed</h4>
+              <div className="mb-6">
+                <div className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2" data-testid="text-products-count">
+                  15,340
+                </div>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Active product listings from verified suppliers
+                </p>
+              </div>
+              <Link href="/directory">
+                <Button 
+                  variant="outline" 
+                  className="w-full border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20"
+                  data-testid="button-browse-products"
+                >
+                  Browse All Products
+                </Button>
+              </Link>
+            </Card>
           </div>
         </section>
       </main>
