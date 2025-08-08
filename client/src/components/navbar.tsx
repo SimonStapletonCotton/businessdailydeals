@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Plus, User, Menu, Ticket, DollarSign, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail } from "lucide-react";
+import { Bell, Plus, User, Menu, Ticket, DollarSign, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -130,6 +130,20 @@ export default function Navbar() {
           Rates per Advert
         </Button>
       </Link>
+      
+      {isAuthenticated && (user as UserType)?.userType === "supplier" && (
+        <Link href="/credits">
+          <Button
+            variant={location === "/credits" ? "default" : "ghost"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium"}
+            data-testid="link-my-credits"
+            onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+          >
+            <Coins className="h-4 w-4 mr-2" />
+            My Credits
+          </Button>
+        </Link>
+      )}
       
       {isAuthenticated && (user as UserType)?.userType === "buyer" && (
         <Link href="/my-coupons">

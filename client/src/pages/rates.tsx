@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, Plus, Minus, Trash2, CreditCard } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2, CreditCard, Coins } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Rates data based on your Excel sheet
@@ -256,12 +256,16 @@ export default function Rates() {
             Choose your advertising duration and quantity. Add items to your basket and convert to credits for payment.
           </p>
           {isAuthenticated && user?.userType === 'supplier' && (
-            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg max-w-md mx-auto">
+            <div className="mt-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl max-w-md mx-auto shadow-sm">
               <div className="text-center">
-                <p className="text-sm text-green-700">Your Current Balance</p>
-                <p className="text-2xl font-bold text-green-800">
-                  {Array.isArray(userCredits) ? userCredits.reduce((total: number, credit: any) => total + parseFloat(credit.amount), 0).toFixed(0) : '0'} credits
+                <div className="flex items-center justify-center mb-2">
+                  <Coins className="w-5 h-5 text-green-600 mr-2" />
+                  <p className="text-sm font-medium text-green-700">Available Credits</p>
+                </div>
+                <p className="text-3xl font-bold text-green-800 mb-1">
+                  R{Array.isArray(userCredits) ? userCredits.reduce((total: number, credit: any) => total + parseFloat(credit.amount), 0).toFixed(0) : '0'}
                 </p>
+                <p className="text-xs text-green-600">Use for advertising and deals</p>
                 <p className="text-xs text-green-600 mt-1">≈ R{Array.isArray(userCredits) ? userCredits.reduce((total: number, credit: any) => total + parseFloat(credit.amount), 0).toFixed(2) : '0.00'}</p>
               </div>
             </div>
