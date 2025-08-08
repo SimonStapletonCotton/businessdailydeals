@@ -22,9 +22,32 @@ export const pool = new Pool({
 
 export const db = drizzle({ client: pool, schema });
 
+// Test database connection function
+export async function testDatabaseConnection(): Promise<void> {
+  try {
+    const result = await pool.query('SELECT 1 as test');
+    if (result.rows[0]?.test === 1) {
+      console.log('✅ Database connection successful');
+    } else {
+      throw new Error('Database connection test failed');
+    }
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+    throw error;
+  }
+}
+
 // Handle connection errors gracefully
 pool.on('error', (err) => {
-  console.error('Database pool error:', err);
+  console.error('❌ Database pool error:', err);
+});
+
+pool.on('connect', () => {
+  console.log('✅ Database pool connected');
+});
+
+pool.on('remove', () => {
+  console.log('🔄 Database connection removed from pool');
 });
 
 // Ensure proper cleanup on application shutdown
