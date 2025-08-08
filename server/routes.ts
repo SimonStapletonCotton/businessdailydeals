@@ -468,7 +468,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Search query required" });
       }
 
-      let results = [];
+      let results: any[] = [];
       
       if (type === 'deals') {
         const filters: any = {};
