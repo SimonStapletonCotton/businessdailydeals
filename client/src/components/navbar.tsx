@@ -107,6 +107,18 @@ export default function Navbar() {
           </Button>
         </Link>
       )}
+
+      <Link href="/about">
+        <Button
+          variant={location === "/about" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+          data-testid="link-about"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <HelpCircle className="h-4 w-4 mr-2" />
+          About Us
+        </Button>
+      </Link>
       
       <Link href="/rates-management">
         <Button
