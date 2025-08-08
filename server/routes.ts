@@ -375,6 +375,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Rates routes
+  app.get("/api/rates", async (req, res) => {
+    try {
+      const rates = await storage.getRates();
+      res.json(rates);
+    } catch (error) {
+      console.error("Error fetching rates:", error);
+      res.status(500).json({ message: "Failed to fetch rates" });
+    }
+  });
+
+  app.post("/api/rates", isAuthenticated, async (req, res) => {
+    try {
+      const rate = await storage.createRate(req.body);
+      res.json(rate);
+    } catch (error) {
+      console.error("Error creating rate:", error);
+      res.status(500).json({ message: "Failed to create rate" });
+    }
+  });
+
+  app.post("/api/rates/bulk-upload", isAuthenticated, async (req, res) => {
+    try {
+      const { rates } = req.body;
+      if (!Array.isArray(rates)) {
+        return res.status(400).json({ message: "Rates must be an array" });
+      }
+      
+      const createdRates = await storage.bulkCreateRates(rates);
+      res.json({ 
+        message: `Successfully uploaded ${createdRates.length} rates`,
+        rates: createdRates 
+      });
+    } catch (error) {
+      console.error("Error bulk uploading rates:", error);
+      res.status(500).json({ message: "Failed to upload rates" });
+    }
+  });
+
+  app.put("/api/rates/:id", isAuthenticated, async (req, res) => {
+    try {
+      const rate = await storage.updateRate(req.params.id, req.body);
+      res.json(rate);
+    } catch (error) {
+      console.error("Error updating rate:", error);
+      res.status(500).json({ message: "Failed to update rate" });
+    }
+  });
+
+  app.delete("/api/rates/:id", isAuthenticated, async (req, res) => {
+    try {
+      await storage.deleteRate(req.params.id);
+      res.json({ message: "Rate deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting rate:", error);
+      res.status(500).json({ message: "Failed to delete rate" });
+    }
+  });
+
+  app.delete("/api/rates", isAuthenticated, async (req, res) => {
+    try {
+      await storage.clearAllRates();
+      res.json({ message: "All rates cleared successfully" });
+    } catch (error) {
+      console.error("Error clearing rates:", error);
+      res.status(500).json({ message: "Failed to clear rates" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -180,6 +180,19 @@ export const couponsRelations = relations(coupons, ({ one }) => ({
   }),
 }));
 
+// Advertising rates table for product advertising pricing
+export const rates = pgTable("rates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  product: varchar("product").notNull(),
+  category: varchar("category").notNull(),
+  dailyRate: decimal("daily_rate", { precision: 10, scale: 2 }).notNull(),
+  weeklyRate: decimal("weekly_rate", { precision: 10, scale: 2 }).notNull(),
+  monthlyRate: decimal("monthly_rate", { precision: 10, scale: 2 }).notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Insert schemas
 export const upsertUserSchema = createInsertSchema(users);
 export const insertDealSchema = createInsertSchema(deals)
@@ -198,6 +211,7 @@ export const insertKeywordSchema = createInsertSchema(keywords).omit({ id: true,
 export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true, createdAt: true });
 export const insertInquirySchema = createInsertSchema(inquiries).omit({ id: true, createdAt: true });
 export const insertCouponSchema = createInsertSchema(coupons).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertRateSchema = createInsertSchema(rates).omit({ id: true, createdAt: true, updatedAt: true });
 
 // Types
 export type UpsertUser = z.infer<typeof upsertUserSchema>;
@@ -216,3 +230,5 @@ export type InquiryWithDetails = Inquiry & { deal: Deal; buyer: User; supplier: 
 export type InsertCoupon = z.infer<typeof insertCouponSchema>;
 export type Coupon = typeof coupons.$inferSelect;
 export type CouponWithDetails = Coupon & { deal: Deal; buyer: User; supplier: User };
+export type InsertRate = z.infer<typeof insertRateSchema>;
+export type Rate = typeof rates.$inferSelect;

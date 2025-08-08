@@ -12,6 +12,7 @@ import SupplierDashboard from "@/pages/supplier-dashboard";
 import PostDeal from "@/pages/post-deal";
 import MyCoupons from "@/pages/my-coupons";
 import Pricing from "@/pages/pricing";
+import RatesManagement from "@/pages/rates-management";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -30,6 +31,7 @@ function Router() {
           <Route path="/post-deal" component={PostDeal} />
           <Route path="/my-coupons" component={MyCoupons} />
           <Route path="/pricing" component={Pricing} />
+          <Route path="/rates-management" component={RatesManagement} />
         </>
       )}
       <Route component={NotFound} />

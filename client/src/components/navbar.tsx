@@ -82,15 +82,26 @@ export default function Navbar() {
         </Link>
       )}
       {(user as UserType)?.userType === "supplier" && (
-        <Link href="/supplier-dashboard">
-          <Button
-            variant={location === "/supplier-dashboard" ? "default" : "ghost"}
-            className="text-sm font-medium"
-            data-testid="link-supplier-dashboard"
-          >
-            Dashboard
-          </Button>
-        </Link>
+        <>
+          <Link href="/supplier-dashboard">
+            <Button
+              variant={location === "/supplier-dashboard" ? "default" : "ghost"}
+              className="text-sm font-medium"
+              data-testid="link-supplier-dashboard"
+            >
+              Dashboard
+            </Button>
+          </Link>
+          <Link href="/rates-management">
+            <Button
+              variant={location === "/rates-management" ? "default" : "ghost"}
+              className="text-sm font-medium"
+              data-testid="link-rates-management"
+            >
+              Rates
+            </Button>
+          </Link>
+        </>
       )}
     </>
   );

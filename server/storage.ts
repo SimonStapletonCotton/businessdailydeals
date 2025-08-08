@@ -5,6 +5,7 @@ import {
   notifications,
   inquiries,
   coupons,
+  rates,
   type User,
   type UpsertUser,
   type Deal,
@@ -21,6 +22,8 @@ import {
   type Coupon,
   type InsertCoupon,
   type CouponWithDetails,
+  type Rate,
+  type InsertRate,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, or, like, inArray } from "drizzle-orm";
@@ -65,6 +68,14 @@ export interface IStorage {
   getCouponByCode(couponCode: string): Promise<CouponWithDetails | undefined>;
   redeemCoupon(couponCode: string, redemptionNotes?: string): Promise<Coupon>;
   expireCoupon(id: string): Promise<Coupon>;
+  
+  // Rates operations
+  getRates(): Promise<Rate[]>;
+  createRate(rate: InsertRate): Promise<Rate>;
+  bulkCreateRates(rates: InsertRate[]): Promise<Rate[]>;
+  updateRate(id: string, rate: Partial<InsertRate>): Promise<Rate>;
+  deleteRate(id: string): Promise<void>;
+  clearAllRates(): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -420,6 +431,55 @@ export class DatabaseStorage implements IStorage {
     }
     
     return coupon;
+  }
+
+  // Rates operations
+  async getRates(): Promise<Rate[]> {
+    return await db.select().from(rates).orderBy(desc(rates.createdAt));
+  }
+
+  async createRate(rate: InsertRate): Promise<Rate> {
+    const [newRate] = await db.insert(rates).values(rate).returning();
+    return newRate;
+  }
+
+  async bulkCreateRates(ratesToInsert: InsertRate[]): Promise<Rate[]> {
+    // Clear existing rates first
+    await db.delete(rates);
+    
+    // Insert new rates in batches
+    const batchSize = 100;
+    const results: Rate[] = [];
+    
+    for (let i = 0; i < ratesToInsert.length; i += batchSize) {
+      const batch = ratesToInsert.slice(i, i + batchSize);
+      const batchResults = await db.insert(rates).values(batch).returning();
+      results.push(...batchResults);
+    }
+    
+    return results;
+  }
+
+  async updateRate(id: string, rate: Partial<InsertRate>): Promise<Rate> {
+    const [updatedRate] = await db
+      .update(rates)
+      .set({ ...rate, updatedAt: new Date() })
+      .where(eq(rates.id, id))
+      .returning();
+    
+    if (!updatedRate) {
+      throw new Error("Rate not found");
+    }
+    
+    return updatedRate;
+  }
+
+  async deleteRate(id: string): Promise<void> {
+    await db.delete(rates).where(eq(rates.id, id));
+  }
+
+  async clearAllRates(): Promise<void> {
+    await db.delete(rates);
   }
 }
 
