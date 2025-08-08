@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial; }
+        
+        .test1 {
+            background: linear-gradient(to right, #475569, #4b5563, #475569);
+            width: 100vw;
+            height: 64px;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+        }
+        
+        .test2 {
+            background: linear-gradient(to right, #475569, #4b5563, #475569);
+            width: 100vw;
+            height: 64px;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Test 1: Plain 100vw</h2>
+    <div class="test1">
+        <div>Home</div>
+        <div>Register | Dashboard | Contact Us</div>
+    </div>
+    
+    <h2>Test 2: 100vw with transform</h2>
+    <div class="test2">
+        <div>Home</div>
+        <div>Register | Dashboard | Contact Us</div>
+    </div>
+    
+    <div class="container">
+        <h1>Content in Container</h1>
+        <p>This red-bordered container has max-width: 1200px. If either header above extends beyond this container on both sides, the CSS technique works.</p>
+    </div>
+</body>
+</html>
