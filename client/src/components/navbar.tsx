@@ -44,7 +44,7 @@ export default function Navbar() {
       <Link href="/">
         <Button
           variant={location === "/" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
           data-testid="link-home"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -57,7 +57,7 @@ export default function Navbar() {
         <>
           <Button
             variant="ghost"
-            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
             data-testid="link-register-supplier"
             onClick={() => {
               window.location.href = "/api/login";
@@ -69,7 +69,7 @@ export default function Navbar() {
           </Button>
           <Button
             variant="ghost"
-            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
             data-testid="link-register-buyer"
             onClick={() => {
               window.location.href = "/api/login";
@@ -85,7 +85,7 @@ export default function Navbar() {
       <Link href="/search">
         <Button
           variant={location === "/search" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
           data-testid="link-search"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -97,7 +97,7 @@ export default function Navbar() {
       <Link href="/regular-deals">
         <Button
           variant={location === "/regular-deals" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
           data-testid="link-regular-deals"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -110,7 +110,7 @@ export default function Navbar() {
         <Link href="/supplier-dashboard">
           <Button
             variant={location === "/supplier-dashboard" ? "secondary" : "ghost"}
-            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
             data-testid="link-supplier-dashboard"
             onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
@@ -122,7 +122,7 @@ export default function Navbar() {
       <Link href="/rates-management">
         <Button
           variant={location === "/rates-management" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
           data-testid="link-rates"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -135,7 +135,7 @@ export default function Navbar() {
         <Link href="/credits">
           <Button
             variant={location === "/credits" ? "secondary" : "ghost"}
-            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
             data-testid="link-my-credits"
             onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
@@ -149,7 +149,7 @@ export default function Navbar() {
         <Link href="/my-coupons">
           <Button
             variant={location === "/my-coupons" ? "secondary" : "ghost"}
-            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
             data-testid="link-my-coupons"
             onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
           >
@@ -162,7 +162,7 @@ export default function Navbar() {
       <Link href="/contact">
         <Button
           variant={location === "/contact" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-olive-900 hover:bg-white/20"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
           data-testid="link-contact"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -174,7 +174,7 @@ export default function Navbar() {
   );
 
   return (
-    <header className="bg-gradient-to-r from-olive-600 via-olive-500 to-olive-600 shadow-lg border-b border-olive-700">
+    <header className="bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 shadow-lg border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8 flex-1">
@@ -193,7 +193,7 @@ export default function Navbar() {
             <div className="md:hidden">
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-white hover:text-olive-900 hover:bg-white/20" data-testid="button-mobile-menu">
+                  <Button variant="ghost" size="icon" className="text-white hover:text-slate-900 hover:bg-white/20" data-testid="button-mobile-menu">
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
@@ -283,7 +283,7 @@ export default function Navbar() {
                   </Select>
                 </div>
 
-                <Button variant="ghost" size="icon" className="relative text-white hover:text-olive-900 hover:bg-white/20" data-testid="button-notifications">
+                <Button variant="ghost" size="icon" className="relative text-white hover:text-slate-900 hover:bg-white/20" data-testid="button-notifications">
                   <Bell className="h-5 w-5" />
                   {unreadCount > 0 && (
                     <Badge className="notification-badge" data-testid="badge-notification-count">
@@ -294,14 +294,14 @@ export default function Navbar() {
 
                 {(user as UserType)?.userType === "supplier" && (
                   <Link href="/post-deal">
-                    <Button className="bg-white text-olive-600 hover:bg-white/90 hover:text-olive-700 font-medium" data-testid="button-post-deal">
+                    <Button className="bg-white text-slate-600 hover:bg-white/90 hover:text-slate-700 font-medium" data-testid="button-post-deal">
                       <Plus className="h-4 w-4 mr-2" />
                       Post Deal
                     </Button>
                   </Link>
                 )}
 
-                <Button variant="ghost" size="icon" className="text-white hover:text-olive-900 hover:bg-white/20" onClick={handleLogout} data-testid="button-logout">
+                <Button variant="ghost" size="icon" className="text-white hover:text-slate-900 hover:bg-white/20" onClick={handleLogout} data-testid="button-logout">
                   <User className="h-5 w-5" />
                 </Button>
               </>
@@ -309,7 +309,7 @@ export default function Navbar() {
 
             {!isAuthenticated && (
               <Button
-                className="bg-white text-olive-600 hover:bg-white/90 hover:text-olive-700 font-medium"
+                className="bg-white text-slate-600 hover:bg-white/90 hover:text-slate-700 font-medium"
                 onClick={() => (window.location.href = "/api/login")}
                 data-testid="button-login"
               >
