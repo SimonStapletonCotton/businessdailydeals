@@ -4,25 +4,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Ensure full-width header that extends to edges */
-body {
-  margin: 0 !important;
-  padding: 0 !important;
+/* Remove default body margins that limit header width */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
+/* Force full-width header to viewport edges */
 header {
   width: 100vw !important;
-  max-width: 100vw !important;
-  position: relative;
-  margin: 0 !important;
-  left: calc(-50vw + 50%) !important;
-  right: auto !important;
-  box-sizing: border-box !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
 }
 
-/* Override container max-width for header */
+/* Ensure header content spans full width */
 header > div {
-  max-width: 100% !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
 }
 
 /* Line clamp utility */

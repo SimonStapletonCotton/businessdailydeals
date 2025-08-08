@@ -174,7 +174,7 @@ export default function Navbar() {
 
   return (
     <header className="bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 shadow-lg border-b border-slate-800">
-      <div className="px-4 sm:px-6 lg:px-8 max-w-none">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4 flex-1">
             <Link href="/" className="flex-shrink-0">
