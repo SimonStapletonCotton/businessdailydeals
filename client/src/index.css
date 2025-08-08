@@ -4,20 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Ensure no container constraints globally */
-html, body {
-  overflow-x: hidden;
+/* Alternative approach - move header outside container structure */
+body {
+  margin: 0;
+  padding: 0;
 }
 
-/* Full width header using viewport units */
 .full-width-header {
   background: linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105));
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgb(30, 41, 59);
 }
