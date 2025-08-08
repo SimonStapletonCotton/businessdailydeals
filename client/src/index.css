@@ -4,21 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force header to span entire screen */
-.header-full-width {
-  background: linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105));
-  width: 100vw !important;
-  margin-left: calc(-50vw + 50%) !important;
-  margin-right: calc(-50vw + 50%) !important;
-  position: relative;
-  box-sizing: border-box !important;
-}
 
-.header-full-width > div {
-  max-width: none !important;
-  margin-left: calc(50vw - 50%) !important;
-  margin-right: calc(50vw - 50%) !important;
-}
 
 /* Line clamp utility */
 .line-clamp-2 {
