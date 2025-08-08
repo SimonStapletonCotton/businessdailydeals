@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure full-width header */
+header {
+  width: 100vw !important;
+  margin-left: calc(-50vw + 50%);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
+}
+
 /* Line clamp utility */
 .line-clamp-2 {
   display: -webkit-box;
