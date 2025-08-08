@@ -173,7 +173,7 @@ export default function Navbar() {
   );
 
   return (
-    <header className="bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 shadow-lg border-b border-slate-800">
+    <header className="shadow-lg border-b border-slate-800" style={{ background: 'linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105))' }}>
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4 flex-1">
