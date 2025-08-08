@@ -120,7 +120,7 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="/regular-deals">
-                <Button variant="outline" size="lg" className="border-primary bg-white/10 text-primary hover:bg-white hover:text-primary px-8 py-3 text-lg font-semibold border-2 backdrop-blur-sm">
+                <Button size="lg" className="bg-white text-primary hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg">
                   Browse Regular Deals
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
