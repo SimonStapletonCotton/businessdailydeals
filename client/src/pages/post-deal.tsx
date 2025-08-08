@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Plus, X, Calendar as CalendarIcon, Flame, Package, AlertCircle } from "lucide-react";
+import { ImageUpload } from "@/components/image-upload";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { insertDealSchema } from "@shared/schema";
@@ -59,7 +60,7 @@ export default function PostDeal() {
   const [, setLocation] = useLocation();
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [productImageInput, setProductImageInput] = useState("");
+  const [mainImage, setMainImage] = useState<string>("");
   const [productImages, setProductImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -115,7 +116,7 @@ export default function PostDeal() {
         discount: Number(data.discount) || 0,
         minOrder: Number(data.minOrder) || 1,
         dealType: data.dealType,
-        imageUrl: data.imageUrl || "",
+        imageUrl: mainImage || "",
         keywords: keywords.length > 0 ? keywords : [],
         expiresAt: data.expiresAt,
         productImages: productImages.length > 0 ? productImages : [],
@@ -184,15 +185,12 @@ export default function PostDeal() {
     setKeywords(keywords.filter(k => k !== keywordToRemove));
   };
 
-  const addProductImage = () => {
-    if (productImageInput.trim() && !productImages.includes(productImageInput.trim())) {
-      setProductImages([...productImages, productImageInput.trim()]);
-      setProductImageInput("");
-    }
+  const handleMainImageChange = (images: string[]) => {
+    setMainImage(images[0] || "");
   };
 
-  const removeProductImage = (imageToRemove: string) => {
-    setProductImages(productImages.filter(img => img !== imageToRemove));
+  const handleProductImagesChange = (images: string[]) => {
+    setProductImages(images);
   };
 
   const calculateDiscount = () => {
@@ -522,27 +520,15 @@ export default function PostDeal() {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="imageUrl"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Cover Image URL</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="https://example.com/image.jpg"
-                            {...field}
-                            value={field.value || ""}
-                            data-testid="input-image-url"
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Optional: Cover image for the deal card
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div>
+                    <ImageUpload
+                      images={mainImage ? [mainImage] : []}
+                      onImagesChange={handleMainImageChange}
+                      maxImages={1}
+                      label="Main Cover Image"
+                      description="Upload a main cover image for your deal (max 1 image, 5MB max)"
+                    />
+                  </div>
                 </div>
 
                 {/* Product Images Section */}
@@ -552,48 +538,13 @@ export default function PostDeal() {
                     <h3 className="text-lg font-semibold text-charcoal-900">Product Images *</h3>
                   </div>
                   <div className="bg-olive-50 border border-olive-200 rounded-lg p-4">
-                    <div className="flex gap-2 mb-3">
-                      <Input
-                        placeholder="Enter product image URL..."
-                        value={productImageInput}
-                        onChange={(e) => setProductImageInput(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addProductImage())}
-                        data-testid="input-product-image"
-                      />
-                      <Button 
-                        type="button" 
-                        onClick={addProductImage}
-                        variant="outline"
-                        className="border-olive-600 text-olive-600 hover:bg-olive-50"
-                        data-testid="button-add-product-image"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    {productImages.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {productImages.map((image, index) => (
-                          <Badge 
-                            key={index} 
-                            variant="secondary" 
-                            className="bg-white border border-charcoal-200 text-charcoal-700 px-3 py-1"
-                          >
-                            <span className="mr-2 truncate max-w-[200px]">{image}</span>
-                            <button
-                              type="button"
-                              onClick={() => removeProductImage(image)}
-                              className="text-red-500 hover:text-red-700"
-                              data-testid={`button-remove-product-image-${index}`}
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                    <p className="text-sm text-charcoal-600 mt-2">
-                      Add multiple product image URLs. At least one image is required.
-                    </p>
+                    <ImageUpload
+                      images={productImages}
+                      onImagesChange={handleProductImagesChange}
+                      maxImages={5}
+                      label="Product Images"
+                      description="Upload images of your product from different angles (max 5 images, 5MB each)"
+                    />
                   </div>
                 </div>
 

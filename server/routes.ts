@@ -877,6 +877,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Upload routes - import at top level
+  const uploadRoutes = (await import('./routes/upload')).default;
+  app.use('/api/upload', uploadRoutes);
+
   const httpServer = createServer(app);
   return httpServer;
 }
