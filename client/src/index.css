@@ -4,12 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Simple full width header */
-.header-full-width {
-  background: linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105));
-  width: 100%;
+/* Remove all container constraints */
+body, html, #root, * {
   margin: 0;
   padding: 0;
+}
+
+.header-full-width {
+  background: linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105));
+  width: 100vw;
+  position: relative;
+  left: 0;
+  right: 0;
 }
 
 /* Line clamp utility */
