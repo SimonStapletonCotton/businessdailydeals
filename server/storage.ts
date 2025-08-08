@@ -5,6 +5,7 @@ import {
   notifications,
   inquiries,
   coupons,
+  basketItems,
   rates,
   creditTransactions,
   orders,
@@ -823,6 +824,24 @@ export class DatabaseStorage implements IStorage {
 
   async clearAllRates(): Promise<void> {
     await db.delete(rates);
+  }
+
+  // Basket operations
+  async getBasketItems(userId: string) {
+    return await db.select().from(basketItems).where(eq(basketItems.userId, userId));
+  }
+
+  async addBasketItem(basketData: any) {
+    const [basketItem] = await db.insert(basketItems).values(basketData).returning();
+    return basketItem;
+  }
+
+  async removeBasketItem(itemId: string, userId: string) {
+    await db.delete(basketItems).where(and(eq(basketItems.id, itemId), eq(basketItems.userId, userId)));
+  }
+
+  async clearBasket(userId: string) {
+    await db.delete(basketItems).where(eq(basketItems.userId, userId));
   }
 }
 

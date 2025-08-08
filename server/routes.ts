@@ -10,7 +10,8 @@ import {
   insertCouponSchema,
   insertCreditTransactionSchema, 
   insertOrderSchema, 
-  insertBannerAdSchema 
+  insertBannerAdSchema,
+  insertBasketItemSchema 
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -665,6 +666,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching directory data:", error);
       res.status(500).json({ message: "Failed to fetch directory" });
+    }
+  });
+
+  // Basket Management Endpoints
+  app.get('/api/basket', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const basketItems = await storage.getBasketItems(userId);
+      res.json(basketItems);
+    } catch (error) {
+      console.error("Error fetching basket items:", error);
+      res.status(500).json({ message: "Failed to fetch basket items" });
+    }
+  });
+
+  app.post('/api/basket', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const basketData = insertBasketItemSchema.parse({ ...req.body, userId });
+      
+      const basketItem = await storage.addBasketItem(basketData);
+      res.json(basketItem);
+    } catch (error) {
+      console.error("Error adding basket item:", error);
+      res.status(500).json({ message: "Failed to add item to basket" });
+    }
+  });
+
+  app.delete('/api/basket/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      await storage.removeBasketItem(id, userId);
+      res.json({ message: "Item removed from basket" });
+    } catch (error) {
+      console.error("Error removing basket item:", error);
+      res.status(500).json({ message: "Failed to remove item from basket" });
+    }
+  });
+
+  app.delete('/api/basket', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      await storage.clearBasket(userId);
+      res.json({ message: "Basket cleared" });
+    } catch (error) {
+      console.error("Error clearing basket:", error);
+      res.status(500).json({ message: "Failed to clear basket" });
     }
   });
 

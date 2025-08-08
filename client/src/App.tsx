@@ -13,6 +13,7 @@ import PostDeal from "@/pages/post-deal";
 import MyCoupons from "@/pages/my-coupons";
 import Pricing from "@/pages/pricing";
 import RatesManagement from "@/pages/rates-management";
+import Rates from "@/pages/rates";
 import SearchPage from "@/pages/search";
 import CreditsPage from "@/pages/credits";
 import ProductDirectoryPage from "@/pages/product-directory";
@@ -35,7 +36,7 @@ function Router() {
           <Route path="/post-deal" component={PostDeal} />
           <Route path="/my-coupons" component={MyCoupons} />
           <Route path="/pricing" component={Pricing} />
-          <Route path="/rates-management" component={RatesManagement} />
+          <Route path="/rates-management" component={Rates} />
           <Route path="/search" component={SearchPage} />
           <Route path="/credits" component={CreditsPage} />
           <Route path="/directory" component={ProductDirectoryPage} />

@@ -121,6 +121,19 @@ export const coupons = pgTable("coupons", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Shopping cart/basket system for rates
+export const basketItems = pgTable("basket_items", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  rateType: varchar("rate_type").notNull(), // 'regular' or 'hot'
+  duration: integer("duration").notNull(), // days
+  quantity: integer("quantity").notNull(), // number of items
+  ratePerDay: decimal("rate_per_day", { precision: 10, scale: 2 }).notNull(),
+  totalCost: decimal("total_cost", { precision: 10, scale: 2 }).notNull(),
+  creditsRequired: decimal("credits_required", { precision: 10, scale: 2 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const rates = pgTable("rates", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   product: varchar("product").notNull(),
@@ -214,10 +227,15 @@ export const usersRelations = relations(users, ({ many }) => ({
   notifications: many(notifications),
   inquiries: many(inquiries),
   coupons: many(coupons),
+  basketItems: many(basketItems),
   creditTransactions: many(creditTransactions),
   orders: many(orders),
   bannerAds: many(bannerAds),
   companies: many(companies),
+}));
+
+export const basketItemsRelations = relations(basketItems, ({ one }) => ({
+  user: one(users, { fields: [basketItems.userId], references: [users.id] }),
 }));
 
 export const dealsRelations = relations(deals, ({ one, many }) => ({
@@ -287,6 +305,8 @@ export type CreditTransaction = typeof creditTransactions.$inferSelect;
 export type InsertCreditTransaction = typeof creditTransactions.$inferInsert;
 export type BannerAd = typeof bannerAds.$inferSelect;
 export type InsertBannerAd = typeof bannerAds.$inferInsert;
+export type BasketItem = typeof basketItems.$inferSelect;
+export type InsertBasketItem = typeof basketItems.$inferInsert;
 export type Company = typeof companies.$inferSelect;
 export type InsertCompany = typeof companies.$inferInsert;
 export type SiteAnalytics = typeof siteAnalytics.$inferSelect;
@@ -303,6 +323,7 @@ export const insertRateSchema = createInsertSchema(rates);
 export const insertOrderSchema = createInsertSchema(orders);
 export const insertCreditTransactionSchema = createInsertSchema(creditTransactions);
 export const insertBannerAdSchema = createInsertSchema(bannerAds);
+export const insertBasketItemSchema = createInsertSchema(basketItems);
 export const insertCompanySchema = createInsertSchema(companies);
 
 // Zod inferred types for inserts
@@ -316,4 +337,5 @@ export type InsertRateType = z.infer<typeof insertRateSchema>;
 export type InsertOrderType = z.infer<typeof insertOrderSchema>;
 export type InsertCreditTransactionType = z.infer<typeof insertCreditTransactionSchema>;
 export type InsertBannerAdType = z.infer<typeof insertBannerAdSchema>;
+export type InsertBasketItemType = z.infer<typeof insertBasketItemSchema>;
 export type InsertCompanyType = z.infer<typeof insertCompanySchema>;

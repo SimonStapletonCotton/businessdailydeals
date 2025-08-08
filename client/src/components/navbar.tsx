@@ -119,11 +119,11 @@ export default function Navbar() {
         </Link>
       )}
       
-      <Link href="/pricing">
+      <Link href="/rates-management">
         <Button
-          variant={location === "/pricing" ? "default" : "ghost"}
+          variant={location === "/rates-management" ? "default" : "ghost"}
           className={mobile ? "w-full justify-start" : "text-sm font-medium"}
-          data-testid="link-pricing"
+          data-testid="link-rates"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           <DollarSign className="h-4 w-4 mr-2" />
