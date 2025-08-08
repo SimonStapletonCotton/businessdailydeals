@@ -181,32 +181,7 @@ export default function Navbar() {
         marginRight: 'calc(50% - 50vw)',
         position: 'relative'
       }}
-      ref={(el) => {
-        // Debug logging when header mounts
-        if (el && typeof window !== 'undefined') {
-          setTimeout(() => {
-            console.log('=== HEADER DEBUG ===');
-            console.log('Viewport width:', window.innerWidth);
-            console.log('Header element width:', el.offsetWidth);
-            console.log('Header computed style width:', window.getComputedStyle(el).width);
-            console.log('Header computed max-width:', window.getComputedStyle(el).maxWidth);
-            
-            // Check parent constraints
-            let parent = el.parentElement;
-            let level = 0;
-            while (parent && level < 3) {
-              const styles = window.getComputedStyle(parent);
-              console.log(`Parent ${level}:`, parent.tagName, {
-                width: styles.width,
-                maxWidth: styles.maxWidth,
-                overflow: styles.overflow
-              });
-              parent = parent.parentElement;
-              level++;
-            }
-          }, 100);
-        }
-      }}
+
     >
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
