@@ -4,35 +4,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reset margins and enable scrolling */
-body, html {
+/* Basic reset */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
   overflow-x: auto;
 }
 
-/* Force header to full viewport width */
-header {
-  width: 100vw !important;
-  margin-left: calc(50% - 50vw) !important;
-  margin-right: calc(50% - 50vw) !important;
-  box-sizing: border-box !important;
-}
-
-/* Ensure gradient background covers full width */
-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105));
-  z-index: -1;
-}
-
-header {
+/* Full-width header wrapper */
+.header-wrapper {
+  width: 100vw;
   position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: linear-gradient(to right, rgb(71, 85, 105), rgb(75, 85, 99), rgb(71, 85, 105));
 }
 
 /* Line clamp utility */
