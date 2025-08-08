@@ -133,8 +133,8 @@ export default function Rates() {
 
     addToBasketMutation.mutate({
       rateType,
-      duration,
-      quantity,
+      duration: Number(duration),
+      quantity: Number(quantity),
       ratePerDay: ratePerDay.toString(),
       totalCost: totalCost.toString(),
       creditsRequired: creditsRequired.toString(),
