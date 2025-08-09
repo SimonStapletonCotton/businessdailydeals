@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RatesTableUpload from "@/components/rates-table-upload";
-import { FileText, Upload, Database, BarChart3 } from "lucide-react";
+import { FileText, Upload, Database, BarChart3, Flame } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 export default function RatesManagement() {
@@ -20,7 +20,7 @@ export default function RatesManagement() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">
-            Advertising Rates Management
+            RATES WE CHARGE
           </h1>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto">
             Upload and manage your advertising rates table for different products and categories.
@@ -35,6 +35,29 @@ export default function RatesManagement() {
               </Badge>
             </div>
           )}
+        </div>
+
+        {/* FREE Promotional Banner */}
+        <div className="bg-green-600 py-6 rounded-lg mb-8">
+          <div className="text-center text-white">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-2">
+              <div className="flex items-center">
+                <Flame className="h-5 w-5 mr-2 text-orange-200" />
+                <p className="text-lg sm:text-xl font-bold">
+                  🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL 1ST JANUARY 2026!
+                </p>
+                <Flame className="h-5 w-5 ml-2 text-orange-200" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm sm:text-base opacity-90">
+                Register as a supplier and post unlimited HOT & REGULAR deals at no cost
+              </p>
+              <p className="text-xs sm:text-sm opacity-80">
+                Save R125 per HOT deal • R50 per REGULAR deal • No setup fees
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Main Content */}
