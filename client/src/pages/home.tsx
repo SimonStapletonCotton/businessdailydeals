@@ -104,36 +104,21 @@ export default function Home() {
               <div className="flex items-center bg-gray-800 rounded-lg p-4 border-2 border-yellow-400 shadow-lg">
                 <div className="flex space-x-3">
                   {/* Slot Reel 1 */}
-                  <div className="relative w-14 h-20 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
-                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-slow">
-                      <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
-                        fontFamily: 'Times, "Times New Roman", serif',
-                        textShadow: '3px 3px 6px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.3)',
-                        fontWeight: '900',
-                        transform: 'scaleY(1.1)'
-                      }}>7</div>
+                  <div className="relative w-16 h-20 bg-white rounded-sm border-2 border-gray-500 overflow-hidden shadow-lg">
+                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-slow bg-gradient-to-b from-gray-50 to-white">
+                      <div className="casino-seven">7</div>
                     </div>
                   </div>
                   {/* Slot Reel 2 */}
-                  <div className="relative w-14 h-20 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
-                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-medium">
-                      <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
-                        fontFamily: 'Times, "Times New Roman", serif',
-                        textShadow: '3px 3px 6px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.3)',
-                        fontWeight: '900',
-                        transform: 'scaleY(1.1)'
-                      }}>7</div>
+                  <div className="relative w-16 h-20 bg-white rounded-sm border-2 border-gray-500 overflow-hidden shadow-lg">
+                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-medium bg-gradient-to-b from-gray-50 to-white">
+                      <div className="casino-seven">7</div>
                     </div>
                   </div>
                   {/* Slot Reel 3 */}
-                  <div className="relative w-14 h-20 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
-                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-fast">
-                      <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
-                        fontFamily: 'Times, "Times New Roman", serif',
-                        textShadow: '3px 3px 6px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.3)',
-                        fontWeight: '900',
-                        transform: 'scaleY(1.1)'
-                      }}>7</div>
+                  <div className="relative w-16 h-20 bg-white rounded-sm border-2 border-gray-500 overflow-hidden shadow-lg">
+                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-fast bg-gradient-to-b from-gray-50 to-white">
+                      <div className="casino-seven">7</div>
                     </div>
                   </div>
                 </div>
