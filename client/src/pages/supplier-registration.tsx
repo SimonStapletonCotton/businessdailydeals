@@ -82,9 +82,9 @@ export default function SupplierRegistration() {
     onSuccess: () => {
       toast({
         title: "Registration Successful",
-        description: "Your supplier account has been created successfully. You can now start posting deals!",
+        description: "Your supplier account has been created successfully. Purchase credits to start advertising!",
       });
-      setLocation("/");
+      setLocation("/supplier-dashboard");
     },
     onError: (error: any) => {
       toast({
@@ -336,7 +336,7 @@ export default function SupplierRegistration() {
                           data-testid="radio-hot-deal"
                         />
                         <label htmlFor="hot-deal" className="text-sm font-medium cursor-pointer">
-                          24-Hour HOT Deal
+                          HOT Deal
                         </label>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -399,14 +399,29 @@ export default function SupplierRegistration() {
                   </div>
                 </div>
 
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Image className="h-5 w-5 text-blue-600" />
-                    <h4 className="font-medium text-blue-800">Images Required</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Image className="h-5 w-5 text-blue-600" />
+                      <h4 className="font-medium text-blue-800">Images Required</h4>
+                    </div>
+                    <p className="text-sm text-blue-700">
+                      After registration, you'll be able to upload images for each item through your supplier dashboard.
+                    </p>
                   </div>
-                  <p className="text-sm text-blue-700">
-                    After registration, you'll be able to upload images for each item through your supplier dashboard.
-                  </p>
+
+                  <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Package className="h-5 w-5 text-emerald-600" />
+                      <h4 className="font-medium text-emerald-800">Credits Needed to Advertise</h4>
+                    </div>
+                    <p className="text-sm text-emerald-700 mb-2">
+                      Purchase credits after registration to start advertising your deals.
+                    </p>
+                    <p className="text-xs text-emerald-600">
+                      💡 1 Credit = R2.50 • View rates page for pricing details
+                    </p>
+                  </div>
                 </div>
 
                 <Button 
