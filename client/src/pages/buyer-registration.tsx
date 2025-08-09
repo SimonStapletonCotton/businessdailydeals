@@ -32,8 +32,8 @@ const buyerRegistrationSchema = z.object({
   acceptDataOffer: z.boolean().default(false),
   mobileProvider: z.string().optional(),
   
-  // Keyword notifications and preferences
-  keywords: z.string().min(1, "Please add at least one keyword for notifications"),
+  // Keyword notifications and preferences  
+  keywords: z.string().optional(),
   notificationMethod: z.enum(["email", "sms", "whatsapp"], {
     required_error: "Please select a notification method",
   }),
@@ -136,9 +136,10 @@ export default function BuyerRegistration() {
     console.log("Form is valid:", form.formState.isValid);
     
     // Ensure keywords are set properly
-    if (keywords.length > 0 && !data.keywords) {
-      form.setValue("keywords", keywords.join(", "));
+    if (keywords.length > 0) {
       data.keywords = keywords.join(", ");
+    } else {
+      data.keywords = "";
     }
     
     registerMutation.mutate(data);
