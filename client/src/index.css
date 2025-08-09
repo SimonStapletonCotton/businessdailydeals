@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v4.0-orange-theme";
+  content: "v5.0-FORCE-ORANGE-FINAL";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v4";
+  --cache-buster: "2025-01-09-v5-FINAL";
 }
 
 /* Casino slot machine animations - vertical spinning */
@@ -158,6 +158,11 @@ html {
   /* Page-specific background styles */
   .page-home {
     @apply bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50;
+  }
+  
+  /* Force home page background - override any conflicting styles */
+  .page-home.mobile-update {
+    background: linear-gradient(to bottom right, #fff7ed, #fef3c7, #fefce8) !important;
   }
   
   .page-landing {
