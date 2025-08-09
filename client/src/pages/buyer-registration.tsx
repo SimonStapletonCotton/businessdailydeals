@@ -389,18 +389,19 @@ export default function BuyerRegistration() {
                               <Smartphone className="h-4 w-4" />
                               Select your mobile provider <span className="text-red-500">*</span>
                             </FormLabel>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                              <FormControl>
-                                <SelectTrigger data-testid="select-mobile-provider">
-                                  <SelectValue placeholder="Choose your provider" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="vodacom">Vodacom</SelectItem>
-                                <SelectItem value="mtn">MTN</SelectItem>
-                                <SelectItem value="telkom">Telkom</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <FormControl>
+                              <select 
+                                {...field}
+                                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                data-testid="select-mobile-provider"
+                              >
+                                <option value="">Choose your provider</option>
+                                <option value="vodacom">Vodacom</option>
+                                <option value="mtn">MTN</option>
+                                <option value="telkom">Telkom</option>
+                                <option value="cell-c">Cell C</option>
+                              </select>
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
