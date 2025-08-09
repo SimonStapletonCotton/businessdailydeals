@@ -24,14 +24,26 @@ export default function Navbar() {
 
   const updateUserTypeMutation = useMutation({
     mutationFn: async (userType: string) => {
-      await apiRequest("PATCH", "/api/user/type", { userType });
+      console.log("Switching user type to:", userType);
+      const response = await apiRequest("PATCH", "/api/user/type", { userType });
+      console.log("User type switch response:", response);
+      return response;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("User type switch successful:", data);
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+    },
+    onError: (error) => {
+      console.error("User type switch failed:", error);
     },
   });
 
   const handleUserTypeChange = (userType: string) => {
+    console.log("handleUserTypeChange called with:", userType);
+    if (userType === (user as UserType)?.userType) {
+      console.log("Same user type selected, ignoring");
+      return;
+    }
     updateUserTypeMutation.mutate(userType);
   };
 
@@ -314,6 +326,7 @@ export default function Navbar() {
                   <Select
                     value={(user as UserType)?.userType || "buyer"}
                     onValueChange={handleUserTypeChange}
+                    disabled={updateUserTypeMutation.isPending}
                   >
                     <SelectTrigger className="w-40 lg:w-48 bg-white/10 border-white/20 text-white hover:bg-white/20" data-testid="select-user-type">
                       <SelectValue />
