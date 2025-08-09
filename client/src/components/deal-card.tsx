@@ -2,10 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash, UserPlus, Lock, Shield, Ticket } from "lucide-react";
+import { Building, Clock, Percent, Package, MessageSquare, UserPlus, Lock, Shield, Ticket } from "lucide-react";
 import { Deal } from "@shared/schema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -74,15 +71,11 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
     mutationFn: async (data: { dealId: string; supplierId: string }) => {
       return await apiRequest("POST", "/api/coupons", data);
     },
-    onSuccess: (response: any) => {
-      if (response && response.redirectUrl) {
-        window.location.href = response.redirectUrl;
-      } else {
-        toast({
-          title: "Coupon Generated",
-          description: "Your deal acceptance coupon has been created successfully.",
-        });
-      }
+    onSuccess: (response) => {
+      toast({
+        title: "Coupon Generated!",
+        description: `Your coupon code is: ${response.couponCode}`,
+      });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
@@ -98,35 +91,54 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
       }
       toast({
         title: "Error",
-        description: "Failed to create coupon. Please try again.",
+        description: "Failed to generate coupon. Please try again.",
         variant: "destructive",
       });
     },
   });
 
+  const formatPrice = (price: string) => {
+    const num = parseFloat(price);
+    return `R${num.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
 
+  const getTimeLeft = () => {
+    if (!deal.expiresAt) return "";
+    const now = new Date().getTime();
+    const expires = new Date(deal.expiresAt).getTime();
+    const diff = expires - now;
+
+    if (diff <= 0) return "Expired";
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    if (days > 0) return `${days}d ${hours}h`;
+    return `${hours}h`;
+  };
 
   const handleInquiry = () => {
     if (!isAuthenticated) {
-      window.location.href = "/api/login";
+      window.location.href = '/register-buyer';
       return;
     }
     setShowInquiryForm(true);
   };
 
-  const handleViewDetails = () => {
-    setShowDetails(true);
-  };
-
   const handleGetCoupon = () => {
     if (!isAuthenticated) {
-      window.location.href = "/api/login";
+      window.location.href = '/register-buyer';
       return;
     }
-    createCouponMutation.mutate({
-      dealId: deal.id,
-      supplierId: deal.supplierId,
-    });
+    createCouponMutation.mutate({ dealId: deal.id, supplierId: deal.supplierId });
+  };
+
+  const handleViewDetails = () => {
+    if (!isAuthenticated) {
+      window.location.href = '/register-buyer';
+      return;
+    }
+    setShowDetails(true);
   };
 
   const submitInquiry = () => {
@@ -137,300 +149,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
     });
   };
 
-  const formatPrice = (price: string) => {
-    return new Intl.NumberFormat("en-ZA", {
-      style: "currency",
-      currency: "ZAR",
-    }).format(parseFloat(price));
-  };
-
-  const getTimeLeft = () => {
-    if (!deal.expiresAt) return null;
-    const now = new Date();
-    const expires = new Date(deal.expiresAt);
-    const diff = expires.getTime() - now.getTime();
-    
-    if (diff <= 0) return "Expired";
-    
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
-    if (days > 0) return `${days} day${days > 1 ? "s" : ""} left`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} left`;
-    return "Less than 1 hour left";
-  };
-
-  const cardClass = variant === "hot" ? "deal-card-hot" : "deal-card-regular";
-
-  if (variant === "regular") {
-    return (
-      <Card className={`hover:shadow-lg transition-all duration-300 ${cardClass} relative`}>
-        <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-semibold z-10">
-          REGULAR
-        </div>
-        {deal.imageUrl && (
-          <img
-            src={deal.imageUrl}
-            alt={deal.title}
-            className="w-full h-32 object-cover rounded-t-lg"
-            data-testid="img-deal"
-          />
-        )}
-        <CardContent className="p-4">
-          <span className="text-xs text-muted-foreground" data-testid="text-category">
-            {deal.category}
-          </span>
-          <h4 className="font-semibold text-slate-900 mb-2 text-sm" data-testid="text-title">
-            {deal.title}
-          </h4>
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-lg font-bold text-primary" data-testid="text-price">
-              {formatPrice(deal.price)}
-            </span>
-            {deal.discount && (
-              <Badge variant="secondary" className="text-success" data-testid="badge-discount">
-                -{deal.discount}%
-              </Badge>
-            )}
-          </div>
-          <div className="flex items-center text-xs text-muted-foreground mb-3">
-            <Building className="h-3 w-3 mr-1" />
-            <span data-testid="text-supplier">{deal.supplier.companyName || deal.supplier.firstName}</span>
-            {deal.supplier.isVerified && (
-              <Badge variant="secondary" className="ml-2 bg-green-100 text-green-700 border-green-200 text-xs px-1 py-0">
-                <Shield className="h-3 w-3 mr-1" />
-                Verified
-              </Badge>
-            )}
-          </div>
-          {isAuthenticated ? (
-            <Button
-              className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 h-10 flex items-center justify-center"
-              onClick={handleViewDetails}
-              data-testid="button-view-details"
-            >
-              View Details
-            </Button>
-          ) : (
-            <Button
-              className="w-full bg-primary text-white hover:bg-primary/90 h-10 flex items-center justify-center"
-              onClick={() => window.location.href = '/register-buyer'}
-              data-testid="button-register-to-view"
-            >
-              <UserPlus className="h-4 w-4 mr-2" />
-              Register to View
-            </Button>
-          )}
-        </CardContent>
-
-        {/* Details Dialog */}
-        <Dialog open={showDetails} onOpenChange={setShowDetails}>
-          <DialogContent className="max-w-[1200px] w-[90vw] max-h-[90vh] overflow-hidden p-0">
-            <DialogHeader className="p-4 border-b bg-gray-50 shrink-0">
-              <DialogTitle className="flex items-center gap-2 text-lg font-bold">
-                <Package className="h-5 w-5 text-blue-600" />
-                {deal.title}
-              </DialogTitle>
-            </DialogHeader>
-            
-            {/* FORCED Two Column Layout using flexbox */}
-            <div 
-              className="flex overflow-y-auto"
-              style={{ 
-                height: 'calc(90vh - 80px)',
-                minHeight: '500px'
-              }}
-            >
-              {/* Left Column - Product Information */}
-              <div className="flex-1 p-6 border-r border-gray-200 overflow-y-auto space-y-4">
-                {/* Main Product Image */}
-                {deal.imageUrl && (
-                  <div className="relative">
-                    <img
-                      src={deal.imageUrl}
-                      alt={deal.title}
-                      className="w-full h-48 object-cover rounded-lg border shadow-sm"
-                    />
-                    {deal.discount && deal.discount > 0 && (
-                      <div className="absolute top-3 right-3">
-                        <Badge className="bg-red-600 text-white px-2 py-1">
-                          <Percent className="h-3 w-3 mr-1" />
-                          {deal.discount}% OFF
-                        </Badge>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Quick Info Grid */}
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-gray-600">Price</p>
-                      <p className="text-2xl font-bold text-green-600">{formatPrice(deal.price)}</p>
-                      {deal.originalPrice && parseFloat(deal.originalPrice) > parseFloat(deal.price) && (
-                        <p className="text-sm text-gray-500 line-through">{formatPrice(deal.originalPrice)}</p>
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-600">Credits Required</p>
-                      <p className="text-lg font-semibold text-blue-600">{deal.creditsCost}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-600">Category</p>
-                      <p className="font-medium text-sm">{deal.category}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-600">Min Order</p>
-                      <p className="font-medium text-sm">{deal.minOrder} units</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2 text-sm text-gray-900">Description</h4>
-                  <p className="text-sm text-gray-700 leading-relaxed">{deal.description}</p>
-                </div>
-
-                {/* Additional Details */}
-                {(deal.size || deal.quantityAvailable || deal.productSpecifications) && (
-                  <div className="bg-slate-50 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-3 text-sm text-gray-900 flex items-center gap-2">
-                      <Box className="h-4 w-4" />
-                      Product Details
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      {deal.size && (
-                        <div className="flex items-center gap-2">
-                          <Ruler className="h-3 w-3 text-gray-500" />
-                          <span className="text-gray-600">Size:</span>
-                          <span className="font-medium">{deal.size}</span>
-                        </div>
-                      )}
-                      {deal.quantityAvailable && (
-                        <div className="flex items-center gap-2">
-                          <Package className="h-3 w-3 text-gray-500" />
-                          <span className="text-gray-600">Available:</span>
-                          <span className="font-medium">{deal.quantityAvailable} units</span>
-                        </div>
-                      )}
-                      {deal.productSpecifications && (
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <FileText className="h-3 w-3 text-gray-500" />
-                            <span className="text-gray-600 font-medium">Specifications:</span>
-                          </div>
-                          <p className="text-sm text-gray-700 ml-5">{deal.productSpecifications}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Right Column - Supplier & Actions */}
-              <div className="flex-1 p-6 overflow-y-auto space-y-4">
-                {/* Supplier Information */}
-                <div className="bg-orange-50 p-5 rounded-lg border border-orange-200">
-                  <h4 className="font-semibold mb-4 text-base text-gray-900 flex items-center gap-2">
-                    <Building className="h-5 w-5" />
-                    Supplier Information
-                  </h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium text-gray-900">
-                        {deal.supplier.firstName} {deal.supplier.lastName}
-                      </p>
-                      {deal.supplier.isVerified && (
-                        <Badge className="bg-green-100 text-green-700 border border-green-300">
-                          <Shield className="h-3 w-3 mr-1" />
-                          Verified
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="space-y-1 text-sm text-gray-600">
-                      <p><strong>Email:</strong> {deal.supplier.email}</p>
-
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="bg-blue-50 p-5 rounded-lg border border-blue-200">
-                  <h4 className="font-semibold mb-4 text-base text-gray-900">Take Action</h4>
-                  <div className="space-y-3">
-                    <Button
-                      onClick={() => {
-                        setShowDetails(false);
-                        handleInquiry();
-                      }}
-                      className="w-full bg-blue-600 text-white hover:bg-blue-700 h-12 text-sm font-medium"
-                    >
-                      <MessageSquare className="h-5 w-5 mr-2" />
-                      Send Inquiry to Supplier
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setShowDetails(false);
-                        handleGetCoupon();
-                      }}
-                      className="w-full bg-green-600 text-white hover:bg-green-700 h-12 text-sm font-medium"
-                    >
-                      <Ticket className="h-5 w-5 mr-2" />
-                      Get Discount Coupon
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Keywords */}
-                {deal.keywords && deal.keywords.length > 0 && (
-                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                    <h4 className="font-medium mb-3 text-sm text-gray-900 flex items-center gap-2">
-                      <Hash className="h-4 w-4" />
-                      Keywords
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {deal.keywords.map((keyword, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs bg-purple-100 text-purple-700">
-                          {keyword}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Important Information */}
-                <div className="space-y-3">
-                  {deal.shippingCost && parseFloat(deal.shippingCost) > 0 && (
-                    <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                      <div className="flex items-center gap-2">
-                        <Package className="h-4 w-4 text-yellow-600" />
-                        <p className="text-sm font-medium text-gray-900">
-                          Shipping: {formatPrice(deal.shippingCost)}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {deal.expiresAt && (
-                    <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                      <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-red-600" />
-                        <p className="text-sm font-medium text-red-700">
-                          Deal expires: {getTimeLeft()}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </Card>
-    );
-  }
+  const cardClass = variant === "hot" ? "border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-50" : "border-gray-200";
 
   return (
     <Card className={`hover:shadow-xl transition-all duration-300 ${cardClass} flex flex-col h-full`}>
@@ -457,6 +176,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           </div>
         )}
       </div>
+      
       <CardContent className="p-4 flex flex-col h-full">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-muted-foreground" data-testid="text-category">
@@ -469,68 +189,15 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             </Badge>
           )}
         </div>
+        
         <h4 className="text-base font-semibold text-slate-900 mb-1" data-testid="text-title">
           {deal.title}
         </h4>
+        
         <p className="text-muted-foreground text-sm mb-3" data-testid="text-description">
           {deal.description}
         </p>
 
-        {/* Product Images Gallery */}
-        {deal.productImages && deal.productImages.length > 0 && (
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Package className="h-4 w-4 text-olive-600" />
-              <span className="text-sm font-medium text-charcoal-700">Product Images</span>
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {deal.productImages.slice(0, 4).map((image: string, index: number) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`${deal.title} - Image ${index + 1}`}
-                  className="w-16 h-16 object-cover rounded-lg flex-shrink-0 border border-charcoal-200"
-                  data-testid={`img-product-${index}`}
-                />
-              ))}
-              {deal.productImages.length > 4 && (
-                <div className="w-16 h-16 bg-charcoal-100 rounded-lg flex-shrink-0 border border-charcoal-200 flex items-center justify-center text-xs text-charcoal-600">
-                  +{deal.productImages.length - 4}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Product Details */}
-        {(deal.size || deal.quantityAvailable || deal.productSpecifications) && (
-          <div className="mb-4 p-3 bg-olive-50 rounded-lg border border-olive-200">
-            {deal.size && (
-              <div className="flex items-center gap-2 mb-2">
-                <Ruler className="h-4 w-4 text-olive-600" />
-                <span className="text-sm text-charcoal-700">
-                  <span className="font-medium">Size:</span> {deal.size}
-                </span>
-              </div>
-            )}
-            {deal.quantityAvailable && (
-              <div className="flex items-center gap-2 mb-2">
-                <Box className="h-4 w-4 text-olive-600" />
-                <span className="text-sm text-charcoal-700">
-                  <span className="font-medium">Available:</span> {deal.quantityAvailable} units
-                </span>
-              </div>
-            )}
-            {deal.productSpecifications && (
-              <div className="mt-2">
-                <span className="text-sm font-medium text-charcoal-700">Specifications:</span>
-                <p className="text-sm text-charcoal-600 mt-1 line-clamp-2">
-                  {deal.productSpecifications}
-                </p>
-              </div>
-            )}
-          </div>
-        )}
         <div className="mb-3">
           <div className="flex items-baseline gap-2 mb-1">
             <span className="text-xl font-bold text-primary" data-testid="text-price">
@@ -546,6 +213,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             Min. order: {deal.minOrder} unit{deal.minOrder !== 1 ? "s" : ""}
           </span>
         </div>
+        
         <div className="flex items-center text-xs text-muted-foreground mb-3">
           <Building className="h-3 w-3 mr-1" />
           <span data-testid="text-supplier">{deal.supplier.companyName || deal.supplier.firstName}</span>
@@ -574,7 +242,6 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                   variant="outline"
                   className="w-full border-olive-600 text-olive-600 hover:bg-olive-50 h-10 flex items-center justify-center"
                   onClick={handleViewDetails}
-                  disabled={createInquiryMutation.isPending}
                   data-testid="button-view-details"
                 >
                   View Details
@@ -632,6 +299,108 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           </div>
         )}
       </CardContent>
+
+      {/* SIMPLE TWO-COLUMN DIALOG */}
+      <Dialog open={showDetails} onOpenChange={setShowDetails}>
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Package className="h-5 w-5" />
+              Deal Details: {deal.title}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Column - Product Information */}
+            <div className="space-y-4">
+              {deal.imageUrl && (
+                <img 
+                  src={deal.imageUrl} 
+                  alt={deal.title}
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+              )}
+              
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">Description</h3>
+                <p className="text-gray-700">{deal.description}</p>
+              </div>
+
+              <div className="bg-green-50 p-4 rounded-lg">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600">Price</p>
+                    <p className="text-2xl font-bold text-green-600">{formatPrice(deal.price)}</p>
+                    {deal.originalPrice && (
+                      <p className="text-sm text-gray-500 line-through">{formatPrice(deal.originalPrice)}</p>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Min Order</p>
+                    <p className="text-lg font-semibold">{deal.minOrder} units</p>
+                  </div>
+                </div>
+              </div>
+
+              {deal.expiresAt && (
+                <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-red-600" />
+                    <p className="text-sm font-medium text-red-700">
+                      Deal expires: {getTimeLeft()}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Right Column - Supplier & Actions */}
+            <div className="space-y-4">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                  <Building className="h-5 w-5" />
+                  Supplier Information
+                </h3>
+                <div className="space-y-2">
+                  <p className="font-medium">{deal.supplier.firstName} {deal.supplier.lastName}</p>
+                  <p className="text-sm text-gray-600">{deal.supplier.email}</p>
+                  {deal.supplier.isVerified && (
+                    <Badge className="bg-green-100 text-green-700">
+                      <Shield className="h-3 w-3 mr-1" />
+                      Verified Supplier
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Button
+                  onClick={() => {
+                    setShowDetails(false);
+                    handleInquiry();
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Send Inquiry
+                </Button>
+                
+                <Button
+                  onClick={() => {
+                    setShowDetails(false);
+                    handleGetCoupon();
+                  }}
+                  className="w-full bg-green-600 hover:bg-green-700"
+                  disabled={createCouponMutation.isPending}
+                >
+                  <Ticket className="h-4 w-4 mr-2" />
+                  {createCouponMutation.isPending ? "Generating..." : "Get Coupon"}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
