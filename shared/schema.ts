@@ -136,9 +136,10 @@ export const inquiries = pgTable("inquiries", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   dealId: varchar("deal_id").notNull().references(() => deals.id),
   buyerId: varchar("buyer_id").notNull().references(() => users.id),
-  message: text("message").notNull(),
+  supplierId: varchar("supplier_id").notNull().references(() => users.id),
+  message: text("message"),
   contactInfo: text("contact_info"),
-  status: varchar("status").default("pending"), // pending, responded, closed
+  status: varchar("status").notNull().default("pending"), // pending, responded, closed
   supplierResponse: text("supplier_response"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -291,6 +292,7 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
 export const inquiriesRelations = relations(inquiries, ({ one }) => ({
   deal: one(deals, { fields: [inquiries.dealId], references: [deals.id] }),
   buyer: one(users, { fields: [inquiries.buyerId], references: [users.id] }),
+  supplier: one(users, { fields: [inquiries.supplierId], references: [users.id] }),
 }));
 
 export const couponsRelations = relations(coupons, ({ one }) => ({
