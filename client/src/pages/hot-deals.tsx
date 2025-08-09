@@ -85,10 +85,10 @@ export default function HotDeals() {
   }
 
   return (
-    <div className="min-h-screen page-deals">
+    <div className="min-h-screen">
       <Navbar />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="page-deals">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Modern Header Section */}
         <div className="mb-12 text-center">
           <div className="flex items-center justify-center mb-4">
@@ -218,7 +218,8 @@ export default function HotDeals() {
             </div>
           )}
         </section>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

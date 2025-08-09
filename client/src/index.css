@@ -34,53 +34,48 @@ body {
   min-height: 100vh !important;
 }
 
-/* Only apply gradient from below the navbar */
-.page-content {
+/* Page-specific background colors starting below navbar */
+
+/* Home page - orange halftone to slate gradient */
+.page-home {
   background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Hero section orange halftone to slate gradient */
-.hero-gradient {
-  background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%) !important;
+/* Hot deals page - red gradient theme */
+.page-deals {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 30%, #ff9ff3 70%, #54a0ff 100%) !important;
+  min-height: calc(100vh - 64px) !important;
 }
 
-.page-home,
-.page-home.mobile-update,
-div[class*="page-home"],
-body.unauthenticated,
-body.authenticated {
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
-  min-height: 100vh !important;
+/* Regular deals page - blue gradient theme */
+.page-regular {
+  background: linear-gradient(135deg, #54a0ff 0%, #2e86de 30%, #a29bfe 70%, #6c5ce7 100%) !important;
+  min-height: calc(100vh - 64px) !important;
 }
 
-/* Force orange background for home page specifically */
-body:has(.page-home-container),
-.page-home-container {
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
-  min-height: 100vh !important;
+/* Supplier pages - green gradient theme */
+.page-supplier {
+  background: linear-gradient(135deg, #00d2d3 0%, #01a3a4 30%, #2ed573 70%, #1e90ff 100%) !important;
+  min-height: calc(100vh - 64px) !important;
 }
 
-/* Override ALL conflicting backgrounds globally */
-* {
-  --tw-gradient-from: #ffcc80 !important;
-  --tw-gradient-to: #8fa3b8 !important;
+/* Registration pages - purple gradient theme */
+.page-register {
+  background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 30%, #fd79a8 70%, #e84393 100%) !important;
+  min-height: calc(100vh - 64px) !important;
 }
 
-/* Specifically override any conflicting color classes */
-.bg-olive-50, .from-olive-50, .to-charcoal-50, .bg-white, .bg-gray-50 {
-  background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%) !important;
+/* General pages - neutral gradient theme */
+.page-general {
+  background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 30%, #fce7f3 70%, #fbcfe8 100%) !important;
+  min-height: calc(100vh - 64px) !important;
 }
 
-/* Universal page background override */
-[class*="min-h-screen"], .min-h-screen {
-  background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%) !important;
-}
-
-/* Ensure all text is visible */
-.text-white {
-  color: white !important;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+/* Default fallback */
+.page-content {
+  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%) !important;
+  min-height: calc(100vh - 64px) !important;
 }
 
 /* Fix any hidden text issues */

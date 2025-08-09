@@ -80,7 +80,9 @@ export default function RegularDeals() {
   }
 
   return (
-    <div className="min-h-screen page-deals">
+    <div className="min-h-screen">
+      <Navbar />
+      <div className="page-regular">
       <Navbar />
       
 
@@ -214,7 +216,8 @@ export default function RegularDeals() {
         <div className="mt-12 mb-8">
           <BannerAds position="footer" className="w-full" />
         </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

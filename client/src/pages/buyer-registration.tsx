@@ -132,9 +132,10 @@ export default function BuyerRegistration() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 py-12">
+    <div className="min-h-screen">
       <Navbar />
-      <div className="container mx-auto px-4 max-w-2xl">
+      <div className="page-register py-12">
+        <div className="container mx-auto px-4 max-w-2xl">
         <div className="text-center mb-8">
           <Badge variant="outline" className="mb-4 text-indigo-600 border-indigo-200">
             Join Business Daily Deals
@@ -549,6 +550,7 @@ export default function BuyerRegistration() {
             </Form>
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   );
