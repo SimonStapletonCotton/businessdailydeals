@@ -478,7 +478,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             {isAuthenticated ? (
               <>
                 <Button
-                  className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white h-10 flex items-center justify-center"
                   onClick={handleGetCoupon}
                   disabled={createCouponMutation.isPending}
                   data-testid="button-take-offer"
@@ -499,7 +499,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             ) : (
               <>
                 <Button
-                  className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white h-10 flex items-center justify-center"
                   onClick={() => window.location.href = '/register-buyer'}
                   data-testid="button-register-for-offer"
                 >
