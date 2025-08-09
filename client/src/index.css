@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v9.0-CORPORATE-BLUE-STEEL-THEME";
+  content: "v10.0-PASTEL-CORPORATE-THEME";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v9-CORPORATE-BLUE-STEEL";
+  --cache-buster: "2025-01-09-v10-PASTEL-CORPORATE";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,45 +36,45 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - corporate blue & steel professional theme */
+/* Home page - light blue pastel theme */
 .page-home {
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 25%, #60a5fa 50%, #93c5fd 75%, #e2e8f0 85%, #64748b 100%) !important;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 30%, #93c5fd 60%, #e0e7ff 80%, #f1f5f9 90%, #f8fafc 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Hot deals page - dynamic blue steel gradient */
+/* Hot deals page - light green pastel theme */
 .page-deals {
-  background: linear-gradient(120deg, #1d4ed8 0%, #2563eb 30%, #3b82f6 60%, #93c5fd 80%, #e2e8f0 95%, #64748b 100%) !important;
+  background: linear-gradient(120deg, #dcfce7 0%, #bbf7d0 30%, #86efac 60%, #ecfdf5 80%, #f0fdf4 90%, #f7fee7 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Regular deals page - softer blue professional theme */
+/* Regular deals page - light purple pastel theme */
 .page-regular {
-  background: linear-gradient(45deg, #2563eb 0%, #3b82f6 35%, #60a5fa 65%, #93c5fd 85%, #e2e8f0 95%, #64748b 100%) !important;
+  background: linear-gradient(45deg, #e9d5ff 0%, #ddd6fe 30%, #c4b5fd 60%, #f3e8ff 80%, #faf5ff 90%, #fefbff 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Supplier pages - steel blue corporate gradient */
+/* Supplier pages - light teal pastel theme */
 .page-supplier {
-  background: linear-gradient(60deg, #1e40af 0%, #2563eb 40%, #60a5fa 70%, #93c5fd 85%, #e2e8f0 95%, #64748b 100%) !important;
+  background: linear-gradient(60deg, #ccfbf1 0%, #a7f3d0 30%, #6ee7b7 60%, #d1fae5 80%, #ecfdf5 90%, #f0fdf4 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Registration pages - professional blue steel */
+/* Registration pages - light rose pastel theme */
 .page-register {
-  background: linear-gradient(90deg, #1d4ed8 0%, #3b82f6 35%, #60a5fa 65%, #93c5fd 85%, #e2e8f0 95%, #64748b 100%) !important;
+  background: linear-gradient(90deg, #fce7f3 0%, #fbcfe8 30%, #f9a8d4 60%, #fdf2f8 80%, #fef7f2 90%, #fffbf7 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* General pages - neutral gradient theme */
+/* General pages - light yellow pastel theme */
 .page-general {
-  background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 30%, #fce7f3 70%, #fbcfe8 100%) !important;
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 30%, #fde68a 60%, #fffbeb 80%, #fffef0 90%, #ffffff 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Default fallback - orange across almost entire screen */
+/* Default fallback - light gray pastel theme */
 .page-content {
-  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 40%, #ff9800 75%, #ff8800 90%, #64748b 98%, #475569 100%) !important;
+  background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 30%, #e2e8f0 60%, #cbd5e1 80%, #94a3b8 90%, #64748b 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
