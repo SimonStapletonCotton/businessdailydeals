@@ -349,7 +349,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
   }
 
   return (
-    <Card className={`hover:shadow-xl transition-all duration-300 ${cardClass}`}>
+    <Card className={`hover:shadow-xl transition-all duration-300 ${cardClass} flex flex-col h-full`}>
       <div className="relative">
         {deal.imageUrl && (
           <img
@@ -373,7 +373,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           </div>
         )}
       </div>
-      <CardContent className="p-4">
+      <CardContent className="p-4 flex flex-col h-full">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-muted-foreground" data-testid="text-category">
             {deal.category}
@@ -474,7 +474,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         </div>
         
         {!showInquiryForm ? (
-          <div className="space-y-2">
+          <div className="space-y-2 mt-auto">
             {isAuthenticated ? (
               <>
                 <Button
