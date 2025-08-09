@@ -120,6 +120,25 @@ export default function SupplierRegistration() {
           </p>
         </div>
 
+        {/* FREE Promotional Period Banner */}
+        <div className="mb-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white text-center" data-testid="promotional-banner">
+          <div className="flex items-center justify-center mb-2">
+            <Package className="h-6 w-6 mr-2 text-orange-200" />
+            <h2 className="text-2xl font-bold">🎉 SPECIAL LAUNCH OFFER!</h2>
+            <Package className="h-6 w-6 ml-2 text-orange-200" />
+          </div>
+          <p className="text-lg mb-2">
+            <strong>Register now and post unlimited deals 100% FREE until 1st January 2026!</strong>
+          </p>
+          <p className="text-sm opacity-90">
+            No setup fees • No monthly charges • No credit purchases required until Jan 2026
+          </p>
+          <div className="mt-3 inline-flex items-center bg-white/20 rounded-full px-4 py-2 text-sm font-medium">
+            <Shield className="h-4 w-4 mr-2" />
+            Save R125 per HOT deal • R50 per REGULAR deal
+          </div>
+        </div>
+
         <Card className="shadow-xl border-slate-200">
           <CardHeader className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-t-lg">
             <CardTitle className="flex items-center gap-3">
