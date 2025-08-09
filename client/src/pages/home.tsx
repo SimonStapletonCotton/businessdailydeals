@@ -338,6 +338,28 @@ export default function Home() {
         {/* Hot Deals Section - Only show for authenticated users when not searching */}
         {(isAuthenticated && !isSearching) && (
           <section className="mb-16">
+            {/* Modern Header Section for Hot Deals */}
+            <div className="mb-12 text-center">
+              <div className="flex items-center justify-center mb-4">
+                <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 p-3 rounded-full">
+                  <Flame className="h-8 w-8 text-orange-500" />
+                </div>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4" data-testid="text-hot-deals-title">
+                Hot Deals
+              </h2>
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <span className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                  🔥 Premium Marketplace
+                </span>
+                <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">
+                  Limited Time
+                </span>
+              </div>
+              <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+                Exclusive premium deals with exceptional value and limited availability. Featured placement for maximum visibility.
+              </p>
+            </div>
 
             <div className="flex justify-end mb-6">
               <Link href="/hot-deals">
