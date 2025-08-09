@@ -12,6 +12,7 @@ import FindMeDeal from "@/pages/find-me-deal";
 import SupplierDashboard from "@/pages/supplier-dashboard";
 import PostDeal from "@/pages/post-deal";
 import MyCoupons from "@/pages/my-coupons";
+import CouponPage from "@/pages/coupon";
 import Pricing from "@/pages/pricing";
 import RatesManagement from "@/pages/rates-management";
 import Rates from "@/pages/rates";
@@ -55,6 +56,7 @@ function Router() {
       <Route path="/suppliers-directory" component={SuppliersDirectory} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/credits" component={CreditsPage} />
+      <Route path="/coupon/:code" component={CouponPage} />
       
       {/* Make core pages accessible to everyone */}
       <Route path="/" component={Home} />

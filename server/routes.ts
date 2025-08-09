@@ -680,23 +680,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/coupons', isAuthenticated, async (req: any, res) => {
     try {
       const buyerId = req.user.claims.sub;
+      const { dealId } = req.body;
+      
+      // Get deal details to include in coupon
+      const deal = await storage.getDealById(dealId);
+      if (!deal) {
+        return res.status(404).json({ message: "Deal not found" });
+      }
       
       // Generate unique coupon code
       const couponCode = `BDD-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
       
-      // Set expiration date (30 days from now)
-      const expiresAt = new Date();
-      expiresAt.setDate(expiresAt.getDate() + 30);
+      // Set validity date (30 days from now)
+      const validUntil = new Date();
+      validUntil.setDate(validUntil.getDate() + 30);
       
       const couponData = insertCouponSchema.parse({
-        ...req.body,
+        dealId,
         buyerId,
+        supplierId: deal.supplierId,
         couponCode,
-        expiresAt
+        dealTitle: deal.title,
+        dealPrice: deal.price,
+        dealOriginalPrice: deal.originalPrice,
+        dealDescription: deal.description,
+        validUntil,
+        expiresAt: validUntil // Keep for backward compatibility
       });
 
       const coupon = await storage.createCoupon(couponData);
-      res.status(201).json(coupon);
+      
+      // Return coupon with redirect URL
+      res.status(201).json({
+        ...coupon,
+        redirectUrl: `/coupon/${couponCode}`
+      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid coupon data", errors: error.errors });

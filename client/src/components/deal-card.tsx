@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash, UserPlus, Lock, Shield } from "lucide-react";
+import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash, UserPlus, Lock, Shield, Ticket } from "lucide-react";
 import { Deal } from "@shared/schema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -74,13 +74,15 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
     mutationFn: async (data: { dealId: string; supplierId: string }) => {
       return await apiRequest("POST", "/api/coupons", data);
     },
-    onSuccess: (coupon) => {
-      toast({
-        title: "Coupon Created",
-        description: "Your coupon has been generated successfully! You can download it from your coupons page.",
-      });
-      // Generate and download PDF coupon
-      generateCouponPDF(coupon);
+    onSuccess: (response) => {
+      if (response.redirectUrl) {
+        window.location.href = response.redirectUrl;
+      } else {
+        toast({
+          title: "Coupon Generated",
+          description: "Your deal acceptance coupon has been created successfully.",
+        });
+      }
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
@@ -102,60 +104,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
     },
   });
 
-  const generateCouponPDF = (coupon: any) => {
-    // Create a simple HTML coupon that can be printed or saved as PDF
-    const couponHTML = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Business Daily Deals Coupon</title>
-          <style>
-            body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-            .coupon { border: 3px dashed #6B7280; padding: 30px; margin: 20px 0; background: #F9FAFB; }
-            .header { text-align: center; color: #059669; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-            .code { background: #374151; color: white; padding: 10px; font-family: monospace; font-size: 18px; text-align: center; margin: 20px 0; }
-            .details { margin: 15px 0; }
-            .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #6B7280; }
-            .deal-title { font-size: 20px; font-weight: bold; color: #111827; margin-bottom: 10px; }
-            .price { font-size: 24px; color: #059669; font-weight: bold; }
-          </style>
-        </head>
-        <body>
-          <div class="coupon">
-            <div class="header">🎫 BUSINESS DAILY DEALS COUPON</div>
-            <div class="deal-title">${deal.title}</div>
-            <div class="details">
-              <p><strong>Deal Price:</strong> <span class="price">R${parseFloat(deal.price).toLocaleString()}</span></p>
-              ${deal.originalPrice ? `<p><strong>Original Price:</strong> R${parseFloat(deal.originalPrice).toLocaleString()}</p>` : ''}
-              ${deal.discount ? `<p><strong>Discount:</strong> ${deal.discount}% OFF</p>` : ''}
-              <p><strong>Supplier:</strong> ${deal.supplier.companyName || deal.supplier.firstName}</p>
-              <p><strong>Category:</strong> ${deal.category}</p>
-              <p><strong>Min Order:</strong> ${deal.minOrder} unit${deal.minOrder !== 1 ? 's' : ''}</p>
-              ${deal.size ? `<p><strong>Size:</strong> ${deal.size}</p>` : ''}
-              ${deal.quantityAvailable ? `<p><strong>Available Qty:</strong> ${deal.quantityAvailable} units</p>` : ''}
-            </div>
-            <div class="code">Coupon Code: ${coupon.couponCode}</div>
-            <div class="details">
-              <p><strong>Valid Until:</strong> ${new Date(coupon.expiresAt).toLocaleDateString('en-ZA')}</p>
-              <p><strong>Description:</strong> ${deal.description}</p>
-              ${deal.productSpecifications ? `<p><strong>Specifications:</strong> ${deal.productSpecifications}</p>` : ''}
-            </div>
-            <div class="footer">
-              <p>Present this coupon to the supplier to redeem this offer</p>
-              <p>www.businessdailydeals.co.za</p>
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
 
-    // Open coupon in new window for printing/saving
-    const newWindow = window.open('', '_blank');
-    if (newWindow) {
-      newWindow.document.write(couponHTML);
-      newWindow.document.close();
-    }
-  };
 
   const handleInquiry = () => {
     if (!isAuthenticated) {
@@ -531,13 +480,13 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             {isAuthenticated ? (
               <>
                 <Button
-                  className="w-full bg-olive-600 hover:bg-olive-700 text-white"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
                   onClick={handleGetCoupon}
                   disabled={createCouponMutation.isPending}
-                  data-testid="button-get-coupon"
+                  data-testid="button-take-offer"
                 >
-                  <Download className="h-4 w-4 mr-2" />
-                  {createCouponMutation.isPending ? "Creating Coupon..." : "Get Coupon"}
+                  <Ticket className="h-4 w-4 mr-2" />
+                  {createCouponMutation.isPending ? "Generating Coupon..." : "Take This Offer"}
                 </Button>
                 <Button
                   variant="outline"
@@ -552,12 +501,12 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             ) : (
               <>
                 <Button
-                  className="w-full bg-primary hover:bg-primary/90 text-white"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
                   onClick={() => window.location.href = '/register-buyer'}
-                  data-testid="button-register-for-coupon"
+                  data-testid="button-register-for-offer"
                 >
                   <UserPlus className="h-4 w-4 mr-2" />
-                  Register to Get Coupon
+                  Register to Take Offer
                 </Button>
                 <Button
                   variant="outline"

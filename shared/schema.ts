@@ -149,11 +149,17 @@ export const coupons = pgTable("coupons", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   dealId: varchar("deal_id").notNull().references(() => deals.id),
   buyerId: varchar("buyer_id").notNull().references(() => users.id),
+  supplierId: varchar("supplier_id").notNull().references(() => users.id),
   couponCode: varchar("coupon_code").notNull().unique(),
+  dealTitle: varchar("deal_title").notNull(),
+  dealPrice: decimal("deal_price", { precision: 10, scale: 2 }).notNull(),
+  dealOriginalPrice: decimal("deal_original_price", { precision: 10, scale: 2 }),
+  dealDescription: text("deal_description"),
   discountAmount: decimal("discount_amount", { precision: 10, scale: 2 }),
   isRedeemed: boolean("is_redeemed").default(false),
   redeemedAt: timestamp("redeemed_at"),
   expiresAt: timestamp("expires_at"),
+  validUntil: timestamp("valid_until").notNull(), // Max 30 days from issue
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -298,6 +304,7 @@ export const inquiriesRelations = relations(inquiries, ({ one }) => ({
 export const couponsRelations = relations(coupons, ({ one }) => ({
   deal: one(deals, { fields: [coupons.dealId], references: [deals.id] }),
   buyer: one(users, { fields: [coupons.buyerId], references: [users.id] }),
+  supplier: one(users, { fields: [coupons.supplierId], references: [users.id] }),
 }));
 
 export const keywordsRelations = relations(keywords, ({ one }) => ({

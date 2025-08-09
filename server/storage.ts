@@ -48,7 +48,7 @@ import { nanoid } from "nanoid";
 export type DealWithSupplier = Deal & { supplier: User };
 export type NotificationWithDeal = Notification & { deal?: Deal };
 export type InquiryWithDetails = Inquiry & { deal: Deal; buyer: User };
-export type CouponWithDetails = Coupon & { deal: Deal; buyer: User };
+export type CouponWithDetails = Coupon & { deal: Deal; buyer: User; supplier: User };
 
 export interface IStorage {
   // User operations
@@ -977,20 +977,21 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCouponByCode(couponCode: string): Promise<CouponWithDetails | undefined> {
-    const [result] = await db
+    const result = await db
       .select()
       .from(coupons)
       .leftJoin(deals, eq(coupons.dealId, deals.id))
       .leftJoin(users, eq(coupons.buyerId, users.id))
       .where(eq(coupons.couponCode, couponCode));
     
-    if (!result) return undefined;
+    if (result.length === 0) return undefined;
 
+    const row = result[0];
     return {
-      ...result.coupons,
-      deal: result.deals!,
-      buyer: result.users!,
-      supplier: {} as User,
+      ...row.coupons,
+      deal: row.deals!,
+      buyer: row.users!,
+      supplier: {} as User, // Will be populated separately
     };
   }
 
@@ -998,10 +999,8 @@ export class DatabaseStorage implements IStorage {
     const [coupon] = await db
       .update(coupons)
       .set({ 
-        status: "redeemed",
+        isRedeemed: true,
         redeemedAt: new Date(),
-        redemptionNotes,
-        updatedAt: new Date(),
       })
       .where(eq(coupons.couponCode, couponCode))
       .returning();
@@ -1017,8 +1016,7 @@ export class DatabaseStorage implements IStorage {
     const [coupon] = await db
       .update(coupons)
       .set({ 
-        status: "expired",
-        updatedAt: new Date(),
+        expiresAt: new Date(), // Mark as expired by setting expiry to now
       })
       .where(eq(coupons.id, id))
       .returning();
