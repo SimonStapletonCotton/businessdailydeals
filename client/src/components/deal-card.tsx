@@ -296,24 +296,38 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         )}
       </CardContent>
 
-      {/* ABSOLUTE POSITIONED TWO-COLUMN DIALOG */}
-      <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent 
-          className="p-0 border-0 bg-white"
-          style={{ 
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '1200px',
-            maxWidth: '90vw',
-            height: '80vh',
-            maxHeight: '800px',
-            borderRadius: '8px',
-            boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
-            zIndex: 9999
-          }}
-        >
+      {/* CUSTOM TWO-COLUMN MODAL - BYPASS SHADCN DIALOG */}
+      {showDetails && (
+        <>
+          {/* Overlay */}
+          <div 
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 9998,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)'
+            }}
+            onClick={() => setShowDetails(false)}
+          />
+          
+          {/* Modal Content */}
+          <div 
+            style={{ 
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '1200px',
+              maxWidth: '90vw',
+              height: '80vh',
+              maxHeight: '800px',
+              borderRadius: '8px',
+              boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+              zIndex: 9999,
+              backgroundColor: 'white',
+              display: 'block'
+            }}
+          >
           {/* Header */}
           <div style={{ 
             padding: '24px', 
@@ -340,6 +354,30 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             height: 'calc(100% - 80px)',
             overflow: 'hidden'
           }}>
+          
+          {/* Close Button */}
+          <button
+            onClick={() => setShowDetails(false)}
+            style={{
+              position: 'absolute',
+              right: '16px',
+              top: '16px',
+              width: '32px',
+              height: '32px',
+              borderRadius: '4px',
+              border: 'none',
+              background: 'transparent',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '18px',
+              color: '#6b7280',
+              zIndex: 10000
+            }}
+          >
+            ×
+          </button>
             {/* LEFT COLUMN */}
             <div style={{
               position: 'absolute',
@@ -492,8 +530,9 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               </div>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+          </div>
+        </>
+      )}
     </Card>
   );
 }
