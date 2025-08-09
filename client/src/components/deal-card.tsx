@@ -225,27 +225,24 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
 
         {/* Details Dialog */}
         <Dialog open={showDetails} onOpenChange={setShowDetails}>
-          <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto p-0">
-            <DialogHeader className="p-6 pb-4 border-b bg-gray-50">
-              <DialogTitle className="flex items-center gap-2 text-xl font-bold">
-                <Package className="h-6 w-6 text-blue-600" />
+          <DialogContent className="max-w-[1200px] w-[90vw] max-h-[90vh] overflow-hidden p-0">
+            <DialogHeader className="p-4 border-b bg-gray-50 shrink-0">
+              <DialogTitle className="flex items-center gap-2 text-lg font-bold">
+                <Package className="h-5 w-5 text-blue-600" />
                 {deal.title}
               </DialogTitle>
             </DialogHeader>
             
-            {/* FORCED Two Column Layout - NEVER single column */}
+            {/* FORCED Two Column Layout using flexbox */}
             <div 
-              className="dialog-two-columns grid gap-6 p-6 min-h-[500px]" 
+              className="flex overflow-y-auto"
               style={{ 
-                display: 'grid !important',
-                gridTemplateColumns: '1fr 1fr !important',
-                maxWidth: '100%',
-                width: '100%',
-                columnGap: '2rem'
+                height: 'calc(90vh - 80px)',
+                minHeight: '500px'
               }}
             >
               {/* Left Column - Product Information */}
-              <div className="space-y-4">
+              <div className="flex-1 p-6 border-r border-gray-200 overflow-y-auto space-y-4">
                 {/* Main Product Image */}
                 {deal.imageUrl && (
                   <div className="relative">
@@ -333,7 +330,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               </div>
 
               {/* Right Column - Supplier & Actions */}
-              <div className="space-y-4">
+              <div className="flex-1 p-6 overflow-y-auto space-y-4">
                 {/* Supplier Information */}
                 <div className="bg-orange-50 p-5 rounded-lg border border-orange-200">
                   <h4 className="font-semibold mb-4 text-base text-gray-900 flex items-center gap-2">
