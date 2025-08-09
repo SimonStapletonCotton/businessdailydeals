@@ -384,7 +384,7 @@ export default function PostDeal() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger data-testid="select-category">
                               <SelectValue placeholder="Select a category" />
@@ -430,7 +430,7 @@ export default function PostDeal() {
                     name="price"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Sale Price ($) *</FormLabel>
+                        <FormLabel>Sale Price (R) *</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
@@ -455,7 +455,7 @@ export default function PostDeal() {
                     name="originalPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Original Price ($)</FormLabel>
+                        <FormLabel>Original Price (R)</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
