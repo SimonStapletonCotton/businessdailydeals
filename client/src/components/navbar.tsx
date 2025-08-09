@@ -53,6 +53,18 @@ export default function Navbar() {
           Home/HOT deals
         </Button>
       </Link>
+      
+      <Link href="/regular-deals">
+        <Button
+          variant={location === "/regular-deals" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20 whitespace-nowrap flex-shrink-0"}
+          data-testid="link-regular-deals"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Ticket className="h-4 w-4 mr-2" />
+          REGULAR deals
+        </Button>
+      </Link>
 
       <Link href="/register-supplier">
         <Button
@@ -74,18 +86,6 @@ export default function Navbar() {
         >
           <ShoppingBag className="h-4 w-4 mr-2" />
           Register as BUYER
-        </Button>
-      </Link>
-      
-      <Link href="/regular-deals">
-        <Button
-          variant={location === "/regular-deals" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20 whitespace-nowrap flex-shrink-0"}
-          data-testid="link-regular-deals"
-          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-        >
-          <Ticket className="h-4 w-4 mr-2" />
-          REGULAR deals
         </Button>
       </Link>
 
