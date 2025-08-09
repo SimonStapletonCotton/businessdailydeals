@@ -101,16 +101,25 @@ export default function Home() {
           <div className="text-center">
             {/* Animated One-Armed Bandit */}
             <div className="flex justify-center items-center mb-6" data-testid="slot-machine">
-              <div className="flex items-center bg-white/10 rounded-lg p-3 border border-white/20 backdrop-blur-sm">
-                <div className="flex space-x-2">
-                  <div className="bg-white/20 rounded px-3 py-2 text-2xl font-bold text-yellow-300 animate-spin" style={{animationDuration: '3s'}}>
-                    7
+              <div className="flex items-center bg-gray-800 rounded-lg p-4 border-2 border-yellow-400 shadow-lg">
+                <div className="flex space-x-3">
+                  {/* Slot Reel 1 */}
+                  <div className="relative w-12 h-16 bg-white rounded border-2 border-gray-300 overflow-hidden">
+                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-slow">
+                      <div className="text-3xl font-bold text-red-600 leading-none" style={{fontFamily: 'serif', textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>7</div>
+                    </div>
                   </div>
-                  <div className="bg-white/20 rounded px-3 py-2 text-2xl font-bold text-yellow-300 animate-pulse" style={{animationDuration: '2s'}}>
-                    7
+                  {/* Slot Reel 2 */}
+                  <div className="relative w-12 h-16 bg-white rounded border-2 border-gray-300 overflow-hidden">
+                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-medium">
+                      <div className="text-3xl font-bold text-red-600 leading-none" style={{fontFamily: 'serif', textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>7</div>
+                    </div>
                   </div>
-                  <div className="bg-white/20 rounded px-3 py-2 text-2xl font-bold text-yellow-300 animate-bounce" style={{animationDuration: '1.5s'}}>
-                    7
+                  {/* Slot Reel 3 */}
+                  <div className="relative w-12 h-16 bg-white rounded border-2 border-gray-300 overflow-hidden">
+                    <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-fast">
+                      <div className="text-3xl font-bold text-red-600 leading-none" style={{fontFamily: 'serif', textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>7</div>
+                    </div>
                   </div>
                 </div>
               </div>

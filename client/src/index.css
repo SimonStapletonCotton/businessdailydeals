@@ -23,6 +23,34 @@
   content: "v2.0";
 }
 
+/* Casino slot machine animations - vertical spinning */
+@keyframes spin-vertical-slow {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes spin-vertical-medium {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes spin-vertical-fast {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-spin-vertical-slow {
+  animation: spin-vertical-slow 4s linear infinite;
+}
+
+.animate-spin-vertical-medium {
+  animation: spin-vertical-medium 2.5s linear infinite;
+}
+
+.animate-spin-vertical-fast {
+  animation: spin-vertical-fast 1.8s linear infinite;
+}
+
 :root {
   --background: hsl(0 0% 100%);
   --foreground: hsl(0 0% 20%);
