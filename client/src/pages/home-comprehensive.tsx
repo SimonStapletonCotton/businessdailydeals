@@ -58,10 +58,10 @@ export default function HomeComprehensive() {
               <Star className="w-4 h-4 mr-2" />
               South Africa's #1 B2B Marketplace
             </Badge>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight" data-testid="text-hero-title">
-              Business Daily
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight uppercase" data-testid="text-hero-title">
+              BUSINESS DAILY
               <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                Deals
+                DEALS
               </span>
             </h1>
             <div className="bg-red-600 px-6 py-3 rounded-lg mb-4 inline-block shadow-lg">
