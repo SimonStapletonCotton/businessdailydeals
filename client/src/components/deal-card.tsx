@@ -310,7 +310,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             onClick={() => setShowDetails(false)}
           />
           
-          {/* Modal Content */}
+          {/* Modal Content - GUARANTEED TWO-COLUMN LAYOUT */}
           <div 
             style={{ 
               position: 'fixed',
@@ -325,7 +325,9 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
               zIndex: 9999,
               backgroundColor: 'white',
-              display: 'block'
+              display: 'flex',  /* FORCE FLEX LAYOUT */
+              flexDirection: 'column',
+              overflow: 'hidden'
             }}
           >
           {/* Header */}
@@ -378,17 +380,18 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           >
             ×
           </button>
-            {/* LEFT COLUMN */}
+            {/* LEFT COLUMN - FORCED 50% WIDTH */}
             <div style={{
               position: 'absolute',
               left: 0,
               top: 0,
-              width: '50%',
+              width: '600px', /* FIXED WIDTH INSTEAD OF PERCENTAGE */
               height: '100%',
               padding: '24px',
               borderRight: '1px solid #e5e7eb',
               overflowY: 'auto',
-              background: 'white'
+              background: 'white',
+              boxSizing: 'border-box'
             }}>
               {deal.imageUrl && (
                 <img 
@@ -452,16 +455,17 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               )}
             </div>
 
-            {/* RIGHT COLUMN */}
+            {/* RIGHT COLUMN - FORCED 50% WIDTH */}
             <div style={{
               position: 'absolute',
-              right: 0,
+              left: '600px', /* START WHERE LEFT COLUMN ENDS */
               top: 0,
-              width: '50%',
+              width: '600px', /* FIXED WIDTH INSTEAD OF PERCENTAGE */
               height: '100%',
               padding: '24px',
               overflowY: 'auto',
-              background: 'white'
+              background: 'white',
+              boxSizing: 'border-box'
             }}>
               <div style={{
                 background: '#eff6ff',

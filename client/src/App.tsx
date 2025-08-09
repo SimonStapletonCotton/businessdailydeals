@@ -40,18 +40,47 @@ function Router() {
   const { isAuthenticated, isLoading } = useAuth();
   const [location, setLocation] = useLocation();
 
-  // Force home page as default route
+  // AGGRESSIVE HOME ROUTE ENFORCEMENT 
   useEffect(() => {
-    // Force home route utility on app load
-    forceHomeRoute();
+    const currentPath = window.location.pathname;
     
-    // Clear any cached routes on first load
-    if (location === '/hot-deals' && !document.referrer) {
-      clearRouteCache();
+    // Force home on any refresh or direct access to hot-deals
+    if (currentPath === '/hot-deals' || (currentPath === '/' && location === '/hot-deals')) {
+      console.log('FORCED HOME: Redirecting from', currentPath, 'to home');
+      window.history.replaceState({}, '', '/');
       setLocation('/');
+      clearRouteCache();
     }
     
+    forceHomeRoute();
     console.log('Router state - Location:', location, 'URL:', window.location.pathname);
+  }, [location, setLocation]);
+
+  // Monitor for refresh attempts to hot deals
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // If user is on hot-deals and refreshes, force home next time
+      if (location === '/hot-deals') {
+        localStorage.setItem('force-home-on-load', 'true');
+      }
+    };
+
+    const handleLoad = () => {
+      // Check if we should force home
+      if (localStorage.getItem('force-home-on-load') === 'true') {
+        localStorage.removeItem('force-home-on-load');
+        window.history.replaceState({}, '', '/');
+        setLocation('/');
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('load', handleLoad);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('load', handleLoad);
+    };
   }, [location, setLocation]);
 
   return (
