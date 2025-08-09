@@ -24,6 +24,7 @@ import BuyerRegistration from "@/pages/buyer-registration";
 import SupplierRegistration from "@/pages/supplier-registration";
 import ManageKeywords from "@/pages/manage-keywords";
 import SupplierAnalytics from "@/pages/supplier-analytics";
+import BuyerDashboard from "@/pages/buyer-dashboard";
 import SuppliersDirectory from "@/pages/suppliers-directory";
 import Support from "@/pages/support";
 import TermsOfService from "@/pages/terms-of-service";
@@ -63,6 +64,7 @@ function Router() {
       {isAuthenticated && (
         <>
           <Route path="/supplier-dashboard" component={SupplierDashboard} />
+          <Route path="/buyer-dashboard" component={BuyerDashboard} />
           <Route path="/supplier-analytics" component={SupplierAnalytics} />
           <Route path="/post-deal" component={PostDeal} />
           <Route path="/my-coupons" component={MyCoupons} />
