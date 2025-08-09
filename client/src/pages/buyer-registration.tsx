@@ -387,7 +387,7 @@ export default function BuyerRegistration() {
                           <FormItem>
                             <FormLabel className="flex items-center gap-2 text-green-800">
                               <Smartphone className="h-4 w-4" />
-                              Select your mobile provider
+                              Select your mobile provider <span className="text-red-500">*</span>
                             </FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
