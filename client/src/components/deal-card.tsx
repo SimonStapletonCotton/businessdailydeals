@@ -408,7 +408,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           <img
             src={deal.imageUrl}
             alt={deal.title}
-            className="w-full h-48 object-cover rounded-t-xl"
+            className="w-full h-32 object-cover rounded-t-xl"
             data-testid="img-deal"
           />
         )}
@@ -426,7 +426,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           </div>
         )}
       </div>
-      <CardContent className="p-6">
+      <CardContent className="p-4">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-muted-foreground" data-testid="text-category">
             {deal.category}
@@ -438,10 +438,10 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             </Badge>
           )}
         </div>
-        <h4 className="text-lg font-semibold text-slate-900 mb-2" data-testid="text-title">
+        <h4 className="text-base font-semibold text-slate-900 mb-1" data-testid="text-title">
           {deal.title}
         </h4>
-        <p className="text-muted-foreground text-sm mb-4" data-testid="text-description">
+        <p className="text-muted-foreground text-sm mb-3" data-testid="text-description">
           {deal.description}
         </p>
 
@@ -500,37 +500,34 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             )}
           </div>
         )}
-        <div className="mb-4">
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-2xl font-bold text-primary" data-testid="text-price">
+        <div className="mb-3">
+          <div className="flex items-baseline gap-2 mb-1">
+            <span className="text-xl font-bold text-primary" data-testid="text-price">
               {formatPrice(deal.price)}
             </span>
             {deal.originalPrice && (
-              <span className="text-muted-foreground line-through" data-testid="text-original-price">
+              <span className="text-muted-foreground line-through text-sm" data-testid="text-original-price">
                 {formatPrice(deal.originalPrice)}
               </span>
             )}
           </div>
-          <span className="text-sm text-muted-foreground" data-testid="text-min-order">
+          <span className="text-xs text-muted-foreground" data-testid="text-min-order">
             Min. order: {deal.minOrder} unit{deal.minOrder !== 1 ? "s" : ""}
           </span>
         </div>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Building className="h-4 w-4 mr-2" />
-            <span data-testid="text-supplier">{deal.supplier.companyName || deal.supplier.firstName}</span>
-            {deal.supplier.isVerified && (
-              <Badge variant="secondary" className="ml-2 bg-green-100 text-green-700 border-green-200 text-xs px-1 py-0">
-                <Shield className="h-3 w-3 mr-1" />
-                Verified
-              </Badge>
-            )}
-          </div>
-
+        <div className="flex items-center text-xs text-muted-foreground mb-3">
+          <Building className="h-3 w-3 mr-1" />
+          <span data-testid="text-supplier">{deal.supplier.companyName || deal.supplier.firstName}</span>
+          {deal.supplier.isVerified && (
+            <Badge variant="secondary" className="ml-2 bg-green-100 text-green-700 border-green-200 text-xs px-1 py-0">
+              <Shield className="h-2 w-2 mr-1" />
+              Verified
+            </Badge>
+          )}
         </div>
         
         {!showInquiryForm ? (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {isAuthenticated ? (
               <>
                 <Button
