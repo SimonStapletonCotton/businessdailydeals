@@ -2,7 +2,7 @@
 
 ## Overview
 
-Business Daily Deals (www.businessdailydeals.com.za) is a full-stack B2B marketplace for the South African market. It connects suppliers and buyers, facilitating the exchange of goods and services through targeted deal notifications and special pricing. Suppliers can post both premium "hot deals" and standard "regular deals." Buyers can discover opportunities via search, categories, and keyword-based notifications. The platform aims to be a fully operational and modern B2B e-commerce solution, currently under development on Replit with a planned production deployment to Cybersmart.
+Business Daily Deals (www.businessdailydeals.com.za) is a full-stack B2B marketplace for the South African market. It connects suppliers and buyers, facilitating the exchange of goods and services through targeted deal notifications and special pricing. Suppliers can post both premium "hot deals" and standard "regular deals." Buyers can discover opportunities via search, categories, and keyword-based notifications. The platform aims to be a fully operational and modern B2B e-commerce solution, currently under development on Replit with production deployment hosted by Cybersmart (www.cybersmart.co.za) in South Africa.
 
 ## User Preferences
 
