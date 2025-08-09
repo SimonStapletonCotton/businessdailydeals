@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v7.0-FORCE-BODY-BACKGROUND";
+  content: "v8.0-UNIVERSAL-ORANGE-THEME";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v6-FINAL";
+  --cache-buster: "2025-01-09-v8-UNIVERSAL-ORANGE";
 }
 
 /* Nuclear option - remove all conflicting styles */
@@ -34,10 +34,19 @@ body {
   min-height: 100vh !important;
 }
 
+/* Force orange theme universally */
+body, html, #root, .page-home-container {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
+  min-height: 100vh !important;
+}
+
 .page-home,
 .page-home.mobile-update,
-div[class*="page-home"] {
-  background: none !important;
+div[class*="page-home"],
+body.unauthenticated,
+body.authenticated {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
+  min-height: 100vh !important;
 }
 
 /* Force orange background for home page specifically */
@@ -45,6 +54,22 @@ body:has(.page-home-container),
 .page-home-container {
   background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
   min-height: 100vh !important;
+}
+
+/* Override ALL olive/charcoal backgrounds globally */
+* {
+  --tw-gradient-from: #fff7ed !important;
+  --tw-gradient-to: #fefce8 !important;
+}
+
+/* Specifically override olive and charcoal color classes */
+.bg-olive-50, .from-olive-50, .to-charcoal-50 {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
+}
+
+/* Universal page background override */
+[class*="min-h-screen"] {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
 }
 
 /* Casino slot machine animations - vertical spinning */
