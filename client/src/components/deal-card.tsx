@@ -6,13 +6,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash, UserPlus, Lock } from "lucide-react";
-import { DealWithSupplier } from "@shared/schema";
+import { Deal } from "@shared/schema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
+
+// Define extended deal type with supplier info
+type DealWithSupplier = Deal & {
+  supplier: {
+    id: string;
+    firstName?: string;
+    lastName?: string;
+    companyName?: string;
+    email?: string;
+  };
+};
 
 interface DealCardProps {
   deal: DealWithSupplier;
@@ -277,7 +288,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                     Product Images
                   </h4>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {deal.productImages.map((image, index) => (
+                    {deal.productImages.map((image: string, index: number) => (
                       <img
                         key={index}
                         src={image}
@@ -435,7 +446,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               <span className="text-sm font-medium text-charcoal-700">Product Images</span>
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2">
-              {deal.productImages.slice(0, 4).map((image, index) => (
+              {deal.productImages.slice(0, 4).map((image: string, index: number) => (
                 <img
                   key={index}
                   src={image}
