@@ -109,7 +109,7 @@ export default function Home() {
                 Deals
               </span>
             </h1>
-            <p className="text-lg md:text-xl mb-2 font-semibold text-white uppercase tracking-wide">
+            <p className="text-lg md:text-xl mb-2 font-semibold text-orange-100 uppercase tracking-wide">
               A Dedicated Website That Connects Buyers to Suppliers
             </p>
             <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-description">
