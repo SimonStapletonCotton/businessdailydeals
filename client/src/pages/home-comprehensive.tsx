@@ -8,13 +8,13 @@ import { Link } from "wouter";
 export default function HomeComprehensive() {
   return (
     <div className="min-h-screen page-home-container" style={{
-      background: 'linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%)',
+      background: 'linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%)',
       minHeight: '100vh'
     }}>
       <Navbar />
 
       {/* Hero Section with Casino Animation */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-orange-500 to-gray-700 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-orange-500 to-slate-800 text-white">
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
@@ -131,7 +131,7 @@ export default function HomeComprehensive() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Message */}
         <section className="mb-16">
-          <div className="text-center py-12 bg-white rounded-xl border-2 border-orange-200 shadow-lg">
+          <div className="text-center py-12 bg-slate-100 rounded-xl border-2 border-orange-200 shadow-lg">
             <Flame className="mx-auto h-16 w-16 text-orange-500 mb-4" />
             <h4 className="text-2xl font-semibold text-slate-900 mb-4">Welcome to Business Daily Deals</h4>
             <p className="text-slate-600 mb-6 max-w-md mx-auto text-lg">
@@ -188,7 +188,7 @@ export default function HomeComprehensive() {
       </main>
 
       {/* Quick Access Features */}
-      <section className="py-16 bg-white border-t border-orange-200">
+      <section className="py-16 bg-slate-100 border-t border-orange-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h3 className="text-3xl font-bold text-center text-slate-900 mb-12">Quick Access Features</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

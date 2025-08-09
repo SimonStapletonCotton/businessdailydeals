@@ -28,15 +28,15 @@ html {
   --cache-buster: "2025-01-09-v8-UNIVERSAL-ORANGE";
 }
 
-/* Nuclear option - remove all conflicting styles */
+/* Force proper orange gradient theme */
 body {
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
+  background: linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%) !important;
   min-height: 100vh !important;
 }
 
 /* Force orange theme universally */
 body, html, #root, .page-home-container {
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
+  background: linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%) !important;
   min-height: 100vh !important;
 }
 
@@ -56,20 +56,32 @@ body:has(.page-home-container),
   min-height: 100vh !important;
 }
 
-/* Override ALL olive/charcoal backgrounds globally */
+/* Override ALL conflicting backgrounds globally */
 * {
-  --tw-gradient-from: #fff7ed !important;
-  --tw-gradient-to: #fefce8 !important;
+  --tw-gradient-from: #ff6600 !important;
+  --tw-gradient-to: #cc4400 !important;
 }
 
-/* Specifically override olive and charcoal color classes */
-.bg-olive-50, .from-olive-50, .to-charcoal-50 {
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
+/* Specifically override any conflicting color classes */
+.bg-olive-50, .from-olive-50, .to-charcoal-50, .bg-white, .bg-gray-50 {
+  background: linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%) !important;
 }
 
 /* Universal page background override */
-[class*="min-h-screen"] {
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important;
+[class*="min-h-screen"], .min-h-screen {
+  background: linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%) !important;
+}
+
+/* Ensure all text is visible */
+.text-white {
+  color: white !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+}
+
+/* Fix any hidden text issues */
+* {
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Casino slot machine animations - vertical spinning */
