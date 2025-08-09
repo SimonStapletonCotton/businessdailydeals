@@ -143,7 +143,7 @@ export default function Landing() {
           </div>
           
           <div className="border-t border-slate-700 mt-8 pt-8 text-center text-slate-400">
-            <p>&copy; 2024 Business Deals Platform. All rights reserved.</p>
+            <p>&copy; 2025 Business Daily Deals. All rights reserved. | www.businessdailydeals.co.za</p>
           </div>
         </div>
       </footer>

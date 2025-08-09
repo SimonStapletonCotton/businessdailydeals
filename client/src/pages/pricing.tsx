@@ -254,7 +254,7 @@ export default function Pricing() {
               </div>
               
               <div className="mt-6 text-sm text-slate-500">
-                <p>Call us: +27 11 123 4567 | Email: sales@businessdailydeals.com.za</p>
+                <p>Call us: +27 11 123 4567 | Email: sales@businessdailydeals.co.za</p>
               </div>
             </CardContent>
           </Card>

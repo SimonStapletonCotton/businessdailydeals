@@ -142,7 +142,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             </div>
             <div class="footer">
               <p>Present this coupon to the supplier to redeem this offer</p>
-              <p>www.businessdailydeals.com.za</p>
+              <p>www.businessdailydeals.co.za</p>
             </div>
           </div>
         </body>

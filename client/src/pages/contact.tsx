@@ -20,7 +20,7 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Create mailto link with form data
-    const mailtoLink = `mailto:info@businessdailydeals.com.za?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+    const mailtoLink = `mailto:info@businessdailydeals.co.za?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     )}`;
     window.location.href = mailtoLink;
@@ -74,7 +74,7 @@ export default function Contact() {
                     <div className="space-y-1">
                       <p className="text-slate-600 dark:text-slate-300">simon@businessdailydeals.co.za</p>
                       <p className="text-slate-600 dark:text-slate-300">admin@businessdailydeals.co.za</p>
-                      <p className="text-slate-600 dark:text-slate-300">info@businessdailydeals.com.za</p>
+                      <p className="text-slate-600 dark:text-slate-300">info@businessdailydeals.co.za</p>
                     </div>
                   </div>
                 </div>
