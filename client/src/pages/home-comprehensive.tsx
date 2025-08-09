@@ -207,30 +207,6 @@ export default function HomeComprehensive() {
       </section>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Message */}
-        <section className="mb-16">
-          <div className="text-center py-12 bg-slate-100 rounded-xl border-2 border-orange-200 shadow-lg">
-            <Flame className="mx-auto h-16 w-16 text-orange-500 mb-4" />
-            <h4 className="text-2xl font-semibold text-slate-900 mb-4">Welcome to Business Daily Deals</h4>
-            <p className="text-slate-600 mb-6 max-w-md mx-auto text-lg">
-              Your premier B2B marketplace. Discover exclusive deals from verified suppliers.
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Link href="/hot-deals">
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2">
-                  <Flame className="w-4 h-4 mr-2" />
-                  Browse Hot Deals
-                </Button>
-              </Link>
-              <Link href="/regular-deals">
-                <Button variant="outline" className="px-6 py-2">
-                  <ShoppingBag className="w-4 h-4 mr-2" />
-                  Browse Regular Deals
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
 
         {/* Business Statistics */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
