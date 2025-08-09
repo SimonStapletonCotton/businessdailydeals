@@ -92,22 +92,10 @@ export default function HomeComprehensive() {
               </Link>
             </div>
             
-            {/* Registration Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/register-buyer">
-                <Button size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-slate-600 px-8 py-3 text-lg font-semibold">
-                  <Users className="w-5 h-5 mr-2" />
-                  Register as Buyer
-                </Button>
-              </Link>
-              <Link href="/register-supplier">
-                <Button size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-slate-600 px-8 py-3 text-lg font-semibold" data-testid="button-register-supplier">
-                  <Building2 className="w-5 h-5 mr-2" />
-                  Register as Supplier
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
+            {/* Call to Action */}
+            <p className="text-white/80 text-lg mt-6">
+              Use the menu above to register as a buyer or supplier
+            </p>
           </div>
         </div>
       </section>
