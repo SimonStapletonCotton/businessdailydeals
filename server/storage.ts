@@ -376,9 +376,9 @@ export class DatabaseStorage implements IStorage {
 
       await db.update(companies)
         .set({
-          totalDeals: Math.max(0, company.totalDeals + totalChange),
-          hotDealsCount: Math.max(0, company.hotDealsCount + hotChange),
-          regularDealsCount: Math.max(0, company.regularDealsCount + regularChange),
+          totalDeals: Math.max(0, (company.totalDeals || 0) + totalChange),
+          hotDealsCount: Math.max(0, (company.hotDealsCount || 0) + hotChange),
+          regularDealsCount: Math.max(0, (company.regularDealsCount || 0) + regularChange),
           updatedAt: new Date()
         })
         .where(eq(companies.userId, userId));
@@ -451,16 +451,16 @@ export class DatabaseStorage implements IStorage {
       const updates: any = {};
       switch (type) {
         case 'visit':
-          updates.totalVisits = existing.totalVisits + 1;
+          updates.totalVisits = (existing.totalVisits || 0) + 1;
           break;
         case 'unique_visitor':
-          updates.uniqueVisitors = existing.uniqueVisitors + 1;
+          updates.uniqueVisitors = (existing.uniqueVisitors || 0) + 1;
           break;
         case 'deal_view':
-          updates.dealViews = existing.dealViews + 1;
+          updates.dealViews = (existing.dealViews || 0) + 1;
           break;
         case 'search_query':
-          updates.searchQueries = existing.searchQueries + 1;
+          updates.searchQueries = (existing.searchQueries || 0) + 1;
           break;
       }
       

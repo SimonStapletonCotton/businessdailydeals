@@ -535,7 +535,7 @@ export default function PostDeal() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Deal Type *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger data-testid="select-deal-type">
                               <SelectValue placeholder="Select deal type" />

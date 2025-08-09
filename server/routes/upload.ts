@@ -3,6 +3,7 @@ import multer from "multer";
 import { Storage } from "@google-cloud/storage";
 import { nanoid } from "nanoid";
 import { extname } from "path";
+import { isAuthenticated } from "../replitAuth";
 
 // Extend Request interface to include file
 interface MulterRequest extends Request {
@@ -40,13 +41,13 @@ const upload = multer({
 // Initialize Google Cloud Storage
 const storage = new Storage();
 
-router.post('/image', upload.single('file'), async (req: MulterRequest, res: Response) => {
+router.post('/image', isAuthenticated, upload.single('file'), async (req: MulterRequest, res: Response) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    if (!req.session?.user) {
+    if (!req.user?.claims?.sub) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
