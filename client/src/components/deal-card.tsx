@@ -500,13 +500,13 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             )}
           </div>
         )}
-        <div className="flex items-center justify-between mb-4">
-          <div>
+        <div className="mb-4">
+          <div className="flex items-baseline gap-2 mb-2">
             <span className="text-2xl font-bold text-primary" data-testid="text-price">
               {formatPrice(deal.price)}
             </span>
             {deal.originalPrice && (
-              <span className="text-muted-foreground line-through ml-2" data-testid="text-original-price">
+              <span className="text-muted-foreground line-through" data-testid="text-original-price">
                 {formatPrice(deal.originalPrice)}
               </span>
             )}
