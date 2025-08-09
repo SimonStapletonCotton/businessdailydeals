@@ -155,8 +155,8 @@ This inquiry has been sent to the supplier and copied here for your records.
 }
 
 export async function sendDealRequestToAdmin(dealRequestData: DealRequestEmailData): Promise<boolean> {
-  const adminEmail = 'admin@businessdailydeals.com.za'; // You can make this configurable
-  const fromEmail = 'noreply@businessdailydeals.com.za'; // You can make this configurable
+  const adminEmail = 'admin@businessdailydeals.co.za';
+  const fromEmail = 'noreply@businessdailydeals.co.za';
 
   const priceRange = dealRequestData.priceRangeMin || dealRequestData.priceRangeMax 
     ? `R${dealRequestData.priceRangeMin || 0} - R${dealRequestData.priceRangeMax || 'unlimited'}`
