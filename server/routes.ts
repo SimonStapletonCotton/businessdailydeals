@@ -104,6 +104,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const user = await storage.createUser(userData);
 
+      // Activate FREE promotional period for suppliers (4 months)
+      if (userType === 'supplier') {
+        await storage.activateSupplierPromotionalPeriod(user.id);
+      }
+
       // Create keywords for the user if provided
       if (keywordsList && Array.isArray(keywordsList) && keywordsList.length > 0) {
         for (const keyword of keywordsList) {
@@ -115,7 +120,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.status(201).json({ 
         message: "Registration successful", 
-        user: { id: user.id, email: user.email, userType: user.userType } 
+        user: { 
+          id: user.id, 
+          email: user.email, 
+          userType: user.userType,
+          promotionalMessage: userType === 'supplier' ? 'FREE deal posting for 4 months!' : null
+        } 
       });
     } catch (error) {
       console.error("Registration error:", error);
@@ -134,7 +144,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const user = await storage.updateUserType(userId, userType);
-      res.json(user);
+      
+      // Activate FREE promotional period for new suppliers (4 months)
+      if (userType === 'supplier') {
+        await storage.activateSupplierPromotionalPeriod(userId);
+      }
+      
+      res.json({
+        ...user,
+        promotionalMessage: userType === 'supplier' ? 'FREE deal posting for 4 months activated!' : null
+      });
     } catch (error) {
       console.error("Error updating user type:", error);
       res.status(500).json({ message: "Failed to update user type" });

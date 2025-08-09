@@ -171,6 +171,25 @@ export default function SupplierDashboard() {
           </div>
         </div>
 
+        {/* FREE Promotional Period Banner */}
+        <div className="mb-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white text-center" data-testid="promotional-banner">
+          <div className="flex items-center justify-center mb-2">
+            <Flame className="h-6 w-6 mr-2 text-orange-200" />
+            <h2 className="text-2xl font-bold">🎉 YOU'RE IN THE FREE PERIOD!</h2>
+            <Flame className="h-6 w-6 ml-2 text-orange-200" />
+          </div>
+          <p className="text-lg mb-2">
+            <strong>All your deal posting is 100% FREE for the next 4 months!</strong>
+          </p>
+          <p className="text-sm opacity-90">
+            Post unlimited HOT and REGULAR deals at no cost • No credit charges until promotional period ends
+          </p>
+          <div className="mt-3 inline-flex items-center bg-white/20 rounded-full px-4 py-2 text-sm font-medium">
+            <Package className="h-4 w-4 mr-2" />
+            You're saving R125 per HOT deal • R50 per REGULAR deal
+          </div>
+        </div>
+
         {/* Modern Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-12">
           <Card className="bg-gradient-to-br from-white to-slate-50 border-0 shadow-lg hover:shadow-xl transition-shadow">

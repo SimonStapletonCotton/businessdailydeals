@@ -71,6 +71,11 @@ export const users = pgTable("users", {
   // Stripe payment integration
   stripeCustomerId: varchar("stripe_customer_id"),
   stripeSubscriptionId: varchar("stripe_subscription_id"),
+  
+  // FREE 4-month promotional period for suppliers
+  promotionalPeriodEnds: timestamp("promotional_period_ends"),
+  isInPromotionalPeriod: boolean("is_in_promotional_period").default(false),
+  
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

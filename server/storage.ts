@@ -627,6 +627,53 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
+  // Promotional period management
+  async isSupplierInPromotionalPeriod(supplierId: string): Promise<boolean> {
+    const supplier = await this.getUser(supplierId);
+    if (!supplier || supplier.userType !== 'supplier') {
+      return false;
+    }
+
+    // Check if promotional period is still active
+    if (!supplier.isInPromotionalPeriod || !supplier.promotionalPeriodEnds) {
+      return false;
+    }
+
+    const now = new Date();
+    const promotionalEnds = new Date(supplier.promotionalPeriodEnds);
+    
+    if (now > promotionalEnds) {
+      // Promotional period has expired, update user record
+      await db.update(users)
+        .set({ 
+          isInPromotionalPeriod: false,
+          updatedAt: new Date()
+        })
+        .where(eq(users.id, supplierId));
+      
+      return false;
+    }
+
+    return true;
+  }
+
+  async activateSupplierPromotionalPeriod(supplierId: string): Promise<User> {
+    const now = new Date();
+    const promotionalEnd = new Date(now.getTime() + (4 * 30 * 24 * 60 * 60 * 1000)); // 4 months from now
+    
+    const [user] = await db.update(users)
+      .set({
+        isInPromotionalPeriod: true,
+        promotionalPeriodEnds: promotionalEnd,
+        updatedAt: now
+      })
+      .where(eq(users.id, supplierId))
+      .returning();
+    
+    console.log(`Activated 4-month FREE promotional period for supplier ${supplierId} ending ${promotionalEnd.toISOString()}`);
+    return user;
+  }
+
   // Credit management for deals
   private calculateDealCredits(dealType: 'hot' | 'regular'): number {
     // Credit pricing structure
@@ -642,6 +689,22 @@ export class DatabaseStorage implements IStorage {
     // Check if supplier has sufficient credits
     const supplier = await this.getUser(supplierId);
     if (!supplier) throw new Error('Supplier not found');
+    
+    // Check if supplier is in FREE 4-month promotional period
+    if (await this.isSupplierInPromotionalPeriod(supplierId)) {
+      // FREE period - no credits charged
+      console.log(`Supplier ${supplierId} is in FREE promotional period - no credits charged for ${dealType} deal`);
+      
+      // Record the transaction as FREE
+      await this.createCreditTransaction({
+        userId: supplierId,
+        amount: '0.00',
+        type: 'promotional_free',
+        description: `FREE promotional period - ${dealType.toUpperCase()} deal posting (normally ${credits} credits)`,
+        dealId: dealId
+      });
+      return;
+    }
     
     const currentBalance = parseFloat(supplier.creditBalance || '0');
     if (currentBalance < credits) {
