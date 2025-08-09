@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Plus, User, Menu, Ticket, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins } from "lucide-react";
+import { Bell, Plus, User, Menu, Ticket, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins, BarChart3 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -89,17 +89,30 @@ export default function Navbar() {
       </Link>
 
       {isAuthenticated && (user as UserType)?.userType === "supplier" && (
-        <Link href="/supplier-dashboard">
-          <Button
-            variant={location === "/supplier-dashboard" ? "secondary" : "ghost"}
-            className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
-            data-testid="link-supplier-dashboard"
-            onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
-          >
-            <Building2 className="h-4 w-4 mr-2" />
-            Supplier dashboard
-          </Button>
-        </Link>
+        <>
+          <Link href="/supplier-dashboard">
+            <Button
+              variant={location === "/supplier-dashboard" ? "secondary" : "ghost"}
+              className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+              data-testid="link-supplier-dashboard"
+              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+            >
+              <Building2 className="h-4 w-4 mr-2" />
+              Supplier dashboard
+            </Button>
+          </Link>
+          <Link href="/supplier-analytics">
+            <Button
+              variant={location === "/supplier-analytics" ? "secondary" : "ghost"}
+              className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+              data-testid="link-supplier-analytics"
+              onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+            >
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Analytics & Reports
+            </Button>
+          </Link>
+        </>
       )}
 
       <Link href="/about">

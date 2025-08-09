@@ -22,6 +22,7 @@ import ContactPage from "@/pages/contact";
 import AboutPage from "@/pages/about";
 import BuyerRegistration from "@/pages/buyer-registration";
 import SupplierRegistration from "@/pages/supplier-registration";
+import SupplierAnalytics from "@/pages/supplier-analytics";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -50,6 +51,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/hot-deals" component={HotDeals} />
           <Route path="/supplier-dashboard" component={SupplierDashboard} />
+          <Route path="/supplier-analytics" component={SupplierAnalytics} />
           <Route path="/post-deal" component={PostDeal} />
           <Route path="/my-coupons" component={MyCoupons} />
           <Route path="/credits" component={CreditsPage} />

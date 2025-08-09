@@ -4,7 +4,7 @@ import DealCard from "@/components/deal-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
+import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard, BarChart3 } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { DealWithSupplier, InquiryWithDetails } from "@/../../server/storage";
@@ -155,12 +155,20 @@ export default function SupplierDashboard() {
           <p className="text-slate-600 text-lg max-w-2xl mx-auto mb-8">
             Welcome back, {user.firstName || user.companyName || "Supplier"}. Manage your deals and connect with buyers.
           </p>
-          <Link href="/post-deal">
-            <Button className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-3 text-lg shadow-lg" data-testid="button-post-deal">
-              <Plus className="h-5 w-5 mr-2" />
-              Post New Deal
-            </Button>
-          </Link>
+          <div className="flex gap-4 justify-center">
+            <Link href="/post-deal">
+              <Button className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-3 text-lg shadow-lg" data-testid="button-post-deal">
+                <Plus className="h-5 w-5 mr-2" />
+                Post New Deal
+              </Button>
+            </Link>
+            <Link href="/supplier-analytics">
+              <Button variant="outline" className="border-2 border-slate-300 hover:border-primary px-8 py-3 text-lg" data-testid="button-view-analytics">
+                <BarChart3 className="h-5 w-5 mr-2" />
+                View Analytics
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Modern Stats Cards */}
@@ -215,7 +223,7 @@ export default function SupplierDashboard() {
                 <CreditCard className="h-8 w-8 text-emerald-600" />
               </div>
               <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-credits">
-                {creditBalance?.balance || 0}
+                {(creditBalance as any)?.balance || 0}
               </div>
               <div className="text-sm text-slate-600 font-medium">Available Credits</div>
             </CardContent>
