@@ -20,7 +20,7 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Create mailto link with form data
-    const mailtoLink = `mailto:info@businessdailydeals.co.za?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+    const mailtoLink = `mailto:admin@businessdailydeals.co.za?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     )}`;
     window.location.href = mailtoLink;
@@ -70,11 +70,10 @@ export default function Contact() {
                     <Mail className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-slate-800 dark:text-slate-100">Email</h4>
+                    <h4 className="font-semibold text-slate-800 dark:text-slate-100">Email a Human</h4>
                     <div className="space-y-1">
                       <p className="text-slate-600 dark:text-slate-300">simon@businessdailydeals.co.za</p>
                       <p className="text-slate-600 dark:text-slate-300">admin@businessdailydeals.co.za</p>
-                      <p className="text-slate-600 dark:text-slate-300">info@businessdailydeals.co.za</p>
                     </div>
                   </div>
                 </div>
@@ -96,8 +95,8 @@ export default function Contact() {
                   <div>
                     <h4 className="font-semibold text-slate-800 dark:text-slate-100">Address</h4>
                     <p className="text-slate-600 dark:text-slate-300">
-                      123 Business District<br />
-                      Johannesburg, Gauteng 2000<br />
+                      Fish Hoek<br />
+                      Cape Town<br />
                       South Africa
                     </p>
                   </div>
