@@ -205,8 +205,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           </div>
           {isAuthenticated ? (
             <Button
-              className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
-              size="sm"
+              className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 h-10 flex items-center justify-center"
               onClick={handleViewDetails}
               data-testid="button-view-details"
             >
@@ -214,8 +213,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             </Button>
           ) : (
             <Button
-              className="w-full bg-primary text-white hover:bg-primary/90"
-              size="sm"
+              className="w-full bg-primary text-white hover:bg-primary/90 h-10 flex items-center justify-center"
               onClick={() => window.location.href = '/register-buyer'}
               data-testid="button-register-to-view"
             >
