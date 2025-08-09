@@ -63,6 +63,7 @@ Color scheme preference: Charcoal/slate theme throughout application (header, co
 - **Navigation Structure**: Home/HOT deals, Register as SUPPLIER, Register as BUYER, REGULAR deals, Supplier dashboard. Consistent navigation across all pages.
 - **Information Pages**: About Us and professional Contact page.
 - **Home Page**: Modernized design, showing only hot deals for authenticated users.
+- **Supplier Verification**: Optional verification system with VAT and business registration number fields, verified supplier badges with shield icons displayed on deal cards.
 
 ## External Dependencies
 
