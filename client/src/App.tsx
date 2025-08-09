@@ -40,48 +40,19 @@ function Router() {
   const { isAuthenticated, isLoading } = useAuth();
   const [location, setLocation] = useLocation();
 
-  // AGGRESSIVE HOME ROUTE ENFORCEMENT 
+  // Simple home route preference - only on initial load
   useEffect(() => {
+    // Only force home on direct refresh to hot-deals (not user navigation)
     const currentPath = window.location.pathname;
+    const isDirectAccess = !document.referrer || document.referrer === window.location.origin + '/';
     
-    // Force home on any refresh or direct access to hot-deals
-    if (currentPath === '/hot-deals' || (currentPath === '/' && location === '/hot-deals')) {
-      console.log('FORCED HOME: Redirecting from', currentPath, 'to home');
-      window.history.replaceState({}, '', '/');
+    if (currentPath === '/hot-deals' && isDirectAccess) {
+      console.log('Direct access to hot-deals detected, redirecting to home');
       setLocation('/');
-      clearRouteCache();
+    } else {
+      console.log('Router state - Location:', location, 'URL:', window.location.pathname);
     }
-    
-    forceHomeRoute();
-    console.log('Router state - Location:', location, 'URL:', window.location.pathname);
-  }, [location, setLocation]);
-
-  // Monitor for refresh attempts to hot deals
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      // If user is on hot-deals and refreshes, force home next time
-      if (location === '/hot-deals') {
-        localStorage.setItem('force-home-on-load', 'true');
-      }
-    };
-
-    const handleLoad = () => {
-      // Check if we should force home
-      if (localStorage.getItem('force-home-on-load') === 'true') {
-        localStorage.removeItem('force-home-on-load');
-        window.history.replaceState({}, '', '/');
-        setLocation('/');
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('load', handleLoad);
-    
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('load', handleLoad);
-    };
-  }, [location, setLocation]);
+  }, [setLocation]); // Remove location dependency to prevent infinite loops
 
   return (
     <Switch>

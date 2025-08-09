@@ -238,7 +238,10 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 <Button
                   variant="outline"
                   className="w-full border-olive-600 text-olive-600 hover:bg-olive-50 h-10 flex items-center justify-center"
-                  onClick={handleViewDetails}
+                  onClick={() => {
+                    console.log("AUTH VIEW: Opening modal for deal:", deal.id);
+                    setShowDetails(true);
+                  }}
                   data-testid="button-view-details"
                 >
                   View Details
@@ -257,7 +260,10 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 <Button
                   variant="outline"
                   className="w-full border-olive-600 text-olive-600 hover:bg-olive-50 h-10 flex items-center justify-center"
-                  onClick={handleViewDetails}
+                  onClick={() => {
+                    console.log("AUTH VIEW: Opening modal for deal:", deal.id);
+                    setShowDetails(true);
+                  }}
                   data-testid="button-view-details"
                 >
                   View Details
