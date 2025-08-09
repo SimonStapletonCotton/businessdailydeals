@@ -61,7 +61,7 @@ const sampleAds: BannerAd[] = [
     title: "Industrial Water Storage Solutions - Water Bladders",
     description: "High-capacity flexible water bladders for industrial, agricultural, and emergency water storage. www.waterbladders.co.za",
     companyName: "Water Bladders SA",
-    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
+    imageUrl: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=200&fit=crop&crop=center",
     linkUrl: "https://www.waterbladders.co.za",
     category: "Water Storage",
     contactPhone: "082 495 7997"
