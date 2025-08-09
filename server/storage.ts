@@ -1034,59 +1034,68 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getSuppliersDirectory(): Promise<any[]> {
-    // Get all suppliers with their deal statistics
-    const suppliersData = await db
-      .select({
-        id: users.id,
-        email: users.email,
-        firstName: users.firstName,
-        lastName: users.lastName,
-        companyName: users.companyName,
-        businessDescription: users.businessDescription,
-        industry: users.industry,
-        province: users.province,
-        city: users.city,
-        phone: users.phone,
-        website: users.website,
-        createdAt: users.createdAt,
-        updatedAt: users.updatedAt
-      })
-      .from(users)
-      .where(eq(users.userType, 'supplier'));
+    try {
+      // Get all suppliers
+      const suppliersData = await db
+        .select()
+        .from(users)
+        .where(eq(users.userType, 'supplier'));
 
-    // Get deal counts for each supplier
-    const supplierIds = suppliersData.map(s => s.id);
-    const dealCounts = await db
-      .select({
-        supplierId: deals.supplierId,
-        totalDeals: sql<number>`count(*)`,
-        activeDeals: sql<number>`count(case when ${deals.status} = 'active' then 1 end)`,
-        totalViews: sql<number>`sum(coalesce(${deals.viewCount}, 0))`
-      })
-      .from(deals)
-      .where(inArray(deals.supplierId, supplierIds))
-      .groupBy(deals.supplierId);
+      if (suppliersData.length === 0) {
+        return [];
+      }
 
-    // Combine data and sort alphabetically
-    const combinedData = suppliersData.map(supplier => {
-      const stats = dealCounts.find(d => d.supplierId === supplier.id);
-      return {
-        ...supplier,
-        activeDealsCount: stats?.activeDeals || 0,
-        totalDealsCount: stats?.totalDeals || 0,
-        totalViews: stats?.totalViews || 0,
-        joinedDate: supplier.createdAt.toISOString(),
-        lastActive: supplier.updatedAt?.toISOString() || supplier.createdAt.toISOString(),
-        averageRating: 4.2 + Math.random() * 0.8 // Mock rating for now
-      };
-    });
+      // Get deal counts for each supplier
+      const supplierIds = suppliersData.map(s => s.id);
+      let dealCounts: any[] = [];
+      
+      if (supplierIds.length > 0) {
+        dealCounts = await db
+          .select({
+            supplierId: deals.supplierId,
+            totalDeals: sql<number>`count(*)`,
+            activeDeals: sql<number>`count(case when ${deals.status} = 'active' then 1 end)`,
+            totalViews: sql<number>`sum(coalesce(${deals.viewCount}, 0))`
+          })
+          .from(deals)
+          .where(inArray(deals.supplierId, supplierIds))
+          .groupBy(deals.supplierId);
+      }
 
-    // Sort alphabetically by company name or full name
-    return combinedData.sort((a, b) => {
-      const nameA = a.companyName || `${a.firstName || ''} ${a.lastName || ''}`.trim() || 'Supplier';
-      const nameB = b.companyName || `${b.firstName || ''} ${b.lastName || ''}`.trim() || 'Supplier';
-      return nameA.localeCompare(nameB);
-    });
+      // Combine data and sort alphabetically
+      const combinedData = suppliersData.map(supplier => {
+        const stats = dealCounts.find(d => d.supplierId === supplier.id);
+        return {
+          id: supplier.id,
+          email: supplier.email,
+          firstName: supplier.firstName,
+          lastName: supplier.lastName,
+          companyName: supplier.companyName,
+          businessDescription: supplier.businessDescription,
+          industry: supplier.industry,
+          province: supplier.province,
+          city: supplier.city,
+          phone: supplier.phone,
+          website: supplier.website,
+          activeDealsCount: stats?.activeDeals || 0,
+          totalDealsCount: stats?.totalDeals || 0,
+          totalViews: stats?.totalViews || 0,
+          joinedDate: supplier.createdAt.toISOString(),
+          lastActive: supplier.updatedAt?.toISOString() || supplier.createdAt.toISOString(),
+          averageRating: 4.2 + Math.random() * 0.8 // Mock rating for now
+        };
+      });
+
+      // Sort alphabetically by company name or full name
+      return combinedData.sort((a, b) => {
+        const nameA = a.companyName || `${a.firstName || ''} ${a.lastName || ''}`.trim() || 'Supplier';
+        const nameB = b.companyName || `${b.firstName || ''} ${b.lastName || ''}`.trim() || 'Supplier';
+        return nameA.localeCompare(nameB);
+      });
+    } catch (error) {
+      console.error('Error in getSuppliersDirectory:', error);
+      return [];
+    }
   }
 }
 
