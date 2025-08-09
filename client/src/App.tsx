@@ -22,6 +22,7 @@ import ContactPage from "@/pages/contact";
 import AboutPage from "@/pages/about";
 import BuyerRegistration from "@/pages/buyer-registration";
 import SupplierRegistration from "@/pages/supplier-registration";
+import ManageKeywords from "@/pages/manage-keywords";
 import SupplierAnalytics from "@/pages/supplier-analytics";
 import SuppliersDirectory from "@/pages/suppliers-directory";
 import Support from "@/pages/support";
@@ -49,6 +50,7 @@ function Router() {
       <Route path="/color-swatches" component={ColorSwatches} />
       <Route path="/register-buyer" component={BuyerRegistration} />
       <Route path="/register-supplier" component={SupplierRegistration} />
+      <Route path="/manage-keywords" component={ManageKeywords} />
       <Route path="/suppliers-directory" component={SuppliersDirectory} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/credits" component={CreditsPage} />

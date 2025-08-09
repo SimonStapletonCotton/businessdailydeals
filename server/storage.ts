@@ -141,6 +141,15 @@ export interface IStorage {
   getDealRequests(): Promise<DealRequest[]>;
   getDealRequestsByUser(userId: string): Promise<DealRequest[]>;
   updateDealRequestStatus(id: string, status: string): Promise<DealRequest>;
+  
+  // Keyword management operations
+  updateUserKeywords(userId: string, data: {
+    keywords?: string;
+    notificationMethod?: string;
+    allowEmailNotifications?: boolean;
+    allowSmsNotifications?: boolean;
+    allowWhatsappNotifications?: boolean;
+  }): Promise<User>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1118,6 +1127,30 @@ export class DatabaseStorage implements IStorage {
     }
     
     return updatedRequest;
+  }
+
+  // Keyword management operations
+  async updateUserKeywords(userId: string, data: {
+    keywords?: string;
+    notificationMethod?: string;
+    allowEmailNotifications?: boolean;
+    allowSmsNotifications?: boolean;
+    allowWhatsappNotifications?: boolean;
+  }): Promise<User> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({ 
+        ...data,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+    
+    return updatedUser;
   }
 
   async getSuppliersDirectory(): Promise<any[]> {

@@ -167,6 +167,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Find user by email for keyword management
+  app.post('/api/auth/find-user', async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      const user = await storage.getUserByEmail(email);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Return user data (excluding sensitive information)
+      const { ...userWithoutPassword } = user;
+      res.json({ user: userWithoutPassword });
+    } catch (error) {
+      console.error("Error finding user:", error);
+      res.status(500).json({ message: "Failed to find user" });
+    }
+  });
+
+  // Update user keywords and notification preferences
+  app.put('/api/auth/update-keywords', async (req, res) => {
+    try {
+      const { 
+        email, 
+        keywords, 
+        notificationMethod, 
+        allowEmailNotifications, 
+        allowSmsNotifications, 
+        allowWhatsappNotifications 
+      } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      const user = await storage.getUserByEmail(email);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const updatedUser = await storage.updateUserKeywords(user.id, {
+        keywords,
+        notificationMethod,
+        allowEmailNotifications,
+        allowSmsNotifications,
+        allowWhatsappNotifications
+      });
+
+      const { ...userWithoutPassword } = updatedUser;
+      res.json({ user: userWithoutPassword });
+    } catch (error) {
+      console.error("Error updating keywords:", error);
+      res.status(500).json({ message: "Failed to update keywords" });
+    }
+  });
+
   // User routes
   app.patch('/api/user/type', isAuthenticated, async (req: any, res) => {
     try {
