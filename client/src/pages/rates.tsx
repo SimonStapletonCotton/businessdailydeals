@@ -1,119 +1,44 @@
 import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, Plus, Minus, Trash2, CreditCard, Coins } from "lucide-react";
+import { ShoppingCart, Flame, Star, Clock, CreditCard, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-// Rates data based on your Excel sheet
-const ratesData = {
-  regular: [
-    { duration: 1, rate3Items: 40, rate10Items: 15, rate20Items: 10 },
-    { duration: 3, rate3Items: 25, rate10Items: 10, rate20Items: 6 },
-    { duration: 7, rate3Items: 12, rate10Items: 6, rate20Items: 4 },
-    { duration: 14, rate3Items: 8, rate10Items: 4, rate20Items: 3 },
-    { duration: 21, rate3Items: 7, rate10Items: 3.5, rate20Items: 2 },
-    { duration: 30, rate3Items: 6, rate10Items: 3, rate20Items: 2 }
-  ],
-  hot: [
-    { duration: 1, rate3Items: 90, rate10Items: 55, rate20Items: 0 }, // No 20+ for 1 day hot
-    { duration: 3, rate3Items: 40, rate10Items: 25, rate20Items: 0 },
-    { duration: 7, rate3Items: 25, rate10Items: 15, rate20Items: 0 }
-  ]
+const advertisingRates = {
+  hotDeals: {
+    title: "Hot Deals",
+    subtitle: "Premium placement on home page",
+    description: "Featured prominently for maximum visibility",
+    price: 125,
+    credits: 50,
+    duration: "30 days",
+    features: ["Home page placement", "Priority listing", "Enhanced visibility", "Mobile optimized"]
+  },
+  regularDeals: {
+    title: "Regular Deals", 
+    subtitle: "Standard deal listing",
+    description: "Listed in category sections",
+    price: 50,
+    credits: 20,
+    duration: "30 days", 
+    features: ["Category placement", "Search visibility", "Standard listing", "Mobile friendly"]
+  }
 };
-
-interface BasketItem {
-  id: string;
-  rateType: 'regular' | 'hot';
-  duration: number;
-  quantity: number;
-  ratePerDay: number;
-  totalCost: number;
-  creditsRequired: number;
-}
 
 export default function Rates() {
   const { isAuthenticated, user } = useAuth();
   const { toast } = useToast();
-  const [selectedItems, setSelectedItems] = useState<BasketItem[]>([]);
+  const [cart, setCart] = useState<Array<{type: string, quantity: number}>>([]);
 
-  const { data: basketItems } = useQuery({
-    queryKey: ["/api/basket"],
-    enabled: isAuthenticated,
-  });
-
-  const { data: userCredits } = useQuery({
-    queryKey: ["/api/credits"],
-    enabled: isAuthenticated,
-  });
-
-  const addToBasketMutation = useMutation({
-    mutationFn: async (item: Omit<BasketItem, 'id'>) => {
-      const response = await apiRequest("POST", "/api/basket", item);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/basket"] });
-      toast({
-        title: "Added to Basket",
-        description: "Item added to your advertising basket successfully",
-      });
-    },
-  });
-
-  const removeFromBasketMutation = useMutation({
-    mutationFn: async (itemId: string) => {
-      await apiRequest("DELETE", `/api/basket/${itemId}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/basket"] });
-      toast({
-        title: "Removed from Basket",
-        description: "Item removed from your basket",
-      });
-    },
-  });
-
-  const purchaseCreditsMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiRequest("POST", "/api/purchase-basket-credits", {
-        totalAmount: totalBasketValue,
-        currency: 'ZAR'
-      });
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/basket"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/credits"] });
-      toast({
-        title: "Credits Purchased Successfully",
-        description: `${totalBasketValue.toFixed(0)} credits added to your account`,
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Purchase Failed",
-        description: "Unable to process credit purchase. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const calculateTotal = (duration: number, quantity: number, ratePerDay: number) => {
-    return duration * quantity * ratePerDay;
-  };
-
-  const handleAddToBasket = (rateType: 'regular' | 'hot', duration: number, quantity: number, ratePerDay: number) => {
+  const handleAddToCart = (dealType: 'hot' | 'regular') => {
     if (!isAuthenticated) {
       toast({
-        title: "Please Login",
-        description: "You need to login to add items to your basket",
+        title: "Login Required",
+        description: "Please login to purchase advertising rates",
         variant: "destructive",
       });
       return;
@@ -121,315 +46,202 @@ export default function Rates() {
 
     if (user?.userType !== 'supplier') {
       toast({
-        title: "Suppliers Only",
+        title: "Suppliers Only", 
         description: "Only suppliers can purchase advertising rates",
         variant: "destructive",
       });
       return;
     }
 
-    const totalCost = calculateTotal(duration, quantity, ratePerDay);
-    const creditsRequired = totalCost; // 1:1 ratio for now
+    // Add to cart logic
+    const existingItem = cart.find(item => item.type === dealType);
+    if (existingItem) {
+      setCart(cart.map(item => 
+        item.type === dealType 
+          ? {...item, quantity: item.quantity + 1}
+          : item
+      ));
+    } else {
+      setCart([...cart, {type: dealType, quantity: 1}]);
+    }
 
-    addToBasketMutation.mutate({
-      rateType,
-      duration: Number(duration),
-      quantity: Number(quantity),
-      ratePerDay: ratePerDay.toString(),
-      totalCost: totalCost.toString(),
-      creditsRequired: creditsRequired.toString(),
+    toast({
+      title: "Added to Cart",
+      description: `${dealType === 'hot' ? 'Hot Deal' : 'Regular Deal'} added to your cart`,
     });
   };
 
-  const getQuantityLabel = (rate3Items: number, rate10Items: number, rate20Items: number) => {
-    if (rate20Items > 0) return "3-5 items, 6-10 items, 11-20 items";
-    return "3-5 items, 6-10 items";
+  const getTotalCost = () => {
+    return cart.reduce((total, item) => {
+      const rate = item.type === 'hot' ? advertisingRates.hotDeals.price : advertisingRates.regularDeals.price;
+      return total + (rate * item.quantity);
+    }, 0);
   };
 
-  const RateRow = ({ 
-    rateType, 
-    duration, 
-    rate3Items, 
-    rate10Items, 
-    rate20Items 
-  }: { 
-    rateType: 'regular' | 'hot';
-    duration: number;
-    rate3Items: number;
-    rate10Items: number;
-    rate20Items: number;
-  }) => (
-    <TableRow>
-      <TableCell className="font-medium">{duration} day{duration > 1 ? 's' : ''}</TableCell>
-      <TableCell>R{rate3Items}/day</TableCell>
-      <TableCell>R{rate10Items}/day</TableCell>
-      {rate20Items > 0 && <TableCell>R{rate20Items}/day</TableCell>}
-      <TableCell>R{calculateTotal(duration, 3, rate3Items)}</TableCell>
-      <TableCell>R{calculateTotal(duration, 6, rate10Items)}</TableCell>
-      {rate20Items > 0 && <TableCell>R{calculateTotal(duration, 11, rate20Items)}</TableCell>}
-      <TableCell className="space-x-2">
-        <Button 
-          size="sm" 
-          onClick={() => handleAddToBasket(rateType, duration, 3, rate3Items)}
-          disabled={addToBasketMutation.isPending}
-        >
-          <Plus className="w-4 h-4 mr-1" />
-          3-5
-        </Button>
-        <Button 
-          size="sm" 
-          onClick={() => handleAddToBasket(rateType, duration, 6, rate10Items)}
-          disabled={addToBasketMutation.isPending}
-        >
-          <Plus className="w-4 h-4 mr-1" />
-          6-10
-        </Button>
-        {rate20Items > 0 && (
-          <Button 
-            size="sm" 
-            onClick={() => handleAddToBasket(rateType, duration, 11, rate20Items)}
-            disabled={addToBasketMutation.isPending}
-          >
-            <Plus className="w-4 h-4 mr-1" />
-            11-20
-          </Button>
-        )}
-      </TableCell>
-    </TableRow>
-  );
-
-  const totalBasketValue = Array.isArray(basketItems) ? basketItems.reduce((total: number, item: any) => total + parseFloat(item.totalCost || '0'), 0) : 0;
-
-  const handlePurchaseCredits = () => {
-    if (!isAuthenticated) {
-      toast({
-        title: "Please Login",
-        description: "You need to login to purchase credits",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (user?.userType !== 'supplier') {
-      toast({
-        title: "Suppliers Only",
-        description: "Only suppliers can purchase advertising credits",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (totalBasketValue === 0) {
-      toast({
-        title: "Empty Basket",
-        description: "Please add items to your basket before purchasing",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // For South African market - simulate payment card entry
-    const confirmed = window.confirm(
-      `You are about to purchase R${totalBasketValue.toFixed(2)} worth of advertising credits.\n\n` +
-      `In a real system, you would be redirected to a secure payment gateway to enter your card details.\n\n` +
-      `For demo purposes, click OK to simulate successful payment.`
-    );
-
-    if (confirmed) {
-      purchaseCreditsMutation.mutate();
-    }
+  const getTotalCredits = () => {
+    return cart.reduce((total, item) => {
+      const credits = item.type === 'hot' ? advertisingRates.hotDeals.credits : advertisingRates.regularDeals.credits;
+      return total + (credits * item.quantity);
+    }, 0);
   };
 
   return (
-    <div className="min-h-screen page-rates">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
       <Navbar />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      
+      <div className="container mx-auto px-4 py-12 max-w-6xl">
+        {/* Header */}
         <div className="text-center mb-12">
-          <Badge variant="secondary" className="mb-6 bg-accent/10 text-accent border-accent/20">
-            Advertising Rates - South African Market
+          <Badge variant="outline" className="mb-4 text-slate-600 border-slate-300">
+            Advertising Rates
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-6">
-            Rates per Advert per Day
+          <h1 className="text-4xl font-bold text-slate-800 mb-4">
+            Business Daily Deals <span className="text-primary">Advertising Rates</span>
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Choose your advertising duration and quantity. Add items to your basket and convert to credits for payment.
+          <p className="text-slate-600 text-lg max-w-3xl mx-auto">
+            Choose your advertising package to reach thousands of South African buyers
           </p>
-          {isAuthenticated && user?.userType === 'supplier' && (
-            <div className="mt-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl max-w-md mx-auto shadow-sm">
-              <div className="text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <Coins className="w-5 h-5 text-green-600 mr-2" />
-                  <p className="text-sm font-medium text-green-700">Available Credits</p>
-                </div>
-                <p className="text-3xl font-bold text-green-800 mb-1">
-                  R{Array.isArray(userCredits) ? userCredits.reduce((total: number, credit: any) => total + parseFloat(credit.amount), 0).toFixed(0) : '0'}
-                </p>
-                <p className="text-xs text-green-600">Use for advertising and deals</p>
-                <p className="text-xs text-green-600 mt-1">≈ R{Array.isArray(userCredits) ? userCredits.reduce((total: number, credit: any) => total + parseFloat(credit.amount), 0).toFixed(2) : '0.00'}</p>
-              </div>
+        </div>
+
+        {/* Rates Cards */}
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          {/* Hot Deals Card */}
+          <Card className="relative overflow-hidden border-2 border-orange-200 shadow-xl">
+            <div className="absolute top-0 right-0 bg-gradient-to-l from-orange-500 to-red-500 text-white px-4 py-2 text-sm font-semibold">
+              PREMIUM
             </div>
-          )}
+            <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
+              <CardTitle className="flex items-center gap-3 text-2xl">
+                <Flame className="h-6 w-6" />
+                {advertisingRates.hotDeals.title}
+              </CardTitle>
+              <p className="text-orange-100 text-base">{advertisingRates.hotDeals.subtitle}</p>
+            </CardHeader>
+            <CardContent className="p-8">
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-slate-800 mb-2">
+                  R{advertisingRates.hotDeals.price}
+                </div>
+                <div className="text-lg text-slate-600">
+                  {advertisingRates.hotDeals.credits} credits • {advertisingRates.hotDeals.duration}
+                </div>
+              </div>
+
+              <p className="text-slate-600 mb-6 text-center">
+                {advertisingRates.hotDeals.description}
+              </p>
+
+              <ul className="space-y-3 mb-8">
+                {advertisingRates.hotDeals.features.map((feature, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <Star className="h-4 w-4 text-orange-500" />
+                    <span className="text-slate-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button 
+                onClick={() => handleAddToCart('hot')}
+                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3"
+                data-testid="button-add-hot-deal"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Hot Deal
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Regular Deals Card */}
+          <Card className="relative overflow-hidden border-2 border-blue-200 shadow-xl">
+            <div className="absolute top-0 right-0 bg-gradient-to-l from-blue-500 to-indigo-500 text-white px-4 py-2 text-sm font-semibold">
+              STANDARD
+            </div>
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+              <CardTitle className="flex items-center gap-3 text-2xl">
+                <Clock className="h-6 w-6" />
+                {advertisingRates.regularDeals.title}
+              </CardTitle>
+              <p className="text-blue-100 text-base">{advertisingRates.regularDeals.subtitle}</p>
+            </CardHeader>
+            <CardContent className="p-8">
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-slate-800 mb-2">
+                  R{advertisingRates.regularDeals.price}
+                </div>
+                <div className="text-lg text-slate-600">
+                  {advertisingRates.regularDeals.credits} credits • {advertisingRates.regularDeals.duration}
+                </div>
+              </div>
+
+              <p className="text-slate-600 mb-6 text-center">
+                {advertisingRates.regularDeals.description}
+              </p>
+
+              <ul className="space-y-3 mb-8">
+                {advertisingRates.regularDeals.features.map((feature, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <Star className="h-4 w-4 text-blue-500" />
+                    <span className="text-slate-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button 
+                onClick={() => handleAddToCart('regular')}
+                className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-3"
+                data-testid="button-add-regular-deal"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Regular Deal
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Regular Deals Rates */}
-          <div className="lg:col-span-2">
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Badge variant="secondary">REGULAR DEALS</Badge>
-                  Standard Marketplace Listings
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Duration</TableHead>
-                      <TableHead>3-5 Items</TableHead>
-                      <TableHead>6-10 Items</TableHead>
-                      <TableHead>11-20 Items</TableHead>
-                      <TableHead>Total (3-5)</TableHead>
-                      <TableHead>Total (6-10)</TableHead>
-                      <TableHead>Total (11-20)</TableHead>
-                      <TableHead>Add to Basket</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {ratesData.regular.map((rate) => (
-                      <RateRow
-                        key={`regular-${rate.duration}`}
-                        rateType="regular"
-                        duration={rate.duration}
-                        rate3Items={rate.rate3Items}
-                        rate10Items={rate.rate10Items}
-                        rate20Items={rate.rate20Items}
-                      />
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-
-            {/* Hot Deals Rates */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Badge variant="destructive">HOT DEALS</Badge>
-                  Premium Home Page Placement
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Duration</TableHead>
-                      <TableHead>3-5 Items</TableHead>
-                      <TableHead>6-10 Items</TableHead>
-                      <TableHead>Total (3-5)</TableHead>
-                      <TableHead>Total (6-10)</TableHead>
-                      <TableHead>Add to Basket</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {ratesData.hot.map((rate) => (
-                      <RateRow
-                        key={`hot-${rate.duration}`}
-                        rateType="hot"
-                        duration={rate.duration}
-                        rate3Items={rate.rate3Items}
-                        rate10Items={rate.rate10Items}
-                        rate20Items={rate.rate20Items}
-                      />
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Basket Sidebar */}
-          <div>
-            <Card className="sticky top-4">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ShoppingCart className="w-5 h-5" />
-                  Your Basket
-                  {Array.isArray(basketItems) && basketItems.length > 0 && (
-                    <Badge>{basketItems.length}</Badge>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {Array.isArray(basketItems) && basketItems.length > 0 ? (
-                  <div className="space-y-4">
-                    {basketItems.map((item: any) => (
-                      <div key={item.id} className="p-3 border rounded-lg">
-                        <div className="flex justify-between items-start mb-2">
-                          <Badge variant={item.rateType === 'hot' ? 'destructive' : 'secondary'}>
-                            {item.rateType.toUpperCase()}
-                          </Badge>
-                          <Button 
-                            size="sm" 
-                            variant="ghost"
-                            onClick={() => removeFromBasketMutation.mutate(item.id)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                        <div className="text-sm text-slate-600">
-                          <p>{item.duration} days × {item.quantity} items</p>
-                          <p>R{parseFloat(item.ratePerDay).toFixed(2)}/day</p>
-                        </div>
-                        <div className="font-semibold text-right">
-                          R{parseFloat(item.totalCost).toFixed(2)}
-                        </div>
-                      </div>
-                    ))}
-                    
-                    <Separator />
-                    
-                    <div className="space-y-2">
-                      <div className="flex justify-between font-semibold">
-                        <span>Total:</span>
-                        <span>R{totalBasketValue.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between text-sm text-slate-600">
-                        <span>Credits Required:</span>
-                        <span>{totalBasketValue.toFixed(0)} credits</span>
-                      </div>
-                    </div>
-                    
-                    <Button 
-                      className="w-full" 
-                      size="lg"
-                      onClick={() => handlePurchaseCredits()}
-                      disabled={totalBasketValue === 0 || purchaseCreditsMutation.isPending}
-                    >
-                      <CreditCard className="w-4 h-4 mr-2" />
-                      {purchaseCreditsMutation.isPending ? "Processing..." : `Purchase Credits (R${totalBasketValue.toFixed(2)})`}
-                    </Button>
-                    
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                      <p className="text-xs text-blue-700 text-center">
-                        <strong>Local Payment Processing:</strong> Credits purchased directly without international payment gateways. 
-                        Perfect for South African businesses. 1 credit = R1.00
-                      </p>
-                    </div>
+        {/* Cart Summary */}
+        {cart.length > 0 && (
+          <Card className="bg-slate-800 text-white shadow-xl">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3">
+                <ShoppingCart className="h-5 w-5" />
+                Cart Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3 mb-6">
+                {cart.map((item, index) => (
+                  <div key={index} className="flex justify-between items-center">
+                    <span>{item.type === 'hot' ? 'Hot Deal' : 'Regular Deal'} × {item.quantity}</span>
+                    <span>R{(item.type === 'hot' ? advertisingRates.hotDeals.price : advertisingRates.regularDeals.price) * item.quantity}</span>
                   </div>
-                ) : (
-                  <div className="text-center py-8 text-slate-500">
-                    <ShoppingCart className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>Your basket is empty</p>
-                    <p className="text-sm">Add advertising rates to get started</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                ))}
+              </div>
+              <Separator className="my-4 bg-slate-600" />
+              <div className="flex justify-between items-center text-xl font-bold mb-4">
+                <span>Total: R{getTotalCost()}</span>
+                <span>{getTotalCredits()} credits</span>
+              </div>
+              <Button 
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
+                data-testid="button-checkout"
+              >
+                <CreditCard className="h-4 w-4 mr-2" />
+                Proceed to Checkout
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Additional Information */}
+        <div className="mt-12 text-center">
+          <h3 className="text-2xl font-semibold text-slate-800 mb-4">Package Combinations</h3>
+          <p className="text-slate-600 max-w-3xl mx-auto">
+            You can purchase any combination of Hot and Regular deals. 
+            Hot deals provide premium placement on the home page, while Regular deals 
+            are featured in category sections. Both options give you 30 days of visibility.
+          </p>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
