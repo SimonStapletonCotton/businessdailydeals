@@ -207,6 +207,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Deal pricing endpoint - must be before dynamic route
+  app.get('/api/deals/pricing', (req, res) => {
+    const pricing = {
+      hot: {
+        credits: 50,
+        cost: 125, // R125 (50 credits × R2.50)
+        description: "Premium placement on home page",
+        features: ["Home page featured placement", "Enhanced visibility", "Priority in search results"]
+      },
+      regular: {
+        credits: 20,
+        cost: 50, // R50 (20 credits × R2.50)
+        description: "Standard deal listing",
+        features: ["Category page listing", "Search visibility", "Basic deal placement"]
+      }
+    };
+    res.json(pricing);
+  });
+
+  // Hottest deals endpoint - must be before dynamic route
+  app.get('/api/deals/hottest', async (req, res) => {
+    try {
+      const deals = await storage.getDeals('hot');
+      // Sort by view count for hottest deals
+      const hottestDeals = deals.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+      res.json(hottestDeals);
+    } catch (error) {
+      console.error("Error fetching hottest deals:", error);
+      res.status(500).json({ message: "Failed to fetch hottest deals" });
+    }
+  });
+
   app.get('/api/deals/:id', async (req, res) => {
     try {
       const deal = await storage.getDeal(req.params.id);
@@ -685,36 +717,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/deals/hottest', async (req, res) => {
-    try {
-      const deals = await storage.getDeals('hot');
-      // Sort by view count for hottest deals
-      const hottestDeals = deals.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
-      res.json(hottestDeals);
-    } catch (error) {
-      console.error("Error fetching hottest deals:", error);
-      res.status(500).json({ message: "Failed to fetch hottest deals" });
-    }
-  });
-
-  // Deal pricing endpoint 
-  app.get('/api/deals/pricing', (req, res) => {
-    const pricing = {
-      hot: {
-        credits: 50,
-        cost: 125, // R125 (50 credits × R2.50)
-        description: "Premium placement on home page",
-        features: ["Home page featured placement", "Enhanced visibility", "Priority in search results"]
-      },
-      regular: {
-        credits: 20,
-        cost: 50, // R50 (20 credits × R2.50)
-        description: "Standard deal listing",
-        features: ["Category page listing", "Search visibility", "Basic deal placement"]
-      }
-    };
-    res.json(pricing);
-  });
 
   // Credits Management Endpoints
   app.get('/api/credits/balance', isAuthenticated, async (req: any, res) => {
