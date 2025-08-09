@@ -27,6 +27,7 @@ import SuppliersDirectory from "@/pages/suppliers-directory";
 import Support from "@/pages/support";
 import TermsOfService from "@/pages/terms-of-service";
 import PrivacyPolicy from "@/pages/privacy-policy";
+import ColorSwatches from "@/pages/color-swatches";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -45,6 +46,7 @@ function Router() {
       <Route path="/support" component={Support} />
       <Route path="/terms-of-service" component={TermsOfService} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/color-swatches" component={ColorSwatches} />
       <Route path="/register-buyer" component={BuyerRegistration} />
       <Route path="/register-supplier" component={SupplierRegistration} />
       <Route path="/suppliers-directory" component={SuppliersDirectory} />
