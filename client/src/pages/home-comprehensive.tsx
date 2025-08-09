@@ -139,7 +139,7 @@ export default function HomeComprehensive() {
                 DEALS
               </span>
             </h1>
-            <div className="bg-blue-700 px-6 py-3 rounded-lg mb-4 inline-block shadow-lg">
+            <div className="bg-slate-600 px-6 py-3 rounded-lg mb-4 inline-block shadow-lg">
               <p className="text-lg md:text-xl font-semibold text-white uppercase tracking-wide">
                 A Dedicated Website That Connects Buyers to Suppliers
               </p>
