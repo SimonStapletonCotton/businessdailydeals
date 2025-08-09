@@ -62,7 +62,7 @@ Color scheme preference: Charcoal/slate theme throughout application (header, co
 - **Registration System**: Detailed buyer and supplier registration pages with keyword notification setup and multi-channel alert preferences.
 - **Navigation Structure**: Home/HOT deals, Register as SUPPLIER, Register as BUYER, REGULAR deals, Supplier dashboard. Consistent navigation across all pages.
 - **Information Pages**: About Us and professional Contact page.
-- **Home Page**: Modernized design, showing only hot deals for authenticated users.
+- **Home Page**: Modernized design with animated casino-style one-armed bandit featuring authentic red 7's spinning vertically at different speeds, showing only hot deals for authenticated users.
 - **Supplier Verification**: Optional verification system with VAT and business registration number fields, verified supplier badges with shield icons displayed on deal cards.
 
 ## External Dependencies
