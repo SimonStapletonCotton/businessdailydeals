@@ -36,33 +36,33 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - orange halftone to slate gradient */
+/* Home page - warm orange sunset gradient */
 .page-home {
-  background: linear-gradient(90deg, #ffcc80 0%, #ff9800 25%, #ffb74d 50%, #c8b8a0 75%, #8fa3b8 100%) !important;
+  background: linear-gradient(135deg, #ff8a50 0%, #ff6b35 25%, #e55100 50%, #bf360c 75%, #8d4004 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Hot deals page - red gradient theme */
+/* Hot deals page - fiery orange-red gradient */
 .page-deals {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 30%, #ff9ff3 70%, #54a0ff 100%) !important;
+  background: linear-gradient(120deg, #ff3d00 0%, #ff5722 25%, #ff7043 50%, #ffab40 75%, #ffc107 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Regular deals page - blue gradient theme */
+/* Regular deals page - amber to teal gradient */
 .page-regular {
-  background: linear-gradient(135deg, #54a0ff 0%, #2e86de 30%, #a29bfe 70%, #6c5ce7 100%) !important;
+  background: linear-gradient(45deg, #ffa726 0%, #ff9800 25%, #ff8f00 50%, #26a69a 75%, #00695c 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Supplier pages - green gradient theme */
+/* Supplier pages - orange to green business gradient */
 .page-supplier {
-  background: linear-gradient(135deg, #00d2d3 0%, #01a3a4 30%, #2ed573 70%, #1e90ff 100%) !important;
+  background: linear-gradient(60deg, #ff9800 0%, #ffb74d 25%, #4caf50 50%, #388e3c 75%, #2e7d32 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Registration pages - purple gradient theme */
+/* Registration pages - orange to purple gradient */
 .page-register {
-  background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 30%, #fd79a8 70%, #e84393 100%) !important;
+  background: linear-gradient(150deg, #ff9800 0%, #ff7043 25%, #e91e63 50%, #9c27b0 75%, #673ab7 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
@@ -72,9 +72,9 @@ body {
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Default fallback */
+/* Default fallback - warm orange theme */
 .page-content {
-  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%) !important;
+  background: linear-gradient(135deg, #ff8a50 0%, #ff6b35 25%, #e55100 50%, #bf360c 75%, #8d4004 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
