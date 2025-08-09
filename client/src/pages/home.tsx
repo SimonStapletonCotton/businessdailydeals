@@ -104,7 +104,7 @@ export default function Home() {
               <div className="flex items-center bg-gray-800 rounded-lg p-4 border-2 border-yellow-400 shadow-lg">
                 <div className="flex space-x-3">
                   {/* Slot Reel 1 */}
-                  <div className="relative w-14 h-18 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
+                  <div className="relative w-14 h-20 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
                     <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-slow">
                       <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
                         fontFamily: 'Times, "Times New Roman", serif',
@@ -115,7 +115,7 @@ export default function Home() {
                     </div>
                   </div>
                   {/* Slot Reel 2 */}
-                  <div className="relative w-14 h-18 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
+                  <div className="relative w-14 h-20 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
                     <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-medium">
                       <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
                         fontFamily: 'Times, "Times New Roman", serif',
@@ -126,7 +126,7 @@ export default function Home() {
                     </div>
                   </div>
                   {/* Slot Reel 3 */}
-                  <div className="relative w-14 h-18 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
+                  <div className="relative w-14 h-20 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
                     <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-fast">
                       <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
                         fontFamily: 'Times, "Times New Roman", serif',
