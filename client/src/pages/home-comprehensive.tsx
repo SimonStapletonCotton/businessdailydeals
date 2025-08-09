@@ -4,6 +4,72 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Building2, CreditCard, Mail, Phone, MapPin, Award, ShoppingBag, Target } from "lucide-react";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+
+// Component to display hot deals on homepage
+function HotDealsHomepage() {
+  const { data: hotDeals, isLoading } = useQuery({
+    queryKey: ["/api/deals", { dealType: "hot" }],
+  });
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-8">
+        <div className="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full mx-auto"></div>
+        <p className="mt-2 text-slate-600">Loading hot deals...</p>
+      </div>
+    );
+  }
+
+  if (!hotDeals || hotDeals.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-slate-600">No hot deals available at the moment. Check back soon!</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {hotDeals.slice(0, 8).map((deal: any) => (
+        <Card key={deal.id} className="hover:shadow-lg transition-shadow border-2 border-red-200 hover:border-red-300">
+          <CardContent className="p-4">
+            {deal.imageUrl && (
+              <img 
+                src={deal.imageUrl} 
+                alt={deal.title}
+                className="w-full h-32 object-cover rounded mb-3"
+              />
+            )}
+            <div className="flex items-center justify-between mb-2">
+              <Badge className="bg-red-600 text-white">HOT DEAL</Badge>
+              {deal.discount > 0 && (
+                <Badge variant="outline" className="text-green-600 border-green-600">
+                  {deal.discount}% OFF
+                </Badge>
+              )}
+            </div>
+            <h3 className="font-semibold text-slate-900 mb-2">{deal.title}</h3>
+            <p className="text-sm text-slate-600 mb-3 line-clamp-2">{deal.description}</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-lg font-bold text-slate-900">R{deal.price}</span>
+                {deal.originalPrice && (
+                  <span className="text-sm text-slate-500 line-through ml-2">R{deal.originalPrice}</span>
+                )}
+              </div>
+              <Link href="/hot-deals">
+                <Button size="sm" className="bg-red-600 hover:bg-red-700 text-white">
+                  View Deal
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
 
 export default function HomeComprehensive() {
   return (
@@ -123,15 +189,20 @@ export default function HomeComprehensive() {
         </div>
       </section>
 
-      {/* HOT DEALS Section Heading */}
+      {/* HOT DEALS Section */}
       <section className="bg-slate-100 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            HOT DEALS
-          </h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            Premium deals with exclusive pricing and featured placement
-          </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+              HOT DEALS
+            </h2>
+            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+              Premium deals with exclusive pricing and featured placement
+            </p>
+          </div>
+          
+          {/* Hot Deals Display */}
+          <HotDealsHomepage />
         </div>
       </section>
 
