@@ -526,10 +526,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               </Badge>
             )}
           </div>
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Star className="h-4 w-4 text-yellow-400 mr-1" />
-            <span data-testid="text-rating">4.8</span>
-          </div>
+
         </div>
         
         {!showInquiryForm ? (
