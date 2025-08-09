@@ -23,7 +23,7 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
 
     await mailService.send({
       to: params.to,
-      from: params.from,
+      from: params.from || 'noreply@businessdailydeals.co.za',
       subject: params.subject,
       text: params.text,
       html: params.html,
@@ -52,9 +52,9 @@ interface DealRequestEmailData {
 
 interface InquiryEmailData {
   buyerName: string;
-  buyerEmail: string;
+  buyerEmail: string | null;
   supplierName: string;
-  supplierEmail: string;
+  supplierEmail: string | null;
   dealTitle: string;
   dealPrice: string;
   inquiryMessage: string;
@@ -122,17 +122,19 @@ This inquiry has been sent to the supplier and copied here for your records.
   let supplierSuccess = false;
   let adminSuccess = false;
 
-  // Send to supplier
-  try {
-    supplierSuccess = await sendEmail({
-      to: inquiryData.supplierEmail,
-      from: fromEmail,
-      subject: `New inquiry for your deal: ${inquiryData.dealTitle}`,
-      text: supplierEmailContent,
-      html: supplierEmailContent.replace(/\n/g, '<br>')
-    });
-  } catch (error) {
-    console.error('Failed to send inquiry email to supplier:', error);
+  // Send to supplier (only if email exists)
+  if (inquiryData.supplierEmail) {
+    try {
+      supplierSuccess = await sendEmail({
+        to: inquiryData.supplierEmail,
+        from: fromEmail,
+        subject: `New inquiry for your deal: ${inquiryData.dealTitle}`,
+        text: supplierEmailContent,
+        html: supplierEmailContent.replace(/\n/g, '<br>')
+      });
+    } catch (error) {
+      console.error('Failed to send inquiry email to supplier:', error);
+    }
   }
 
   // Send copy to admin

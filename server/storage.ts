@@ -61,6 +61,7 @@ export interface IStorage {
   // Deal operations
   getDeals(dealType?: 'hot' | 'regular'): Promise<DealWithSupplier[]>;
   getDeal(id: string): Promise<DealWithSupplier | undefined>;
+  getDealById(id: string): Promise<Deal | undefined>;
   getDealsBySupplier(supplierId: string): Promise<DealWithSupplier[]>;
   getExpiredDealsBySupplier(supplierId: string): Promise<DealWithSupplier[]>;
   createDeal(deal: InsertDeal): Promise<Deal>;
@@ -519,6 +520,11 @@ export class DatabaseStorage implements IStorage {
       ...row.deals,
       supplier: row.users!
     };
+  }
+
+  async getDealById(id: string): Promise<Deal | undefined> {
+    const [deal] = await db.select().from(deals).where(eq(deals.id, id));
+    return deal || undefined;
   }
 
   async getDealsBySupplier(supplierId: string): Promise<DealWithSupplier[]> {

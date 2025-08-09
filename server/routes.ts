@@ -478,9 +478,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Send email notifications to supplier and admin
       const emailData = {
         buyerName: `${buyer.firstName} ${buyer.lastName}`.trim(),
-        buyerEmail: buyer.email,
+        buyerEmail: buyer.email || '',
         supplierName: supplier.companyName || `${supplier.firstName} ${supplier.lastName}`.trim(),
-        supplierEmail: supplier.email,
+        supplierEmail: supplier.email || '',
         dealTitle: deal.title,
         dealPrice: `R${parseFloat(deal.price).toLocaleString()}`,
         inquiryMessage: message || "",
