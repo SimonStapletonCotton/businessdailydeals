@@ -18,7 +18,7 @@ export default function HotDeals() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortBy, setSortBy] = useState("latest");
-  const [displayCount, setDisplayCount] = useState(25); // Show 5 rows of 5 deals each
+  const [displayCount, setDisplayCount] = useState(50); // Show 10 rows of 5 deals each (50 deals per page)
 
   // Remove authentication redirect - let pages load for everyone
 
@@ -159,8 +159,8 @@ export default function HotDeals() {
         {/* Deals Grid - 5 Columns Layout */}
         <section>
           {dealsLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {Array.from({ length: 15 }, (_, i) => (
+            <div className="grid grid-cols-5 gap-4 min-h-[800px]">{/* Fixed 5-column layout for loading */}
+              {Array.from({ length: 50 }, (_, i) => (
                 <Card key={i} className="animate-pulse shadow-lg border-0 bg-gradient-to-br from-white to-slate-50">
                   <div className="w-full h-48 bg-gradient-to-br from-slate-200 to-slate-300 rounded-t-xl"></div>
                   <CardContent className="p-4">
@@ -177,7 +177,7 @@ export default function HotDeals() {
               <div className="mb-4 text-sm text-slate-600 bg-yellow-100 p-2 rounded">
                 DEBUG: Showing {deals.length} hot deal{deals.length === 1 ? '' : 's'} - {JSON.stringify(deals.map(d => d.title))}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-5 gap-4 min-h-[800px]">{/* Fixed 5-column layout, 10 rows = 50 deals */}
                 {deals.slice(0, displayCount).map((deal) => (
                   <DealCard 
                     key={deal.id} 
@@ -201,11 +201,11 @@ export default function HotDeals() {
               {deals.length > displayCount && (
                 <div className="text-center mt-12">
                   <Button
-                    onClick={() => setDisplayCount(prev => prev + 25)}
+                    onClick={() => setDisplayCount(prev => prev + 50)}
                     className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
                     data-testid="button-show-more"
                   >
-                    Show More Deals ({Math.min(25, deals.length - displayCount)} more)
+                    Show More Deals ({Math.min(50, deals.length - displayCount)} more)
                   </Button>
                   <p className="text-slate-500 mt-3">
                     Showing {displayCount} of {deals.length} hot deals
