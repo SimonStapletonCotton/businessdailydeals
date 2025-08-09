@@ -230,6 +230,70 @@ export default function SupplierDashboard() {
           </Card>
         </div>
 
+        {/* Credit Management Section */}
+        <Card className="mb-8 bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200">
+          <CardHeader>
+            <CardTitle className="flex items-center text-emerald-800">
+              <CreditCard className="h-5 w-5 mr-2" />
+              Credit Management
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="bg-white p-4 rounded-lg border border-emerald-200">
+                  <h4 className="font-semibold text-emerald-800 mb-2">Current Balance</h4>
+                  <p className="text-2xl font-bold text-emerald-600">
+                    {(creditBalance as any)?.balance || 0} Credits
+                  </p>
+                  <p className="text-sm text-slate-600 mt-1">
+                    💡 1 Credit = 1 Rand
+                  </p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg border border-emerald-200">
+                  <h4 className="font-semibold text-emerald-800 mb-2">How Credits Work</h4>
+                  <ul className="text-sm text-slate-700 space-y-1">
+                    <li>• Purchase credits to advertise your deals</li>
+                    <li>• Credits are automatically applied to your adverts</li>
+                    <li>• View detailed rates on the rates page</li>
+                    <li>• Credits never expire - use when needed</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="bg-white p-4 rounded-lg border border-emerald-200">
+                  <h4 className="font-semibold text-emerald-800 mb-2">Quick Actions</h4>
+                  <div className="space-y-3">
+                    <Link href="/rates">
+                      <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white" data-testid="button-view-rates">
+                        View Advertising Rates
+                      </Button>
+                    </Link>
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                      data-testid="button-purchase-credits"
+                    >
+                      Purchase Credits
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <h4 className="font-semibold text-blue-800 mb-2">💡 Pro Tip</h4>
+                  <p className="text-sm text-blue-700">
+                    Check the rates page to see exactly what it costs to advertise 
+                    different numbers of items for various durations. Plan your 
+                    advertising budget effectively!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Recent Inquiries */}
         <Card className="mb-8">
           <CardHeader>
