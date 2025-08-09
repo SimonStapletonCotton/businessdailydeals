@@ -114,8 +114,9 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    // Use the first domain from REPLIT_DOMAINS for localhost development
-    const domain = req.hostname === 'localhost' ? process.env.REPLIT_DOMAINS!.split(",")[0] : req.hostname;
+    // Always use the configured domain from REPLIT_DOMAINS
+    const domain = process.env.REPLIT_DOMAINS!.split(",")[0];
+    
     passport.authenticate(`replitauth:${domain}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
@@ -123,11 +124,11 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/callback", (req, res, next) => {
-    // Use the first domain from REPLIT_DOMAINS for localhost development
-    const domain = req.hostname === 'localhost' ? process.env.REPLIT_DOMAINS!.split(",")[0] : req.hostname;
+    // Always use the configured domain from REPLIT_DOMAINS
+    const domain = process.env.REPLIT_DOMAINS!.split(",")[0];
     passport.authenticate(`replitauth:${domain}`, {
       successReturnToOrRedirect: "/",
-      failureRedirect: "/api/login",
+      failureRedirect: "/api/login?error=callback_failed",
     })(req, res, next);
   });
 
