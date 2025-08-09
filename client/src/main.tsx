@@ -30,6 +30,12 @@ const injectOverrideStyles = () => {
 injectOverrideStyles();
 
 console.log("main.tsx loading...");
+
+// Set home preference immediately
+if (typeof window !== 'undefined') {
+  localStorage.setItem('bdd-home-preference', 'force-home');
+}
+
 const rootElement = document.getElementById("root");
 console.log("Root element found:", rootElement);
 

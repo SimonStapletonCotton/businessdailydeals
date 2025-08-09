@@ -71,7 +71,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
     mutationFn: async (data: { dealId: string; supplierId: string }) => {
       return await apiRequest("POST", "/api/coupons", data);
     },
-    onSuccess: (response) => {
+    onSuccess: (response: any) => {
       toast({
         title: "Coupon Generated!",
         description: `Your coupon code is: ${response.couponCode}`,
@@ -300,75 +300,117 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         )}
       </CardContent>
 
-      {/* FORCE TWO-COLUMN DIALOG WITH INLINE STYLES */}
+      {/* ABSOLUTE POSITIONED TWO-COLUMN DIALOG */}
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent 
-          className="p-0 border-0"
+          className="p-0 border-0 bg-white"
           style={{ 
-            maxWidth: '1200px', 
-            width: '90vw',
-            maxHeight: '90vh',
-            overflow: 'hidden'
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '1200px',
+            maxWidth: '90vw',
+            height: '80vh',
+            maxHeight: '800px',
+            borderRadius: '8px',
+            boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+            zIndex: 9999
           }}
         >
-          <div style={{ padding: '24px', borderBottom: '1px solid #e5e7eb' }}>
+          {/* Header */}
+          <div style={{ 
+            padding: '24px', 
+            borderBottom: '1px solid #e5e7eb',
+            background: '#f9fafb'
+          }}>
             <h2 style={{ 
               fontSize: '20px', 
               fontWeight: '600', 
               display: 'flex', 
               alignItems: 'center', 
               gap: '8px',
-              margin: 0
+              margin: 0,
+              color: '#111827'
             }}>
               <Package style={{ width: '20px', height: '20px' }} />
               Deal Details: {deal.title}
             </h2>
           </div>
           
+          {/* TWO COLUMNS WITH ABSOLUTE POSITIONING */}
           <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '1fr 1fr', 
-            gap: '24px',
-            padding: '24px',
-            height: 'calc(90vh - 100px)',
-            overflow: 'auto'
+            position: 'relative',
+            height: 'calc(100% - 80px)',
+            overflow: 'hidden'
           }}>
-            {/* Left Column - Product Information */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* LEFT COLUMN */}
+            <div style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              width: '50%',
+              height: '100%',
+              padding: '24px',
+              borderRight: '1px solid #e5e7eb',
+              overflowY: 'auto',
+              background: 'white'
+            }}>
               {deal.imageUrl && (
                 <img 
                   src={deal.imageUrl} 
                   alt={deal.title}
-                  className="w-full h-64 object-cover rounded-lg"
+                  style={{
+                    width: '100%',
+                    height: '200px',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                    marginBottom: '16px'
+                  }}
                 />
               )}
               
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Description</h3>
-                <p className="text-gray-700">{deal.description}</p>
+              <div style={{
+                background: '#f9fafb',
+                padding: '16px',
+                borderRadius: '8px',
+                marginBottom: '16px'
+              }}>
+                <h3 style={{ fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>Description</h3>
+                <p style={{ color: '#374151' }}>{deal.description}</p>
               </div>
 
-              <div className="bg-green-50 p-4 rounded-lg">
-                <div className="grid grid-cols-2 gap-4">
+              <div style={{
+                background: '#f0fdf4',
+                padding: '16px',
+                borderRadius: '8px',
+                marginBottom: '16px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div>
-                    <p className="text-sm text-gray-600">Price</p>
-                    <p className="text-2xl font-bold text-green-600">{formatPrice(deal.price)}</p>
+                    <p style={{ fontSize: '14px', color: '#6b7280' }}>Price</p>
+                    <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#059669' }}>{formatPrice(deal.price)}</p>
                     {deal.originalPrice && (
-                      <p className="text-sm text-gray-500 line-through">{formatPrice(deal.originalPrice)}</p>
+                      <p style={{ fontSize: '14px', color: '#6b7280', textDecoration: 'line-through' }}>{formatPrice(deal.originalPrice)}</p>
                     )}
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Min Order</p>
-                    <p className="text-lg font-semibold">{deal.minOrder} units</p>
+                    <p style={{ fontSize: '14px', color: '#6b7280' }}>Min Order</p>
+                    <p style={{ fontSize: '18px', fontWeight: '600' }}>{deal.minOrder} units</p>
                   </div>
                 </div>
               </div>
 
               {deal.expiresAt && (
-                <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-red-600" />
-                    <p className="text-sm font-medium text-red-700">
+                <div style={{
+                  background: '#fef2f2',
+                  padding: '16px',
+                  borderRadius: '8px',
+                  border: '1px solid #fecaca'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Clock style={{ width: '16px', height: '16px', color: '#dc2626' }} />
+                    <p style={{ fontSize: '14px', fontWeight: '500', color: '#b91c1c' }}>
                       Deal expires: {getTimeLeft()}
                     </p>
                   </div>
@@ -376,32 +418,64 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               )}
             </div>
 
-            {/* Right Column - Supplier & Actions */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                  <Building className="h-5 w-5" />
+            {/* RIGHT COLUMN */}
+            <div style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              width: '50%',
+              height: '100%',
+              padding: '24px',
+              overflowY: 'auto',
+              background: 'white'
+            }}>
+              <div style={{
+                background: '#eff6ff',
+                padding: '16px',
+                borderRadius: '8px',
+                marginBottom: '16px'
+              }}>
+                <h3 style={{ 
+                  fontWeight: '600', 
+                  fontSize: '18px', 
+                  marginBottom: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <Building style={{ width: '20px', height: '20px' }} />
                   Supplier Information
                 </h3>
-                <div className="space-y-2">
-                  <p className="font-medium">{deal.supplier.firstName} {deal.supplier.lastName}</p>
-                  <p className="text-sm text-gray-600">{deal.supplier.email}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <p style={{ fontWeight: '500' }}>{deal.supplier.firstName} {deal.supplier.lastName}</p>
+                  <p style={{ fontSize: '14px', color: '#6b7280' }}>{deal.supplier.email}</p>
                   {deal.supplier.isVerified && (
-                    <Badge className="bg-green-100 text-green-700">
-                      <Shield className="h-3 w-3 mr-1" />
+                    <div style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      background: '#dcfce7',
+                      color: '#166534',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      width: 'fit-content'
+                    }}>
+                      <Shield style={{ width: '12px', height: '12px' }} />
                       Verified Supplier
-                    </Badge>
+                    </div>
                   )}
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <Button
                   onClick={() => {
                     setShowDetails(false);
                     handleInquiry();
                   }}
                   className="w-full bg-blue-600 hover:bg-blue-700"
+                  style={{ height: '48px' }}
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Send Inquiry
@@ -414,6 +488,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                   }}
                   className="w-full bg-green-600 hover:bg-green-700"
                   disabled={createCouponMutation.isPending}
+                  style={{ height: '48px' }}
                 >
                   <Ticket className="h-4 w-4 mr-2" />
                   {createCouponMutation.isPending ? "Generating..." : "Get Coupon"}
