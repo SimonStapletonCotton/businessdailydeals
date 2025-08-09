@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v16.0-VIBRANT-ORANGE-HOME";
+  content: "v17.0-SPECKLED-ORANGE-HOME";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v16-VIBRANT-ORANGE";
+  --cache-buster: "2025-01-09-v17-SPECKLED-ORANGE";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,9 +36,26 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - vibrant orange theme */
+/* Home page - funky speckled orange theme */
 .page-home {
-  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 30%, #f97316 60%, #fff7ed 80%, #fffbeb 90%, #fefce8 100%) !important;
+  background: 
+    radial-gradient(circle at 20% 30%, #f97316 1px, transparent 1px),
+    radial-gradient(circle at 80% 70%, #ea580c 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, #fb923c 1.5px, transparent 1.5px),
+    radial-gradient(circle at 90% 20%, #fdba74 1px, transparent 1px),
+    radial-gradient(circle at 10% 90%, #f97316 0.8px, transparent 0.8px),
+    radial-gradient(circle at 60% 40%, #ea580c 1.2px, transparent 1.2px),
+    radial-gradient(circle at 30% 60%, #fb923c 0.9px, transparent 0.9px),
+    linear-gradient(135deg, #fed7aa 0%, #fdba74 30%, #fff7ed 70%, #fffbeb 100%) !important;
+  background-size: 
+    80px 80px,
+    120px 120px,
+    60px 60px,
+    100px 100px,
+    90px 90px,
+    70px 70px,
+    110px 110px,
+    100% 100% !important;
   min-height: calc(100vh - 64px) !important;
 }
 
