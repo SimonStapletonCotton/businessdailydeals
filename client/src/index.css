@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v20.0-PROFESSIONAL-GEOMETRIC-BG";
+  content: "v21.0-CLEAN-TEAL-GRADIENT";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v20-GEOMETRIC-CITYSCAPE";
+  --cache-buster: "2025-01-09-v21-TEAL-GRADIENT";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,13 +36,9 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - professional geometric background with cityscape */
+/* Home page - professional teal to white gradient */
 .page-home {
-  background-image: url('@assets/IMG_9066_1754751187817.png') !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 20%, #06b6d4 40%, #67e8f9 70%, #f0f9ff 90%, #ffffff 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
