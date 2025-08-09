@@ -297,3 +297,16 @@ body {
 .notification-badge {
   @apply absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center;
 }
+
+/* Force dialog two-column layout */
+.dialog-two-columns {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 2rem !important;
+  min-height: 500px !important;
+}
+
+/* Override any conflicting dialog styles */
+[data-radix-dialog-content] .dialog-two-columns {
+  display: grid !important;
+}

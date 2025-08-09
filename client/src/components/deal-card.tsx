@@ -234,7 +234,16 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             </DialogHeader>
             
             {/* FORCED Two Column Layout - NEVER single column */}
-            <div className="grid grid-cols-2 gap-6 p-6 min-h-[500px]" style={{ gridTemplateColumns: '1fr 1fr' }}>
+            <div 
+              className="dialog-two-columns grid gap-6 p-6 min-h-[500px]" 
+              style={{ 
+                display: 'grid !important',
+                gridTemplateColumns: '1fr 1fr !important',
+                maxWidth: '100%',
+                width: '100%',
+                columnGap: '2rem'
+              }}
+            >
               {/* Left Column - Product Information */}
               <div className="space-y-4">
                 {/* Main Product Image */}
