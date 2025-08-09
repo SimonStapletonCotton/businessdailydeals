@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v31.0-DEEP-ORANGE-TO-SLATE";
+  content: "v32.0-SOFTER-ORANGE-LIGHTER-SLATE";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v31-ORANGE-SLATE";
+  --cache-buster: "2025-01-09-v32-SOFTER-GRADIENT";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,9 +36,9 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - deep orange left graduating to fine slate right */
+/* Home page - medium orange left graduating to light slate right */
 .page-home {
-  background: linear-gradient(to right, #e65100, #ff6d00, #ff8f00, #ffab40, #c8b8a0, #94a3b8, #f1f5f9) !important;
+  background: linear-gradient(to right, #ff8f00, #ffab40, #ffcc80, #ffb74d, #e2e8f0, #f8fafc) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
