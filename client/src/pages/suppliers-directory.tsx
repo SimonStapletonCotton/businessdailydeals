@@ -362,8 +362,15 @@ export default function SuppliersDirectory() {
                 <Button 
                   className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90"
                   data-testid={`button-contact-${supplier.id}`}
+                  onClick={() => {
+                    const subject = `Business Daily Deals - Contact Request`;
+                    const body = `Dear ${getSupplierName(supplier)},\n\nI found your company on Business Daily Deals and would like to get in touch.\n\nBest regards,`;
+                    const mailtoUrl = `mailto:${supplier.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    window.location.href = mailtoUrl;
+                  }}
+                  disabled={!supplier.email}
                 >
-                  Contact Supplier
+                  {supplier.email ? 'Contact Supplier' : 'No Email Available'}
                 </Button>
               </CardContent>
             </Card>
