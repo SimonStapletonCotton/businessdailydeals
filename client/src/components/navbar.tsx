@@ -128,6 +128,18 @@ export default function Navbar() {
         </Button>
       </Link>
       
+      <Link href="/live-coupons">
+        <Button
+          variant={location === "/live-coupons" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+          data-testid="link-live-coupons"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Ticket className="h-4 w-4 mr-2" />
+          Live Coupons
+        </Button>
+      </Link>
+      
       <Link href="/about">
         <Button
           variant={location === "/about" ? "secondary" : "ghost"}

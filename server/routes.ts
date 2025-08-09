@@ -770,6 +770,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public coupon routes for Live Coupons page
+  app.get('/api/coupons/public', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const coupons = await storage.getPublicCoupons(limit);
+      res.json(coupons);
+    } catch (error) {
+      console.error("Error fetching public coupons:", error);
+      res.status(500).json({ message: "Failed to fetch public coupons" });
+    }
+  });
+
+  app.get('/api/coupons/stats', async (req, res) => {
+    try {
+      const stats = await storage.getCouponStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching coupon stats:", error);
+      res.status(500).json({ message: "Failed to fetch coupon stats" });
+    }
+  });
+
   // Rates routes
   app.get("/api/rates", async (req, res) => {
     try {

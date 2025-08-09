@@ -1028,6 +1028,78 @@ export class DatabaseStorage implements IStorage {
     return coupon;
   }
 
+  async getPublicCoupons(limit: number = 50): Promise<any[]> {
+    const result = await db
+      .select({
+        id: coupons.id,
+        couponCode: coupons.couponCode,
+        createdAt: coupons.createdAt,
+        expiresAt: coupons.expiresAt,
+        isRedeemed: coupons.isRedeemed,
+        dealTitle: coupons.dealTitle,
+        dealPrice: coupons.dealPrice,
+        dealOriginalPrice: coupons.dealOriginalPrice,
+        dealCategory: deals.category,
+        supplierCompanyName: users.companyName,
+        supplierCity: users.city,
+        supplierProvince: users.province,
+      })
+      .from(coupons)
+      .leftJoin(deals, eq(coupons.dealId, deals.id))
+      .leftJoin(users, eq(coupons.supplierId, users.id))
+      .orderBy(desc(coupons.createdAt))
+      .limit(limit);
+
+    return result;
+  }
+
+  async getCouponStats(): Promise<{
+    totalCoupons: number;
+    activeCoupons: number;
+    redeemedCoupons: number;
+    totalSavings: string;
+  }> {
+    // Get basic counts
+    const [totalResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(coupons);
+
+    const [redeemedResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(coupons)
+      .where(eq(coupons.isRedeemed, true));
+
+    const [activeResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(coupons)
+      .where(
+        and(
+          eq(coupons.isRedeemed, false),
+          sql`${coupons.expiresAt} > NOW()`
+        )
+      );
+
+    // Calculate total savings (difference between original and deal prices for redeemed coupons)
+    const [savingsResult] = await db
+      .select({
+        totalSavings: sql<string>`COALESCE(SUM(CAST(${coupons.dealOriginalPrice} AS DECIMAL) - CAST(${coupons.dealPrice} AS DECIMAL)), 0)`
+      })
+      .from(coupons)
+      .where(
+        and(
+          eq(coupons.isRedeemed, true),
+          sql`${coupons.dealOriginalPrice} IS NOT NULL AND ${coupons.dealOriginalPrice} != ''`
+        )
+      );
+
+    return {
+      totalCoupons: totalResult?.count || 0,
+      activeCoupons: activeResult?.count || 0,
+      redeemedCoupons: redeemedResult?.count || 0,
+      totalSavings: savingsResult?.totalSavings || '0',
+    };
+  }
+
   // Rates operations
   async getRates(): Promise<Rate[]> {
     return await db.select().from(rates).orderBy(desc(rates.createdAt));
