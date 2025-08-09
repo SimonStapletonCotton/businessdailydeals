@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Navbar from "@/components/navbar";
 import DealCard from "@/components/deal-card";
+import { BannerAds } from "@/components/banner-ads";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
@@ -92,6 +93,11 @@ export default function RegularDeals() {
   return (
     <div className="min-h-screen page-deals">
       <Navbar />
+      
+      {/* Header Advertisement Banner */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+        <BannerAds position="header" className="w-full" />
+      </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Modern Header Section */}

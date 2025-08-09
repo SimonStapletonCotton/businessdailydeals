@@ -14,6 +14,7 @@ import { Link } from "wouter";
 import { Deal } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 import { CopyrightNotice } from "@/components/copyright-notice";
+import { BannerAds } from "@/components/banner-ads";
 
 export default function Home() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -94,6 +95,13 @@ export default function Home() {
   return (
     <div className="min-h-screen page-home mobile-update">
       <Navbar />
+      
+      {/* Header Advertisement Banner */}
+      <div className="px-4 sm:px-6 lg:px-8 py-2">
+        <div className="max-w-7xl mx-auto">
+          <BannerAds position="header" className="w-full" />
+        </div>
+      </div>
 
       {/* Modern Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-orange-500 to-gray-700 text-white">
