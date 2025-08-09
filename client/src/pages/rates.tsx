@@ -4,37 +4,39 @@ import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, Flame, Star, Clock, CreditCard, Plus } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ShoppingCart, Calculator, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const advertisingRates = {
-  hotDeals: {
-    title: "Hot Deals",
-    subtitle: "Premium placement on home page",
-    description: "Featured prominently for maximum visibility",
-    price: 125,
-    credits: 50,
-    duration: "30 days",
-    features: ["Home page placement", "Priority listing", "Enhanced visibility", "Mobile optimized"]
-  },
-  regularDeals: {
-    title: "Regular Deals", 
-    subtitle: "Standard deal listing",
-    description: "Listed in category sections",
-    price: 50,
-    credits: 20,
-    duration: "30 days", 
-    features: ["Category placement", "Search visibility", "Standard listing", "Mobile friendly"]
-  }
+// Exact rates from Excel file
+const ratesData = {
+  regular: [
+    { duration: 1, items25: 40, items610: 15, items1120: 10 },
+    { duration: 3, items25: 25, items610: 10, items1120: 6 },
+    { duration: 7, items25: 12, items610: 6, items1120: 4 },
+    { duration: 14, items25: 8, items610: 4, items1120: 3 },
+    { duration: 21, items25: 7, items610: 3.5, items1120: 2 },
+    { duration: 30, items25: 6, items610: 3, items1120: 2 }
+  ],
+  hot: [
+    { duration: 1, items25: 90, items610: 55, items1120: null },
+    { duration: 3, items25: 40, items610: 25, items1120: null },
+    { duration: 7, items25: 25, items610: 15, items1120: null }
+  ]
 };
 
 export default function Rates() {
   const { isAuthenticated, user } = useAuth();
   const { toast } = useToast();
-  const [cart, setCart] = useState<Array<{type: string, quantity: number}>>([]);
+  const [selectedPackage, setSelectedPackage] = useState<{
+    type: 'regular' | 'hot';
+    duration: number;
+    items: string;
+    rate: number;
+    total: number;
+  } | null>(null);
 
-  const handleAddToCart = (dealType: 'hot' | 'regular') => {
+  const handleSelectPackage = (type: 'regular' | 'hot', duration: number, items: string, rate: number) => {
     if (!isAuthenticated) {
       toast({
         title: "Login Required",
@@ -53,43 +55,24 @@ export default function Rates() {
       return;
     }
 
-    // Add to cart logic
-    const existingItem = cart.find(item => item.type === dealType);
-    if (existingItem) {
-      setCart(cart.map(item => 
-        item.type === dealType 
-          ? {...item, quantity: item.quantity + 1}
-          : item
-      ));
-    } else {
-      setCart([...cart, {type: dealType, quantity: 1}]);
-    }
+    // Calculate total based on items and duration
+    const itemCount = items === '2-5' ? 3 : items === '6-10' ? 8 : 15; // Average items in range
+    const total = rate * itemCount * duration;
 
-    toast({
-      title: "Added to Cart",
-      description: `${dealType === 'hot' ? 'Hot Deal' : 'Regular Deal'} added to your cart`,
+    setSelectedPackage({
+      type,
+      duration,
+      items,
+      rate,
+      total
     });
-  };
-
-  const getTotalCost = () => {
-    return cart.reduce((total, item) => {
-      const rate = item.type === 'hot' ? advertisingRates.hotDeals.price : advertisingRates.regularDeals.price;
-      return total + (rate * item.quantity);
-    }, 0);
-  };
-
-  const getTotalCredits = () => {
-    return cart.reduce((total, item) => {
-      const credits = item.type === 'hot' ? advertisingRates.hotDeals.credits : advertisingRates.regularDeals.credits;
-      return total + (credits * item.quantity);
-    }, 0);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
       <Navbar />
       
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4 text-slate-600 border-slate-300">
@@ -98,148 +81,192 @@ export default function Rates() {
           <h1 className="text-4xl font-bold text-slate-800 mb-4">
             Business Daily Deals <span className="text-primary">Advertising Rates</span>
           </h1>
-          <p className="text-slate-600 text-lg max-w-3xl mx-auto">
-            Choose your advertising package to reach thousands of South African buyers
+          <p className="text-slate-600 text-lg max-w-3xl mx-auto mb-6">
+            Rates shown are per item per day (rands). Calculate your total cost based on number of items and duration.
           </p>
         </div>
 
-        {/* Rates Cards */}
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
-          {/* Hot Deals Card */}
-          <Card className="relative overflow-hidden border-2 border-orange-200 shadow-xl">
-            <div className="absolute top-0 right-0 bg-gradient-to-l from-orange-500 to-red-500 text-white px-4 py-2 text-sm font-semibold">
-              PREMIUM
-            </div>
-            <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
-              <CardTitle className="flex items-center gap-3 text-2xl">
-                <Flame className="h-6 w-6" />
-                {advertisingRates.hotDeals.title}
-              </CardTitle>
-              <p className="text-orange-100 text-base">{advertisingRates.hotDeals.subtitle}</p>
+        {/* Rates Tables */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+          {/* Regular Deals Table */}
+          <Card className="shadow-xl border-2 border-blue-200">
+            <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+              <CardTitle className="text-2xl text-center">REGULAR DEALS</CardTitle>
+              <p className="text-center text-blue-100">Rate per item per day (rands)</p>
             </CardHeader>
-            <CardContent className="p-8">
-              <div className="text-center mb-6">
-                <div className="text-4xl font-bold text-slate-800 mb-2">
-                  R{advertisingRates.hotDeals.price}
-                </div>
-                <div className="text-lg text-slate-600">
-                  {advertisingRates.hotDeals.credits} credits • {advertisingRates.hotDeals.duration}
-                </div>
-              </div>
-
-              <p className="text-slate-600 mb-6 text-center">
-                {advertisingRates.hotDeals.description}
-              </p>
-
-              <ul className="space-y-3 mb-8">
-                {advertisingRates.hotDeals.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <Star className="h-4 w-4 text-orange-500" />
-                    <span className="text-slate-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Button 
-                onClick={() => handleAddToCart('hot')}
-                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3"
-                data-testid="button-add-hot-deal"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Hot Deal
-              </Button>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50">
+                    <TableHead className="font-semibold text-slate-700 border-r">Duration</TableHead>
+                    <TableHead className="font-semibold text-slate-700 text-center border-r">2-5 items</TableHead>
+                    <TableHead className="font-semibold text-slate-700 text-center border-r">6-10 items</TableHead>
+                    <TableHead className="font-semibold text-slate-700 text-center">11-20 items</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {ratesData.regular.map((rate, index) => (
+                    <TableRow key={index} className="hover:bg-blue-50">
+                      <TableCell className="font-medium border-r bg-slate-50">
+                        {rate.duration} day{rate.duration > 1 ? 's' : ''}
+                      </TableCell>
+                      <TableCell className="text-center font-bold border-r cursor-pointer hover:bg-blue-100"
+                        onClick={() => handleSelectPackage('regular', rate.duration, '2-5', rate.items25)}>
+                        R{rate.items25}
+                      </TableCell>
+                      <TableCell className="text-center font-bold border-r cursor-pointer hover:bg-blue-100"
+                        onClick={() => handleSelectPackage('regular', rate.duration, '6-10', rate.items610)}>
+                        R{rate.items610}
+                      </TableCell>
+                      <TableCell className="text-center font-bold cursor-pointer hover:bg-blue-100"
+                        onClick={() => handleSelectPackage('regular', rate.duration, '11-20', rate.items1120)}>
+                        R{rate.items1120}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
 
-          {/* Regular Deals Card */}
-          <Card className="relative overflow-hidden border-2 border-blue-200 shadow-xl">
-            <div className="absolute top-0 right-0 bg-gradient-to-l from-blue-500 to-indigo-500 text-white px-4 py-2 text-sm font-semibold">
-              STANDARD
-            </div>
-            <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
-              <CardTitle className="flex items-center gap-3 text-2xl">
-                <Clock className="h-6 w-6" />
-                {advertisingRates.regularDeals.title}
-              </CardTitle>
-              <p className="text-blue-100 text-base">{advertisingRates.regularDeals.subtitle}</p>
+          {/* Hot Deals Table */}
+          <Card className="shadow-xl border-2 border-orange-200">
+            <CardHeader className="bg-gradient-to-r from-orange-600 to-red-600 text-white">
+              <CardTitle className="text-2xl text-center">HOT DEALS</CardTitle>
+              <p className="text-center text-orange-100">Rate per item per day (rands)</p>
             </CardHeader>
-            <CardContent className="p-8">
-              <div className="text-center mb-6">
-                <div className="text-4xl font-bold text-slate-800 mb-2">
-                  R{advertisingRates.regularDeals.price}
-                </div>
-                <div className="text-lg text-slate-600">
-                  {advertisingRates.regularDeals.credits} credits • {advertisingRates.regularDeals.duration}
-                </div>
-              </div>
-
-              <p className="text-slate-600 mb-6 text-center">
-                {advertisingRates.regularDeals.description}
-              </p>
-
-              <ul className="space-y-3 mb-8">
-                {advertisingRates.regularDeals.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <Star className="h-4 w-4 text-blue-500" />
-                    <span className="text-slate-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Button 
-                onClick={() => handleAddToCart('regular')}
-                className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-3"
-                data-testid="button-add-regular-deal"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Regular Deal
-              </Button>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50">
+                    <TableHead className="font-semibold text-slate-700 border-r">Duration</TableHead>
+                    <TableHead className="font-semibold text-slate-700 text-center border-r">2-5 items</TableHead>
+                    <TableHead className="font-semibold text-slate-700 text-center border-r">6-10 items</TableHead>
+                    <TableHead className="font-semibold text-slate-700 text-center">11-20 items</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {ratesData.hot.map((rate, index) => (
+                    <TableRow key={index} className="hover:bg-orange-50">
+                      <TableCell className="font-medium border-r bg-slate-50">
+                        {rate.duration} day{rate.duration > 1 ? 's' : ''}
+                      </TableCell>
+                      <TableCell className="text-center font-bold border-r cursor-pointer hover:bg-orange-100"
+                        onClick={() => handleSelectPackage('hot', rate.duration, '2-5', rate.items25)}>
+                        R{rate.items25}
+                      </TableCell>
+                      <TableCell className="text-center font-bold border-r cursor-pointer hover:bg-orange-100"
+                        onClick={() => handleSelectPackage('hot', rate.duration, '6-10', rate.items610)}>
+                        R{rate.items610}
+                      </TableCell>
+                      <TableCell className="text-center font-bold cursor-pointer hover:bg-orange-100">
+                        {rate.items1120 ? `R${rate.items1120}` : '-'}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {/* Empty rows to match regular table */}
+                  {[...Array(3)].map((_, index) => (
+                    <TableRow key={`empty-${index}`}>
+                      <TableCell className="border-r bg-slate-50"></TableCell>
+                      <TableCell className="border-r"></TableCell>
+                      <TableCell className="border-r"></TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </div>
 
-        {/* Cart Summary */}
-        {cart.length > 0 && (
+        {/* Calculator Section */}
+        {selectedPackage && (
           <Card className="bg-slate-800 text-white shadow-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-3">
-                <ShoppingCart className="h-5 w-5" />
-                Cart Summary
+                <Calculator className="h-5 w-5" />
+                Cost Calculator
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3 mb-6">
-                {cart.map((item, index) => (
-                  <div key={index} className="flex justify-between items-center">
-                    <span>{item.type === 'hot' ? 'Hot Deal' : 'Regular Deal'} × {item.quantity}</span>
-                    <span>R{(item.type === 'hot' ? advertisingRates.hotDeals.price : advertisingRates.regularDeals.price) * item.quantity}</span>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Selected Package:</label>
+                    <p className="text-lg font-bold">
+                      {selectedPackage.type.toUpperCase()} DEAL - {selectedPackage.duration} day{selectedPackage.duration > 1 ? 's' : ''}
+                    </p>
+                    <p className="text-slate-300">
+                      {selectedPackage.items} items @ R{selectedPackage.rate} per item per day
+                    </p>
                   </div>
-                ))}
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Enter exact number of items:</label>
+                    <input 
+                      type="number" 
+                      className="w-full p-2 rounded border bg-slate-700 text-white border-slate-600"
+                      placeholder="e.g. 3"
+                      onChange={(e) => {
+                        const items = parseInt(e.target.value) || 0;
+                        const total = selectedPackage.rate * items * selectedPackage.duration;
+                        setSelectedPackage({...selectedPackage, total});
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Calculation:</label>
+                    <div className="bg-slate-700 p-4 rounded">
+                      <p>Rate: R{selectedPackage.rate} per item per day</p>
+                      <p>Duration: {selectedPackage.duration} day{selectedPackage.duration > 1 ? 's' : ''}</p>
+                      <p className="text-xl font-bold text-green-400 mt-2">
+                        Total: R{selectedPackage.total.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
+                    data-testid="button-add-to-cart"
+                  >
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    Add to Cart
+                  </Button>
+                </div>
               </div>
-              <Separator className="my-4 bg-slate-600" />
-              <div className="flex justify-between items-center text-xl font-bold mb-4">
-                <span>Total: R{getTotalCost()}</span>
-                <span>{getTotalCredits()} credits</span>
-              </div>
-              <Button 
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
-                data-testid="button-checkout"
-              >
-                <CreditCard className="h-4 w-4 mr-2" />
-                Proceed to Checkout
-              </Button>
             </CardContent>
           </Card>
         )}
 
-        {/* Additional Information */}
+        {/* Instructions */}
         <div className="mt-12 text-center">
-          <h3 className="text-2xl font-semibold text-slate-800 mb-4">Package Combinations</h3>
-          <p className="text-slate-600 max-w-3xl mx-auto">
-            You can purchase any combination of Hot and Regular deals. 
-            Hot deals provide premium placement on the home page, while Regular deals 
-            are featured in category sections. Both options give you 30 days of visibility.
-          </p>
+          <h3 className="text-2xl font-semibold text-slate-800 mb-4">How it Works</h3>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-blue-600 font-bold">1</span>
+              </div>
+              <h4 className="font-semibold mb-2">Choose Your Package</h4>
+              <p className="text-slate-600 text-sm">Click on any rate in the tables above to select your advertising package</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-orange-600 font-bold">2</span>
+              </div>
+              <h4 className="font-semibold mb-2">Calculate Total Cost</h4>
+              <p className="text-slate-600 text-sm">Enter your exact number of items to see the total cost calculation</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-green-600 font-bold">3</span>
+              </div>
+              <h4 className="font-semibold mb-2">Purchase & Advertise</h4>
+              <p className="text-slate-600 text-sm">Add to cart and proceed with payment to start advertising your deals</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
