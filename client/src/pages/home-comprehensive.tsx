@@ -15,8 +15,19 @@ export default function HomeComprehensive() {
       }}>
 
       {/* Hero Section with Casino Animation */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-orange-500 to-slate-800 text-white">
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent"></div>
+      <section className="relative overflow-hidden text-white" style={{
+        background: 'linear-gradient(135deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%)'
+      }}>
+        {/* Ghost Bubbles Background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-xl animate-pulse"></div>
+          <div className="absolute top-32 right-20 w-24 h-24 bg-white/10 rounded-full blur-lg animate-bounce" style={{animationDelay: '1s'}}></div>
+          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-white/3 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-white/8 rounded-full blur-md animate-bounce" style={{animationDelay: '0.5s'}}></div>
+          <div className="absolute bottom-32 right-10 w-28 h-28 bg-white/6 rounded-full blur-xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
+          <div className="absolute top-20 left-1/3 w-20 h-20 bg-white/7 rounded-full blur-lg animate-bounce" style={{animationDelay: '0.8s'}}></div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
             {/* Animated One-Armed Bandit */}
