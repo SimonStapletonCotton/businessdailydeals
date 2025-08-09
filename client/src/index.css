@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v25.0-ORANGE-RETURN";
+  content: "v26.0-ORIGINAL-ORANGE-HALFTONE";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v25-ORANGE-RETURN";
+  --cache-buster: "2025-01-09-v26-ORIGINAL-ORANGE";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,9 +36,9 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - vibrant orange gradient */
+/* Home page - original orange halftone style */
 .page-home {
-  background: linear-gradient(135deg, #ea580c 0%, #f97316 20%, #fb923c 40%, #fed7aa 70%, #fff7ed 90%, #fffbeb 100%) !important;
+  background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #ff9800 50%, #ff6600 75%, #ffcc80 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
