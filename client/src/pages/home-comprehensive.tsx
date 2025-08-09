@@ -9,7 +9,16 @@ import { useQuery } from "@tanstack/react-query";
 // Component to display hot deals on homepage
 function HotDealsHomepage() {
   const { data: hotDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals?dealType=hot"],
+    queryKey: ["/api/deals", { type: "hot" }],
+    queryFn: async () => {
+      const res = await fetch("/api/deals?type=hot", {
+        credentials: "include",
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    },
   });
 
   if (isLoading) {

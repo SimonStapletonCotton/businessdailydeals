@@ -179,7 +179,21 @@ export default function HotDeals() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {deals.slice(0, displayCount).map((deal) => (
-                  <DealCard key={deal.id} deal={deal} variant="hot" />
+                  <DealCard 
+                    key={deal.id} 
+                    deal={{
+                      ...deal,
+                      supplier: {
+                        ...deal.supplier,
+                        firstName: deal.supplier.firstName || undefined,
+                        lastName: deal.supplier.lastName || undefined,
+                        companyName: deal.supplier.companyName || undefined,
+                        email: deal.supplier.email || undefined,
+                        isVerified: deal.supplier.isVerified || false,
+                      }
+                    }} 
+                    variant="hot" 
+                  />
                 ))}
               </div>
               
