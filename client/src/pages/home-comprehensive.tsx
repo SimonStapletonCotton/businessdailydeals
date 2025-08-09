@@ -123,6 +123,18 @@ export default function HomeComprehensive() {
         </div>
       </section>
 
+      {/* HOT DEALS Section Heading */}
+      <section className="bg-slate-100 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+            HOT DEALS
+          </h2>
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+            Premium deals with exclusive pricing and featured placement
+          </p>
+        </div>
+      </section>
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Message */}
         <section className="mb-16">
