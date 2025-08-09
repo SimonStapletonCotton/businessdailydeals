@@ -74,8 +74,8 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
     mutationFn: async (data: { dealId: string; supplierId: string }) => {
       return await apiRequest("POST", "/api/coupons", data);
     },
-    onSuccess: (response) => {
-      if (response.redirectUrl) {
+    onSuccess: (response: any) => {
+      if (response && response.redirectUrl) {
         window.location.href = response.redirectUrl;
       } else {
         toast({
@@ -225,16 +225,16 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
 
         {/* Details Dialog */}
         <Dialog open={showDetails} onOpenChange={setShowDetails}>
-          <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto p-0">
-            <DialogHeader className="p-6 pb-4 border-b">
-              <DialogTitle className="flex items-center gap-2 text-xl">
-                <Package className="h-6 w-6" />
+          <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto p-0">
+            <DialogHeader className="p-6 pb-4 border-b bg-gray-50">
+              <DialogTitle className="flex items-center gap-2 text-xl font-bold">
+                <Package className="h-6 w-6 text-blue-600" />
                 {deal.title}
               </DialogTitle>
             </DialogHeader>
             
-            {/* Two Column Layout - Left: Details, Right: Actions */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+            {/* FORCED Two Column Layout - NEVER single column */}
+            <div className="grid grid-cols-2 gap-6 p-6 min-h-[500px]" style={{ gridTemplateColumns: '1fr 1fr' }}>
               {/* Left Column - Product Information */}
               <div className="space-y-4">
                 {/* Main Product Image */}
@@ -245,7 +245,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                       alt={deal.title}
                       className="w-full h-48 object-cover rounded-lg border shadow-sm"
                     />
-                    {deal.discount > 0 && (
+                    {deal.discount && deal.discount > 0 && (
                       <div className="absolute top-3 right-3">
                         <Badge className="bg-red-600 text-white px-2 py-1">
                           <Percent className="h-3 w-3 mr-1" />
@@ -345,12 +345,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                     </div>
                     <div className="space-y-1 text-sm text-gray-600">
                       <p><strong>Email:</strong> {deal.supplier.email}</p>
-                      {deal.supplier.mobile && (
-                        <p><strong>Mobile:</strong> {deal.supplier.mobile}</p>
-                      )}
-                      {deal.supplier.province && (
-                        <p><strong>Location:</strong> {deal.supplier.province}</p>
-                      )}
+
                     </div>
                   </div>
                 </div>

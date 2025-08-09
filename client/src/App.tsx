@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
+import { forceHomeRoute, clearRouteCache } from "@/utils/forceHomeRoute";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home-comprehensive";
 import HotDeals from "@/pages/hot-deals";
@@ -39,14 +40,19 @@ function Router() {
   const { isAuthenticated, isLoading } = useAuth();
   const [location, setLocation] = useLocation();
 
-  // Ensure home page loads on refresh and root access
+  // Force home page as default route
   useEffect(() => {
-    // If the current path is empty or just a slash, ensure we're on home
-    if (location === '' || location === '/' || location === '/home') {
-      // This ensures the home page component loads properly
-      console.log('Home page routing confirmed:', location);
+    // Force home route utility on app load
+    forceHomeRoute();
+    
+    // Clear any cached routes on first load
+    if (location === '/hot-deals' && !document.referrer) {
+      clearRouteCache();
+      setLocation('/');
     }
-  }, [location]);
+    
+    console.log('Router state - Location:', location, 'URL:', window.location.pathname);
+  }, [location, setLocation]);
 
   return (
     <Switch>
