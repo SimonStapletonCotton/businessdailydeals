@@ -38,7 +38,7 @@ body {
 
 /* Home page - orange halftone to slate gradient */
 .page-home {
-  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%) !important;
+  background: linear-gradient(90deg, #ffcc80 0%, #ff9800 25%, #ffb74d 50%, #c8b8a0 75%, #8fa3b8 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 

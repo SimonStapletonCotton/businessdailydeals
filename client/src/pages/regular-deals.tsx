@@ -83,11 +83,7 @@ export default function RegularDeals() {
     <div className="min-h-screen">
       <Navbar />
       <div className="page-regular">
-      <Navbar />
-      
-
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Modern Header Section */}
         <div className="mb-12 text-center">
           <div className="flex items-center justify-center mb-4">

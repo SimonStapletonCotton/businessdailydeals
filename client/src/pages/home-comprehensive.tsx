@@ -9,15 +9,10 @@ export default function HomeComprehensive() {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <div className="page-content" style={{
-        background: 'linear-gradient(135deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%)',
-        minHeight: 'calc(100vh - 64px)'
-      }}>
+      <div className="page-home">
 
       {/* Hero Section with Casino Animation */}
-      <section className="relative overflow-hidden text-white" style={{
-        background: 'linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%)'
-      }}>
+      <section className="relative overflow-hidden text-white">
         {/* Ghost Bubbles Background */}
         <div className="absolute inset-0">
           <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-xl animate-pulse"></div>
