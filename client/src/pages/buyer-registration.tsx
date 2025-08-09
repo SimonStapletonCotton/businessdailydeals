@@ -25,7 +25,9 @@ const buyerRegistrationSchema = z.object({
   mobile: z.string().min(10, "Mobile number must be at least 10 digits"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string().min(8, "Please confirm your password"),
-  province: z.string().min(1, "Please select your province"),
+  province: z.string({
+    required_error: "Please select your province",
+  }).min(1, "Please select your province"),
   subscribeToNewsletter: z.boolean().default(false),
   acceptDataOffer: z.boolean().default(false),
   mobileProvider: z.string().optional(),
@@ -236,7 +238,7 @@ export default function BuyerRegistration() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Province</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value || ""}>
                         <FormControl>
                           <SelectTrigger data-testid="select-province">
                             <SelectValue placeholder="Select your province" />
@@ -244,7 +246,7 @@ export default function BuyerRegistration() {
                         </FormControl>
                         <SelectContent>
                           {southAfricanProvinces.map((province) => (
-                            <SelectItem key={province} value={province}>
+                            <SelectItem key={province} value={province} data-testid={`option-${province.toLowerCase().replace(/\s+/g, '-')}`}>
                               {province}
                             </SelectItem>
                           ))}
