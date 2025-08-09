@@ -22,13 +22,15 @@ export default function HotDeals() {
 
   // Remove authentication redirect - let pages load for everyone
 
-  const { data: deals, isLoading: dealsLoading } = useQuery<DealWithSupplier[]>({
+  const { data: deals, isLoading: dealsLoading, error } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/deals", "hot", searchQuery, selectedCategory],
     queryFn: async () => {
       const params = new URLSearchParams();
       params.set("type", "hot");
       if (searchQuery) params.set("search", searchQuery);
       if (selectedCategory && selectedCategory !== "All Categories") params.set("category", selectedCategory);
+      
+      console.log("Fetching hot deals with params:", params.toString());
       
       const res = await fetch(`/api/deals?${params.toString()}`, {
         credentials: "include",
@@ -38,10 +40,14 @@ export default function HotDeals() {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       
-      return await res.json();
+      const data = await res.json();
+      console.log("Hot deals data received:", data);
+      return data;
     },
     enabled: true, // Allow loading for everyone
   });
+
+  console.log("Hot deals state:", { deals, dealsLoading, error });
 
   const categories = [
     "All Categories",
@@ -168,8 +174,8 @@ export default function HotDeals() {
             </div>
           ) : deals && deals.length > 0 ? (
             <>
-              <div className="mb-4 text-sm text-slate-600">
-                Showing {deals.length} hot deal{deals.length === 1 ? '' : 's'}
+              <div className="mb-4 text-sm text-slate-600 bg-yellow-100 p-2 rounded">
+                DEBUG: Showing {deals.length} hot deal{deals.length === 1 ? '' : 's'} - {JSON.stringify(deals.map(d => d.title))}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {deals.slice(0, displayCount).map((deal) => (
@@ -195,6 +201,9 @@ export default function HotDeals() {
             </>
           ) : (
             <div className="text-center py-20">
+              <div className="bg-red-100 p-4 rounded mb-4">
+                DEBUG: No deals found. Loading: {dealsLoading.toString()}, Error: {error?.message || 'none'}, Deals: {JSON.stringify(deals)}
+              </div>
               <div className="bg-gradient-to-br from-accent/10 to-primary/10 p-6 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
                 <Flame className="h-12 w-12 text-accent" />
               </div>
