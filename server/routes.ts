@@ -406,10 +406,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Deal not found or unauthorized" });
       }
 
+      // Calculate extension cost
+      const currentExpiry = new Date(deal.expiresAt || Date.now());
+      const newExpiry = new Date(expiresAt);
+      const extraDays = Math.ceil((newExpiry.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
+      
+      if (extraDays <= 0) {
+        return res.status(400).json({ message: "New expiry date must be after current expiry date" });
+      }
+
+      // Calculate credits needed: HOT deals = 5 credits per day, REGULAR = 2 credits per day
+      const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
+      const creditsNeeded = extraDays * creditsPerDay;
+
+      // Check if supplier has enough credits
+      const creditBalance = await storage.getUserCreditBalance(userId);
+      const currentBalance = parseFloat(creditBalance.creditBalance);
+      
+      if (currentBalance < creditsNeeded) {
+        return res.status(400).json({ 
+          message: "Insufficient credits", 
+          creditsNeeded,
+          currentBalance: currentBalance,
+          shortfall: creditsNeeded - currentBalance
+        });
+      }
+
+      // Charge credits for extension
+      await storage.updateUserCreditBalance(userId, creditsNeeded.toString(), 'subtract');
+      
+      // Create credit transaction record
+      await storage.createCreditTransaction({
+        userId,
+        amount: creditsNeeded.toString(),
+        type: 'debit',
+        description: `Deal extension: ${extraDays} extra days for "${deal.title}"`,
+        dealId: dealId
+      });
+
       // Update the deal's expiry date
       await storage.updateDealExpiry(dealId, expiresAt);
       
-      res.json({ message: "Deal expiry date extended successfully" });
+      res.json({ 
+        message: "Deal expiry date extended successfully",
+        creditsCharged: creditsNeeded,
+        remainingCredits: currentBalance - creditsNeeded,
+        extraDays
+      });
     } catch (error) {
       console.error("Error extending deal:", error);
       res.status(500).json({ message: "Failed to extend deal" });

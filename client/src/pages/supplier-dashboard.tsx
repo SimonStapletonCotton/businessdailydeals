@@ -103,16 +103,18 @@ export default function SupplierDashboard() {
 
   const extendDealMutation = useMutation({
     mutationFn: async ({ dealId, expiresAt }: { dealId: string; expiresAt: string }) => {
-      await apiRequest("PATCH", `/api/deals/${dealId}/extend`, { expiresAt });
+      const response = await apiRequest("PATCH", `/api/deals/${dealId}/extend`, { expiresAt });
+      return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast({
-        title: "Deal Extended",
-        description: "Your deal expiry date has been successfully extended.",
+        title: "Deal Extended Successfully",
+        description: `Extended for ${data.extraDays} extra days. ${data.creditsCharged} credits charged. Remaining balance: ${data.remainingCredits} credits.`,
       });
       setExtendingDealId(null);
       setExtendExpirationDate("");
       queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/credits/balance"] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
@@ -152,6 +154,34 @@ export default function SupplierDashboard() {
       toast({
         title: "Invalid Date",
         description: "The expiration date must be in the future.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Find the deal to calculate credits
+    const deal = deals?.find(d => d.id === dealId);
+    if (!deal || !deal.expiresAt) {
+      toast({
+        title: "Error",
+        description: "Deal information not found.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const currentExpiry = new Date(deal.expiresAt);
+    const extraDays = Math.ceil((selectedDate.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
+    const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
+    const totalCredits = extraDays * creditsPerDay;
+
+    // Check current credit balance
+    const currentBalance = parseFloat((creditBalance as any)?.creditBalance || '0');
+    
+    if (currentBalance < totalCredits) {
+      toast({
+        title: "Insufficient Credits",
+        description: `You need ${totalCredits} credits but only have ${currentBalance}. Please top up your credits first.`,
         variant: "destructive",
       });
       return;
@@ -474,14 +504,43 @@ export default function SupplierDashboard() {
             {dealsLoading ? (
               <div className="text-center py-4">Loading deals...</div>
             ) : deals && deals.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="space-y-4">
                 {deals.slice(0, 6).map((deal: DealWithSupplier) => (
-                  <Card key={deal.id} className={`overflow-hidden hover:shadow-lg transition-shadow ${deal.dealType === "hot" ? "border-red-200 bg-gradient-to-br from-red-50 to-orange-50" : "border-blue-200 bg-gradient-to-br from-blue-50 to-slate-50"}`}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <Badge variant={deal.dealType === "hot" ? "destructive" : "default"} className="mb-2">
-                          {deal.dealType === "hot" ? "🔥 HOT DEAL" : "📦 REGULAR"}
-                        </Badge>
+                  <Card key={deal.id} className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge variant={deal.dealType === "hot" ? "destructive" : "default"}>
+                            {deal.dealType === "hot" ? "🔥 HOT DEAL" : "📦 REGULAR"}
+                          </Badge>
+                          <span className="text-sm text-muted-foreground">
+                            Posted: {deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown'}
+                          </span>
+                        </div>
+                        
+                        <h3 className="font-semibold text-slate-900 mb-1" data-testid={`text-deal-title-${deal.id}`}>
+                          {deal.title}
+                        </h3>
+                        
+                        <div className="text-sm text-muted-foreground mb-2" data-testid={`text-deal-category-${deal.id}`}>
+                          {deal.category} • R{parseFloat(deal.price).toLocaleString()}
+                        </div>
+                        
+                        <div className="flex items-center gap-4 text-sm">
+                          <div className="flex items-center text-muted-foreground">
+                            <Clock className="h-4 w-4 mr-1" />
+                            Current expiry: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'No expiry set'}
+                          </div>
+                          <div className="text-orange-600">
+                            {deal.expiresAt ? (() => {
+                              const daysLeft = Math.ceil((new Date(deal.expiresAt).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                              return daysLeft > 0 ? `${daysLeft} day${daysLeft > 1 ? 's' : ''} left` : 'Expired';
+                            })() : 'No expiry'}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button
@@ -494,7 +553,7 @@ export default function SupplierDashboard() {
                               data-testid={`button-extend-deal-${deal.id}`}
                             >
                               <Calendar className="h-4 w-4 mr-1" />
-                              Extend
+                              Extend Expiry
                             </Button>
                           </DialogTrigger>
                           <DialogContent>
@@ -502,11 +561,14 @@ export default function SupplierDashboard() {
                               <DialogTitle>Extend Deal Expiry</DialogTitle>
                             </DialogHeader>
                             <div className="space-y-4">
-                              <div className="text-sm text-muted-foreground">
+                              <div className="text-sm">
                                 <strong>{deal.title}</strong>
-                                <br />
-                                Current expiry: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'Not set'}
+                                <div className="mt-2 p-3 bg-slate-50 rounded border">
+                                  <div>Current expiry: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'Not set'}</div>
+                                  <div>Deal type: {deal.dealType === "hot" ? "HOT DEAL" : "REGULAR DEAL"}</div>
+                                </div>
                               </div>
+                              
                               <div>
                                 <Label htmlFor="extend-expiry-date">New Expiry Date</Label>
                                 <Input
@@ -518,40 +580,50 @@ export default function SupplierDashboard() {
                                   min={new Date().toISOString().split('T')[0]}
                                 />
                               </div>
+                              
+                              {extendExpirationDate && deal.expiresAt && (
+                                <div className="p-3 bg-blue-50 rounded border border-blue-200">
+                                  <div className="text-sm font-medium text-blue-900 mb-1">Extension Cost</div>
+                                  <div className="text-sm text-blue-800">
+                                    {(() => {
+                                      const currentExpiry = new Date(deal.expiresAt);
+                                      const newExpiry = new Date(extendExpirationDate);
+                                      const extraDays = Math.ceil((newExpiry.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
+                                      
+                                      if (extraDays <= 0) return "Please select a date after the current expiry";
+                                      
+                                      // Calculate cost: HOT deals = 5 credits per day, REGULAR = 2 credits per day
+                                      const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
+                                      const totalCredits = extraDays * creditsPerDay;
+                                      const totalCost = totalCredits * 2.5; // R2.50 per credit
+                                      
+                                      return (
+                                        <div>
+                                          <div>{extraDays} extra day{extraDays > 1 ? 's' : ''} × {creditsPerDay} credits = {totalCredits} credits</div>
+                                          <div className="font-medium">Total cost: R{totalCost.toFixed(2)}</div>
+                                        </div>
+                                      );
+                                    })()}
+                                  </div>
+                                </div>
+                              )}
+                              
                               <div className="flex justify-end space-x-2">
                                 <DialogTrigger asChild>
                                   <Button variant="outline">Cancel</Button>
                                 </DialogTrigger>
                                 <Button 
                                   onClick={() => handleExtendDeal(deal.id)}
-                                  disabled={extendDealMutation.isPending}
+                                  disabled={extendDealMutation.isPending || !extendExpirationDate}
                                 >
-                                  {extendDealMutation.isPending ? "Extending..." : "Extend Deal"}
+                                  {extendDealMutation.isPending ? "Extending..." : "Extend & Charge Credits"}
                                 </Button>
                               </div>
                             </div>
                           </DialogContent>
                         </Dialog>
                       </div>
-                      
-                      <h3 className="font-semibold text-slate-900 mb-2" data-testid={`text-deal-title-${deal.id}`}>
-                        {deal.title}
-                      </h3>
-                      
-                      <div className="text-sm text-muted-foreground mb-2" data-testid={`text-deal-category-${deal.id}`}>
-                        {deal.category}
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="text-lg font-bold text-slate-900" data-testid={`text-deal-price-${deal.id}`}>
-                          R{parseFloat(deal.price).toLocaleString()}
-                        </div>
-                        <div className="flex items-center text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3 mr-1" />
-                          {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'No expiry'}
-                        </div>
-                      </div>
-                    </CardContent>
+                    </div>
                   </Card>
                 ))}
               </div>
