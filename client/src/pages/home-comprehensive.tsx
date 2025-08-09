@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 // Component to display hot deals on homepage
 function HotDealsHomepage() {
   const { data: hotDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", { dealType: "hot" }],
+    queryKey: ["/api/deals?dealType=hot"],
   });
 
   if (isLoading) {
@@ -21,7 +21,7 @@ function HotDealsHomepage() {
     );
   }
 
-  if (!hotDeals || hotDeals.length === 0) {
+  if (!hotDeals || !Array.isArray(hotDeals) || hotDeals.length === 0) {
     return (
       <div className="text-center py-8">
         <p className="text-slate-600">No hot deals available at the moment. Check back soon!</p>

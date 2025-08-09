@@ -110,9 +110,16 @@ export default function SupplierRegistration() {
       <div className="page-register py-12">
         <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-8">
-          <Badge variant="outline" className="mb-4 text-emerald-600 border-emerald-200">
-            Join Business Daily Deals
-          </Badge>
+          <div className="flex justify-center mb-4">
+            <Link href="/">
+              <Button variant="outline" className="mr-4">
+                ← Back to Home
+              </Button>
+            </Link>
+            <Badge variant="outline" className="text-emerald-600 border-emerald-200">
+              Join Business Daily Deals
+            </Badge>
+          </div>
           <h1 className="text-4xl font-bold text-slate-800 mb-4">
             Register as a <span className="text-emerald-600">Supplier</span>
           </h1>
