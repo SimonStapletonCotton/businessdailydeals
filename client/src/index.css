@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v28.0-MORNING-SESSION-ORANGE";
+  content: "v29.0-LIGHT-ORANGE-GRADIENT";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v28-MORNING-ORANGE";
+  --cache-buster: "2025-01-09-v29-LIGHT-ORANGE";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,32 +36,9 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - funky orange background with white bubble speckles (from 9-10am session) */
+/* Home page - light orange with left to right graduation */
 .page-home {
-  background: 
-    radial-gradient(circle at 15% 25%, rgba(255,255,255,0.7) 3px, transparent 3px),
-    radial-gradient(circle at 85% 75%, rgba(255,255,255,0.8) 4px, transparent 4px),
-    radial-gradient(circle at 45% 85%, rgba(255,255,255,0.6) 2px, transparent 2px),
-    radial-gradient(circle at 25% 45%, rgba(255,255,255,0.9) 5px, transparent 5px),
-    radial-gradient(circle at 75% 25%, rgba(255,255,255,0.5) 6px, transparent 6px),
-    radial-gradient(circle at 35% 15%, rgba(255,255,255,0.8) 3px, transparent 3px),
-    radial-gradient(circle at 65% 55%, rgba(255,255,255,0.7) 4px, transparent 4px),
-    radial-gradient(circle at 95% 45%, rgba(255,255,255,0.6) 2px, transparent 2px),
-    radial-gradient(circle at 55% 95%, rgba(255,255,255,0.4) 3px, transparent 3px),
-    radial-gradient(circle at 5% 65%, rgba(255,255,255,0.8) 5px, transparent 5px),
-    #ff6600 !important;
-  background-size: 
-    80px 80px,
-    120px 120px,
-    60px 60px,
-    100px 100px,
-    140px 140px,
-    90px 90px,
-    110px 110px,
-    70px 70px,
-    95px 95px,
-    85px 85px,
-    100% 100% !important;
+  background: linear-gradient(to right, #ffcc80, #ffb74d, #ff9800, #ffab40, #ffc947) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
