@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v11.0-PURPLE-HOME-THEME";
+  content: "v12.0-DARKER-PURPLE-HOME";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v11-PURPLE-HOME";
+  --cache-buster: "2025-01-09-v12-DARKER-PURPLE";
 }
 
 /* Background starts below navbar - not above it */
@@ -38,7 +38,7 @@ body {
 
 /* Home page - darker purple pastel theme */
 .page-home {
-  background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 30%, #c4b5fd 60%, #ede9fe 80%, #f3f4f6 90%, #f8fafc 100%) !important;
+  background: linear-gradient(135deg, #d8b4fe 0%, #c4b5fd 30%, #a78bfa 60%, #ddd6fe 80%, #e5e7eb 90%, #f3f4f6 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
