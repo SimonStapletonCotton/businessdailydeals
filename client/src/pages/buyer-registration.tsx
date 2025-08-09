@@ -130,6 +130,9 @@ export default function BuyerRegistration() {
   });
 
   const onSubmit = (data: BuyerRegistrationForm) => {
+    console.log("Form submitted with data:", data);
+    console.log("Keywords state:", keywords);
+    console.log("Form errors:", form.formState.errors);
     registerMutation.mutate(data);
   };
 
