@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v19.0-LARGER-WHITE-BUBBLES";
+  content: "v20.0-PROFESSIONAL-GEOMETRIC-BG";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v19-LARGER-BUBBLES";
+  --cache-buster: "2025-01-09-v20-GEOMETRIC-CITYSCAPE";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,32 +36,13 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - orange with larger white bubble speckles */
+/* Home page - professional geometric background with cityscape */
 .page-home {
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.8) 4px, transparent 4px),
-    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.6) 3px, transparent 3px),
-    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.9) 5px, transparent 5px),
-    radial-gradient(circle at 90% 20%, rgba(255,255,255,0.7) 3.5px, transparent 3.5px),
-    radial-gradient(circle at 10% 90%, rgba(255,255,255,0.8) 2.5px, transparent 2.5px),
-    radial-gradient(circle at 60% 40%, rgba(255,255,255,0.5) 4.5px, transparent 4.5px),
-    radial-gradient(circle at 30% 60%, rgba(255,255,255,0.7) 3px, transparent 3px),
-    radial-gradient(circle at 75% 85%, rgba(255,255,255,0.6) 6px, transparent 6px),
-    radial-gradient(circle at 15% 65%, rgba(255,255,255,0.8) 4px, transparent 4px),
-    radial-gradient(circle at 50% 25%, rgba(255,255,255,0.4) 2px, transparent 2px),
-    linear-gradient(135deg, #fed7aa 0%, #fdba74 30%, #f97316 60%, #fff7ed 80%, #fffbeb 100%) !important;
-  background-size: 
-    120px 120px,
-    180px 180px,
-    90px 90px,
-    150px 150px,
-    110px 110px,
-    100px 100px,
-    160px 160px,
-    200px 200px,
-    130px 130px,
-    80px 80px,
-    100% 100% !important;
+  background-image: url('@assets/IMG_9066_1754751187817.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
   min-height: calc(100vh - 64px) !important;
 }
 
