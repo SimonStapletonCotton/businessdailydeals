@@ -36,33 +36,33 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - orange halftone to charcoal gradient */
+/* Home page - orange dominates most of screen */
 .page-home {
-  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 20%, #ff9800 40%, #64748b 70%, #475569 100%) !important;
+  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #ff9800 60%, #ff8800 80%, #64748b 95%, #475569 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Hot deals page - vibrant orange to charcoal */
+/* Hot deals page - extensive orange coverage */
 .page-deals {
-  background: linear-gradient(135deg, #ff6600 0%, #ff8800 30%, #ff9500 50%, #64748b 80%, #475569 100%) !important;
+  background: linear-gradient(135deg, #ff6600 0%, #ff8800 40%, #ff9500 70%, #ffab40 85%, #64748b 95%, #475569 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Regular deals page - warm orange to slate */
+/* Regular deals page - warm orange across most screen */
 .page-regular {
-  background: linear-gradient(45deg, #ffab40 0%, #ff9800 25%, #ff8f00 50%, #64748b 75%, #475569 100%) !important;
+  background: linear-gradient(45deg, #ffab40 0%, #ff9800 35%, #ff8f00 65%, #ff8800 85%, #64748b 95%, #475569 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Supplier pages - professional orange to charcoal */
+/* Supplier pages - orange majority with charcoal accent */
 .page-supplier {
-  background: linear-gradient(60deg, #ff9800 0%, #ffb74d 30%, #64748b 60%, #475569 100%) !important;
+  background: linear-gradient(60deg, #ff9800 0%, #ffb74d 40%, #ff8800 70%, #ff9500 85%, #64748b 95%, #475569 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Registration pages - bright orange to charcoal */
+/* Registration pages - bright orange dominance */
 .page-register {
-  background: linear-gradient(120deg, #ff6600 0%, #ff8800 25%, #ffab40 50%, #64748b 75%, #475569 100%) !important;
+  background: linear-gradient(120deg, #ff6600 0%, #ff8800 35%, #ffab40 65%, #ff9800 85%, #64748b 95%, #475569 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
@@ -72,9 +72,9 @@ body {
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Default fallback - orange to charcoal theme */
+/* Default fallback - orange dominates screen */
 .page-content {
-  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 20%, #ff9800 40%, #64748b 70%, #475569 100%) !important;
+  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #ff9800 60%, #ff8800 80%, #64748b 95%, #475569 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
