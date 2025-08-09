@@ -92,7 +92,7 @@ export default function Navbar() {
       <Link href="/regular-deals">
         <Button
           variant={location === "/regular-deals" ? "secondary" : "ghost"}
-          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20 whitespace-nowrap flex-shrink-0"}
           data-testid="link-regular-deals"
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
@@ -223,8 +223,10 @@ export default function Navbar() {
                 Business Daily Deals
               </h1>
             </Link>
-            <nav className="hidden md:flex space-x-1 flex-1 justify-start ml-8">
-              <NavLinks />
+            <nav className="hidden md:flex space-x-1 flex-1 justify-start ml-8 overflow-x-auto">
+              <div className="flex space-x-1 whitespace-nowrap">
+                <NavLinks />
+              </div>
             </nav>
           </div>
 
