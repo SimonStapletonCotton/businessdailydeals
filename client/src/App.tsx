@@ -52,9 +52,9 @@ function Router() {
       <Route path="/credits" component={CreditsPage} />
       
       {/* Authentication-based routing */}
-      {isLoading || !isAuthenticated ? (
+      {isLoading ? (
         <Route path="/" component={Landing} />
-      ) : (
+      ) : isAuthenticated ? (
         <>
           <Route path="/" component={Home} />
           <Route path="/hot-deals" component={HotDeals} />
@@ -64,6 +64,8 @@ function Router() {
           <Route path="/my-coupons" component={MyCoupons} />
           <Route path="/credits" component={CreditsPage} />
         </>
+      ) : (
+        <Route path="/" component={Landing} />
       )}
       <Route component={NotFound} />
     </Switch>
