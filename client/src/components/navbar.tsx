@@ -35,8 +35,21 @@ export default function Navbar() {
     updateUserTypeMutation.mutate(userType);
   };
 
-  const handleLogout = () => {
-    window.location.href = "/api/logout";
+  const handleLogout = async () => {
+    try {
+      // Call logout endpoint
+      const response = await fetch("/api/logout", {
+        method: "GET",
+        credentials: "include"
+      });
+      
+      // Force refresh to clear all client-side state
+      window.location.reload();
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Fallback: try direct redirect
+      window.location.href = "/api/logout";
+    }
   };
 
   const NavLinks = ({ mobile = false }: { mobile?: boolean }) => (
@@ -328,8 +341,15 @@ export default function Navbar() {
                   </Link>
                 )}
 
-                <Button variant="ghost" size="icon" className="text-white hover:text-slate-900 hover:bg-white/20" onClick={handleLogout} data-testid="button-logout">
-                  <User className="h-5 w-5" />
+                <Button 
+                  variant="ghost" 
+                  className="text-white hover:text-slate-900 hover:bg-white/20 px-3" 
+                  onClick={handleLogout} 
+                  data-testid="button-logout"
+                  title="Logout"
+                >
+                  <User className="h-4 w-4 mr-2" />
+                  <span className="hidden lg:inline">Logout</span>
                 </Button>
               </>
             )}
