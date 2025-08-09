@@ -58,14 +58,14 @@ const sampleAds: BannerAd[] = [
   },
   {
     id: "4",
-    title: "Green Energy Solutions - Solar & Renewable",
-    description: "Sustainable energy solutions for businesses. Solar installations, battery storage, and energy consulting.",
-    companyName: "EcoEnergy Solutions",
-    imageUrl: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=200&fit=crop&crop=center",
-    linkUrl: "https://ecoenergy.co.za",
-    category: "Energy",
-    contactPhone: "012 567 8901",
-    contactEmail: "quotes@ecoenergy.co.za"
+    title: "Industrial Water Storage Solutions - Water Bladders",
+    description: "High-capacity flexible water bladders for industrial, agricultural, and emergency water storage. Custom sizes available.",
+    companyName: "Water Bladders SA",
+    imageUrl: "/src/assets/Omnia 1_1754727405700.JPG",
+    linkUrl: "https://www.waterbladders.co.za",
+    category: "Water Storage",
+    contactPhone: "082 495 7997",
+    contactEmail: "simon@waterbladders.co.za"
   },
   {
     id: "5",
