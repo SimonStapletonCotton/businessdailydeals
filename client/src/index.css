@@ -36,9 +36,9 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - orange dominates most of screen */
+/* Home page - orange across almost entire screen */
 .page-home {
-  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #ff9800 60%, #ff8800 80%, #64748b 95%, #475569 100%) !important;
+  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 40%, #ff9800 75%, #ff8800 90%, #64748b 98%, #475569 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
@@ -72,9 +72,9 @@ body {
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Default fallback - orange dominates screen */
+/* Default fallback - orange across almost entire screen */
 .page-content {
-  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #ff9800 60%, #ff8800 80%, #64748b 95%, #475569 100%) !important;
+  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 40%, #ff9800 75%, #ff8800 90%, #64748b 98%, #475569 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
