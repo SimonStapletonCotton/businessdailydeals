@@ -133,7 +133,24 @@ export default function BuyerRegistration() {
     console.log("Form submitted with data:", data);
     console.log("Keywords state:", keywords);
     console.log("Form errors:", form.formState.errors);
+    console.log("Form is valid:", form.formState.isValid);
+    
+    // Ensure keywords are set properly
+    if (keywords.length > 0 && !data.keywords) {
+      form.setValue("keywords", keywords.join(", "));
+      data.keywords = keywords.join(", ");
+    }
+    
     registerMutation.mutate(data);
+  };
+
+  // Add a function to handle form submission that logs validation errors
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submission attempted");
+    console.log("Current form errors:", form.formState.errors);
+    console.log("Form values:", form.getValues());
+    form.handleSubmit(onSubmit)(e);
   };
 
   return (
@@ -175,7 +192,7 @@ export default function BuyerRegistration() {
           </CardHeader>
           <CardContent className="p-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={handleFormSubmit} className="space-y-6">
                 {/* Personal Information */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <FormField
