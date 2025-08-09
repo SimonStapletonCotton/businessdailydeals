@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe } from "lucide-react";
+import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Building2, CreditCard } from "lucide-react";
 import { Link } from "wouter";
 
 export default function HomeSimple() {
@@ -175,13 +175,118 @@ export default function HomeSimple() {
         </section>
       </main>
 
+      {/* Quick Access Buttons Section */}
+      <section className="py-16 bg-white border-t border-orange-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 className="text-3xl font-bold text-center text-slate-900 mb-12">Quick Access</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Link href="/find-me-deal">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardContent className="p-6 text-center">
+                  <Search className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+                  <h4 className="font-semibold mb-2">Find Me a Deal</h4>
+                  <p className="text-sm text-slate-600">Tell us what you need and we'll find suppliers for you</p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link href="/directory">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardContent className="p-6 text-center">
+                  <Users className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+                  <h4 className="font-semibold mb-2">Product Directory</h4>
+                  <p className="text-sm text-slate-600">Browse products by category and supplier</p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link href="/suppliers-directory">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardContent className="p-6 text-center">
+                  <Building2 className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+                  <h4 className="font-semibold mb-2">Supplier Directory</h4>
+                  <p className="text-sm text-slate-600">Find verified suppliers by industry and location</p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link href="/rates-management">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardContent className="p-6 text-center">
+                  <CreditCard className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+                  <h4 className="font-semibold mb-2">Advertising Rates</h4>
+                  <p className="text-sm text-slate-600">View pricing for posting deals and advertisements</p>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-16 bg-gradient-to-r from-orange-50 to-yellow-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 className="text-3xl font-bold text-center text-slate-900 mb-12">How It Works</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-orange-500 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">1</div>
+              <h4 className="text-xl font-semibold mb-3">Suppliers Post Deals</h4>
+              <p className="text-slate-600">Companies post HOT deals (premium) or REGULAR deals with special pricing and offers</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-orange-500 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">2</div>
+              <h4 className="text-xl font-semibold mb-3">Buyers Browse & Connect</h4>
+              <p className="text-slate-600">Buyers search deals, set keyword alerts, and connect directly with suppliers</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-orange-500 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">3</div>
+              <h4 className="text-xl font-semibold mb-3">Business Growth</h4>
+              <p className="text-slate-600">Successful connections lead to business deals, partnerships, and growth</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h3 className="text-2xl font-bold mb-4">Business Daily Deals</h3>
-            <p className="text-slate-300 mb-6 max-w-md mx-auto">
-              South Africa's premier B2B marketplace connecting suppliers with buyers.
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="text-xl font-bold mb-4">Business Daily Deals</h3>
+              <p className="text-slate-300 mb-4">
+                South Africa's premier B2B marketplace connecting suppliers with buyers through targeted deal notifications.
+              </p>
+              <div className="text-sm text-slate-400">
+                <p>📧 admin@businessdailydeals.co.za</p>
+                <p>🌍 www.businessdailydeals.co.za</p>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">For Suppliers</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/register-supplier" className="text-slate-300 hover:text-white">Register as Supplier</Link></li>
+                <li><Link href="/rates-management" className="text-slate-300 hover:text-white">View Pricing</Link></li>
+                <li><Link href="/post-deal" className="text-slate-300 hover:text-white">Post a Deal</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">For Buyers</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/register-buyer" className="text-slate-300 hover:text-white">Register as Buyer</Link></li>
+                <li><Link href="/find-me-deal" className="text-slate-300 hover:text-white">Find Me a Deal</Link></li>
+                <li><Link href="/directory" className="text-slate-300 hover:text-white">Product Directory</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-slate-700 mt-8 pt-8 text-center">
+            <p className="text-slate-400 text-sm">
+              © 2025 Business Daily Deals. All rights reserved. | 
+              <Link href="/terms-of-service" className="hover:text-white ml-2">Terms</Link> | 
+              <Link href="/privacy-policy" className="hover:text-white ml-2">Privacy</Link> | 
+              <Link href="/support" className="hover:text-white ml-2">Support</Link>
+            </p>
+            <p className="text-xs text-slate-500 mt-2">
+              🎉 FREE deal posting for suppliers until January 1st, 2026!
             </p>
           </div>
         </div>
