@@ -179,6 +179,37 @@ export default function Rates() {
           </Card>
         </div>
 
+        {/* Example Calculation */}
+        <Card className="mb-12 bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200">
+          <CardHeader>
+            <CardTitle className="text-center text-emerald-800 text-xl">
+              EXAMPLE CALCULATION
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="text-slate-700 text-lg mb-4">
+              <strong>Advertise for 7 days, 7 items as regular deals and 3 days 4 items under hot deals</strong>
+            </p>
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <h4 className="font-bold text-blue-800 mb-2">REGULAR DEAL:</h4>
+                <p className="text-slate-700">7 items × R6/item = R42 per day</p>
+                <p className="text-slate-700">R42 × 7 days = <strong className="text-blue-800">R294</strong></p>
+              </div>
+              <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                <h4 className="font-bold text-orange-800 mb-2">HOT DEAL:</h4>
+                <p className="text-slate-700">4 items × R40/item = R160 per day</p>
+                <p className="text-slate-700">R160 × 3 days = <strong className="text-orange-800">R480</strong></p>
+              </div>
+            </div>
+            <div className="mt-6 p-4 bg-green-100 rounded-lg border border-green-300">
+              <p className="text-xl font-bold text-green-800">
+                TOTAL SPEND: R294 + R480 = R774.00
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Calculator Section */}
         {selectedPackage && (
           <Card className="bg-slate-800 text-white shadow-xl">
