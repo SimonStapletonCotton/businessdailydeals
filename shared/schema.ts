@@ -372,6 +372,18 @@ export type InsertSiteAnalytics = typeof siteAnalytics.$inferInsert;
 export type DealRequest = typeof dealRequests.$inferSelect;
 export type InsertDealRequest = typeof dealRequests.$inferInsert;
 
+// Extended types for joins
+export type DealWithSupplier = Deal & { 
+  supplier: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    companyName: string | null;
+    email: string | null;
+    isVerified: boolean | null;
+  }
+};
+
 // Insert schemas with Zod validation
 export const insertUserSchema = createInsertSchema(users);
 export const insertDealSchema = createInsertSchema(deals);
