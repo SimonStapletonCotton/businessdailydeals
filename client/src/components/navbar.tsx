@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 
 import { Badge } from "@/components/ui/badge";
-import { Bell, Plus, User, Menu, Ticket, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins, BarChart3 } from "lucide-react";
+import { Bell, Plus, User, Menu, Ticket, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins, BarChart3, Flame } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { User as UserType } from "@shared/schema";
@@ -50,7 +50,19 @@ export default function Navbar() {
           onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
         >
           <Home className="h-4 w-4 mr-2" />
-          Home/HOT deals
+          Home
+        </Button>
+      </Link>
+      
+      <Link href="/hot-deals">
+        <Button
+          variant={location === "/hot-deals" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20 whitespace-nowrap flex-shrink-0"}
+          data-testid="link-hot-deals"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Flame className="h-4 w-4 mr-2" />
+          HOT deals
         </Button>
       </Link>
       
