@@ -146,12 +146,21 @@ export default function BuyerRegistration() {
   };
 
   // Add a function to handle form submission that logs validation errors
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submission attempted");
     console.log("Current form errors:", form.formState.errors);
     console.log("Form values:", form.getValues());
-    form.handleSubmit(onSubmit)(e);
+    
+    // Force validation
+    const isValid = await form.trigger();
+    console.log("Form is valid after trigger:", isValid);
+    
+    if (isValid) {
+      form.handleSubmit(onSubmit)(e);
+    } else {
+      console.log("Form validation failed:", form.formState.errors);
+    }
   };
 
   return (
@@ -590,6 +599,12 @@ export default function BuyerRegistration() {
                   className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                   disabled={registerMutation.isPending}
                   data-testid="button-register"
+                  onClick={(e) => {
+                    console.log("Button clicked");
+                    if (!registerMutation.isPending) {
+                      handleFormSubmit(e);
+                    }
+                  }}
                 >
                   {registerMutation.isPending ? "Creating Account..." : "Create Buyer Account"}
                 </Button>
