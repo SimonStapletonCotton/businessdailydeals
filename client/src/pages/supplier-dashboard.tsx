@@ -247,7 +247,7 @@ export default function SupplierDashboard() {
                     {(creditBalance as any)?.balance || 0} Credits
                   </p>
                   <p className="text-sm text-slate-600 mt-1">
-                    💡 1 Credit = 1 Rand
+                    💡 1 Credit = R2.50
                   </p>
                 </div>
                 

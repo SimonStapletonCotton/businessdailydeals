@@ -85,7 +85,7 @@ export default function Rates() {
             <p className="mb-2">Rates shown are per item per day (rands). Calculate your total cost based on number of items and duration.</p>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 inline-block">
               <p className="text-blue-800 font-semibold">
-                💡 <strong>Credit Conversion:</strong> 1 Credit = 1 Rand
+                💡 <strong>Credit Conversion:</strong> 1 Credit = R2.50
               </p>
             </div>
           </div>
