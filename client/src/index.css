@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v15.0-SAGE-GREEN-HOME";
+  content: "v16.0-VIBRANT-ORANGE-HOME";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v15-SAGE-GREEN";
+  --cache-buster: "2025-01-09-v16-VIBRANT-ORANGE";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,9 +36,9 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - professional sage green theme */
+/* Home page - vibrant orange theme */
 .page-home {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 30%, #6ee7b7 60%, #ecfdf5 80%, #f0fdf4 90%, #f7fee7 100%) !important;
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 30%, #f97316 60%, #fff7ed 80%, #fffbeb 90%, #fefce8 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
