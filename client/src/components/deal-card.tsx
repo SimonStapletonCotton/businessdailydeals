@@ -225,82 +225,97 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
 
         {/* Details Dialog */}
         <Dialog open={showDetails} onOpenChange={setShowDetails}>
-          <DialogContent className="max-w-5xl max-h-[85vh] overflow-y-auto">
-            <DialogHeader className="pb-3 border-b">
-              <DialogTitle className="flex items-center gap-2 text-lg">
-                <Package className="h-5 w-5" />
+          <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto p-0">
+            <DialogHeader className="p-6 pb-4 border-b">
+              <DialogTitle className="flex items-center gap-2 text-xl">
+                <Package className="h-6 w-6" />
                 {deal.title}
               </DialogTitle>
             </DialogHeader>
             
-            {/* Compact Grid Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 py-3">
-              {/* Left Column - Main Info */}
-              <div className="lg:col-span-2 space-y-4">
-                {/* Deal Info Card */}
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+            {/* Two Column Layout - Left: Details, Right: Actions */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+              {/* Left Column - Product Information */}
+              <div className="space-y-4">
+                {/* Main Product Image */}
+                {deal.imageUrl && (
+                  <div className="relative">
+                    <img
+                      src={deal.imageUrl}
+                      alt={deal.title}
+                      className="w-full h-48 object-cover rounded-lg border shadow-sm"
+                    />
+                    {deal.discount > 0 && (
+                      <div className="absolute top-3 right-3">
+                        <Badge className="bg-red-600 text-white px-2 py-1">
+                          <Percent className="h-3 w-3 mr-1" />
+                          {deal.discount}% OFF
+                        </Badge>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Quick Info Grid */}
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-gray-600">Category:</span>
-                      <p className="font-medium">{deal.category}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Price:</span>
-                      <p className="text-xl font-bold text-primary">{formatPrice(deal.price)}</p>
+                      <p className="text-xs text-gray-600">Price</p>
+                      <p className="text-2xl font-bold text-green-600">{formatPrice(deal.price)}</p>
                       {deal.originalPrice && parseFloat(deal.originalPrice) > parseFloat(deal.price) && (
-                        <p className="text-xs text-gray-500 line-through">{formatPrice(deal.originalPrice)}</p>
+                        <p className="text-sm text-gray-500 line-through">{formatPrice(deal.originalPrice)}</p>
                       )}
                     </div>
                     <div>
-                      <span className="text-gray-600">Min Order:</span>
-                      <p className="font-medium">{deal.minOrder} unit{deal.minOrder !== 1 ? 's' : ''}</p>
+                      <p className="text-xs text-gray-600">Credits Required</p>
+                      <p className="text-lg font-semibold text-blue-600">{deal.creditsCost}</p>
                     </div>
                     <div>
-                      <span className="text-gray-600">Supplier:</span>
-                      <div className="flex items-center gap-1">
-                        <p className="font-medium text-xs">{deal.supplier.companyName || deal.supplier.firstName}</p>
-                        {deal.supplier.isVerified && (
-                          <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200 text-xs px-1 py-0">
-                            <Shield className="h-3 w-3" />
-                          </Badge>
-                        )}
-                      </div>
+                      <p className="text-xs text-gray-600">Category</p>
+                      <p className="font-medium text-sm">{deal.category}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-600">Min Order</p>
+                      <p className="font-medium text-sm">{deal.minOrder} units</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Description */}
-                <div className="bg-white border rounded-lg p-4">
-                  <h4 className="font-semibold mb-2 text-sm">Description</h4>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2 text-sm text-gray-900">Description</h4>
                   <p className="text-sm text-gray-700 leading-relaxed">{deal.description}</p>
                 </div>
 
                 {/* Additional Details */}
                 {(deal.size || deal.quantityAvailable || deal.productSpecifications) && (
-                  <div className="bg-white border rounded-lg p-4">
-                    <h4 className="font-semibold mb-3 text-sm flex items-center gap-2">
+                  <div className="bg-slate-50 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-3 text-sm text-gray-900 flex items-center gap-2">
                       <Box className="h-4 w-4" />
                       Product Details
                     </h4>
-                    <div className="space-y-3 text-sm">
+                    <div className="space-y-2 text-sm">
                       {deal.size && (
-                        <div>
+                        <div className="flex items-center gap-2">
+                          <Ruler className="h-3 w-3 text-gray-500" />
                           <span className="text-gray-600">Size:</span>
-                          <span className="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{deal.size}</span>
+                          <span className="font-medium">{deal.size}</span>
                         </div>
                       )}
                       {deal.quantityAvailable && (
-                        <div>
+                        <div className="flex items-center gap-2">
+                          <Package className="h-3 w-3 text-gray-500" />
                           <span className="text-gray-600">Available:</span>
-                          <span className="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{deal.quantityAvailable} units</span>
+                          <span className="font-medium">{deal.quantityAvailable} units</span>
                         </div>
                       )}
                       {deal.productSpecifications && (
                         <div>
-                          <span className="text-gray-600 block mb-1">Specifications:</span>
-                          <div className="bg-gray-50 p-2 rounded text-xs text-gray-700">
-                            {deal.productSpecifications}
+                          <div className="flex items-center gap-2 mb-1">
+                            <FileText className="h-3 w-3 text-gray-500" />
+                            <span className="text-gray-600 font-medium">Specifications:</span>
                           </div>
+                          <p className="text-sm text-gray-700 ml-5">{deal.productSpecifications}</p>
                         </div>
                       )}
                     </div>
@@ -308,77 +323,106 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 )}
               </div>
 
-              {/* Right Column - Images & Actions */}
+              {/* Right Column - Supplier & Actions */}
               <div className="space-y-4">
-                {/* Product Images */}
-                {deal.productImages && deal.productImages.length > 0 && (
-                  <div className="bg-white border rounded-lg p-4">
-                    <h4 className="font-semibold mb-3 text-sm flex items-center gap-2">
-                      <FileText className="h-4 w-4" />
-                      Images
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {deal.productImages.slice(0, 4).map((image: string, index: number) => (
-                        <img
-                          key={index}
-                          src={image}
-                          alt={`${deal.title} - ${index + 1}`}
-                          className="w-full h-20 object-cover rounded border"
-                        />
-                      ))}
-                    </div>
-                    {deal.productImages.length > 4 && (
-                      <p className="text-xs text-gray-500 mt-2 text-center">
-                        +{deal.productImages.length - 4} more images
+                {/* Supplier Information */}
+                <div className="bg-orange-50 p-5 rounded-lg border border-orange-200">
+                  <h4 className="font-semibold mb-4 text-base text-gray-900 flex items-center gap-2">
+                    <Building className="h-5 w-5" />
+                    Supplier Information
+                  </h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-gray-900">
+                        {deal.supplier.firstName} {deal.supplier.lastName}
                       </p>
-                    )}
+                      {deal.supplier.isVerified && (
+                        <Badge className="bg-green-100 text-green-700 border border-green-300">
+                          <Shield className="h-3 w-3 mr-1" />
+                          Verified
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p><strong>Email:</strong> {deal.supplier.email}</p>
+                      {deal.supplier.mobile && (
+                        <p><strong>Mobile:</strong> {deal.supplier.mobile}</p>
+                      )}
+                      {deal.supplier.province && (
+                        <p><strong>Location:</strong> {deal.supplier.province}</p>
+                      )}
+                    </div>
                   </div>
-                )}
+                </div>
 
-                {/* Compact Action Buttons */}
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-3 text-sm">Actions</h4>
-                  <div className="space-y-2">
+                {/* Action Buttons */}
+                <div className="bg-blue-50 p-5 rounded-lg border border-blue-200">
+                  <h4 className="font-semibold mb-4 text-base text-gray-900">Take Action</h4>
+                  <div className="space-y-3">
                     <Button
                       onClick={() => {
                         setShowDetails(false);
                         handleInquiry();
                       }}
-                      className="w-full bg-blue-600 text-white hover:bg-blue-700 h-9 text-sm"
+                      className="w-full bg-blue-600 text-white hover:bg-blue-700 h-12 text-sm font-medium"
                     >
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Send Inquiry
+                      <MessageSquare className="h-5 w-5 mr-2" />
+                      Send Inquiry to Supplier
                     </Button>
                     <Button
                       onClick={() => {
                         setShowDetails(false);
                         handleGetCoupon();
                       }}
-                      className="w-full bg-green-600 text-white hover:bg-green-700 h-9 text-sm"
+                      className="w-full bg-green-600 text-white hover:bg-green-700 h-12 text-sm font-medium"
                     >
-                      <Ticket className="h-4 w-4 mr-2" />
-                      Get Coupon
+                      <Ticket className="h-5 w-5 mr-2" />
+                      Get Discount Coupon
                     </Button>
                   </div>
                 </div>
 
-                {/* Additional Info */}
-                {(deal.shippingCost && parseFloat(deal.shippingCost) > 0) || deal.expiresAt ? (
-                  <div className="bg-yellow-50 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-2 text-sm">Important Info</h4>
-                    {deal.shippingCost && parseFloat(deal.shippingCost) > 0 && (
-                      <p className="text-xs text-gray-700 mb-1">
-                        <span className="font-medium">Shipping:</span> {formatPrice(deal.shippingCost)}
-                      </p>
-                    )}
-                    {deal.expiresAt && (
-                      <p className="text-xs text-red-600 font-medium">
-                        <Clock className="h-3 w-3 inline mr-1" />
-                        {getTimeLeft()}
-                      </p>
-                    )}
+                {/* Keywords */}
+                {deal.keywords && deal.keywords.length > 0 && (
+                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <h4 className="font-medium mb-3 text-sm text-gray-900 flex items-center gap-2">
+                      <Hash className="h-4 w-4" />
+                      Keywords
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {deal.keywords.map((keyword, index) => (
+                        <Badge key={index} variant="secondary" className="text-xs bg-purple-100 text-purple-700">
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                ) : null}
+                )}
+
+                {/* Important Information */}
+                <div className="space-y-3">
+                  {deal.shippingCost && parseFloat(deal.shippingCost) > 0 && (
+                    <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                      <div className="flex items-center gap-2">
+                        <Package className="h-4 w-4 text-yellow-600" />
+                        <p className="text-sm font-medium text-gray-900">
+                          Shipping: {formatPrice(deal.shippingCost)}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {deal.expiresAt && (
+                    <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-red-600" />
+                        <p className="text-sm font-medium text-red-700">
+                          Deal expires: {getTimeLeft()}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </DialogContent>
