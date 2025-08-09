@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash, UserPlus, Lock } from "lucide-react";
+import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash, UserPlus, Lock, Shield } from "lucide-react";
 import { Deal } from "@shared/schema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -22,6 +22,7 @@ type DealWithSupplier = Deal & {
     lastName?: string;
     companyName?: string;
     email?: string;
+    isVerified?: boolean;
   };
 };
 
@@ -246,6 +247,12 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           <div className="flex items-center text-xs text-muted-foreground mb-3">
             <Building className="h-3 w-3 mr-1" />
             <span data-testid="text-supplier">{deal.supplier.companyName || deal.supplier.firstName}</span>
+            {deal.supplier.isVerified && (
+              <Badge variant="secondary" className="ml-2 bg-green-100 text-green-700 border-green-200 text-xs px-1 py-0">
+                <Shield className="h-3 w-3 mr-1" />
+                Verified
+              </Badge>
+            )}
           </div>
           {isAuthenticated ? (
             <Button
@@ -512,6 +519,12 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           <div className="flex items-center text-sm text-muted-foreground">
             <Building className="h-4 w-4 mr-2" />
             <span data-testid="text-supplier">{deal.supplier.companyName || deal.supplier.firstName}</span>
+            {deal.supplier.isVerified && (
+              <Badge variant="secondary" className="ml-2 bg-green-100 text-green-700 border-green-200 text-xs px-1 py-0">
+                <Shield className="h-3 w-3 mr-1" />
+                Verified
+              </Badge>
+            )}
           </div>
           <div className="flex items-center text-sm text-muted-foreground">
             <Star className="h-4 w-4 text-yellow-400 mr-1" />

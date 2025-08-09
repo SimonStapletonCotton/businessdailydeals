@@ -59,6 +59,12 @@ export const users = pgTable("users", {
   dealType: varchar("preferred_deal_type"), // "hot" or "regular"
   regularDealDuration: varchar("regular_deal_duration"), // "7" or "14" days
   
+  // Optional verification fields for suppliers
+  vatNumber: varchar("vat_number"),
+  businessRegistrationNumber: varchar("business_registration_number"),
+  isVerified: boolean("is_verified").default(false),
+  verifiedAt: timestamp("verified_at"),
+  
   // Credits system for advertising
   creditBalance: decimal("credit_balance", { precision: 10, scale: 2 }).default('0.00'),
   totalCreditsSpent: decimal("total_credits_spent", { precision: 10, scale: 2 }).default('0.00'),

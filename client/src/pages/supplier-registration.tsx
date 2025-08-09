@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Building2, Package, Percent, Image, Clock } from "lucide-react";
+import { Building2, Package, Percent, Image, Clock, Shield } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -32,6 +32,9 @@ const supplierRegistrationSchema = z.object({
     required_error: "Please select whether to load as 24hr deal or regular deal",
   }),
   regularDealDuration: z.string().optional(),
+  // Optional verification fields
+  vatNumber: z.string().optional(),
+  businessRegistrationNumber: z.string().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -68,6 +71,8 @@ export default function SupplierRegistration() {
       itemDescriptions: "",
       dealType: "hot",
       regularDealDuration: "",
+      vatNumber: "",
+      businessRegistrationNumber: "",
     },
   });
 
@@ -238,6 +243,60 @@ export default function SupplierRegistration() {
                       </FormItem>
                     )}
                   />
+                </div>
+
+                {/* Optional Supplier Verification */}
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
+                  <h3 className="text-lg font-semibold text-slate-800 mb-2 flex items-center gap-2">
+                    <Shield className="h-5 w-5" />
+                    Supplier Verification (Optional)
+                  </h3>
+                  <p className="text-sm text-slate-600 mb-4">
+                    Provide your VAT and business registration numbers to become a verified supplier. 
+                    Verified suppliers receive a trust badge and higher visibility on the platform.
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="vatNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="flex items-center gap-2">
+                            <Shield className="h-4 w-4" />
+                            VAT Number (Optional)
+                          </FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g. 4123456789" {...field} data-testid="input-vat-number" />
+                          </FormControl>
+                          <FormDescription className="text-xs text-slate-500">
+                            Your South African VAT registration number
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="businessRegistrationNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="flex items-center gap-2">
+                            <Building2 className="h-4 w-4" />
+                            Business Registration Number (Optional)
+                          </FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g. 2021/123456/07" {...field} data-testid="input-business-registration" />
+                          </FormControl>
+                          <FormDescription className="text-xs text-slate-500">
+                            Your CIPC company registration number
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
 
                 {/* Deal Information */}
