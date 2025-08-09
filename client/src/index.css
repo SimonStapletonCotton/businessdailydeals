@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v29.0-LIGHT-ORANGE-GRADIENT";
+  content: "v30.0-BUTTON-COLORS-SWAPPED";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v29-LIGHT-ORANGE";
+  --cache-buster: "2025-01-09-v30-BUTTON-SWAP";
 }
 
 /* Background starts below navbar - not above it */
