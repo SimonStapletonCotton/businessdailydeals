@@ -79,7 +79,7 @@ export default function HomeComprehensive() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <Link href="/hot-deals">
-                <Button size="lg" className="bg-red-600 text-white hover:bg-red-700 px-8 py-3 text-lg font-semibold shadow-lg">
+                <Button size="lg" className="bg-green-600 text-white hover:bg-green-700 px-8 py-3 text-lg font-semibold shadow-lg">
                   <Flame className="w-5 h-5 mr-2" />
                   Browse Hot Deals
                 </Button>
