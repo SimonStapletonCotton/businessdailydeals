@@ -94,10 +94,7 @@ export default function RegularDeals() {
     <div className="min-h-screen page-deals">
       <Navbar />
       
-      {/* Header Advertisement Banner */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-        <BannerAds position="header" className="w-full" />
-      </div>
+
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Modern Header Section */}
@@ -223,6 +220,11 @@ export default function RegularDeals() {
             </div>
           )}
         </section>
+        
+        {/* Bottom Advertisement Banner */}
+        <div className="mt-12 mb-8">
+          <BannerAds position="footer" className="w-full" />
+        </div>
       </main>
     </div>
   );

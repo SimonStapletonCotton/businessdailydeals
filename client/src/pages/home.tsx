@@ -96,12 +96,7 @@ export default function Home() {
     <div className="min-h-screen page-home mobile-update">
       <Navbar />
       
-      {/* Header Advertisement Banner */}
-      <div className="px-4 sm:px-6 lg:px-8 py-2">
-        <div className="max-w-7xl mx-auto">
-          <BannerAds position="header" className="w-full" />
-        </div>
-      </div>
+
 
       {/* Modern Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-orange-500 to-gray-700 text-white">
@@ -657,6 +652,12 @@ export default function Home() {
               </ul>
             </div>
           </div>
+          
+          {/* Bottom Advertisement Banner */}
+          <div className="mb-8">
+            <BannerAds position="footer" className="w-full" />
+          </div>
+          
           <CopyrightNotice />
         </div>
       </footer>
