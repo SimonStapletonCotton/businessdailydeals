@@ -155,37 +155,31 @@ export default function Home() {
               Connect with premium suppliers and discover exclusive daily deals that transform your business procurement
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              {isAuthenticated ? (
-                <>
-                  <Link href="/hot-deals">
-                    <Button size="lg" className="bg-white text-primary hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg">
-                      <Flame className="w-5 h-5 mr-2" />
-                      Browse Hot Deals
-                    </Button>
-                  </Link>
-                  <Link href="/regular-deals">
-                    <Button size="lg" className="bg-white text-primary hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
-                      Browse Regular Deals
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link href="/register-buyer">
-                    <Button size="lg" className="bg-white text-primary hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg">
-                      <UserCheck className="w-5 h-5 mr-2" />
-                      Register as Buyer
-                    </Button>
-                  </Link>
-                  <Link href="/register-supplier">
-                    <Button size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-3 text-lg font-semibold" data-testid="button-register-supplier">
-                      Register as Supplier
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  </Link>
-                </>
-              )}
+              {/* Always show buttons - will be filtered at route level */}
+              <Link href="/hot-deals">
+                <Button size="lg" className="bg-white text-slate-600 hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg">
+                  <Flame className="w-5 h-5 mr-2" />
+                  Browse Hot Deals
+                </Button>
+              </Link>
+              <Link href="/regular-deals">
+                <Button size="lg" className="bg-white text-slate-600 hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
+                  Browse Regular Deals
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Link href="/register-buyer">
+                <Button size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-slate-600 px-8 py-3 text-lg font-semibold">
+                  <UserCheck className="w-5 h-5 mr-2" />
+                  Register as Buyer
+                </Button>
+              </Link>
+              <Link href="/register-supplier">
+                <Button size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-slate-600 px-8 py-3 text-lg font-semibold" data-testid="button-register-supplier">
+                  Register as Supplier
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -218,8 +212,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Enhanced Search Bar - Only show for authenticated users */}
-      {isAuthenticated && (
+      {/* Enhanced Search Bar */}
+      {true && (
         <section className="bg-white/80 backdrop-blur-sm border-b border-slate-200/50 py-6 -mt-6 relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-xl border border-slate-200/50 p-6">
@@ -426,15 +420,15 @@ export default function Home() {
           </section>
         )}
 
-        {/* Notification Section - Only show for authenticated users */}
-        {isAuthenticated && (
+        {/* Notification Section */}
+        {true && (
           <section className="mb-12">
             <KeywordNotifications />
           </section>
         )}
 
-        {/* Supplier Section - Only show for authenticated users */}
-        {isAuthenticated && (
+        {/* Supplier Section */}
+        {true && (
           <section className="mb-12">
             <SupplierOnboarding />
           </section>
