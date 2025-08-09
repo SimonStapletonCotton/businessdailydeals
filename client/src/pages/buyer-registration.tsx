@@ -238,20 +238,20 @@ export default function BuyerRegistration() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Province</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value || ""}>
-                        <FormControl>
-                          <SelectTrigger data-testid="select-province">
-                            <SelectValue placeholder="Select your province" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
+                      <FormControl>
+                        <select 
+                          {...field}
+                          className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                          data-testid="select-province"
+                        >
+                          <option value="">Select your province</option>
                           {southAfricanProvinces.map((province) => (
-                            <SelectItem key={province} value={province} data-testid={`option-${province.toLowerCase().replace(/\s+/g, '-')}`}>
+                            <option key={province} value={province}>
                               {province}
-                            </SelectItem>
+                            </option>
                           ))}
-                        </SelectContent>
-                      </Select>
+                        </select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
