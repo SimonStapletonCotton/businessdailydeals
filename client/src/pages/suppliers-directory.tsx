@@ -45,7 +45,7 @@ export default function SuppliersDirectory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterProvince, setFilterProvince] = useState("all");
   const [filterIndustry, setFilterIndustry] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
+  const [sortBy, setSortBy] = useState("alphabetical");
 
   const { data: suppliers, isLoading } = useQuery<SupplierWithStats[]>({
     queryKey: ["/api/suppliers/directory"],
@@ -141,7 +141,7 @@ export default function SuppliersDirectory() {
             Suppliers Directory
           </h1>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            Discover and connect with verified suppliers across South Africa. Find the right business partners for your needs.
+            Browse our alphabetically organized directory of verified suppliers across South Africa. Find the right business partners for your needs.
           </p>
         </div>
 
@@ -203,8 +203,8 @@ export default function SuppliersDirectory() {
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Filter className="h-5 w-5" />
-              Search & Filter Suppliers
+              <Search className="h-5 w-5" />
+              Find Suppliers (Alphabetically Listed)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -249,10 +249,10 @@ export default function SuppliersDirectory() {
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="alphabetical">Alphabetical (A-Z)</SelectItem>
+                  <SelectItem value="most-deals">Most Deals</SelectItem>
                   <SelectItem value="newest">Newest First</SelectItem>
                   <SelectItem value="oldest">Oldest First</SelectItem>
-                  <SelectItem value="most-deals">Most Deals</SelectItem>
-                  <SelectItem value="alphabetical">Alphabetical</SelectItem>
                   <SelectItem value="rating">Highest Rated</SelectItem>
                 </SelectContent>
               </Select>

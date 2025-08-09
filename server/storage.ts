@@ -1067,8 +1067,8 @@ export class DatabaseStorage implements IStorage {
       .where(inArray(deals.supplierId, supplierIds))
       .groupBy(deals.supplierId);
 
-    // Combine data
-    return suppliersData.map(supplier => {
+    // Combine data and sort alphabetically
+    const combinedData = suppliersData.map(supplier => {
       const stats = dealCounts.find(d => d.supplierId === supplier.id);
       return {
         ...supplier,
@@ -1079,6 +1079,13 @@ export class DatabaseStorage implements IStorage {
         lastActive: supplier.updatedAt?.toISOString() || supplier.createdAt.toISOString(),
         averageRating: 4.2 + Math.random() * 0.8 // Mock rating for now
       };
+    });
+
+    // Sort alphabetically by company name or full name
+    return combinedData.sort((a, b) => {
+      const nameA = a.companyName || `${a.firstName || ''} ${a.lastName || ''}`.trim() || 'Supplier';
+      const nameB = b.companyName || `${b.firstName || ''} ${b.lastName || ''}`.trim() || 'Supplier';
+      return nameA.localeCompare(nameB);
     });
   }
 }
