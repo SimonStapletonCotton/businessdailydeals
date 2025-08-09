@@ -24,6 +24,9 @@ import BuyerRegistration from "@/pages/buyer-registration";
 import SupplierRegistration from "@/pages/supplier-registration";
 import SupplierAnalytics from "@/pages/supplier-analytics";
 import SuppliersDirectory from "@/pages/suppliers-directory";
+import Support from "@/pages/support";
+import TermsOfService from "@/pages/terms-of-service";
+import PrivacyPolicy from "@/pages/privacy-policy";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -39,6 +42,9 @@ function Router() {
       <Route path="/directory" component={ProductDirectoryPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/about" component={AboutPage} />
+      <Route path="/support" component={Support} />
+      <Route path="/terms-of-service" component={TermsOfService} />
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/register-buyer" component={BuyerRegistration} />
       <Route path="/register-supplier" component={SupplierRegistration} />
       <Route path="/suppliers-directory" component={SuppliersDirectory} />

@@ -65,6 +65,9 @@ Color scheme preference: Charcoal/slate theme throughout application (header, co
 - **Information Pages**: About Us and professional Contact page.
 - **Home Page**: Modernized design with animated casino-style one-armed bandit featuring authentic red 7's spinning vertically at different speeds, showing only hot deals for authenticated users.
 - **Supplier Verification**: Optional verification system with VAT and business registration number fields, verified supplier badges with shield icons displayed on deal cards.
+- **Legal & Support Pages**: Comprehensive Terms of Service, Privacy Policy, Support Center with admin@businessdailydeals.co.za as primary help center contact.
+- **Security Features**: Multi-layer security including rate limiting, input validation, security headers, IP blocking, and protection against common web attacks.
+- **Copyright Protection**: Comprehensive copyright notices and intellectual property protection throughout the platform.
 
 ## External Dependencies
 

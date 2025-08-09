@@ -13,6 +13,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Deal } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
+import { CopyrightNotice } from "@/components/copyright-notice";
 
 export default function Home() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -638,16 +639,14 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-slate-300">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><Link href="/support" className="hover:text-white transition-colors">Help Center</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+                <li><Link href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                <li><Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-800 pt-8 mt-8 text-center text-slate-400">
-            <p>&copy; 2025 Business Daily Deals. All rights reserved. | www.businessdailydeals.com.za</p>
-          </div>
+          <CopyrightNotice />
         </div>
       </footer>
     </div>

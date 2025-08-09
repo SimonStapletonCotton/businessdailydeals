@@ -4,6 +4,17 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { sendDealRequestToAdmin } from "./email";
 import Stripe from "stripe";
+import {
+  generalLimiter,
+  authLimiter,
+  apiLimiter,
+  contactLimiter,
+  securityHeaders,
+  validateInput,
+  ipSecurity,
+  securityErrorHandler,
+  cleanupSecurityData
+} from "./middleware/security";
 import { 
   insertDealSchema, 
   insertKeywordSchema, 
@@ -23,6 +34,23 @@ if (process.env.STRIPE_SECRET_KEY) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Initialize security cleanup
+  cleanupSecurityData();
+  
+  // Apply security middleware (skip rate limiting for development static assets)
+  app.use(securityHeaders);
+  app.use(ipSecurity);
+  app.use(validateInput);
+  
+  // Apply rate limiting only to API routes and exclude Vite dev resources
+  app.use((req, res, next) => {
+    if (req.path.includes('/@') || req.path.includes('/node_modules') || req.path.includes('/.vite/')) {
+      // Skip rate limiting for Vite development resources
+      return next();
+    }
+    return generalLimiter(req, res, next);
+  });
+  
   // Health check endpoint for autoscale deployment diagnostics
   app.get('/api/health', async (req, res) => {
     try {
@@ -65,8 +93,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Registration endpoint
-  app.post('/api/auth/register', async (req, res) => {
+  // Registration endpoint with rate limiting
+  app.post('/api/auth/register', authLimiter, async (req, res) => {
     try {
       const {
         firstName,
@@ -1087,6 +1115,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Upload routes - import at top level
   const uploadRoutes = (await import('./routes/upload')).default;
   app.use('/api/upload', uploadRoutes);
+
+  // Apply security error handler at the end
+  app.use(securityErrorHandler);
 
   const httpServer = createServer(app);
   return httpServer;

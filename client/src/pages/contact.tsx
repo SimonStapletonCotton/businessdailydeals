@@ -119,31 +119,46 @@ export default function Contact() {
               </CardContent>
             </Card>
 
-            {/* Quick Help */}
+            {/* Quick Help & Help Center */}
             <Card className="border-0 shadow-xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-700">
               <CardHeader>
                 <CardTitle className="text-xl text-slate-800 dark:text-slate-100">
-                  Need Quick Help?
+                  Help Center
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <h5 className="font-medium text-slate-700 dark:text-slate-200">For Suppliers:</h5>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">
-                    Questions about posting deals, managing your account, or advertising rates
+              <CardContent className="space-y-4">
+                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 p-4 rounded-lg border border-emerald-200 dark:border-emerald-700">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <Mail className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                    <h5 className="font-semibold text-emerald-800 dark:text-emerald-200">Help Center Support</h5>
+                  </div>
+                  <p className="text-emerald-700 dark:text-emerald-300 font-medium">
+                    admin@businessdailydeals.co.za
+                  </p>
+                  <p className="text-sm text-emerald-600 dark:text-emerald-400 mt-1">
+                    For all support inquiries, technical help, and account assistance
                   </p>
                 </div>
-                <div>
-                  <h5 className="font-medium text-slate-700 dark:text-slate-200">For Buyers:</h5>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">
-                    Help with finding deals, setting up notifications, or using search features
-                  </p>
-                </div>
-                <div>
-                  <h5 className="font-medium text-slate-700 dark:text-slate-200">Technical Support:</h5>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">
-                    Website issues, account problems, or payment questions
-                  </p>
+                
+                <div className="space-y-3">
+                  <div>
+                    <h5 className="font-medium text-slate-700 dark:text-slate-200">For Suppliers:</h5>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      Questions about posting deals, managing your account, or advertising rates
+                    </p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-slate-700 dark:text-slate-200">For Buyers:</h5>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      Help with finding deals, setting up notifications, or using search features
+                    </p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-slate-700 dark:text-slate-200">Technical Support:</h5>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      Website issues, account problems, or payment questions
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
