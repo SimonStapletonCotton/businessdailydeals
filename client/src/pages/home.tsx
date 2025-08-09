@@ -104,21 +104,36 @@ export default function Home() {
               <div className="flex items-center bg-gray-800 rounded-lg p-4 border-2 border-yellow-400 shadow-lg">
                 <div className="flex space-x-3">
                   {/* Slot Reel 1 */}
-                  <div className="relative w-12 h-16 bg-white rounded border-2 border-gray-300 overflow-hidden">
+                  <div className="relative w-14 h-18 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
                     <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-slow">
-                      <div className="text-3xl font-bold text-red-600 leading-none" style={{fontFamily: 'serif', textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>7</div>
+                      <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
+                        fontFamily: 'Times, "Times New Roman", serif',
+                        textShadow: '3px 3px 6px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.3)',
+                        fontWeight: '900',
+                        transform: 'scaleY(1.1)'
+                      }}>7</div>
                     </div>
                   </div>
                   {/* Slot Reel 2 */}
-                  <div className="relative w-12 h-16 bg-white rounded border-2 border-gray-300 overflow-hidden">
+                  <div className="relative w-14 h-18 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
                     <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-medium">
-                      <div className="text-3xl font-bold text-red-600 leading-none" style={{fontFamily: 'serif', textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>7</div>
+                      <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
+                        fontFamily: 'Times, "Times New Roman", serif',
+                        textShadow: '3px 3px 6px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.3)',
+                        fontWeight: '900',
+                        transform: 'scaleY(1.1)'
+                      }}>7</div>
                     </div>
                   </div>
                   {/* Slot Reel 3 */}
-                  <div className="relative w-12 h-16 bg-white rounded border-2 border-gray-300 overflow-hidden">
+                  <div className="relative w-14 h-18 bg-white rounded border-2 border-gray-400 overflow-hidden shadow-inner">
                     <div className="absolute inset-0 flex flex-col justify-center items-center animate-spin-vertical-fast">
-                      <div className="text-3xl font-bold text-red-600 leading-none" style={{fontFamily: 'serif', textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>7</div>
+                      <div className="text-4xl font-black text-red-700 leading-none tracking-tighter" style={{
+                        fontFamily: 'Times, "Times New Roman", serif',
+                        textShadow: '3px 3px 6px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.3)',
+                        fontWeight: '900',
+                        transform: 'scaleY(1.1)'
+                      }}>7</div>
                     </div>
                   </div>
                 </div>
