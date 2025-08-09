@@ -20,7 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v2.0";
+  content: "v4.0-orange-theme";
+}
+
+/* Force cache refresh for all browsers */
+html {
+  --cache-buster: "2025-01-09-v4";
 }
 
 /* Casino slot machine animations - vertical spinning */
@@ -152,7 +157,7 @@
 @layer components {
   /* Page-specific background styles */
   .page-home {
-    @apply bg-gradient-to-br from-slate-50 via-emerald-50 to-green-50;
+    @apply bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50;
   }
   
   .page-landing {
