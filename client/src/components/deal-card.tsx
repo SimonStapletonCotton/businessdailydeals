@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash } from "lucide-react";
+import { Building, Star, Clock, Percent, Download, Package, Ruler, Box, MessageSquare, X, FileText, Hash, UserPlus, Lock } from "lucide-react";
 import { DealWithSupplier } from "@shared/schema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -236,14 +236,26 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             <Building className="h-3 w-3 mr-1" />
             <span data-testid="text-supplier">{deal.supplier.companyName || deal.supplier.firstName}</span>
           </div>
-          <Button
-            className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
-            size="sm"
-            onClick={handleViewDetails}
-            data-testid="button-view-details"
-          >
-            View Details
-          </Button>
+          {isAuthenticated ? (
+            <Button
+              className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              size="sm"
+              onClick={handleViewDetails}
+              data-testid="button-view-details"
+            >
+              View Details
+            </Button>
+          ) : (
+            <Button
+              className="w-full bg-primary text-white hover:bg-primary/90"
+              size="sm"
+              onClick={() => window.location.href = '/register-buyer'}
+              data-testid="button-register-to-view"
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              Register to View
+            </Button>
+          )}
         </CardContent>
 
         {/* Details Dialog */}
@@ -498,24 +510,48 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         
         {!showInquiryForm ? (
           <div className="space-y-3">
-            <Button
-              className="w-full bg-olive-600 hover:bg-olive-700 text-white"
-              onClick={handleGetCoupon}
-              disabled={createCouponMutation.isPending}
-              data-testid="button-get-coupon"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              {createCouponMutation.isPending ? "Creating Coupon..." : "Get Coupon"}
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full border-olive-600 text-olive-600 hover:bg-olive-50"
-              onClick={handleInquiry}
-              disabled={createInquiryMutation.isPending}
-              data-testid="button-view-details"
-            >
-              View Details
-            </Button>
+            {isAuthenticated ? (
+              <>
+                <Button
+                  className="w-full bg-olive-600 hover:bg-olive-700 text-white"
+                  onClick={handleGetCoupon}
+                  disabled={createCouponMutation.isPending}
+                  data-testid="button-get-coupon"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  {createCouponMutation.isPending ? "Creating Coupon..." : "Get Coupon"}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full border-olive-600 text-olive-600 hover:bg-olive-50"
+                  onClick={handleInquiry}
+                  disabled={createInquiryMutation.isPending}
+                  data-testid="button-view-details"
+                >
+                  View Details
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  className="w-full bg-primary hover:bg-primary/90 text-white"
+                  onClick={() => window.location.href = '/register-buyer'}
+                  data-testid="button-register-for-coupon"
+                >
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Register to Get Coupon
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full border-primary text-primary hover:bg-primary/10"
+                  onClick={() => window.location.href = '/register-buyer'}
+                  data-testid="button-register-for-details"
+                >
+                  <Lock className="h-4 w-4 mr-2" />
+                  Register to View Details
+                </Button>
+              </>
+            )}
           </div>
         ) : (
           <div className="space-y-3">

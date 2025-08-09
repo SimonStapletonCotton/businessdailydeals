@@ -985,6 +985,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Suppliers Directory API
+  app.get('/api/suppliers/directory', async (req, res) => {
+    try {
+      const suppliers = await storage.getSuppliersDirectory();
+      res.json(suppliers);
+    } catch (error) {
+      console.error("Error fetching suppliers directory:", error);
+      res.status(500).json({ message: "Failed to fetch suppliers directory" });
+    }
+  });
+
   // Deal Requests API
   app.post("/api/deal-requests", isAuthenticated, async (req, res) => {
     try {
