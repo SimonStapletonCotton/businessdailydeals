@@ -4,7 +4,7 @@ import DealCard from "@/components/deal-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard, BarChart3 } from "lucide-react";
+import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard, BarChart3, Calendar, Clock } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { DealWithSupplier, InquiryWithDetails } from "@/../../server/storage";
@@ -14,6 +14,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function SupplierDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -21,6 +22,8 @@ export default function SupplierDashboard() {
   const [showExpiredDeals, setShowExpiredDeals] = useState(false);
   const [reactivatingDealId, setReactivatingDealId] = useState<string | null>(null);
   const [newExpirationDate, setNewExpirationDate] = useState("");
+  const [extendingDealId, setExtendingDealId] = useState<string | null>(null);
+  const [extendExpirationDate, setExtendExpirationDate] = useState("");
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -80,22 +83,107 @@ export default function SupplierDashboard() {
     onError: (error) => {
       if (isUnauthorizedError(error)) {
         toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
+          title: "Session Expired",
+          description: "Please log in again to continue.",
           variant: "destructive",
         });
         setTimeout(() => {
           window.location.href = "/api/login";
-        }, 500);
-        return;
+        }, 1000);
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to reactivate deal. Please try again.",
+          variant: "destructive",
+        });
       }
-      toast({
-        title: "Error",
-        description: "Failed to reactivate deal. Please try again.",
-        variant: "destructive",
-      });
+      setReactivatingDealId(null);
     },
   });
+
+  const extendDealMutation = useMutation({
+    mutationFn: async ({ dealId, expiresAt }: { dealId: string; expiresAt: string }) => {
+      await apiRequest("PATCH", `/api/deals/${dealId}/extend`, { expiresAt });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Deal Extended",
+        description: "Your deal expiry date has been successfully extended.",
+      });
+      setExtendingDealId(null);
+      setExtendExpirationDate("");
+      queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Session Expired",
+          description: "Please log in again to continue.",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 1000);
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to extend deal. Please try again.",
+          variant: "destructive",
+        });
+      }
+      setExtendingDealId(null);
+    },
+  });
+
+  const handleExtendDeal = async (dealId: string) => {
+    if (!extendExpirationDate) {
+      toast({
+        title: "Date Required",
+        description: "Please select a new expiration date.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const selectedDate = new Date(extendExpirationDate);
+    const currentDate = new Date();
+    
+    if (selectedDate <= currentDate) {
+      toast({
+        title: "Invalid Date",
+        description: "The expiration date must be in the future.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    extendDealMutation.mutate({ dealId, expiresAt: extendExpirationDate });
+  };
+
+  const handleReactivateDeal = async (dealId: string) => {
+    if (!newExpirationDate) {
+      toast({
+        title: "Date Required",
+        description: "Please select a new expiration date.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const selectedDate = new Date(newExpirationDate);
+    const currentDate = new Date();
+    
+    if (selectedDate <= currentDate) {
+      toast({
+        title: "Invalid Date",
+        description: "The expiration date must be in the future.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    reactivateDealMutation.mutate({ dealId, expiresAt: newExpirationDate });
+  };
 
   if (isLoading) {
     return (
@@ -388,7 +476,83 @@ export default function SupplierDashboard() {
             ) : deals && deals.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {deals.slice(0, 6).map((deal: DealWithSupplier) => (
-                  <DealCard key={deal.id} deal={deal} variant={deal.dealType === "hot" ? "hot" : "regular"} />
+                  <Card key={deal.id} className={`overflow-hidden hover:shadow-lg transition-shadow ${deal.dealType === "hot" ? "border-red-200 bg-gradient-to-br from-red-50 to-orange-50" : "border-blue-200 bg-gradient-to-br from-blue-50 to-slate-50"}`}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <Badge variant={deal.dealType === "hot" ? "destructive" : "default"} className="mb-2">
+                          {deal.dealType === "hot" ? "🔥 HOT DEAL" : "📦 REGULAR"}
+                        </Badge>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setExtendingDealId(deal.id);
+                                setExtendExpirationDate("");
+                              }}
+                              data-testid={`button-extend-deal-${deal.id}`}
+                            >
+                              <Calendar className="h-4 w-4 mr-1" />
+                              Extend
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Extend Deal Expiry</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div className="text-sm text-muted-foreground">
+                                <strong>{deal.title}</strong>
+                                <br />
+                                Current expiry: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'Not set'}
+                              </div>
+                              <div>
+                                <Label htmlFor="extend-expiry-date">New Expiry Date</Label>
+                                <Input
+                                  id="extend-expiry-date"
+                                  type="date"
+                                  value={extendExpirationDate}
+                                  onChange={(e) => setExtendExpirationDate(e.target.value)}
+                                  className="mt-1"
+                                  min={new Date().toISOString().split('T')[0]}
+                                />
+                              </div>
+                              <div className="flex justify-end space-x-2">
+                                <DialogTrigger asChild>
+                                  <Button variant="outline">Cancel</Button>
+                                </DialogTrigger>
+                                <Button 
+                                  onClick={() => handleExtendDeal(deal.id)}
+                                  disabled={extendDealMutation.isPending}
+                                >
+                                  {extendDealMutation.isPending ? "Extending..." : "Extend Deal"}
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                      
+                      <h3 className="font-semibold text-slate-900 mb-2" data-testid={`text-deal-title-${deal.id}`}>
+                        {deal.title}
+                      </h3>
+                      
+                      <div className="text-sm text-muted-foreground mb-2" data-testid={`text-deal-category-${deal.id}`}>
+                        {deal.category}
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="text-lg font-bold text-slate-900" data-testid={`text-deal-price-${deal.id}`}>
+                          R{parseFloat(deal.price).toLocaleString()}
+                        </div>
+                        <div className="flex items-center text-xs text-muted-foreground">
+                          <Clock className="h-3 w-3 mr-1" />
+                          {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'No expiry'}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
             ) : (

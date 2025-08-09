@@ -389,6 +389,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Extend deal expiry date
+  app.patch('/api/deals/:id/extend', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const dealId = req.params.id;
+      const { expiresAt } = req.body;
+
+      if (!expiresAt) {
+        return res.status(400).json({ message: "New expiry date is required" });
+      }
+
+      // Verify deal ownership
+      const deal = await storage.getDeal(dealId);
+      if (!deal || deal.supplierId !== userId) {
+        return res.status(404).json({ message: "Deal not found or unauthorized" });
+      }
+
+      // Update the deal's expiry date
+      await storage.updateDealExpiry(dealId, expiresAt);
+      
+      res.json({ message: "Deal expiry date extended successfully" });
+    } catch (error) {
+      console.error("Error extending deal:", error);
+      res.status(500).json({ message: "Failed to extend deal" });
+    }
+  });
+
   // Keyword routes
   app.get('/api/keywords', isAuthenticated, async (req: any, res) => {
     try {

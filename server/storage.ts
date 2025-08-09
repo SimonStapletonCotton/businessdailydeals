@@ -625,6 +625,18 @@ export class DatabaseStorage implements IStorage {
     return deal;
   }
 
+  async updateDealExpiry(id: string, newExpiresAt: string): Promise<Deal> {
+    const [deal] = await db
+      .update(deals)
+      .set({ 
+        expiresAt: new Date(newExpiresAt),
+        updatedAt: new Date() 
+      })
+      .where(eq(deals.id, id))
+      .returning();
+    return deal;
+  }
+
   async deleteDeal(id: string): Promise<void> {
     // Get deal info before deletion for credit refund
     const deal = await this.getDeal(id);
