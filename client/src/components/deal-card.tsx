@@ -490,8 +490,8 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-olive-600 text-olive-600 hover:bg-olive-50"
-                  onClick={handleInquiry}
+                  className="w-full border-olive-600 text-olive-600 hover:bg-olive-50 h-10 flex items-center justify-center"
+                  onClick={handleViewDetails}
                   disabled={createInquiryMutation.isPending}
                   data-testid="button-view-details"
                 >
@@ -510,7 +510,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-primary text-primary hover:bg-primary/10"
+                  className="w-full border-primary text-primary hover:bg-primary/10 h-10 flex items-center justify-center"
                   onClick={() => window.location.href = '/register-buyer'}
                   data-testid="button-register-for-details"
                 >
