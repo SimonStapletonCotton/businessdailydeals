@@ -148,6 +148,9 @@ export default function Home() {
               <p className="text-lg md:text-xl font-semibold text-white uppercase tracking-wide">
                 A Dedicated Website That Connects Buyers to Suppliers
               </p>
+              <p className="text-sm md:text-base text-white/90 mt-1 normal-case">
+                A user friendly, essential tool for all South African SMME's
+              </p>
             </div>
             <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-description">
               Connect with premium suppliers and discover exclusive daily deals that transform your business procurement
