@@ -142,8 +142,11 @@ export default function BuyerRegistration() {
           <h1 className="text-4xl font-bold text-slate-800 mb-4">
             Register as a <span className="text-blue-600">Buyer</span>
           </h1>
-          <p className="text-slate-600 text-lg">
+          <p className="text-slate-600 text-lg mb-2">
             Start saving money with exclusive B2B deals and special offers
+          </p>
+          <p className="text-green-600 font-semibold text-base bg-green-50 px-4 py-2 rounded-lg border border-green-200">
+            There is no cost to register or engage as a buyer
           </p>
         </div>
 
