@@ -50,6 +50,110 @@ interface DealRequestEmailData {
   submittedAt: string;
 }
 
+interface InquiryEmailData {
+  buyerName: string;
+  buyerEmail: string;
+  supplierName: string;
+  supplierEmail: string;
+  dealTitle: string;
+  dealPrice: string;
+  inquiryMessage: string;
+  submittedAt: string;
+}
+
+export async function sendInquiryNotifications(inquiryData: InquiryEmailData): Promise<boolean> {
+  const adminEmail = 'admin@businessdailydeals.co.za';
+  const fromEmail = 'noreply@businessdailydeals.co.za';
+  
+  // Email content for supplier
+  const supplierEmailContent = `
+New Inquiry for Your Deal
+=========================
+
+Dear ${inquiryData.supplierName},
+
+You have received a new inquiry for your deal "${inquiryData.dealTitle}".
+
+Deal Details:
+- Product: ${inquiryData.dealTitle}
+- Price: ${inquiryData.dealPrice}
+
+Buyer Information:
+- Name: ${inquiryData.buyerName}
+- Email: ${inquiryData.buyerEmail}
+
+Inquiry Message:
+${inquiryData.inquiryMessage || 'No additional message provided.'}
+
+Please log into your supplier dashboard at www.businessdailydeals.co.za to respond to this inquiry.
+
+Best regards,
+Business Daily Deals Team
+www.businessdailydeals.co.za
+  `;
+
+  // Email content for admin
+  const adminEmailContent = `
+New Inquiry Notification
+========================
+
+A new inquiry has been submitted on Business Daily Deals.
+
+Deal Information:
+- Product: ${inquiryData.dealTitle}
+- Price: ${inquiryData.dealPrice}
+
+Supplier Information:
+- Name: ${inquiryData.supplierName}
+- Email: ${inquiryData.supplierEmail}
+
+Buyer Information:
+- Name: ${inquiryData.buyerName}
+- Email: ${inquiryData.buyerEmail}
+
+Inquiry Message:
+${inquiryData.inquiryMessage || 'No additional message provided.'}
+
+Submitted: ${inquiryData.submittedAt}
+
+This inquiry has been sent to the supplier and copied here for your records.
+  `;
+
+  let supplierSuccess = false;
+  let adminSuccess = false;
+
+  // Send to supplier
+  try {
+    supplierSuccess = await sendEmail({
+      to: inquiryData.supplierEmail,
+      from: fromEmail,
+      subject: `New inquiry for your deal: ${inquiryData.dealTitle}`,
+      text: supplierEmailContent,
+      html: supplierEmailContent.replace(/\n/g, '<br>')
+    });
+  } catch (error) {
+    console.error('Failed to send inquiry email to supplier:', error);
+  }
+
+  // Send copy to admin
+  try {
+    adminSuccess = await sendEmail({
+      to: adminEmail,
+      from: fromEmail,
+      subject: `Inquiry Copy: ${inquiryData.dealTitle}`,
+      text: adminEmailContent,
+      html: adminEmailContent.replace(/\n/g, '<br>')
+    });
+  } catch (error) {
+    console.error('Failed to send inquiry copy to admin:', error);
+  }
+
+  console.log(`Inquiry emails - Supplier: ${supplierSuccess ? 'sent' : 'failed'}, Admin: ${adminSuccess ? 'sent' : 'failed'}`);
+  
+  // Return true if at least one email was sent successfully
+  return supplierSuccess || adminSuccess;
+}
+
 export async function sendDealRequestToAdmin(dealRequestData: DealRequestEmailData): Promise<boolean> {
   const adminEmail = 'admin@businessdailydeals.com.za'; // You can make this configurable
   const fromEmail = 'noreply@businessdailydeals.com.za'; // You can make this configurable

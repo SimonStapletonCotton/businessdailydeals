@@ -418,12 +418,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/inquiries', isAuthenticated, async (req: any, res) => {
     try {
       const buyerId = req.user.claims.sub;
+      const { dealId, supplierId, message } = req.body;
+
+      // Get deal to verify it exists and get supplier info if not provided
+      const deal = await storage.getDealById(dealId);
+      if (!deal) {
+        return res.status(404).json({ message: "Deal not found" });
+      }
+
+      // Get buyer and supplier information for email notifications
+      const buyer = await storage.getUser(buyerId);
+      const supplier = await storage.getUser(supplierId || deal.supplierId);
+      
+      if (!buyer || !supplier) {
+        return res.status(404).json({ message: "User information not found" });
+      }
+
       const inquiryData = insertInquirySchema.parse({
-        ...req.body,
-        buyerId
+        dealId,
+        buyerId,
+        supplierId: supplierId || deal.supplierId,
+        message: message || ""
       });
 
       const inquiry = await storage.createInquiry(inquiryData);
+
+      // Send email notifications to supplier and admin
+      const emailData = {
+        buyerName: `${buyer.firstName} ${buyer.lastName}`.trim(),
+        buyerEmail: buyer.email,
+        supplierName: supplier.companyName || `${supplier.firstName} ${supplier.lastName}`.trim(),
+        supplierEmail: supplier.email,
+        dealTitle: deal.title,
+        dealPrice: `R${parseFloat(deal.price).toLocaleString()}`,
+        inquiryMessage: message || "",
+        submittedAt: new Date().toLocaleString('en-ZA')
+      };
+
+      // Import and send email notifications
+      const { sendInquiryNotifications } = await import('./email');
+      const emailSent = await sendInquiryNotifications(emailData);
+      
+      if (!emailSent) {
+        console.warn('Failed to send inquiry email notifications, but inquiry was created successfully');
+      }
+
       res.status(201).json(inquiry);
     } catch (error) {
       if (error instanceof z.ZodError) {
