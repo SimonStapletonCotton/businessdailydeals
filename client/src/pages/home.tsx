@@ -21,6 +21,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortBy, setSortBy] = useState("latest");
+  const [hotDealsDisplayCount, setHotDealsDisplayCount] = useState(50);
 
   // Search deals query that updates based on search input
   const { data: searchResults, isLoading: searchLoading } = useQuery({
@@ -369,38 +370,56 @@ export default function Home() {
               </Link>
             </div>
           
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {hotDealsLoading ? (
-                Array.from({ length: 6 }, (_, i) => (
-                  <Card key={i} className="animate-pulse overflow-hidden shadow-lg">
-                    <div className="w-full h-48 bg-gradient-to-r from-slate-200 to-slate-300"></div>
-                    <CardContent className="p-6">
-                      <div className="h-4 bg-slate-200 rounded mb-4"></div>
-                      <div className="h-6 bg-slate-200 rounded mb-2"></div>
-                      <div className="h-4 bg-slate-200 rounded mb-4"></div>
-                      <div className="h-10 bg-slate-200 rounded"></div>
-                    </CardContent>
-                  </Card>
-                ))
-              ) : displayedHotDeals.length > 0 ? (
-                displayedHotDeals.map((deal: any) => (
-                  <DealCard key={deal.id} deal={deal} variant="hot" />
-                ))
-              ) : (
-                <div className="col-span-full text-center py-12">
-                  <Flame className="mx-auto h-16 w-16 text-red-300 mb-4" />
-                  <h4 className="text-xl font-semibold text-slate-900 mb-2">No Hot Deals Available</h4>
-                  <p className="text-muted-foreground mb-6">
-                    Check back soon for exclusive premium deals from verified suppliers
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {hotDealsLoading ? (
+                  Array.from({ length: 50 }, (_, i) => (
+                    <Card key={i} className="animate-pulse shadow-md border-0 bg-gradient-to-br from-white to-slate-50">
+                      <div className="w-full h-48 bg-gradient-to-br from-orange-200 to-red-300 rounded-t-xl"></div>
+                      <CardContent className="p-4">
+                        <div className="h-3 bg-gradient-to-r from-orange-200 to-red-300 rounded mb-3"></div>
+                        <div className="h-5 bg-gradient-to-r from-orange-200 to-red-300 rounded mb-3"></div>
+                        <div className="h-3 bg-gradient-to-r from-orange-200 to-red-300 rounded mb-3"></div>
+                        <div className="h-8 bg-gradient-to-r from-orange-200 to-red-300 rounded"></div>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : displayedHotDeals.length > 0 ? (
+                  displayedHotDeals.slice(0, hotDealsDisplayCount).map((deal: any) => (
+                    <DealCard key={deal.id} deal={deal} variant="hot" />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-12">
+                    <Flame className="mx-auto h-16 w-16 text-red-300 mb-4" />
+                    <h4 className="text-xl font-semibold text-slate-900 mb-2">No Hot Deals Available</h4>
+                    <p className="text-muted-foreground mb-6">
+                      Check back soon for exclusive premium deals from verified suppliers
+                    </p>
+                    <Link href="/regular-deals">
+                      <Button variant="outline">
+                        Browse Regular Deals <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Show More Button for Hot Deals */}
+              {displayedHotDeals.length > hotDealsDisplayCount && (
+                <div className="text-center mt-12">
+                  <Button
+                    onClick={() => setHotDealsDisplayCount(prev => prev + 25)}
+                    className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+                    data-testid="button-show-more-hot"
+                  >
+                    🔥 Show More Hot Deals ({Math.min(25, displayedHotDeals.length - hotDealsDisplayCount)} more)
+                  </Button>
+                  <p className="text-slate-500 mt-3">
+                    Showing {hotDealsDisplayCount} of {displayedHotDeals.length} hot deals
                   </p>
-                  <Link href="/regular-deals">
-                    <Button variant="outline">
-                      Browse Regular Deals <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
                 </div>
               )}
-            </div>
+            </>
           </section>
         )}
 
