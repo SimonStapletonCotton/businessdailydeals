@@ -225,121 +225,164 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
 
         {/* Details Dialog */}
         <Dialog open={showDetails} onOpenChange={setShowDetails}>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Package className="h-5 w-5" />
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="pb-4 border-b">
+              <DialogTitle className="flex items-center gap-2 text-xl">
+                <Package className="h-6 w-6" />
                 {deal.title}
               </DialogTitle>
             </DialogHeader>
             
-            <div className="space-y-6">
-              {/* Deal Images */}
+            <div className="space-y-8 py-4">
+              {/* Main Information Panel */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-4 text-gray-900">Deal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Category</Label>
+                      <p className="text-sm mt-1 font-medium">{deal.category}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Price</Label>
+                      <p className="text-2xl font-bold text-primary mt-1">{formatPrice(deal.price)}</p>
+                      {deal.originalPrice && parseFloat(deal.originalPrice) > parseFloat(deal.price) && (
+                        <p className="text-sm text-gray-500 line-through">{formatPrice(deal.originalPrice)}</p>
+                      )}
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Minimum Order</Label>
+                      <p className="text-sm mt-1">{deal.minOrder} unit{deal.minOrder !== 1 ? 's' : ''}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Supplier</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-sm font-medium">{deal.supplier.companyName || deal.supplier.firstName}</p>
+                        {deal.supplier.isVerified && (
+                          <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200 text-xs">
+                            <Shield className="h-3 w-3 mr-1" />
+                            Verified
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    {deal.shippingCost && parseFloat(deal.shippingCost) > 0 && (
+                      <div>
+                        <Label className="text-sm font-medium text-gray-600">Shipping Cost</Label>
+                        <p className="text-sm mt-1">{formatPrice(deal.shippingCost)}</p>
+                      </div>
+                    )}
+                    {deal.expiresAt && (
+                      <div>
+                        <Label className="text-sm font-medium text-gray-600">Deal Expires</Label>
+                        <p className="text-sm mt-1 text-red-600 font-medium">{getTimeLeft()}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="bg-white border rounded-lg p-6">
+                <h3 className="text-lg font-semibold mb-3 text-gray-900">Description</h3>
+                <p className="text-gray-700 leading-relaxed">{deal.description}</p>
+              </div>
+
+              {/* Product Images */}
               {deal.productImages && deal.productImages.length > 0 && (
-                <div>
-                  <h4 className="font-semibold mb-3 flex items-center gap-2">
-                    <FileText className="h-4 w-4" />
+                <div className="bg-white border rounded-lg p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900">
+                    <FileText className="h-5 w-5" />
                     Product Images
-                  </h4>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {deal.productImages.map((image: string, index: number) => (
                       <img
                         key={index}
                         src={image}
                         alt={`${deal.title} - Image ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-lg border"
+                        className="w-full h-32 object-cover rounded-lg border shadow-sm hover:shadow-md transition-shadow"
                       />
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Basic Info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-sm font-medium text-muted-foreground">Category</Label>
-                  <p className="text-sm">{deal.category}</p>
-                </div>
-                <div>
-                  <Label className="text-sm font-medium text-muted-foreground">Price</Label>
-                  <p className="text-lg font-bold text-primary">{formatPrice(deal.price)}</p>
-                </div>
-                <div>
-                  <Label className="text-sm font-medium text-muted-foreground">Minimum Order</Label>
-                  <p className="text-sm">{deal.minOrder} unit{deal.minOrder !== 1 ? 's' : ''}</p>
-                </div>
-                <div>
-                  <Label className="text-sm font-medium text-muted-foreground">Supplier</Label>
-                  <p className="text-sm">{deal.supplier.companyName || deal.supplier.firstName}</p>
-                </div>
-              </div>
-
-              {/* Product Details */}
-              {(deal.size || deal.quantityAvailable) && (
-                <div>
-                  <h4 className="font-semibold mb-3 flex items-center gap-2">
-                    <Box className="h-4 w-4" />
-                    Product Information
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {deal.size && (
-                      <div>
-                        <Label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                          <Ruler className="h-3 w-3" />
-                          Size
-                        </Label>
-                        <p className="text-sm">{deal.size}</p>
+              {/* Additional Product Details */}
+              {(deal.size || deal.quantityAvailable || deal.productSpecifications) && (
+                <div className="bg-white border rounded-lg p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900">
+                    <Box className="h-5 w-5" />
+                    Additional Product Information
+                  </h3>
+                  <div className="space-y-4">
+                    {(deal.size || deal.quantityAvailable) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {deal.size && (
+                          <div>
+                            <Label className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                              <Ruler className="h-4 w-4" />
+                              Size
+                            </Label>
+                            <p className="text-sm mt-1 bg-gray-50 p-2 rounded">{deal.size}</p>
+                          </div>
+                        )}
+                        {deal.quantityAvailable && (
+                          <div>
+                            <Label className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                              <Hash className="h-4 w-4" />
+                              Available Quantity
+                            </Label>
+                            <p className="text-sm mt-1 bg-gray-50 p-2 rounded">{deal.quantityAvailable} units</p>
+                          </div>
+                        )}
                       </div>
                     )}
-                    {deal.quantityAvailable && (
+                    
+                    {deal.productSpecifications && (
                       <div>
-                        <Label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                          <Hash className="h-3 w-3" />
-                          Available Quantity
-                        </Label>
-                        <p className="text-sm">{deal.quantityAvailable} units</p>
+                        <Label className="text-sm font-medium text-gray-600">Product Specifications</Label>
+                        <div className="mt-2 bg-gray-50 p-4 rounded-lg">
+                          <p className="text-sm text-gray-700 leading-relaxed">{deal.productSpecifications}</p>
+                        </div>
                       </div>
                     )}
                   </div>
                 </div>
               )}
 
-              {/* Description */}
-              <div>
-                <Label className="text-sm font-medium text-muted-foreground">Description</Label>
-                <p className="text-sm mt-1 leading-relaxed">{deal.description}</p>
-              </div>
-
-              {/* Product Specifications */}
-              {deal.productSpecifications && (
-                <div>
-                  <Label className="text-sm font-medium text-muted-foreground">Product Specifications</Label>
-                  <p className="text-sm mt-1 leading-relaxed bg-muted p-3 rounded">{deal.productSpecifications}</p>
+              {/* Action Buttons */}
+              <div className="bg-gray-50 p-6 rounded-lg border-t">
+                <h3 className="text-lg font-semibold mb-4 text-gray-900">Take Action</h3>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button
+                    onClick={() => {
+                      setShowDetails(false);
+                      handleInquiry();
+                    }}
+                    className="flex-1 bg-blue-600 text-white hover:bg-blue-700 h-12 text-base font-medium"
+                    size="lg"
+                  >
+                    <MessageSquare className="h-5 w-5 mr-2" />
+                    Send Inquiry to Supplier
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setShowDetails(false);
+                      handleGetCoupon();
+                    }}
+                    className="flex-1 bg-green-600 text-white hover:bg-green-700 h-12 text-base font-medium"
+                    size="lg"
+                  >
+                    <Ticket className="h-5 w-5 mr-2" />
+                    Accept Deal & Get Coupon
+                  </Button>
                 </div>
-              )}
-
-              {/* Actions */}
-              <div className="flex gap-3 pt-4 border-t">
-                <Button
-                  onClick={() => {
-                    setShowDetails(false);
-                    handleInquiry();
-                  }}
-                  className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Send Inquiry
-                </Button>
-                <Button
-                  onClick={() => {
-                    setShowDetails(false);
-                    handleGetCoupon();
-                  }}
-                  className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Get Coupon
-                </Button>
+                <p className="text-xs text-gray-500 mt-3 text-center">
+                  Send an inquiry for questions or accept the deal to get your coupon
+                </p>
               </div>
             </div>
           </DialogContent>
