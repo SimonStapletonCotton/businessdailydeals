@@ -204,6 +204,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("Validation errors:", JSON.stringify(error.errors, null, 2));
         return res.status(400).json({ message: "Invalid deal data", errors: error.errors });
       }
+      
+      // Handle credit-related errors
+      if (error instanceof Error && error.message.includes('Insufficient credits')) {
+        return res.status(400).json({ 
+          message: "Insufficient Credits", 
+          details: error.message,
+          creditError: true 
+        });
+      }
+      
       console.error("Error creating deal:", error);
       res.status(500).json({ message: "Failed to create deal" });
     }
@@ -263,6 +273,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updatedDeal = await storage.updateDeal(req.params.id, req.body);
       res.json(updatedDeal);
     } catch (error) {
+      // Handle credit-related errors
+      if (error instanceof Error && error.message.includes('Insufficient credits')) {
+        return res.status(400).json({ 
+          message: "Insufficient Credits", 
+          details: error.message,
+          creditError: true 
+        });
+      }
+      
       console.error("Error updating deal:", error);
       res.status(500).json({ message: "Failed to update deal" });
     }
@@ -590,6 +609,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error fetching hottest deals:", error);
       res.status(500).json({ message: "Failed to fetch hottest deals" });
     }
+  });
+
+  // Deal pricing endpoint 
+  app.get('/api/deals/pricing', (req, res) => {
+    const pricing = {
+      hot: {
+        credits: 50,
+        cost: 125, // R125 (50 credits × R2.50)
+        description: "Premium placement on home page",
+        features: ["Home page featured placement", "Enhanced visibility", "Priority in search results"]
+      },
+      regular: {
+        credits: 20,
+        cost: 50, // R50 (20 credits × R2.50)
+        description: "Standard deal listing",
+        features: ["Category page listing", "Search visibility", "Basic deal placement"]
+      }
+    };
+    res.json(pricing);
   });
 
   // Credits Management Endpoints

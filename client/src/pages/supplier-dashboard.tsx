@@ -4,7 +4,7 @@ import DealCard from "@/components/deal-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { DealWithSupplier, InquiryWithDetails } from "@/../../server/storage";
@@ -55,6 +55,11 @@ export default function SupplierDashboard() {
 
   const { data: expiredDeals, isLoading: expiredDealsLoading } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/supplier/expired-deals"],
+    enabled: isAuthenticated && user?.userType === "supplier",
+  });
+
+  const { data: creditBalance } = useQuery({
+    queryKey: ["/api/credits/balance"],
     enabled: isAuthenticated && user?.userType === "supplier",
   });
 
@@ -159,7 +164,7 @@ export default function SupplierDashboard() {
         </div>
 
         {/* Modern Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-12">
           <Card className="bg-gradient-to-br from-white to-slate-50 border-0 shadow-lg hover:shadow-xl transition-shadow">
             <CardContent className="p-8 text-center">
               <div className="bg-gradient-to-br from-primary/10 to-primary/20 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -193,13 +198,26 @@ export default function SupplierDashboard() {
               <div className="text-sm text-slate-600 font-medium">Hot Deals</div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <MessageCircle className="h-8 w-8 text-secondary mx-auto mb-2" />
-              <div className="text-2xl font-bold text-slate-900" data-testid="text-stat-inquiries">
+          <Card className="bg-gradient-to-br from-white to-blue-50 border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-8 text-center">
+              <div className="bg-gradient-to-br from-blue-100 to-blue-200 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <MessageCircle className="h-8 w-8 text-blue-600" />
+              </div>
+              <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-inquiries">
                 {pendingInquiries.length}
               </div>
-              <div className="text-sm text-muted-foreground">Pending Inquiries</div>
+              <div className="text-sm text-slate-600 font-medium">Pending Inquiries</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-br from-white to-emerald-50 border-0 shadow-lg hover:shadow-xl transition-shadow">
+            <CardContent className="p-8 text-center">
+              <div className="bg-gradient-to-br from-emerald-100 to-emerald-200 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <CreditCard className="h-8 w-8 text-emerald-600" />
+              </div>
+              <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-credits">
+                {creditBalance?.balance || 0}
+              </div>
+              <div className="text-sm text-slate-600 font-medium">Available Credits</div>
             </CardContent>
           </Card>
         </div>

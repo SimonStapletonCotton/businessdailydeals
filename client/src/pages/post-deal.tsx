@@ -23,6 +23,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { z } from "zod";
+import { DealPricingInfo } from "@/components/deal-pricing-info";
 
 const formSchema = insertDealSchema.omit({ supplierId: true }).extend({
   keywords: z.array(z.string()).optional(),
@@ -134,7 +135,7 @@ export default function PostDeal() {
       });
       setLocation("/supplier-dashboard");
     },
-    onError: (error) => {
+    onError: (error: any) => {
       if (isUnauthorizedError(error)) {
         toast({
           title: "Unauthorized",
@@ -146,9 +147,20 @@ export default function PostDeal() {
         }, 500);
         return;
       }
+      
+      // Handle credit-related errors
+      if (error?.response?.data?.creditError) {
+        toast({
+          title: "Insufficient Credits",
+          description: error.response.data.details || "Not enough credits to post this deal type.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       toast({
         title: "Error",
-        description: "Failed to post deal. Please try again.",
+        description: error?.response?.data?.message || "Failed to post deal. Please try again.",
         variant: "destructive",
       });
     },
@@ -275,6 +287,9 @@ export default function PostDeal() {
             Create compelling deal listings to attract buyers and grow your business in the South African B2B marketplace
           </p>
         </div>
+
+        {/* Credit Pricing Information */}
+        <DealPricingInfo />
 
         {/* Modern Deal Type Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">

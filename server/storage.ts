@@ -549,7 +549,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createDeal(dealData: InsertDeal): Promise<Deal> {
-    const [deal] = await db.insert(deals).values(dealData).returning();
+    // Calculate credits cost based on deal type
+    const creditsCost = this.calculateDealCredits(dealData.dealType || 'regular');
+    const dealWithCredits = { ...dealData, creditsCost: creditsCost.toFixed(2) };
+
+    const [deal] = await db.insert(deals).values(dealWithCredits).returning();
+    
+    // Charge credits to supplier
+    if (creditsCost > 0 && dealData.supplierId) {
+      await this.chargeDealCredits(dealData.supplierId, creditsCost, deal.id, dealData.dealType || 'regular');
+    }
     
     // Create notifications for users with matching keywords
     if (dealData.keywords && dealData.keywords.length > 0) {
@@ -561,6 +570,7 @@ export class DatabaseStorage implements IStorage {
       for (const keyword of matchingKeywords) {
         await this.createNotification({
           userId: keyword.userId,
+          title: 'New Deal Alert',
           dealId: deal.id,
           message: `New deal matching your keyword "${keyword.keyword}": ${dealData.title}`,
         });
@@ -571,11 +581,21 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateDeal(id: string, dealData: Partial<InsertDeal>): Promise<Deal> {
+    // Get the original deal to check for deal type changes
+    const originalDeal = await this.getDeal(id);
+    if (!originalDeal) throw new Error('Deal not found');
+
     const [deal] = await db
       .update(deals)
       .set({ ...dealData, updatedAt: new Date() })
       .where(eq(deals.id, id))
       .returning();
+
+    // Handle credit adjustments for deal type changes
+    if (dealData.dealType && dealData.dealType !== originalDeal.dealType) {
+      await this.handleDealTypeChangeCredits(originalDeal, dealData.dealType);
+    }
+
     return deal;
   }
 
@@ -593,7 +613,102 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteDeal(id: string): Promise<void> {
+    // Get deal info before deletion for credit refund
+    const deal = await this.getDeal(id);
+    if (!deal) throw new Error('Deal not found');
+
+    // Delete the deal
     await db.delete(deals).where(eq(deals.id, id));
+
+    // Process credit refund if deal was active and had credits spent
+    if (deal.status === 'active' && parseFloat(deal.creditsCost || '0') > 0) {
+      await this.refundDealCredits(deal);
+    }
+  }
+
+  // Credit management for deals
+  private calculateDealCredits(dealType: 'hot' | 'regular'): number {
+    // Credit pricing structure
+    const creditPricing = {
+      'hot': 50,     // R125 (50 credits × R2.50) - Premium placement on home page
+      'regular': 20  // R50 (20 credits × R2.50) - Standard deal listing
+    };
+    
+    return creditPricing[dealType] || 20;
+  }
+
+  private async chargeDealCredits(supplierId: string, credits: number, dealId: string, dealType: string): Promise<void> {
+    // Check if supplier has sufficient credits
+    const supplier = await this.getUser(supplierId);
+    if (!supplier) throw new Error('Supplier not found');
+    
+    const currentBalance = parseFloat(supplier.creditBalance || '0');
+    if (currentBalance < credits) {
+      throw new Error(`Insufficient credits. Required: ${credits}, Available: ${currentBalance}`);
+    }
+
+    // Deduct credits from supplier
+    await this.updateUserCreditBalance(supplierId, credits.toString(), 'subtract');
+
+    // Record transaction
+    await this.createCreditTransaction({
+      userId: supplierId,
+      amount: credits.toFixed(2),
+      type: 'spend',
+      description: `${dealType.toUpperCase()} deal posting - ${credits} credits`,
+      dealId: dealId
+    });
+  }
+
+  private async refundDealCredits(deal: any): Promise<void> {
+    const creditsToRefund = parseFloat(deal.creditsCost);
+    if (creditsToRefund <= 0) return;
+
+    // Refund credits to supplier
+    await this.updateUserCreditBalance(deal.supplierId, creditsToRefund.toString(), 'add');
+
+    // Record refund transaction
+    await this.createCreditTransaction({
+      userId: deal.supplierId,
+      amount: creditsToRefund.toFixed(2),
+      type: 'refund',
+      description: `Deal deletion refund - ${deal.title} (${creditsToRefund} credits)`,
+      dealId: deal.id
+    });
+  }
+
+  private async handleDealTypeChangeCredits(originalDeal: any, newDealType: 'hot' | 'regular'): Promise<void> {
+    const originalCredits = parseFloat(originalDeal.creditsCost);
+    const newCredits = this.calculateDealCredits(newDealType);
+    const creditDifference = newCredits - originalCredits;
+
+    if (creditDifference > 0) {
+      // Charge additional credits for upgrade (regular → hot)
+      await this.chargeDealCredits(
+        originalDeal.supplierId, 
+        creditDifference, 
+        originalDeal.id, 
+        `${originalDeal.dealType} → ${newDealType} upgrade`
+      );
+    } else if (creditDifference < 0) {
+      // Refund excess credits for downgrade (hot → regular)
+      const refundAmount = Math.abs(creditDifference);
+      await this.updateUserCreditBalance(originalDeal.supplierId, refundAmount.toString(), 'add');
+      
+      await this.createCreditTransaction({
+        userId: originalDeal.supplierId,
+        amount: refundAmount.toFixed(2),
+        type: 'refund',
+        description: `Deal type change refund - ${originalDeal.dealType} → ${newDealType} (${refundAmount} credits)`,
+        dealId: originalDeal.id
+      });
+    }
+
+    // Update the deal's credit cost
+    await db
+      .update(deals)
+      .set({ creditsCost: newCredits.toFixed(2) })
+      .where(eq(deals.id, originalDeal.id));
   }
 
   async searchDeals(query: string, category?: string): Promise<DealWithSupplier[]> {
