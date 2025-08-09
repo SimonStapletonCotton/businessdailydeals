@@ -99,6 +99,23 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
+            {/* Animated One-Armed Bandit */}
+            <div className="flex justify-center items-center mb-6" data-testid="slot-machine">
+              <div className="flex items-center bg-white/10 rounded-lg p-3 border border-white/20 backdrop-blur-sm">
+                <div className="flex space-x-2">
+                  <div className="bg-white/20 rounded px-3 py-2 text-2xl font-bold text-yellow-300 animate-spin" style={{animationDuration: '3s'}}>
+                    7
+                  </div>
+                  <div className="bg-white/20 rounded px-3 py-2 text-2xl font-bold text-yellow-300 animate-pulse" style={{animationDuration: '2s'}}>
+                    7
+                  </div>
+                  <div className="bg-white/20 rounded px-3 py-2 text-2xl font-bold text-yellow-300 animate-bounce" style={{animationDuration: '1.5s'}}>
+                    7
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30">
               <Star className="w-4 h-4 mr-2" />
               South Africa's #1 B2B Marketplace
