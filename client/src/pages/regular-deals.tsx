@@ -17,6 +17,7 @@ export default function RegularDeals() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortBy, setSortBy] = useState("latest");
+  const [displayCount, setDisplayCount] = useState(25); // Show 5 rows of 5 deals each
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -177,11 +178,29 @@ export default function RegularDeals() {
               ))}
             </div>
           ) : deals && deals.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {deals.map((deal: DealWithSupplier) => (
-                <DealCard key={deal.id} deal={deal} variant="regular" />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {deals.slice(0, displayCount).map((deal: DealWithSupplier) => (
+                  <DealCard key={deal.id} deal={deal} variant="regular" />
+                ))}
+              </div>
+              
+              {/* Show More Button */}
+              {deals.length > displayCount && (
+                <div className="text-center mt-12">
+                  <Button
+                    onClick={() => setDisplayCount(prev => prev + 25)}
+                    className="bg-gradient-to-r from-primary to-slate-600 hover:from-primary/90 hover:to-slate-600/90 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+                    data-testid="button-show-more"
+                  >
+                    Show More Deals ({Math.min(25, deals.length - displayCount)} more)
+                  </Button>
+                  <p className="text-slate-500 mt-3">
+                    Showing {displayCount} of {deals.length} regular deals
+                  </p>
+                </div>
+              )}
+            </>
           ) : (
             <div className="text-center py-20">
               <div className="bg-gradient-to-br from-primary/10 to-slate/10 p-6 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
