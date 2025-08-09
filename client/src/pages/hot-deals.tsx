@@ -4,6 +4,7 @@ import DealCard from "@/components/deal-card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Search, Flame } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -19,19 +20,7 @@ export default function HotDeals() {
   const [sortBy, setSortBy] = useState("latest");
   const [displayCount, setDisplayCount] = useState(25); // Show 5 rows of 5 deals each
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [isAuthenticated, isLoading, toast]);
+  // Remove authentication redirect - let pages load for everyone
 
   const { data: deals, isLoading: dealsLoading } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/deals", "hot", searchQuery, selectedCategory],
@@ -51,7 +40,7 @@ export default function HotDeals() {
       
       return await res.json();
     },
-    enabled: isAuthenticated,
+    enabled: true, // Allow loading for everyone
   });
 
   const categories = [

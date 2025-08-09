@@ -51,21 +51,18 @@ function Router() {
       <Route path="/pricing" component={Pricing} />
       <Route path="/credits" component={CreditsPage} />
       
-      {/* Authentication-based routing */}
-      {isLoading ? (
-        <Route path="/" component={Landing} />
-      ) : isAuthenticated ? (
+      {/* Make core pages accessible to everyone */}
+      <Route path="/" component={Home} />
+      <Route path="/hot-deals" component={HotDeals} />
+      
+      {/* Keep some features auth-protected */}
+      {isAuthenticated && (
         <>
-          <Route path="/" component={Home} />
-          <Route path="/hot-deals" component={HotDeals} />
           <Route path="/supplier-dashboard" component={SupplierDashboard} />
           <Route path="/supplier-analytics" component={SupplierAnalytics} />
           <Route path="/post-deal" component={PostDeal} />
           <Route path="/my-coupons" component={MyCoupons} />
-          <Route path="/credits" component={CreditsPage} />
         </>
-      ) : (
-        <Route path="/" component={Landing} />
       )}
       <Route component={NotFound} />
     </Switch>
