@@ -185,18 +185,25 @@ export default function Home() {
       </section>
 
       {/* FREE Promotional Banner for Suppliers */}
-      <section className="bg-gradient-to-r from-green-500 to-emerald-600 py-4 relative z-10">
+      <section className="bg-gradient-to-r from-green-500 to-emerald-600 py-6 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <div className="flex items-center justify-center">
-            <Flame className="h-5 w-5 mr-2 text-orange-200" />
-            <p className="text-lg font-bold">
-              🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL 1ST JANUARY 2026! 
-            </p>
-            <Flame className="h-5 w-5 ml-2 text-orange-200" />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-2">
+            <div className="flex items-center">
+              <Flame className="h-5 w-5 mr-2 text-orange-200" />
+              <p className="text-lg sm:text-xl font-bold">
+                🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL 1ST JANUARY 2026!
+              </p>
+              <Flame className="h-5 w-5 ml-2 text-orange-200" />
+            </div>
           </div>
-          <p className="text-sm opacity-90 mt-1">
-            Register as a supplier and post unlimited HOT & REGULAR deals at no cost
-          </p>
+          <div className="space-y-1">
+            <p className="text-sm sm:text-base opacity-90">
+              Register as a supplier and post unlimited HOT & REGULAR deals at no cost
+            </p>
+            <p className="text-xs sm:text-sm opacity-80">
+              Save R125 per HOT deal • R50 per REGULAR deal • No setup fees
+            </p>
+          </div>
         </div>
       </section>
 
