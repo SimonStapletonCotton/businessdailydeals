@@ -115,6 +115,18 @@ export default function Navbar() {
         </>
       )}
 
+      <Link href="/suppliers-directory">
+        <Button
+          variant={location === "/suppliers-directory" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+          data-testid="link-suppliers-directory"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Building2 className="h-4 w-4 mr-2" />
+          Suppliers Directory
+        </Button>
+      </Link>
+      
       <Link href="/about">
         <Button
           variant={location === "/about" ? "secondary" : "ghost"}

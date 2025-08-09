@@ -23,6 +23,7 @@ import AboutPage from "@/pages/about";
 import BuyerRegistration from "@/pages/buyer-registration";
 import SupplierRegistration from "@/pages/supplier-registration";
 import SupplierAnalytics from "@/pages/supplier-analytics";
+import SuppliersDirectory from "@/pages/suppliers-directory";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -40,6 +41,7 @@ function Router() {
       <Route path="/about" component={AboutPage} />
       <Route path="/register-buyer" component={BuyerRegistration} />
       <Route path="/register-supplier" component={SupplierRegistration} />
+      <Route path="/suppliers-directory" component={SuppliersDirectory} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/credits" component={CreditsPage} />
       

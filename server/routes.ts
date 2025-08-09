@@ -793,6 +793,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Suppliers Directory
+  app.get('/api/suppliers/directory', async (req, res) => {
+    try {
+      const suppliers = await storage.getSuppliersDirectory();
+      res.json(suppliers);
+    } catch (error) {
+      console.error("Error fetching suppliers directory:", error);
+      res.status(500).json({ message: "Failed to fetch suppliers directory" });
+    }
+  });
+
   // Basket Management Endpoints
   app.get('/api/basket', isAuthenticated, async (req: any, res) => {
     try {

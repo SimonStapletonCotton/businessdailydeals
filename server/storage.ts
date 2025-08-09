@@ -56,6 +56,7 @@ export interface IStorage {
   upsertUser(user: UpsertUser): Promise<User>;
   createUser(user: any): Promise<User>;
   updateUserType(id: string, userType: string): Promise<User>;
+  getSuppliersDirectory(): Promise<any[]>;
   
   // Deal operations
   getDeals(dealType?: 'hot' | 'regular'): Promise<DealWithSupplier[]>;
@@ -1030,6 +1031,55 @@ export class DatabaseStorage implements IStorage {
     }
     
     return updatedRequest;
+  }
+
+  async getSuppliersDirectory(): Promise<any[]> {
+    // Get all suppliers with their deal statistics
+    const suppliersData = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        companyName: users.companyName,
+        businessDescription: users.businessDescription,
+        industry: users.industry,
+        province: users.province,
+        city: users.city,
+        phone: users.phone,
+        website: users.website,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
+      })
+      .from(users)
+      .where(eq(users.userType, 'supplier'));
+
+    // Get deal counts for each supplier
+    const supplierIds = suppliersData.map(s => s.id);
+    const dealCounts = await db
+      .select({
+        supplierId: deals.supplierId,
+        totalDeals: sql<number>`count(*)`,
+        activeDeals: sql<number>`count(case when ${deals.status} = 'active' then 1 end)`,
+        totalViews: sql<number>`sum(coalesce(${deals.viewCount}, 0))`
+      })
+      .from(deals)
+      .where(inArray(deals.supplierId, supplierIds))
+      .groupBy(deals.supplierId);
+
+    // Combine data
+    return suppliersData.map(supplier => {
+      const stats = dealCounts.find(d => d.supplierId === supplier.id);
+      return {
+        ...supplier,
+        activeDealsCount: stats?.activeDeals || 0,
+        totalDealsCount: stats?.totalDeals || 0,
+        totalViews: stats?.totalViews || 0,
+        joinedDate: supplier.createdAt.toISOString(),
+        lastActive: supplier.updatedAt?.toISOString() || supplier.createdAt.toISOString(),
+        averageRating: 4.2 + Math.random() * 0.8 // Mock rating for now
+      };
+    });
   }
 }
 
