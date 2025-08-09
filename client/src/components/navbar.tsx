@@ -208,7 +208,7 @@ export default function Navbar() {
 
   return (
     <header 
-      className="bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 shadow-lg border-b border-slate-800"
+      className="bg-slate-600 shadow-lg border-b border-slate-800"
       style={{
         width: '100%',
         minWidth: '100%',

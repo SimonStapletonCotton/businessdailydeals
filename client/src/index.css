@@ -28,15 +28,15 @@ html {
   --cache-buster: "2025-01-09-v8-UNIVERSAL-ORANGE";
 }
 
-/* Force proper orange gradient theme */
+/* Light orange halftone gradient to slate theme */
 body {
-  background: linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%) !important;
+  background: linear-gradient(135deg, #ffebb3 0%, #ffd580 25%, #e6c2a6 50%, #64748b 100%) !important;
   min-height: 100vh !important;
 }
 
-/* Force orange theme universally */
+/* Force light orange to slate theme universally */
 body, html, #root, .page-home-container {
-  background: linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%) !important;
+  background: linear-gradient(135deg, #ffebb3 0%, #ffd580 25%, #e6c2a6 50%, #64748b 100%) !important;
   min-height: 100vh !important;
 }
 
@@ -58,18 +58,18 @@ body:has(.page-home-container),
 
 /* Override ALL conflicting backgrounds globally */
 * {
-  --tw-gradient-from: #ff6600 !important;
-  --tw-gradient-to: #cc4400 !important;
+  --tw-gradient-from: #ffebb3 !important;
+  --tw-gradient-to: #64748b !important;
 }
 
 /* Specifically override any conflicting color classes */
 .bg-olive-50, .from-olive-50, .to-charcoal-50, .bg-white, .bg-gray-50 {
-  background: linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%) !important;
+  background: linear-gradient(135deg, #ffebb3 0%, #ffd580 25%, #e6c2a6 50%, #64748b 100%) !important;
 }
 
 /* Universal page background override */
 [class*="min-h-screen"], .min-h-screen {
-  background: linear-gradient(135deg, #ff6600 0%, #ff8533 25%, #ffaa66 50%, #cc4400 100%) !important;
+  background: linear-gradient(135deg, #ffebb3 0%, #ffd580 25%, #e6c2a6 50%, #64748b 100%) !important;
 }
 
 /* Ensure all text is visible */

@@ -12,7 +12,7 @@ Domain: www.businessdailydeals.com.za
 Target market: South African B2B marketplace
 Pricing structure: Hot deals (premium home page placement, higher pricing) vs Regular deals (dropdown sections, standard pricing)
 **NEW PROMOTIONAL PERIOD**: FREE deal posting for suppliers until 1st January 2026 to build user base quickly, then start charging
-Color scheme preference: Orange casino-style theme with animated red 7's, professional gradient backgrounds (specific: #ff6600 → #ff8533 → #ffaa66 → #cc4400 gradient transitioning to slate colors)
+Color scheme preference: Light orange halftone casino-style theme with animated red 7's, professional gradient backgrounds (specific: light orange halftone #ffebb3 → #ffd580 → #e6c2a6 → #64748b slate gradient), mid charcoal navbar (#64748b)
 
 ## System Architecture
 
