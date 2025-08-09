@@ -201,7 +201,9 @@ export default function BuyerRegistration() {
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>First Name</FormLabel>
+                        <FormLabel>
+                          First Name <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Enter your first name" {...field} data-testid="input-first-name" />
                         </FormControl>
@@ -214,7 +216,9 @@ export default function BuyerRegistration() {
                     name="surname"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Surname</FormLabel>
+                        <FormLabel>
+                          Surname <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Enter your surname" {...field} data-testid="input-surname" />
                         </FormControl>
@@ -230,7 +234,9 @@ export default function BuyerRegistration() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email Address</FormLabel>
+                      <FormLabel>
+                        Email Address <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input type="email" placeholder="Enter your email address" {...field} data-testid="input-email" />
                       </FormControl>
@@ -244,7 +250,9 @@ export default function BuyerRegistration() {
                   name="mobile"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Mobile Number</FormLabel>
+                      <FormLabel>
+                        Mobile Number <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input placeholder="Enter your mobile number" {...field} data-testid="input-mobile" />
                       </FormControl>
@@ -258,7 +266,9 @@ export default function BuyerRegistration() {
                   name="province"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Province</FormLabel>
+                      <FormLabel>
+                        Province <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <select 
                           {...field}
@@ -285,7 +295,9 @@ export default function BuyerRegistration() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Create Password</FormLabel>
+                        <FormLabel>
+                          Create Password <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input type="password" placeholder="Create a password" {...field} data-testid="input-password" />
                         </FormControl>
@@ -298,7 +310,9 @@ export default function BuyerRegistration() {
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
+                        <FormLabel>
+                          Confirm Password <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input type="password" placeholder="Confirm your password" {...field} data-testid="input-confirm-password" />
                         </FormControl>
@@ -468,7 +482,9 @@ export default function BuyerRegistration() {
                     name="notificationMethod"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-orange-800">How would you like to receive notifications?</FormLabel>
+                        <FormLabel className="text-orange-800">
+                          How would you like to receive notifications? <span className="text-red-500">*</span>
+                        </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger data-testid="select-notification-method">
