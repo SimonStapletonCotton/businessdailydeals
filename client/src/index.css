@@ -20,12 +20,12 @@
 
 /* Mobile cache buster - force reload */
 .mobile-update {
-  content: "v8.0-UNIVERSAL-ORANGE-THEME";
+  content: "v9.0-CORPORATE-BLUE-STEEL-THEME";
 }
 
 /* Force cache refresh for all browsers */
 html {
-  --cache-buster: "2025-01-09-v8-UNIVERSAL-ORANGE";
+  --cache-buster: "2025-01-09-v9-CORPORATE-BLUE-STEEL";
 }
 
 /* Background starts below navbar - not above it */
@@ -36,33 +36,33 @@ body {
 
 /* Page-specific background colors starting below navbar */
 
-/* Home page - orange across almost entire screen */
+/* Home page - corporate blue & steel professional theme */
 .page-home {
-  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 40%, #ff9800 75%, #ff8800 90%, #64748b 98%, #475569 100%) !important;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 25%, #60a5fa 50%, #93c5fd 75%, #e2e8f0 85%, #64748b 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Hot deals page - extensive orange coverage */
+/* Hot deals page - dynamic blue steel gradient */
 .page-deals {
-  background: linear-gradient(135deg, #ff6600 0%, #ff8800 40%, #ff9500 70%, #ffab40 85%, #64748b 95%, #475569 100%) !important;
+  background: linear-gradient(120deg, #1d4ed8 0%, #2563eb 30%, #3b82f6 60%, #93c5fd 80%, #e2e8f0 95%, #64748b 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Regular deals page - warm orange across most screen */
+/* Regular deals page - softer blue professional theme */
 .page-regular {
-  background: linear-gradient(45deg, #ffab40 0%, #ff9800 35%, #ff8f00 65%, #ff8800 85%, #64748b 95%, #475569 100%) !important;
+  background: linear-gradient(45deg, #2563eb 0%, #3b82f6 35%, #60a5fa 65%, #93c5fd 85%, #e2e8f0 95%, #64748b 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Supplier pages - orange majority with charcoal accent */
+/* Supplier pages - steel blue corporate gradient */
 .page-supplier {
-  background: linear-gradient(60deg, #ff9800 0%, #ffb74d 40%, #ff8800 70%, #ff9500 85%, #64748b 95%, #475569 100%) !important;
+  background: linear-gradient(60deg, #1e40af 0%, #2563eb 40%, #60a5fa 70%, #93c5fd 85%, #e2e8f0 95%, #64748b 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 
-/* Registration pages - bright orange dominance */
+/* Registration pages - professional blue steel */
 .page-register {
-  background: linear-gradient(120deg, #ff6600 0%, #ff8800 35%, #ffab40 65%, #ff9800 85%, #64748b 95%, #475569 100%) !important;
+  background: linear-gradient(90deg, #1d4ed8 0%, #3b82f6 35%, #60a5fa 65%, #93c5fd 85%, #e2e8f0 95%, #64748b 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 

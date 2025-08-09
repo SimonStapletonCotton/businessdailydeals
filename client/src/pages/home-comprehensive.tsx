@@ -135,11 +135,11 @@ export default function HomeComprehensive() {
             </Badge>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight uppercase" data-testid="text-hero-title">
               BUSINESS DAILY
-              <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-blue-200 to-white bg-clip-text text-transparent">
                 DEALS
               </span>
             </h1>
-            <div className="bg-red-600 px-6 py-3 rounded-lg mb-4 inline-block shadow-lg">
+            <div className="bg-blue-700 px-6 py-3 rounded-lg mb-4 inline-block shadow-lg">
               <p className="text-lg md:text-xl font-semibold text-white uppercase tracking-wide">
                 A Dedicated Website That Connects Buyers to Suppliers
               </p>
@@ -154,13 +154,13 @@ export default function HomeComprehensive() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <Link href="/hot-deals">
-                <Button size="lg" className="bg-green-600 text-white hover:bg-green-700 px-8 py-3 text-lg font-semibold shadow-lg">
+                <Button size="lg" className="bg-blue-800 text-white hover:bg-blue-900 px-8 py-3 text-lg font-semibold shadow-lg">
                   <Flame className="w-5 h-5 mr-2" />
                   Browse Hot Deals
                 </Button>
               </Link>
               <Link href="/regular-deals">
-                <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
+                <Button size="lg" className="bg-slate-600 text-white hover:bg-slate-700 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
                   Browse Regular Deals
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
