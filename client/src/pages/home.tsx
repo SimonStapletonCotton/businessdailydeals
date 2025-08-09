@@ -3,7 +3,7 @@ import { Link } from "wouter";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-500 to-orange-700">
+    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #ff6600 0%, #cc4400 100%)" }}>
       {/* Header */}
       <div className="text-center pt-8 pb-4 px-4">
         <div className="flex items-center justify-center gap-2 mb-2">
@@ -34,15 +34,15 @@ export default function Home() {
           }
           .seven-1 {
             animation: spinSeven 2s linear infinite;
-            color: #dc2626;
+            color: #ff0000 !important;
           }
           .seven-2 {
             animation: spinSeven 2.5s linear infinite;
-            color: #b91c1c;
+            color: #cc0000 !important;
           }
           .seven-3 {
             animation: spinSeven 3s linear infinite;
-            color: #ef4444;
+            color: #ff3333 !important;
           }
         `}</style>
         <span className="text-7xl md:text-8xl spinning-seven seven-1">7</span>
@@ -52,7 +52,7 @@ export default function Home() {
 
       {/* Promotional Banner */}
       <div className="max-w-4xl mx-auto px-6 pb-8">
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 border-2 border-orange-300 text-center">
+        <div className="rounded-2xl p-8 border-4 border-yellow-400 text-center" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", backdropFilter: "blur(10px)" }}>
           <h2 className="text-3xl md:text-4xl font-bold text-yellow-300 mb-4 flex items-center justify-center gap-2">
             <span>🎉</span>
             <span>FREE UNTIL JANUARY 1ST, 2026!</span>
