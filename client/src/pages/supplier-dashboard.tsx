@@ -175,18 +175,18 @@ export default function SupplierDashboard() {
         <div className="mb-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white text-center" data-testid="promotional-banner">
           <div className="flex items-center justify-center mb-2">
             <Flame className="h-6 w-6 mr-2 text-orange-200" />
-            <h2 className="text-2xl font-bold">🎉 YOU'RE IN THE FREE PERIOD!</h2>
+            <h2 className="text-2xl font-bold">🎉 FREE UNTIL 1ST JANUARY 2026!</h2>
             <Flame className="h-6 w-6 ml-2 text-orange-200" />
           </div>
           <p className="text-lg mb-2">
-            <strong>All your deal posting is 100% FREE for the next 4 months!</strong>
+            <strong>All your deal posting is 100% FREE until 1st January 2026!</strong>
           </p>
           <p className="text-sm opacity-90">
-            Post unlimited HOT and REGULAR deals at no cost • No credit charges until promotional period ends
+            Post unlimited HOT and REGULAR deals at no cost • No credit charges until 1st January 2026
           </p>
           <div className="mt-3 inline-flex items-center bg-white/20 rounded-full px-4 py-2 text-sm font-medium">
             <Package className="h-4 w-4 mr-2" />
-            You're saving R125 per HOT deal • R50 per REGULAR deal
+            You're saving R125 per HOT deal • R50 per REGULAR deal until Jan 2026
           </div>
         </div>
 

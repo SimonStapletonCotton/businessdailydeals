@@ -184,6 +184,22 @@ export default function Home() {
         <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-purple-300/20 rounded-full blur-sm"></div>
       </section>
 
+      {/* FREE Promotional Banner for Suppliers */}
+      <section className="bg-gradient-to-r from-green-500 to-emerald-600 py-4 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+          <div className="flex items-center justify-center">
+            <Flame className="h-5 w-5 mr-2 text-orange-200" />
+            <p className="text-lg font-bold">
+              🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL 1ST JANUARY 2026! 
+            </p>
+            <Flame className="h-5 w-5 ml-2 text-orange-200" />
+          </div>
+          <p className="text-sm opacity-90 mt-1">
+            Register as a supplier and post unlimited HOT & REGULAR deals at no cost
+          </p>
+        </div>
+      </section>
+
       {/* Enhanced Search Bar - Only show for authenticated users */}
       {isAuthenticated && (
         <section className="bg-white/80 backdrop-blur-sm border-b border-slate-200/50 py-6 -mt-6 relative z-10">

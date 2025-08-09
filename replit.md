@@ -11,7 +11,7 @@ Brand name: Business Daily Deals
 Domain: www.businessdailydeals.com.za
 Target market: South African B2B marketplace
 Pricing structure: Hot deals (premium home page placement, higher pricing) vs Regular deals (dropdown sections, standard pricing)
-**NEW PROMOTIONAL PERIOD**: FREE deal posting for suppliers for 4 months to build user base quickly, then start charging
+**NEW PROMOTIONAL PERIOD**: FREE deal posting for suppliers until 1st January 2026 to build user base quickly, then start charging
 Color scheme preference: Charcoal/slate theme throughout application (header, components, UI elements)
 
 ## System Architecture
