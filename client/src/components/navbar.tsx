@@ -1,11 +1,10 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { Badge } from "@/components/ui/badge";
 import { Bell, Plus, User, Menu, Ticket, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins, BarChart3 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useQuery } from "@tanstack/react-query";
 import { User as UserType } from "@shared/schema";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -22,30 +21,7 @@ export default function Navbar() {
 
   const unreadCount = Array.isArray(notifications) ? notifications.filter((n: any) => !n.isRead).length : 0;
 
-  const updateUserTypeMutation = useMutation({
-    mutationFn: async (userType: string) => {
-      console.log("Switching user type to:", userType);
-      const response = await apiRequest("PATCH", "/api/user/type", { userType });
-      console.log("User type switch response:", response);
-      return response;
-    },
-    onSuccess: (data) => {
-      console.log("User type switch successful:", data);
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-    },
-    onError: (error) => {
-      console.error("User type switch failed:", error);
-    },
-  });
 
-  const handleUserTypeChange = (userType: string) => {
-    console.log("handleUserTypeChange called with:", userType);
-    if (userType === (user as UserType)?.userType) {
-      console.log("Same user type selected, ignoring");
-      return;
-    }
-    updateUserTypeMutation.mutate(userType);
-  };
 
   const handleLogout = async () => {
     try {
@@ -204,6 +180,18 @@ export default function Navbar() {
         </Link>
       )}
       
+      <Link href="/find-me-deal">
+        <Button
+          variant={location === "/find-me-deal" ? "secondary" : "ghost"}
+          className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20"}
+          data-testid="link-find-me-deal"
+          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        >
+          <Search className="h-4 w-4 mr-2" />
+          FIND ME A DEAL
+        </Button>
+      </Link>
+      
       <Link href="/contact">
         <Button
           variant={location === "/contact" ? "secondary" : "ghost"}
@@ -262,18 +250,6 @@ export default function Navbar() {
                       <>
                         <div className="border-t pt-4 mt-6">
                           <div className="text-sm font-medium text-slate-700 mb-3">Account Settings</div>
-                          <Select
-                            value={(user as UserType)?.userType || "buyer"}
-                            onValueChange={handleUserTypeChange}
-                          >
-                            <SelectTrigger className="w-full mb-3" data-testid="select-user-type-mobile">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="buyer">Switch to Buyer</SelectItem>
-                              <SelectItem value="supplier">Switch to Supplier</SelectItem>
-                            </SelectContent>
-                          </Select>
                           
                           <div className="flex flex-col space-y-2">
                             <Button variant="ghost" className="justify-start" data-testid="button-notifications-mobile">
@@ -322,22 +298,6 @@ export default function Navbar() {
             </div>
             {isAuthenticated && (
               <>
-                <div className="hidden md:block">
-                  <Select
-                    value={(user as UserType)?.userType || "buyer"}
-                    onValueChange={handleUserTypeChange}
-                    disabled={updateUserTypeMutation.isPending}
-                  >
-                    <SelectTrigger className="w-40 lg:w-48 bg-white/10 border-white/20 text-white hover:bg-white/20" data-testid="select-user-type">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="buyer">Switch to Buyer</SelectItem>
-                      <SelectItem value="supplier">Switch to Supplier</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
                 <Button variant="ghost" size="icon" className="relative text-white hover:text-slate-900 hover:bg-white/20" data-testid="button-notifications">
                   <Bell className="h-5 w-5" />
                   {unreadCount > 0 && (
@@ -392,22 +352,7 @@ export default function Navbar() {
                   <div className="space-y-2">
                     <NavLinks />
                   </div>
-                  {isAuthenticated && (
-                    <div className="pt-4 border-t">
-                      <Select
-                        value={(user as UserType)?.userType || "buyer"}
-                        onValueChange={handleUserTypeChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="buyer">Switch to Buyer</SelectItem>
-                          <SelectItem value="supplier">Switch to Supplier</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
+
                 </div>
               </SheetContent>
             </Sheet>
