@@ -280,18 +280,7 @@ export default function Home() {
         {/* Hot Deals Section - Only show for authenticated users when not searching */}
         {(isAuthenticated && !isSearching) && (
           <section className="mb-16">
-            <div className="text-center mb-12">
-              <Badge variant="destructive" className="mb-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2">
-                <Flame className="w-4 h-4 mr-2" />
-                Premium Hot Deals
-              </Badge>
-              <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4" data-testid="text-hot-deals-title">
-                Featured Hot Deals
-              </h3>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Don't miss these limited-time offers from our premium suppliers
-              </p>
-            </div>
+
             <div className="flex justify-end mb-6">
               <Link href="/hot-deals">
                 <Button variant="outline" className="bg-gradient-to-r from-red-50 to-orange-50 border-red-200 text-red-700 hover:from-red-100 hover:to-orange-100" data-testid="button-view-all-hot">
