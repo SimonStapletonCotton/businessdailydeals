@@ -71,10 +71,17 @@ export default function Contact() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-800 dark:text-slate-100">Email a Human</h4>
-                    <div className="space-y-1">
-                      <p className="text-slate-600 dark:text-slate-300">simon@businessdailydeals.co.za</p>
-                      <p className="text-slate-600 dark:text-slate-300">admin@businessdailydeals.co.za</p>
-                    </div>
+                    <p className="text-slate-600 dark:text-slate-300">simon@businessdailydeals.co.za</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-3 rounded-xl">
+                    <Mail className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-slate-800 dark:text-slate-100">Email Admin</h4>
+                    <p className="text-slate-600 dark:text-slate-300">admin@businessdailydeals.co.za</p>
                   </div>
                 </div>
                 
