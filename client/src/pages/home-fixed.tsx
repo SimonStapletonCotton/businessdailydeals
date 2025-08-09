@@ -25,6 +25,28 @@ export default function HomeFixed() {
           color: white !important;
           z-index: 999999999 !important;
         }
+        @keyframes spinSeven {
+          0% { transform: rotateY(0deg); }
+          100% { transform: rotateY(360deg); }
+        }
+        .spinning-seven {
+          display: inline-block;
+          font-weight: bold;
+          text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+          transform-style: preserve-3d;
+        }
+        .seven-1 {
+          animation: spinSeven 2s linear infinite;
+          color: #ff0000 !important;
+        }
+        .seven-2 {
+          animation: spinSeven 2.5s linear infinite;
+          color: #cc0000 !important;
+        }
+        .seven-3 {
+          animation: spinSeven 3s linear infinite;
+          color: #ff3333 !important;
+        }
       `}</style>
       
       <div className="home-container">
@@ -63,13 +85,14 @@ export default function HomeFixed() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: "20px",
+            gap: "30px",
             marginBottom: "40px",
-            fontSize: "72px"
+            fontSize: "84px",
+            fontFamily: "Georgia, serif"
           }}>
-            <span style={{ color: "red", animation: "spin 2s linear infinite" }}>7</span>
-            <span style={{ color: "red", animation: "spin 2.5s linear infinite" }}>7</span>
-            <span style={{ color: "red", animation: "spin 3s linear infinite" }}>7</span>
+            <span className="spinning-seven seven-1">7</span>
+            <span className="spinning-seven seven-2">7</span>
+            <span className="spinning-seven seven-3">7</span>
           </div>
 
           {/* Promotional Text */}
