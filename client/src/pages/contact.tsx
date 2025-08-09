@@ -71,7 +71,11 @@ export default function Contact() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-800 dark:text-slate-100">Email</h4>
-                    <p className="text-slate-600 dark:text-slate-300">info@businessdailydeals.com.za</p>
+                    <div className="space-y-1">
+                      <p className="text-slate-600 dark:text-slate-300">simon@businessdailydeals.co.za</p>
+                      <p className="text-slate-600 dark:text-slate-300">admin@businessdailydeals.co.za</p>
+                      <p className="text-slate-600 dark:text-slate-300">info@businessdailydeals.com.za</p>
+                    </div>
                   </div>
                 </div>
                 
