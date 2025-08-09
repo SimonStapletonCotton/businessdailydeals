@@ -36,7 +36,7 @@ body {
 
 /* Only apply gradient from below the navbar */
 .page-content {
-  background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%) !important;
+  background: linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%) !important;
   min-height: calc(100vh - 64px) !important;
 }
 

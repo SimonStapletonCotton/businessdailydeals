@@ -10,13 +10,13 @@ export default function HomeComprehensive() {
     <div className="min-h-screen">
       <Navbar />
       <div className="page-content" style={{
-        background: 'linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%)',
+        background: 'linear-gradient(135deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%)',
         minHeight: 'calc(100vh - 64px)'
       }}>
 
       {/* Hero Section with Casino Animation */}
       <section className="relative overflow-hidden text-white" style={{
-        background: 'linear-gradient(135deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%)'
+        background: 'linear-gradient(90deg, #ffcc80 0%, #ffb74d 30%, #c8b8a0 70%, #8fa3b8 100%)'
       }}>
         {/* Ghost Bubbles Background */}
         <div className="absolute inset-0">
@@ -27,7 +27,7 @@ export default function HomeComprehensive() {
           <div className="absolute bottom-32 right-10 w-28 h-28 bg-white/6 rounded-full blur-xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
           <div className="absolute top-20 left-1/3 w-20 h-20 bg-white/7 rounded-full blur-lg animate-bounce" style={{animationDelay: '0.8s'}}></div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
             {/* Animated One-Armed Bandit */}
