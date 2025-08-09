@@ -300,19 +300,41 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         )}
       </CardContent>
 
-      {/* SIMPLE TWO-COLUMN DIALOG */}
+      {/* FORCE TWO-COLUMN DIALOG WITH INLINE STYLES */}
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5" />
+        <DialogContent 
+          className="p-0 border-0"
+          style={{ 
+            maxWidth: '1200px', 
+            width: '90vw',
+            maxHeight: '90vh',
+            overflow: 'hidden'
+          }}
+        >
+          <div style={{ padding: '24px', borderBottom: '1px solid #e5e7eb' }}>
+            <h2 style={{ 
+              fontSize: '20px', 
+              fontWeight: '600', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              margin: 0
+            }}>
+              <Package style={{ width: '20px', height: '20px' }} />
               Deal Details: {deal.title}
-            </DialogTitle>
-          </DialogHeader>
+            </h2>
+          </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 1fr', 
+            gap: '24px',
+            padding: '24px',
+            height: 'calc(90vh - 100px)',
+            overflow: 'auto'
+          }}>
             {/* Left Column - Product Information */}
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {deal.imageUrl && (
                 <img 
                   src={deal.imageUrl} 
@@ -355,7 +377,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             </div>
 
             {/* Right Column - Supplier & Actions */}
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div className="bg-blue-50 p-4 rounded-lg">
                 <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
                   <Building className="h-5 w-5" />
