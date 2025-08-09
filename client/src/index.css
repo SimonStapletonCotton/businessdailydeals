@@ -28,16 +28,16 @@ html {
   --cache-buster: "2025-01-09-v8-UNIVERSAL-ORANGE";
 }
 
-/* Orange halftone to slate halftone gradient theme */
+/* Background starts below navbar - not above it */
 body {
-  background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%) !important;
+  background: white !important;
   min-height: 100vh !important;
 }
 
-/* Force orange halftone to slate halftone theme universally */
-body, html, #root, .page-home-container {
+/* Only apply gradient from below the navbar */
+.page-content {
   background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%) !important;
-  min-height: 100vh !important;
+  min-height: calc(100vh - 64px) !important;
 }
 
 .page-home,

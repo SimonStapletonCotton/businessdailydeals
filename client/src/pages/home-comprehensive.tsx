@@ -7,11 +7,12 @@ import { Link } from "wouter";
 
 export default function HomeComprehensive() {
   return (
-    <div className="min-h-screen page-home-container" style={{
-      background: 'linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%)',
-      minHeight: '100vh'
-    }}>
+    <div className="min-h-screen">
       <Navbar />
+      <div className="page-content" style={{
+        background: 'linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%)',
+        minHeight: 'calc(100vh - 64px)'
+      }}>
 
       {/* Hero Section with Casino Animation */}
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-orange-500 to-slate-800 text-white">
@@ -72,13 +73,13 @@ export default function HomeComprehensive() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <Link href="/hot-deals">
-                <Button size="lg" className="bg-white text-slate-600 hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg">
+                <Button size="lg" className="bg-red-600 text-white hover:bg-red-700 px-8 py-3 text-lg font-semibold shadow-lg">
                   <Flame className="w-5 h-5 mr-2" />
                   Browse Hot Deals
                 </Button>
               </Link>
               <Link href="/regular-deals">
-                <Button size="lg" className="bg-white text-slate-600 hover:bg-stone-50 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
+                <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
                   Browse Regular Deals
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -106,7 +107,7 @@ export default function HomeComprehensive() {
       </section>
 
       {/* FREE Promotional Banner */}
-      <section className="bg-gradient-to-r from-green-500 to-emerald-600 py-6 relative z-10">
+      <section className="bg-green-600 py-6 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-2">
             <div className="flex items-center">
@@ -363,6 +364,7 @@ export default function HomeComprehensive() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
