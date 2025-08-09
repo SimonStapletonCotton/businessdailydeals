@@ -8,7 +8,7 @@ import { Link } from "wouter";
 export default function HomeComprehensive() {
   return (
     <div className="min-h-screen page-home-container" style={{
-      background: 'linear-gradient(135deg, #ffebb3 0%, #ffd580 25%, #e6c2a6 50%, #64748b 100%)',
+      background: 'linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 50%, #8fa3b8 100%)',
       minHeight: '100vh'
     }}>
       <Navbar />
