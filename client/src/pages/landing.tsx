@@ -7,7 +7,10 @@ import Navbar from "@/components/navbar";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen page-landing">
+    <div className="min-h-screen page-landing" style={{
+      background: 'linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%)',
+      minHeight: '100vh'
+    }}>
       <Navbar />
       
       {/* Landing-specific login section */}
@@ -15,7 +18,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Button
             onClick={() => (window.location.href = "/api/login")}
-            className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-3 shadow-lg text-lg"
+            className="bg-white text-slate-600 hover:bg-white/90 hover:text-slate-700 font-medium px-8 py-3 shadow-lg text-lg"
             data-testid="button-login"
           >
             Login to Access Deals
@@ -25,7 +28,7 @@ export default function Landing() {
 
       {/* Modern Hero Section */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent via-primary to-slate-700 opacity-90"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-orange-500 to-gray-700"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-8">
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight" data-testid="text-hero-title">
@@ -40,7 +43,7 @@ export default function Landing() {
           </div>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Button
-              className="bg-white text-accent hover:bg-slate-100 px-10 py-4 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all"
+              className="bg-white text-slate-600 hover:bg-slate-100 px-10 py-4 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all"
               onClick={() => (window.location.href = "/api/login")}
               data-testid="button-start-buying"
             >
@@ -48,7 +51,7 @@ export default function Landing() {
             </Button>
             <Button
               variant="outline"
-              className="border-2 border-white text-white hover:bg-white hover:text-accent px-10 py-4 text-xl font-semibold backdrop-blur-sm"
+              className="border-2 border-white text-white hover:bg-white hover:text-slate-600 px-10 py-4 text-xl font-semibold backdrop-blur-sm"
               onClick={() => (window.location.href = "/api/login")}
               data-testid="button-become-supplier"
             >
