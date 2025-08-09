@@ -81,9 +81,14 @@ export default function Rates() {
           <h1 className="text-4xl font-bold text-slate-800 mb-4">
             Business Daily Deals <span className="text-primary">Advertising Rates</span>
           </h1>
-          <p className="text-slate-600 text-lg max-w-3xl mx-auto mb-6">
-            Rates shown are per item per day (rands). Calculate your total cost based on number of items and duration.
-          </p>
+          <div className="text-slate-600 text-lg max-w-3xl mx-auto mb-6">
+            <p className="mb-2">Rates shown are per item per day (rands). Calculate your total cost based on number of items and duration.</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 inline-block">
+              <p className="text-blue-800 font-semibold">
+                💡 <strong>Credit Conversion:</strong> 1 Credit = 1 Rand
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Rates Tables */}
