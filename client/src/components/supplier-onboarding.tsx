@@ -53,7 +53,7 @@ export default function SupplierOnboarding() {
               ))}
             </div>
             
-            <Link href="/api/login">
+            <Link href="/register-supplier">
               <Button
                 className="bg-accent text-accent-foreground hover:bg-accent/90"
                 data-testid="button-start-selling"
