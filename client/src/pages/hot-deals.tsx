@@ -160,24 +160,24 @@ export default function HotDeals() {
           </div>
         </section>
 
-        {/* Deals Grid */}
+        {/* Deals Grid - 5 Columns Layout */}
         <section>
           {dealsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {Array.from({ length: 8 }, (_, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {Array.from({ length: 15 }, (_, i) => (
                 <Card key={i} className="animate-pulse shadow-lg border-0 bg-gradient-to-br from-white to-slate-50">
-                  <div className="w-full h-56 bg-gradient-to-br from-slate-200 to-slate-300 rounded-t-xl"></div>
-                  <CardContent className="p-6">
-                    <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-4"></div>
-                    <div className="h-6 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-2"></div>
-                    <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-4"></div>
-                    <div className="h-10 bg-gradient-to-r from-slate-200 to-slate-300 rounded"></div>
+                  <div className="w-full h-48 bg-gradient-to-br from-slate-200 to-slate-300 rounded-t-xl"></div>
+                  <CardContent className="p-4">
+                    <div className="h-3 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-3"></div>
+                    <div className="h-5 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-2"></div>
+                    <div className="h-3 bg-gradient-to-r from-slate-200 to-slate-300 rounded mb-3"></div>
+                    <div className="h-8 bg-gradient-to-r from-slate-200 to-slate-300 rounded"></div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : deals && deals.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {deals.map((deal: DealWithSupplier) => (
                 <DealCard key={deal.id} deal={deal} variant="hot" />
               ))}
