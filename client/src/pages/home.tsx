@@ -94,8 +94,8 @@ export default function Home() {
   const showLoading = isSearching ? searchLoading : hotDealsLoading;
 
   return (
-    <div className="min-h-screen" style={{
-      background: 'linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%)',
+    <div className="min-h-screen page-home-container" style={{
+      background: 'linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%) !important',
       minHeight: '100vh'
     }}>
       <Navbar />
