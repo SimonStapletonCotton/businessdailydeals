@@ -215,16 +215,16 @@ export default function Navbar() {
         position: 'relative'
       }}
     >
-      <div className="px-4 sm:px-6 lg:px-8" style={{ maxWidth: '100%', overflowX: 'auto' }}>
-        <div className="flex justify-between items-center h-16" style={{ minWidth: 'max-content' }}>
-            <div className="flex items-center space-x-2 flex-1" style={{ minWidth: 'max-content' }}>
+      <div className="px-4 sm:px-6 lg:px-8" style={{ width: '100%', overflowX: 'auto' }}>
+        <div className="flex justify-between items-center h-16" style={{ minWidth: '1200px' }}>
+            <div className="flex items-center space-x-4 flex-1">
             <Link href="/" className="flex-shrink-0">
               <h1 className="text-xl md:text-2xl font-bold text-white cursor-pointer whitespace-nowrap" data-testid="text-logo">
                 Business Daily Deals
               </h1>
             </Link>
-            <nav className="hidden md:flex space-x-1 flex-1 justify-start ml-8 overflow-x-auto">
-              <div className="flex space-x-1 whitespace-nowrap">
+            <nav className="hidden md:flex space-x-2 flex-1 justify-start ml-8">
+              <div className="flex space-x-2 whitespace-nowrap">
                 <NavLinks />
               </div>
             </nav>
