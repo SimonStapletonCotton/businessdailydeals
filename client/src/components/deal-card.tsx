@@ -134,10 +134,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
   };
 
   const handleViewDetails = () => {
-    if (!isAuthenticated) {
-      window.location.href = '/register-buyer';
-      return;
-    }
+    // Allow everyone to view deal details - no authentication required
     setShowDetails(true);
   };
 
@@ -259,12 +256,11 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-primary text-primary hover:bg-primary/10 h-10 flex items-center justify-center"
-                  onClick={() => window.location.href = '/register-buyer'}
-                  data-testid="button-register-for-details"
+                  className="w-full border-olive-600 text-olive-600 hover:bg-olive-50 h-10 flex items-center justify-center"
+                  onClick={handleViewDetails}
+                  data-testid="button-view-details"
                 >
-                  <Lock className="h-4 w-4 mr-2" />
-                  Register to View Details
+                  View Details
                 </Button>
               </>
             )}
