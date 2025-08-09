@@ -356,14 +356,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             </h2>
           </div>
           
-          {/* TWO COLUMNS WITH ABSOLUTE POSITIONING */}
-          <div style={{ 
-            position: 'relative',
-            height: 'calc(100% - 80px)',
-            overflow: 'hidden'
-          }}>
-          
-          {/* Close Button */}
+          {/* CLOSE BUTTON - POSITIONED ON MODAL */}
           <button
             onClick={() => setShowDetails(false)}
             style={{
@@ -374,7 +367,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               height: '32px',
               borderRadius: '4px',
               border: 'none',
-              background: 'transparent',
+              background: 'rgba(0,0,0,0.1)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -386,18 +379,20 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           >
             ×
           </button>
-            {/* LEFT COLUMN - FORCED 50% WIDTH */}
+
+          {/* MAIN CONTENT AREA WITH FLEX TWO-COLUMN LAYOUT */}
+          <div style={{ 
+            display: 'flex',
+            height: 'calc(100% - 80px)',
+            overflow: 'hidden'
+          }}>
+            {/* LEFT COLUMN - EXACTLY 50% FLEX BASIS */}
             <div style={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              width: '600px', /* FIXED WIDTH INSTEAD OF PERCENTAGE */
-              height: '100%',
+              flex: '0 0 50%',
               padding: '24px',
               borderRight: '1px solid #e5e7eb',
               overflowY: 'auto',
-              background: 'white',
-              boxSizing: 'border-box'
+              background: 'white'
             }}>
               {deal.imageUrl && (
                 <img 
@@ -461,17 +456,12 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               )}
             </div>
 
-            {/* RIGHT COLUMN - FORCED 50% WIDTH */}
+            {/* RIGHT COLUMN - EXACTLY 50% FLEX BASIS */}
             <div style={{
-              position: 'absolute',
-              left: '600px', /* START WHERE LEFT COLUMN ENDS */
-              top: 0,
-              width: '600px', /* FIXED WIDTH INSTEAD OF PERCENTAGE */
-              height: '100%',
+              flex: '0 0 50%',
               padding: '24px',
               overflowY: 'auto',
-              background: 'white',
-              boxSizing: 'border-box'
+              background: 'white'
             }}>
               <div style={{
                 background: '#eff6ff',
