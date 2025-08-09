@@ -236,7 +236,7 @@ export default function BuyerRegistration() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Province</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger data-testid="select-province">
                             <SelectValue placeholder="Select your province" />
@@ -352,7 +352,7 @@ export default function BuyerRegistration() {
                               <Smartphone className="h-4 w-4" />
                               Select your mobile provider
                             </FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
                                 <SelectTrigger data-testid="select-mobile-provider">
                                   <SelectValue placeholder="Choose your provider" />
@@ -446,7 +446,7 @@ export default function BuyerRegistration() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-orange-800">How would you like to receive notifications?</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger data-testid="select-notification-method">
                               <SelectValue placeholder="Choose notification method" />
