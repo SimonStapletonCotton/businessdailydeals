@@ -225,164 +225,160 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
 
         {/* Details Dialog */}
         <Dialog open={showDetails} onOpenChange={setShowDetails}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader className="pb-4 border-b">
-              <DialogTitle className="flex items-center gap-2 text-xl">
-                <Package className="h-6 w-6" />
+          <DialogContent className="max-w-5xl max-h-[85vh] overflow-y-auto">
+            <DialogHeader className="pb-3 border-b">
+              <DialogTitle className="flex items-center gap-2 text-lg">
+                <Package className="h-5 w-5" />
                 {deal.title}
               </DialogTitle>
             </DialogHeader>
             
-            <div className="space-y-8 py-4">
-              {/* Main Information Panel */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-lg font-semibold mb-4 text-gray-900">Deal Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
+            {/* Compact Grid Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 py-3">
+              {/* Left Column - Main Info */}
+              <div className="lg:col-span-2 space-y-4">
+                {/* Deal Info Card */}
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Category</Label>
-                      <p className="text-sm mt-1 font-medium">{deal.category}</p>
+                      <span className="text-gray-600">Category:</span>
+                      <p className="font-medium">{deal.category}</p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Price</Label>
-                      <p className="text-2xl font-bold text-primary mt-1">{formatPrice(deal.price)}</p>
+                      <span className="text-gray-600">Price:</span>
+                      <p className="text-xl font-bold text-primary">{formatPrice(deal.price)}</p>
                       {deal.originalPrice && parseFloat(deal.originalPrice) > parseFloat(deal.price) && (
-                        <p className="text-sm text-gray-500 line-through">{formatPrice(deal.originalPrice)}</p>
+                        <p className="text-xs text-gray-500 line-through">{formatPrice(deal.originalPrice)}</p>
                       )}
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Minimum Order</Label>
-                      <p className="text-sm mt-1">{deal.minOrder} unit{deal.minOrder !== 1 ? 's' : ''}</p>
+                      <span className="text-gray-600">Min Order:</span>
+                      <p className="font-medium">{deal.minOrder} unit{deal.minOrder !== 1 ? 's' : ''}</p>
                     </div>
-                  </div>
-                  <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Supplier</Label>
-                      <div className="flex items-center gap-2 mt-1">
-                        <p className="text-sm font-medium">{deal.supplier.companyName || deal.supplier.firstName}</p>
+                      <span className="text-gray-600">Supplier:</span>
+                      <div className="flex items-center gap-1">
+                        <p className="font-medium text-xs">{deal.supplier.companyName || deal.supplier.firstName}</p>
                         {deal.supplier.isVerified && (
-                          <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200 text-xs">
-                            <Shield className="h-3 w-3 mr-1" />
-                            Verified
+                          <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200 text-xs px-1 py-0">
+                            <Shield className="h-3 w-3" />
                           </Badge>
                         )}
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="bg-white border rounded-lg p-4">
+                  <h4 className="font-semibold mb-2 text-sm">Description</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed">{deal.description}</p>
+                </div>
+
+                {/* Additional Details */}
+                {(deal.size || deal.quantityAvailable || deal.productSpecifications) && (
+                  <div className="bg-white border rounded-lg p-4">
+                    <h4 className="font-semibold mb-3 text-sm flex items-center gap-2">
+                      <Box className="h-4 w-4" />
+                      Product Details
+                    </h4>
+                    <div className="space-y-3 text-sm">
+                      {deal.size && (
+                        <div>
+                          <span className="text-gray-600">Size:</span>
+                          <span className="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{deal.size}</span>
+                        </div>
+                      )}
+                      {deal.quantityAvailable && (
+                        <div>
+                          <span className="text-gray-600">Available:</span>
+                          <span className="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{deal.quantityAvailable} units</span>
+                        </div>
+                      )}
+                      {deal.productSpecifications && (
+                        <div>
+                          <span className="text-gray-600 block mb-1">Specifications:</span>
+                          <div className="bg-gray-50 p-2 rounded text-xs text-gray-700">
+                            {deal.productSpecifications}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Right Column - Images & Actions */}
+              <div className="space-y-4">
+                {/* Product Images */}
+                {deal.productImages && deal.productImages.length > 0 && (
+                  <div className="bg-white border rounded-lg p-4">
+                    <h4 className="font-semibold mb-3 text-sm flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
+                      Images
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {deal.productImages.slice(0, 4).map((image: string, index: number) => (
+                        <img
+                          key={index}
+                          src={image}
+                          alt={`${deal.title} - ${index + 1}`}
+                          className="w-full h-20 object-cover rounded border"
+                        />
+                      ))}
+                    </div>
+                    {deal.productImages.length > 4 && (
+                      <p className="text-xs text-gray-500 mt-2 text-center">
+                        +{deal.productImages.length - 4} more images
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Compact Action Buttons */}
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-3 text-sm">Actions</h4>
+                  <div className="space-y-2">
+                    <Button
+                      onClick={() => {
+                        setShowDetails(false);
+                        handleInquiry();
+                      }}
+                      className="w-full bg-blue-600 text-white hover:bg-blue-700 h-9 text-sm"
+                    >
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Send Inquiry
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowDetails(false);
+                        handleGetCoupon();
+                      }}
+                      className="w-full bg-green-600 text-white hover:bg-green-700 h-9 text-sm"
+                    >
+                      <Ticket className="h-4 w-4 mr-2" />
+                      Get Coupon
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Additional Info */}
+                {(deal.shippingCost && parseFloat(deal.shippingCost) > 0) || deal.expiresAt ? (
+                  <div className="bg-yellow-50 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2 text-sm">Important Info</h4>
                     {deal.shippingCost && parseFloat(deal.shippingCost) > 0 && (
-                      <div>
-                        <Label className="text-sm font-medium text-gray-600">Shipping Cost</Label>
-                        <p className="text-sm mt-1">{formatPrice(deal.shippingCost)}</p>
-                      </div>
+                      <p className="text-xs text-gray-700 mb-1">
+                        <span className="font-medium">Shipping:</span> {formatPrice(deal.shippingCost)}
+                      </p>
                     )}
                     {deal.expiresAt && (
-                      <div>
-                        <Label className="text-sm font-medium text-gray-600">Deal Expires</Label>
-                        <p className="text-sm mt-1 text-red-600 font-medium">{getTimeLeft()}</p>
-                      </div>
+                      <p className="text-xs text-red-600 font-medium">
+                        <Clock className="h-3 w-3 inline mr-1" />
+                        {getTimeLeft()}
+                      </p>
                     )}
                   </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="bg-white border rounded-lg p-6">
-                <h3 className="text-lg font-semibold mb-3 text-gray-900">Description</h3>
-                <p className="text-gray-700 leading-relaxed">{deal.description}</p>
-              </div>
-
-              {/* Product Images */}
-              {deal.productImages && deal.productImages.length > 0 && (
-                <div className="bg-white border rounded-lg p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900">
-                    <FileText className="h-5 w-5" />
-                    Product Images
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {deal.productImages.map((image: string, index: number) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`${deal.title} - Image ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-lg border shadow-sm hover:shadow-md transition-shadow"
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Additional Product Details */}
-              {(deal.size || deal.quantityAvailable || deal.productSpecifications) && (
-                <div className="bg-white border rounded-lg p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900">
-                    <Box className="h-5 w-5" />
-                    Additional Product Information
-                  </h3>
-                  <div className="space-y-4">
-                    {(deal.size || deal.quantityAvailable) && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {deal.size && (
-                          <div>
-                            <Label className="text-sm font-medium text-gray-600 flex items-center gap-1">
-                              <Ruler className="h-4 w-4" />
-                              Size
-                            </Label>
-                            <p className="text-sm mt-1 bg-gray-50 p-2 rounded">{deal.size}</p>
-                          </div>
-                        )}
-                        {deal.quantityAvailable && (
-                          <div>
-                            <Label className="text-sm font-medium text-gray-600 flex items-center gap-1">
-                              <Hash className="h-4 w-4" />
-                              Available Quantity
-                            </Label>
-                            <p className="text-sm mt-1 bg-gray-50 p-2 rounded">{deal.quantityAvailable} units</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    
-                    {deal.productSpecifications && (
-                      <div>
-                        <Label className="text-sm font-medium text-gray-600">Product Specifications</Label>
-                        <div className="mt-2 bg-gray-50 p-4 rounded-lg">
-                          <p className="text-sm text-gray-700 leading-relaxed">{deal.productSpecifications}</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="bg-gray-50 p-6 rounded-lg border-t">
-                <h3 className="text-lg font-semibold mb-4 text-gray-900">Take Action</h3>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    onClick={() => {
-                      setShowDetails(false);
-                      handleInquiry();
-                    }}
-                    className="flex-1 bg-blue-600 text-white hover:bg-blue-700 h-12 text-base font-medium"
-                    size="lg"
-                  >
-                    <MessageSquare className="h-5 w-5 mr-2" />
-                    Send Inquiry to Supplier
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setShowDetails(false);
-                      handleGetCoupon();
-                    }}
-                    className="flex-1 bg-green-600 text-white hover:bg-green-700 h-12 text-base font-medium"
-                    size="lg"
-                  >
-                    <Ticket className="h-5 w-5 mr-2" />
-                    Accept Deal & Get Coupon
-                  </Button>
-                </div>
-                <p className="text-xs text-gray-500 mt-3 text-center">
-                  Send an inquiry for questions or accept the deal to get your coupon
-                </p>
+                ) : null}
               </div>
             </div>
           </DialogContent>
