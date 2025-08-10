@@ -39,38 +39,81 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
   const createCouponMutation = useMutation({
     mutationFn: async (data: { dealId: string; supplierId: string }) => {
       console.log("Creating coupon for deal:", data);
-      const response = await apiRequest("POST", "/api/coupons", data);
-      console.log("Coupon response:", response);
-      return response;
+      console.log("Authentication state before API call:", isAuthenticated);
+      
+      try {
+        const response = await apiRequest("POST", "/api/coupons", data);
+        console.log("Coupon API response object:", response);
+        const responseData = await response.json();
+        console.log("Coupon response data:", responseData);
+        return responseData;
+      } catch (error: any) {
+        console.error("API request error:", error);
+        console.log("Error status:", error?.status);
+        console.log("Error message:", error?.message);
+        
+        // Parse error response if possible
+        if (error?.message?.includes(':')) {
+          const [status, message] = error.message.split(': ', 2);
+          error.status = parseInt(status);
+          error.parsedMessage = message;
+        }
+        
+        throw error;
+      }
     },
     onSuccess: (response: any) => {
-      console.log("Coupon success:", response);
+      console.log("Coupon creation successful:", response);
+      const couponCode = response.couponCode || "Unknown";
+      const expiresAt = response.expiresAt || response.validUntil;
+      
       toast({
-        title: "Coupon Generated!",
-        description: `Your coupon code: ${response.couponCode}. Valid until ${new Date(response.expiresAt).toLocaleDateString()}.`,
+        title: "Coupon Generated Successfully!",
+        description: `Your coupon code: ${couponCode}. Valid until ${expiresAt ? new Date(expiresAt).toLocaleDateString() : 'N/A'}.`,
       });
       setShowCompactModal(false);
       // Invalidate coupons cache
       queryClient.invalidateQueries({ queryKey: ["/api/coupons"] });
     },
     onError: (error: any) => {
-      console.error("Coupon generation error:", error);
-      if (isUnauthorizedError(error)) {
+      console.error("Coupon generation failed:", error);
+      console.log("Error details:", {
+        status: error?.status,
+        message: error?.message,
+        response: error?.response,
+      });
+      
+      // Check for authentication errors
+      const isAuthError = error?.status === 401 || 
+                         error?.message?.includes('401') || 
+                         error?.message?.includes('Unauthorized') || 
+                         isUnauthorizedError(error);
+                         
+      if (isAuthError) {
         toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
+          title: "Login Required",
+          description: "Please log in to generate a coupon",
           variant: "destructive",
         });
         setTimeout(() => {
           window.location.href = "/api/login";
-        }, 500);
+        }, 1000);
+        return;
+      }
+      
+      if (error?.status === 404) {
+        toast({
+          title: "Deal Not Found",
+          description: "This deal is no longer available",
+          variant: "destructive",
+        });
         return;
       }
       
       // More specific error handling
       const errorMessage = error?.message || error?.error || "Failed to generate coupon. Please try again.";
       toast({
-        title: "Error",
+        title: "Coupon Generation Failed",
         description: errorMessage,
         variant: "destructive",
       });
