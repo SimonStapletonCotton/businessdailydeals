@@ -38,8 +38,26 @@ const upload = multer({
   },
 });
 
-// Initialize Google Cloud Storage
-const storage = new Storage();
+const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
+
+// Initialize Google Cloud Storage with Replit configuration
+const storage = new Storage({
+  credentials: {
+    audience: "replit",
+    subject_token_type: "access_token",
+    token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
+    type: "external_account",
+    credential_source: {
+      url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
+      format: {
+        type: "json",
+        subject_token_field_name: "access_token",
+      },
+    },
+    universe_domain: "googleapis.com",
+  },
+  projectId: "",
+});
 
 router.post('/image', isAuthenticated, upload.single('file'), async (req: MulterRequest, res: Response) => {
   try {
@@ -58,9 +76,9 @@ router.post('/image', isAuthenticated, upload.single('file'), async (req: Multer
 
     const bucket = storage.bucket(bucketId);
     
-    // Generate unique filename
+    // Generate unique filename for public directory
     const fileExtension = extname(req.file.originalname);
-    const fileName = `product-images/${nanoid()}${fileExtension}`;
+    const fileName = `public/product-images/${nanoid()}${fileExtension}`;
     
     const file = bucket.file(fileName);
     const stream = file.createWriteStream({
@@ -79,11 +97,8 @@ router.post('/image', isAuthenticated, upload.single('file'), async (req: Multer
 
     stream.on('finish', async () => {
       try {
-        // Make the file publicly readable
-        await file.makePublic();
-        
-        // Get the public URL
-        const publicUrl = `https://storage.googleapis.com/${bucketId}/${fileName}`;
+        // Get the public URL for serving via our public objects endpoint
+        const publicUrl = `/public-objects/product-images/${nanoid()}${fileExtension}`;
         
         res.json({
           url: publicUrl,
@@ -92,9 +107,9 @@ router.post('/image', isAuthenticated, upload.single('file'), async (req: Multer
           mimetype: req.file!.mimetype,
         });
       } catch (error) {
-        console.error('Error making file public:', error);
+        console.error('Error completing upload:', error);
         if (!res.headersSent) {
-          res.status(500).json({ message: 'Failed to make file public' });
+          res.status(500).json({ message: 'Failed to complete upload' });
         }
       }
     });
