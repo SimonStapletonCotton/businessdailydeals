@@ -1,107 +1,125 @@
-# Business Daily Deals - Comprehensive Testing Report
+# Business Daily Deals - Comprehensive Testing & Stability Plan
 
-## Current System Status ✅ FULLY OPERATIONAL
+## Critical Stability Issues Identified
+- Deal type labeling reverting to hardcoded values
+- Find Me a Deal dropdown functionality breaking
+- Image display intermittently failing
+- Components becoming unstable between sessions
 
-### Database State (Verified)
-- **Users**: 3 active users (1 supplier: simons@cybersmart.co.za, 2 buyers: test@example.com, test2@example.com)
-- **Deals**: 2 active deals (1 hot deal: Water bladders R55,000, 1 regular: Dam liners R200)
-- **Credit Transactions**: 1 transaction recorded (supplier purchase R1,320)
-- **Inquiries**: 1 inquiry system working (buyer-supplier communication)
-- **Keywords**: Empty (ready for user input)
+## 1. AUTOMATED TESTING FRAMEWORK
 
-## ✅ CORE SYSTEM FUNCTIONALITY TESTS
+### Backend API Tests
+```bash
+# Core functionality tests to run before any deployment
+curl -f http://localhost:5000/api/health || exit 1
+curl -f http://localhost:5000/api/deals | grep -q "dealType" || exit 1
+curl -f http://localhost:5000/public-objects/product-images/test.jpg || echo "Image serving test needed"
+```
 
-### 1. ✅ API Health & Infrastructure
-- **Health Endpoint**: ✅ Working (`/api/health` returns healthy status)
-- **Database Connection**: ✅ PostgreSQL connected and responsive
-- **Server Startup**: ✅ Business Daily Deals server running on port 5000
-- **Environment**: ✅ Development mode with all required variables
+### Database Integrity Checks
+```sql
+-- Verify deal types are properly stored
+SELECT DISTINCT deal_type FROM deals;
+-- Should return: hot, regular
 
-### 2. ✅ Deal Management System
-- **Deal Retrieval**: ✅ `/api/deals` returns 2 active deals with complete supplier info
-- **Hot Deals Filter**: ✅ `/api/deals?type=hot` correctly filters to 1 hot deal
-- **Search Functionality**: ✅ `/api/deals?search=water` finds "Water bladders" deal
-- **Deal Structure**: ✅ Complete data including pricing, discounts, supplier details
+-- Check image URLs are properly formatted
+SELECT COUNT(*) FROM deals WHERE image_url LIKE '/public-objects/%';
+-- Should match deals with images
 
-### 3. ✅ User Authentication System
-- **Existing User Login**: ✅ simons@cybersmart.co.za authenticated successfully
-- **User Profile Data**: ✅ Complete profile with supplier role, credit balance
-- **Session Management**: ✅ Express sessions working with PostgreSQL storage
-- **Role-based Access**: ✅ Supplier/buyer role restrictions functioning
+-- Verify promotional period logic
+SELECT COUNT(*) FROM users WHERE promotional_period_ends = '2025-12-31';
+```
 
-### 4. ✅ Registration System (POST /api/register)
-- **Endpoint Response**: ✅ Accepting registrations (200 status codes)
-- **Field Validation**: ✅ Expects: firstName, surname, email, userType, etc.
-- **Supplier Promotion**: ✅ Promotional period activation for new suppliers
-- **Keyword Creation**: ✅ Automatic keyword setup during registration
+## 2. COMPONENT STABILITY CHECKLIST
 
-## ✅ BUSINESS LOGIC VERIFICATION
+### Critical Components to Monitor
+- [ ] deal-card-fixed.tsx (dealType logic)
+- [ ] find-me-deal.tsx (dropdown functionality)
+- [ ] home-comprehensive.tsx (image display)
+- [ ] supplier-dashboard.tsx (extend functionality)
 
-### Credit System & Promotional Period
-- **Current Status**: FREE until January 1st, 2026 for suppliers ✅
-- **Credit Tracking**: ✅ Credit transactions recorded (R1,320 purchase logged)
-- **Balance Management**: ✅ Users have credit_balance field (currently 0 for all)
-- **Promotional Flag**: ✅ is_in_promotional_period field exists in database
+### Required Checks Before Any Code Changes
+1. Backup current working state
+2. Test deal type display (hot vs regular)
+3. Test Find Me a Deal form submission
+4. Verify image loading on all pages
+5. Check promotional period logic
 
-### Deal Pricing & Economics
-- **Hot Deal**: Water bladders - R55,000 (13% discount from R63,000) ✅
-- **Regular Deal**: Dam liners - R200 (15% discount from R235) ✅
-- **Cost Structure**: 1 credit per deal (R2.50 value) ✅
-- **Promotional Impact**: Suppliers post FREE during promotional period ✅
+## 3. DEPLOYMENT SAFEGUARDS
 
-## ✅ USER WORKFLOW VERIFICATION
+### Pre-Deployment Checklist
+- [ ] All LSP diagnostics resolved
+- [ ] No hardcoded values in components
+- [ ] Database schema matches code expectations
+- [ ] Object storage connectivity verified
+- [ ] Email notification system ready (SendGrid)
 
-### Supplier Capabilities
-- **Deal Creation**: ✅ 2 deals created by supplier (hot & regular)
-- **Dashboard Access**: ✅ Supplier dashboard available
-- **Credit Management**: ✅ Credit system tracking purchases
-- **Inquiry Handling**: ✅ Receiving and managing buyer inquiries
+### Post-Deployment Verification
+- [ ] Homepage loads with correct deal types
+- [ ] Images display properly
+- [ ] Forms submit successfully
+- [ ] Navigation functions work
+- [ ] Dynamic statistics update
 
-### Buyer Capabilities  
-- **Browse Deals**: ✅ Can view all deals without authentication
-- **Search Function**: ✅ Search working (finds "water" in "Water bladders")
-- **User Registration**: ✅ Registration system accepting new buyers
-- **Inquiry System**: ✅ Can submit inquiries to suppliers
+## 4. BACKUP AND RECOVERY STRATEGY
 
-## ✅ TECHNICAL INFRASTRUCTURE
+### Critical Files to Monitor
+- client/src/components/deal-card-fixed.tsx
+- client/src/pages/find-me-deal.tsx
+- client/src/pages/home-comprehensive.tsx
+- server/routes.ts
+- shared/schema.ts
 
-### Production Readiness
-- **Cybersmart Hosting**: ✅ Requirements confirmed (Node.js 18+, SSL, MySQL)
-- **Database Migration**: ✅ MySQL schema ready (`drizzle.config.mysql.ts`)
-- **Apache Configuration**: ✅ `.htaccess` prepared for shared hosting
-- **Environment Variables**: ✅ Application-level configuration ready
+### Recovery Procedures
+1. Document exact working state before changes
+2. Create checkpoint snapshots
+3. Maintain rollback procedures
+4. Test recovery process
 
-### Security & Performance
-- **Authentication**: ✅ Replit OIDC integration working
-- **Session Security**: ✅ PostgreSQL session storage
-- **Input Validation**: ✅ Zod schemas for data validation
-- **Error Handling**: ✅ Comprehensive error responses
+## 5. MONITORING AND ALERTS
 
-## 🎯 PLATFORM ASSESSMENT
+### Key Metrics to Track
+- Deal type accuracy (no hardcoded "HOT DEAL")
+- Image load success rate
+- Form submission success rate
+- API response times
+- Database connection stability
 
-**Business Daily Deals is FULLY FUNCTIONAL** for both suppliers and buyers:
+### Error Patterns to Watch
+- Components reverting to hardcoded states
+- Form validation breaking
+- Object storage connectivity issues
+- Authentication/session problems
 
-### Supplier Journey ✅
-1. Register → Get FREE promotional period until Jan 1, 2026
-2. Create hot deals (premium placement) or regular deals
-3. Manage deal portfolio via supplier dashboard
-4. Receive and respond to buyer inquiries
-5. Track analytics and credit usage
+## 6. STABILITY MAINTENANCE PROTOCOL
 
-### Buyer Journey ✅  
-1. Browse deals on homepage (hot deals featured)
-2. Search for specific products/categories
-3. Register for keyword notifications
-4. Submit inquiries to suppliers
-5. Manage preferences via buyer dashboard
+### Daily Checks
+1. Verify deal type labels are dynamic
+2. Test form functionality
+3. Check image loading
+4. Confirm promotional period logic
 
-### Cross-Platform Features ✅
-- User type switching (supplier ↔ buyer)
-- Real-time notifications system
-- Credit and payment processing framework
-- Analytics and reporting capabilities
-- Professional UI with casino-themed design
+### Weekly Maintenance
+1. Review and update this test plan
+2. Verify backup procedures
+3. Test rollback capabilities
+4. Update documentation
 
-## 🚀 READY FOR PRODUCTION DEPLOYMENT
+## 7. CYBERSMART PRODUCTION READINESS
 
-The platform represents a **complete B2B marketplace** with enterprise-level functionality, ready for deployment to www.businessdailydeals.co.za with Cybersmart hosting.
+### Final Deployment Criteria
+- [ ] All automated tests passing
+- [ ] No known stability issues
+- [ ] Complete backup documentation
+- [ ] Recovery procedures tested
+- [ ] Performance optimization complete
+
+### Production Monitoring Setup
+- Health check endpoints active
+- Error logging configured
+- Performance metrics tracking
+- User feedback collection system
+
+---
+**Last Updated:** August 10, 2025
+**Status:** Active monitoring required before Cybersmart deployment
