@@ -20,6 +20,7 @@ RECENT PROGRESS (August 10, 2025):
 - All deals posted during promotional period (until Dec 31, 2025) are completely FREE
 - Dashboard extend functionality fully working with proper promotional period bypass
 - Enhanced crossed-out original price visibility: made them darker (text-slate-700), same size as discounted prices, and medium font weight across all deal displays
+- Implemented organized coupon management with separate tabs: Active, Redeemed, and Expired coupons with proper filtering, visual styling, and count indicators
 
 ## System Architecture
 
