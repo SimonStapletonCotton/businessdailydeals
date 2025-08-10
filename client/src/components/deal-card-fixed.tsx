@@ -9,6 +9,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { DealImage } from "@/components/DealImage";
 
 // Define extended deal type with supplier info
 type DealWithSupplier = Deal & {
@@ -169,21 +170,11 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
       <>
         <Card className="hover:shadow-lg transition-shadow border-2 border-red-200 hover:border-red-300 h-fit">
           <CardContent className="p-4">
-            {deal.imageUrl && (
-              <img 
-                src={deal.imageUrl} 
-                alt={deal.title}
-                className="w-full h-32 object-cover rounded mb-3"
-                onError={(e) => {
-                  console.error('Image failed to load:', deal.imageUrl);
-                  console.error('Deal:', deal.title);
-                  e.currentTarget.style.display = 'none';
-                }}
-                onLoad={(e) => {
-                  console.log('Image loaded successfully:', deal.imageUrl);
-                }}
-              />
-            )}
+            <DealImage
+              src={deal.imageUrl}
+              alt={deal.title}
+              className="w-full h-32 object-cover rounded mb-3"
+            />
             <div className="flex items-center justify-between mb-2">
               <Badge className={`text-white text-xs ${deal.dealType === 'hot' ? 'bg-red-600' : 'bg-orange-500'}`}>
                 {deal.dealType === 'hot' ? 'HOT DEAL' : 'REGULAR DEAL'}
@@ -248,20 +239,11 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Left Column - Deal Info */}
                 <div>
-                  {deal.imageUrl && (
-                    <img 
-                      src={deal.imageUrl} 
-                      alt={deal.title}
-                      className="w-full h-48 object-cover rounded mb-4"
-                      onError={(e) => {
-                        console.error('Modal image failed to load:', deal.imageUrl);
-                        e.currentTarget.style.display = 'none';
-                      }}
-                      onLoad={(e) => {
-                        console.log('Modal image loaded successfully:', deal.imageUrl);
-                      }}
-                    />
-                  )}
+                  <DealImage
+                    src={deal.imageUrl}
+                    alt={deal.title}
+                    className="w-full h-48 object-cover rounded mb-4"
+                  />
                   <div className="space-y-3">
                     <div>
                       <h3 className="font-semibold text-slate-900 mb-1">Description</h3>
@@ -402,24 +384,11 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Image */}
           <div className="lg:col-span-1">
-            {deal.imageUrl ? (
-              <img 
-                src={deal.imageUrl} 
-                alt={deal.title}
-                className="w-full h-48 object-cover rounded-lg"
-                onError={(e) => {
-                  console.error('Regular image failed to load:', deal.imageUrl);
-                  e.currentTarget.style.display = 'none';
-                }}
-                onLoad={(e) => {
-                  console.log('Regular image loaded successfully:', deal.imageUrl);
-                }}
-              />
-            ) : (
-              <div className="w-full h-48 bg-slate-100 rounded-lg flex items-center justify-center">
-                <Package className="h-12 w-12 text-slate-400" />
-              </div>
-            )}
+            <DealImage
+              src={deal.imageUrl}
+              alt={deal.title}
+              className="w-full h-48 object-cover rounded-lg"
+            />
           </div>
 
           {/* Middle Column - Deal Details */}

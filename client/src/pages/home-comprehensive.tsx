@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Building2, CreditCard, Mail, Phone, MapPin, Award, ShoppingBag, Target, Plus } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { DealImage } from "@/components/DealImage";
 
 // Business Statistics Component
 function BusinessStatistics() {
@@ -112,13 +113,11 @@ function HotDealsHomepage() {
       {hotDeals.slice(0, 8).map((deal: any) => (
         <Card key={deal.id} className="hover:shadow-lg transition-shadow border-2 border-red-200 hover:border-red-300">
           <CardContent className="p-4">
-            {deal.imageUrl && (
-              <img 
-                src={deal.imageUrl} 
-                alt={deal.title}
-                className="w-full h-32 object-cover rounded mb-3"
-              />
-            )}
+            <DealImage
+              src={deal.imageUrl}
+              alt={deal.title}
+              className="w-full h-32 object-cover rounded mb-3"
+            />
             <div className="flex items-center justify-between mb-2">
               <Badge className="bg-red-600 text-white">HOT DEAL</Badge>
               {deal.discount > 0 && (
