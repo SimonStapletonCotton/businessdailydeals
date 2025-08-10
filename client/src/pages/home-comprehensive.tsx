@@ -6,6 +6,75 @@ import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Buildin
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 
+// Business Statistics Component
+function BusinessStatistics() {
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ["/api/business/stats"],
+    queryFn: async () => {
+      const res = await fetch("/api/business/stats", {
+        credentials: "include",
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    },
+  });
+
+  // Show loading state or default values if not loaded yet
+  const displayStats = stats || {
+    activeSuppliers: 1,
+    totalDeals: 8,
+    successfulConnections: 0,
+    totalSavings: 0
+  };
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M+`;
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K+`;
+    return `${num}`;
+  };
+
+  const formatCurrency = (amount: number) => {
+    if (amount >= 1000000) return `R${(amount / 1000000).toFixed(1)}M+`;
+    if (amount >= 1000) return `R${(amount / 1000).toFixed(1)}K+`;
+    return amount > 0 ? `R${amount.toLocaleString()}` : 'R0';
+  };
+
+  return (
+    <section className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+      <Card className="text-center p-6 hover:shadow-lg transition-shadow">
+        <Users className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+        <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-suppliers">
+          {isLoading ? '...' : formatNumber(displayStats.activeSuppliers)}
+        </div>
+        <div className="text-slate-600 text-sm">Active Suppliers</div>
+      </Card>
+      <Card className="text-center p-6 hover:shadow-lg transition-shadow">
+        <TrendingUp className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+        <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-deals">
+          {isLoading ? '...' : formatNumber(displayStats.totalDeals)}
+        </div>
+        <div className="text-slate-600 text-sm">Deals Posted</div>
+      </Card>
+      <Card className="text-center p-6 hover:shadow-lg transition-shadow">
+        <Zap className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+        <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-connections">
+          {isLoading ? '...' : formatNumber(displayStats.successfulConnections)}
+        </div>
+        <div className="text-slate-600 text-sm">Successful Connections</div>
+      </Card>
+      <Card className="text-center p-6 hover:shadow-lg transition-shadow">
+        <Globe className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+        <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-savings">
+          {isLoading ? '...' : formatCurrency(displayStats.totalSavings)}
+        </div>
+        <div className="text-slate-600 text-sm">Total Savings</div>
+      </Card>
+    </section>
+  );
+}
+
 // Component to display hot deals on homepage
 function HotDealsHomepage() {
   const { data: hotDeals, isLoading } = useQuery({
@@ -240,36 +309,7 @@ export default function HomeComprehensive() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Business Statistics */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-          <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-            <Users className="h-8 w-8 text-orange-500 mx-auto mb-4" />
-            <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-suppliers">
-              2,150+
-            </div>
-            <div className="text-slate-600 text-sm">Active Suppliers</div>
-          </Card>
-          <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-            <TrendingUp className="h-8 w-8 text-orange-500 mx-auto mb-4" />
-            <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-deals">
-              15,340+
-            </div>
-            <div className="text-slate-600 text-sm">Deals Posted</div>
-          </Card>
-          <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-            <Zap className="h-8 w-8 text-orange-500 mx-auto mb-4" />
-            <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-connections">
-              89,250+
-            </div>
-            <div className="text-slate-600 text-sm">Successful Connections</div>
-          </Card>
-          <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-            <Globe className="h-8 w-8 text-orange-500 mx-auto mb-4" />
-            <div className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-stat-savings">
-              R12.4M+
-            </div>
-            <div className="text-slate-600 text-sm">Total Savings</div>
-          </Card>
-        </section>
+        <BusinessStatistics />
       </main>
 
       {/* Quick Access Features */}

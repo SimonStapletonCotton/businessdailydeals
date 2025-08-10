@@ -831,6 +831,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Business statistics endpoint for homepage
+  app.get('/api/business/stats', async (req, res) => {
+    try {
+      const stats = await storage.getBusinessStats();
+      console.log("Fetched business stats:", stats);
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching business stats:", error);
+      res.status(500).json({ message: "Failed to fetch business stats", error: error.message });
+    }
+  });
+
   app.get('/api/coupons/:code', async (req, res) => {
     try {
       const coupon = await storage.getCouponByCode(req.params.code);
