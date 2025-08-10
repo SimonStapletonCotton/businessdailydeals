@@ -91,7 +91,7 @@ export default function PostDeal() {
     defaultValues: {
       title: "",
       description: "",
-      category: "Electronics",
+      category: "",
       price: "",
       originalPrice: "",
       discount: 0,
@@ -384,15 +384,15 @@ export default function PostDeal() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category *</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger data-testid="select-category">
+                            <SelectTrigger data-testid="select-category" className="w-full">
                               <SelectValue placeholder="Select a category" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="max-h-[200px] z-50">
                             {categories.map((category) => (
-                              <SelectItem key={category} value={category}>
+                              <SelectItem key={category} value={category} className="cursor-pointer">
                                 {category}
                               </SelectItem>
                             ))}
