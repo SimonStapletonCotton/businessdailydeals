@@ -124,9 +124,13 @@ export default function SupplierDashboard() {
       return response.json();
     },
     onSuccess: (data) => {
+      const message = data.promotionalPeriod 
+        ? `Extended for ${data.extraDays} extra days. FREE during promotional period!`
+        : `Extended for ${data.extraDays} extra days. ${data.creditsCharged} credits charged. Remaining balance: ${data.remainingCredits} credits.`;
+      
       toast({
         title: "Deal Extended Successfully",
-        description: `Extended for ${data.extraDays} extra days. ${data.creditsCharged} credits charged. Remaining balance: ${data.remainingCredits} credits.`,
+        description: message,
       });
       setExtendingDealId(null);
       setExtendExpirationDate("");
@@ -267,16 +271,22 @@ export default function SupplierDashboard() {
     const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
     const totalCredits = extraDays * creditsPerDay;
 
-    // Check current credit balance
-    const currentBalance = parseFloat((creditBalance as any)?.creditBalance || '0');
-    
-    if (currentBalance < totalCredits) {
-      toast({
-        title: "Insufficient Credits",
-        description: `You need ${totalCredits} credits but only have ${currentBalance}. Please top up your credits first.`,
-        variant: "destructive",
-      });
-      return;
+    // Check if we're in promotional period (FREE until January 1st, 2026)
+    const promotionalEndDate = new Date('2026-01-01T00:00:00.000Z');
+    const isPromotionalPeriod = new Date() < promotionalEndDate;
+
+    if (!isPromotionalPeriod) {
+      // Check current credit balance (only after promotional period)
+      const currentBalance = parseFloat((creditBalance as any)?.creditBalance || '0');
+      
+      if (currentBalance < totalCredits) {
+        toast({
+          title: "Insufficient Credits",
+          description: `You need ${totalCredits} credits but only have ${currentBalance}. Please top up your credits first.`,
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     extendDealMutation.mutate({ dealId, expiresAt: extendExpirationDate });
