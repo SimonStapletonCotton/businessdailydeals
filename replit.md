@@ -50,11 +50,11 @@ Backup requirements: Critical - cannot start from beginning if crashes occur, ne
 - **Role-based Access**: Buyer and supplier roles with route protection.
 
 ### Key Features
-- **Deal Management**: Suppliers can create, edit, manage hot and regular deals, and reactivate expired deals.
+- **Deal Management**: Suppliers can create, edit, manage hot and regular deals, extend deal expiry dates (FREE during promotional period until Dec 31, 2025), and reactivate expired deals.
 - **Smart Notifications**: Keyword-based matching system for relevant deal alerts with multi-channel support.
 - **Search & Discovery**: Comprehensive search for products, companies, and hot deals with category filters.
 - **Inquiry System**: Direct communication between buyers and suppliers.
-- **Supplier Dashboard**: For managing deals, inquiries, and expired deals.
+- **Supplier Dashboard**: Comprehensive dashboard with deal management (edit, delete, extend expiry), inquiries tracking, expired deals management, promotional period banners, and credit system integration.
 - **Credit System**: Credit packages, local ZAR payment integration, balance management, and transaction history.
 - **Image Upload**: Professional file upload with Google Cloud Storage integration.
 - **"Find Me a Deal"**: System for buyers to submit specific product requirements.
