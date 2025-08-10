@@ -61,7 +61,7 @@ export function CouponCard({ coupon, onDownload }: CouponCardProps) {
           {coupon.deal.originalPrice && (
             <div className="flex justify-between items-center">
               <span className="text-sm text-charcoal-600">Original Price:</span>
-              <span className="text-sm text-charcoal-500 line-through">
+              <span className="text-sm text-charcoal-700 line-through font-medium">
                 R{parseFloat(coupon.deal.originalPrice).toLocaleString()}
               </span>
             </div>

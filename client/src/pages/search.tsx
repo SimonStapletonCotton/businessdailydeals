@@ -169,7 +169,7 @@ export default function SearchPage() {
                             <div>
                               <p className="text-2xl font-bold text-primary">R{deal.price}</p>
                               {deal.originalPrice && (
-                                <p className="text-sm text-slate-500 line-through">R{deal.originalPrice}</p>
+                                <p className="text-sm text-slate-700 line-through font-medium">R{deal.originalPrice}</p>
                               )}
                             </div>
                             <div className="flex items-center gap-2 text-sm text-slate-500">
