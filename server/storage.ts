@@ -1029,28 +1029,40 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPublicCoupons(limit: number = 50): Promise<any[]> {
-    const result = await db
-      .select({
-        id: coupons.id,
-        couponCode: coupons.couponCode,
-        createdAt: coupons.createdAt,
-        expiresAt: coupons.expiresAt,
-        isRedeemed: coupons.isRedeemed,
-        dealTitle: coupons.dealTitle,
-        dealPrice: coupons.dealPrice,
-        dealOriginalPrice: coupons.dealOriginalPrice,
-        dealCategory: deals.category,
-        supplierCompanyName: users.companyName,
-        supplierCity: users.city,
-        supplierProvince: users.province,
-      })
-      .from(coupons)
-      .leftJoin(deals, eq(coupons.dealId, deals.id))
-      .leftJoin(users, eq(coupons.supplierId, users.id))
-      .orderBy(desc(coupons.createdAt))
-      .limit(limit);
+    try {
+      const result = await db
+        .select({
+          id: coupons.id,
+          couponCode: coupons.couponCode,
+          createdAt: coupons.createdAt,
+          expiresAt: coupons.expiresAt,
+          isRedeemed: coupons.isRedeemed,
+          dealTitle: coupons.dealTitle,
+          dealPrice: coupons.dealPrice,
+          dealOriginalPrice: coupons.dealOriginalPrice,
+          dealCategory: deals.category,
+          supplierCompanyName: sql<string>`supplier_user.company_name`,
+          supplierCity: sql<string>`NULL`, // Not available in schema
+          supplierProvince: sql<string>`supplier_user.province`,
+          buyerFirstName: sql<string>`buyer_user.first_name`,
+          buyerLastName: sql<string>`buyer_user.last_name`,
+          buyerCity: sql<string>`NULL`, // Not available in schema  
+          buyerProvince: sql<string>`buyer_user.province`,
+          buyerCompanyName: sql<string>`buyer_user.company_name`,
+        })
+        .from(coupons)
+        .leftJoin(deals, eq(coupons.dealId, deals.id))
+        .leftJoin(sql`${users} supplier_user`, eq(coupons.supplierId, sql`supplier_user.id`))
+        .leftJoin(sql`${users} buyer_user`, eq(coupons.buyerId, sql`buyer_user.id`))
+        .orderBy(desc(coupons.createdAt))
+        .limit(limit);
 
-    return result;
+      console.log("Public coupons query result:", result.length);
+      return result;
+    } catch (error) {
+      console.error("Error in getPublicCoupons:", error);
+      throw error;
+    }
   }
 
   async getCouponStats(): Promise<{
@@ -1082,15 +1094,10 @@ export class DatabaseStorage implements IStorage {
     // Calculate total savings (difference between original and deal prices for redeemed coupons)
     const [savingsResult] = await db
       .select({
-        totalSavings: sql<string>`COALESCE(SUM(CAST(${coupons.dealOriginalPrice} AS DECIMAL) - CAST(${coupons.dealPrice} AS DECIMAL)), 0)`
+        totalSavings: sql<string>`COALESCE(SUM(CASE WHEN ${coupons.dealOriginalPrice} IS NOT NULL AND ${coupons.dealOriginalPrice} != '' AND ${coupons.dealOriginalPrice} != '0' AND ${coupons.dealPrice} IS NOT NULL AND ${coupons.dealPrice} != '' THEN CAST(${coupons.dealOriginalPrice} AS DECIMAL) - CAST(${coupons.dealPrice} AS DECIMAL) ELSE 0 END), 0)`
       })
       .from(coupons)
-      .where(
-        and(
-          eq(coupons.isRedeemed, true),
-          sql`${coupons.dealOriginalPrice} IS NOT NULL AND ${coupons.dealOriginalPrice} != ''`
-        )
-      );
+      .where(eq(coupons.isRedeemed, true));
 
     return {
       totalCoupons: totalResult?.count || 0,

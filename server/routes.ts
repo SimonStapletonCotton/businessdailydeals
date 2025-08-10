@@ -757,6 +757,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public coupon routes for Live Coupons page (MUST be before wildcard routes)
+  app.get('/api/coupons/public', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const coupons = await storage.getPublicCoupons(limit);
+      console.log("Fetched public coupons:", coupons.length);
+      res.json(coupons);
+    } catch (error) {
+      console.error("Error fetching public coupons:", error);
+      res.status(500).json({ message: "Failed to fetch public coupons", error: error.message });
+    }
+  });
+
+  app.get('/api/coupons/stats', async (req, res) => {
+    try {
+      const stats = await storage.getCouponStats();
+      console.log("Fetched coupon stats:", stats);
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching coupon stats:", error);
+      res.status(500).json({ message: "Failed to fetch coupon stats", error: error.message });
+    }
+  });
+
   app.get('/api/coupons/:code', async (req, res) => {
     try {
       const coupon = await storage.getCouponByCode(req.params.code);
@@ -778,28 +802,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error redeeming coupon:", error);
       res.status(500).json({ message: "Failed to redeem coupon" });
-    }
-  });
-
-  // Public coupon routes for Live Coupons page
-  app.get('/api/coupons/public', async (req, res) => {
-    try {
-      const limit = parseInt(req.query.limit as string) || 50;
-      const coupons = await storage.getPublicCoupons(limit);
-      res.json(coupons);
-    } catch (error) {
-      console.error("Error fetching public coupons:", error);
-      res.status(500).json({ message: "Failed to fetch public coupons" });
-    }
-  });
-
-  app.get('/api/coupons/stats', async (req, res) => {
-    try {
-      const stats = await storage.getCouponStats();
-      res.json(stats);
-    } catch (error) {
-      console.error("Error fetching coupon stats:", error);
-      res.status(500).json({ message: "Failed to fetch coupon stats" });
     }
   });
 
