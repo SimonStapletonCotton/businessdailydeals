@@ -661,6 +661,9 @@ export class DatabaseStorage implements IStorage {
     if (!deal) throw new Error('Deal not found');
 
     // First delete related records to avoid foreign key constraints
+    // Delete related coupons
+    await db.delete(coupons).where(eq(coupons.dealId, id));
+    
     // Delete related credit transactions
     await db.delete(creditTransactions).where(eq(creditTransactions.dealId, id));
     
