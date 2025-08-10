@@ -24,24 +24,52 @@ export function DealImage({ src, alt, className = "", fallbackClassName = "" }: 
     );
   }
 
+  // CRITICAL FIX: Complete style override to force visibility
   return (
-    <div className="relative">
+    <div 
+      className="relative bg-yellow-100 border-2 border-yellow-500" 
+      style={{ 
+        position: 'relative', 
+        minHeight: '200px',
+        width: '100%',
+        backgroundColor: 'yellow !important'
+      }}
+    >
+      {/* Debug overlay */}
+      <div className="absolute top-0 left-0 bg-red-500 text-white text-xs p-1 z-50">
+        IMG: {imageLoaded ? 'LOADED' : 'LOADING'} | SRC: {src?.substring(src.lastIndexOf('/') + 1)}
+      </div>
+      
       <img
         src={src}
         alt={alt}
-        className={className}
+        className=""
         onLoad={(e) => {
           console.log('Image successfully loaded:', src);
+          console.log('Image element dimensions:', e.target.naturalWidth, 'x', e.target.naturalHeight);
           setImageLoaded(true);
         }}
         onError={(e) => {
           console.error('Image failed to load:', src, e);
           setImageError(true);
         }}
+        style={{ 
+          display: 'block',
+          visibility: 'visible',
+          opacity: '1',
+          width: '100%',
+          height: 'auto',
+          position: 'relative',
+          zIndex: 10,
+          border: '3px solid red',
+          backgroundColor: 'white'
+        }}
       />
+      
       {!imageLoaded && !imageError && (
-        <div className={`absolute inset-0 bg-slate-100 flex items-center justify-center ${className}`}>
-          <div className="animate-spin w-6 h-6 border-2 border-slate-300 border-t-slate-600 rounded-full"></div>
+        <div className="absolute inset-0 bg-blue-200 flex items-center justify-center">
+          <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+          <span className="ml-2 text-blue-800">Loading...</span>
         </div>
       )}
     </div>
