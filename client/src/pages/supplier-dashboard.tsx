@@ -703,87 +703,18 @@ export default function SupplierDashboard() {
                           {deletingDealId === deal.id ? "Deleting..." : "Delete"}
                         </Button>
                         
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                setExtendingDealId(deal.id);
-                                setExtendExpirationDate("");
-                              }}
-                              data-testid={`button-extend-deal-${deal.id}`}
-                            >
-                              <Calendar className="h-4 w-4 mr-1" />
-                              Extend Expiry
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>Extend Deal Expiry</DialogTitle>
-                            </DialogHeader>
-                            <div className="space-y-4">
-                              <div className="text-sm">
-                                <strong>{deal.title}</strong>
-                                <div className="mt-2 p-3 bg-slate-50 rounded border">
-                                  <div>Current expiry: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'Not set'}</div>
-                                  <div>Deal type: {deal.dealType === "hot" ? "HOT DEAL" : "REGULAR DEAL"}</div>
-                                </div>
-                              </div>
-                              
-                              <div>
-                                <Label htmlFor="extend-expiry-date">New Expiry Date</Label>
-                                <Input
-                                  id="extend-expiry-date"
-                                  type="date"
-                                  value={extendExpirationDate}
-                                  onChange={(e) => setExtendExpirationDate(e.target.value)}
-                                  className="mt-1"
-                                  min={new Date().toISOString().split('T')[0]}
-                                />
-                              </div>
-                              
-                              {extendExpirationDate && deal.expiresAt && (
-                                <div className="p-3 bg-blue-50 rounded border border-blue-200">
-                                  <div className="text-sm font-medium text-blue-900 mb-1">Extension Cost</div>
-                                  <div className="text-sm text-blue-800">
-                                    {(() => {
-                                      const currentExpiry = new Date(deal.expiresAt);
-                                      const newExpiry = new Date(extendExpirationDate);
-                                      const extraDays = Math.ceil((newExpiry.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
-                                      
-                                      if (extraDays <= 0) return "Please select a date after the current expiry";
-                                      
-                                      // Calculate cost: HOT deals = 5 credits per day, REGULAR = 2 credits per day
-                                      const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
-                                      const totalCredits = extraDays * creditsPerDay;
-                                      const totalCost = totalCredits * 2.5; // R2.50 per credit
-                                      
-                                      return (
-                                        <div>
-                                          <div>{extraDays} extra day{extraDays > 1 ? 's' : ''} × {creditsPerDay} credits = {totalCredits} credits</div>
-                                          <div className="font-medium">Total cost: R{totalCost.toFixed(2)}</div>
-                                        </div>
-                                      );
-                                    })()}
-                                  </div>
-                                </div>
-                              )}
-                              
-                              <div className="flex justify-end space-x-2">
-                                <DialogTrigger asChild>
-                                  <Button variant="outline">Cancel</Button>
-                                </DialogTrigger>
-                                <Button 
-                                  onClick={() => handleExtendDeal(deal.id)}
-                                  disabled={extendDealMutation.isPending || !extendExpirationDate}
-                                >
-                                  {extendDealMutation.isPending ? "Extending..." : "Extend & Charge Credits"}
-                                </Button>
-                              </div>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setExtendingDealId(deal.id);
+                            setExtendExpirationDate("");
+                          }}
+                          data-testid={`button-extend-deal-${deal.id}`}
+                        >
+                          <Calendar className="h-4 w-4 mr-1" />
+                          Extend Expiry
+                        </Button>
                       </div>
                     </div>
                   </Card>
@@ -932,6 +863,98 @@ export default function SupplierDashboard() {
             )}
         </Card>
       </main>
+
+      {/* Extend Deal Modal */}
+      {extendingDealId && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg w-full max-w-md p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold">Extend Deal Expiry</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setExtendingDealId(null);
+                  setExtendExpirationDate("");
+                }}
+                className="h-8 w-8 p-0"
+              >
+                ×
+              </Button>
+            </div>
+            
+            {(() => {
+              const deal = deals?.find(d => d.id === extendingDealId);
+              if (!deal) return null;
+              
+              return (
+                <div className="space-y-4">
+                  <div className="text-sm">
+                    <strong>{deal.title}</strong>
+                    <div className="mt-2 p-3 bg-slate-50 rounded border">
+                      <div>Current expiry: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'Not set'}</div>
+                      <div>Deal type: {deal.dealType === "hot" ? "HOT DEAL" : "REGULAR DEAL"}</div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="extend-expiry-date">New Expiry Date</Label>
+                    <Input
+                      id="extend-expiry-date"
+                      type="date"
+                      value={extendExpirationDate}
+                      onChange={(e) => setExtendExpirationDate(e.target.value)}
+                      className="mt-1"
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  
+                  {extendExpirationDate && deal.expiresAt && (
+                    <div className="p-3 bg-blue-50 rounded border border-blue-200">
+                      <div className="text-sm font-medium text-blue-900 mb-1">Extension Cost</div>
+                      <div className="text-sm text-blue-800">
+                        {(() => {
+                          const currentExpiry = new Date(deal.expiresAt);
+                          const newExpiry = new Date(extendExpirationDate);
+                          const daysDiff = Math.ceil((newExpiry.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
+                          const costPerDay = deal.dealType === "hot" ? 2 : 1;
+                          const totalCost = Math.max(0, daysDiff) * costPerDay;
+                          
+                          return (
+                            <>
+                              <div>Extension: {Math.max(0, daysDiff)} days</div>
+                              <div>Rate: {costPerDay} credit{costPerDay !== 1 ? 's' : ''} per day</div>
+                              <div className="font-semibold">Total: {totalCost} credit{totalCost !== 1 ? 's' : ''}</div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex justify-end space-x-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setExtendingDealId(null);
+                        setExtendExpirationDate("");
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => handleExtendDeal(deal.id)}
+                      disabled={extendDealMutation.isPending || !extendExpirationDate}
+                    >
+                      {extendDealMutation.isPending ? "Extending..." : "Extend & Charge Credits"}
+                    </Button>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
 
       {/* Edit Deal Modal */}
       {editingDeal && (
