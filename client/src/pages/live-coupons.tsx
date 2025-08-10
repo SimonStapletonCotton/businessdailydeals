@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Ticket, Clock, Building, Package, TrendingUp, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Ticket, Clock, Building, Package, TrendingUp, Users, Printer, Download, Save } from "lucide-react";
 import { format } from "date-fns";
 import Navbar from "@/components/navbar";
 
@@ -48,6 +49,217 @@ export default function LiveCoupons() {
     statsError,
     couponsLength: coupons?.length 
   });
+
+  // Print individual coupon function
+  const printCoupon = (coupon: PublicCoupon) => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const isExpired = new Date(coupon.expiresAt) < new Date();
+    const discount = coupon.dealOriginalPrice 
+      ? Math.round(((parseFloat(coupon.dealOriginalPrice) - parseFloat(coupon.dealPrice)) / parseFloat(coupon.dealOriginalPrice)) * 100)
+      : 0;
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Business Daily Deals Coupon - ${coupon.couponCode}</title>
+          <style>
+            body { 
+              font-family: Arial, sans-serif; 
+              margin: 0; 
+              padding: 20px; 
+              background: white;
+            }
+            .coupon {
+              max-width: 600px;
+              margin: 0 auto;
+              border: 3px dashed #ff6b35;
+              border-radius: 15px;
+              padding: 30px;
+              background: linear-gradient(135deg, #fff5f0 0%, #ffe5d9 100%);
+              box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
+            }
+            .header {
+              text-align: center;
+              border-bottom: 2px solid #ff6b35;
+              padding-bottom: 20px;
+              margin-bottom: 25px;
+            }
+            .logo {
+              font-size: 28px;
+              font-weight: bold;
+              color: #ff6b35;
+              margin-bottom: 5px;
+            }
+            .tagline {
+              color: #64748b;
+              font-size: 14px;
+            }
+            .deal-title {
+              font-size: 24px;
+              font-weight: bold;
+              color: #1e293b;
+              margin: 20px 0 15px 0;
+              text-align: center;
+            }
+            .price-section {
+              text-align: center;
+              margin: 20px 0;
+              padding: 15px;
+              background: rgba(255, 107, 53, 0.1);
+              border-radius: 10px;
+            }
+            .current-price {
+              font-size: 32px;
+              font-weight: bold;
+              color: #16a34a;
+            }
+            .original-price {
+              font-size: 18px;
+              text-decoration: line-through;
+              color: #64748b;
+              margin-left: 10px;
+            }
+            .savings {
+              color: #dc2626;
+              font-weight: bold;
+              font-size: 16px;
+            }
+            .details-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+              margin: 25px 0;
+            }
+            .detail-section {
+              background: rgba(255, 255, 255, 0.8);
+              padding: 15px;
+              border-radius: 8px;
+              border: 1px solid #e2e8f0;
+            }
+            .detail-title {
+              font-weight: bold;
+              color: #ff6b35;
+              margin-bottom: 8px;
+              font-size: 14px;
+              text-transform: uppercase;
+            }
+            .detail-value {
+              color: #1e293b;
+              font-size: 13px;
+              line-height: 1.4;
+            }
+            .coupon-code {
+              text-align: center;
+              margin: 25px 0;
+              padding: 15px;
+              background: #1e293b;
+              color: white;
+              border-radius: 8px;
+              font-family: 'Courier New', monospace;
+            }
+            .code-label {
+              font-size: 12px;
+              margin-bottom: 5px;
+              opacity: 0.8;
+            }
+            .code-value {
+              font-size: 20px;
+              font-weight: bold;
+              letter-spacing: 2px;
+            }
+            .validity {
+              text-align: center;
+              margin-top: 20px;
+              padding: 10px;
+              ${isExpired ? 'background: #fee2e2; color: #dc2626;' : 'background: #dcfce7; color: #16a34a;'}
+              border-radius: 6px;
+              font-weight: bold;
+            }
+            .footer {
+              text-align: center;
+              margin-top: 25px;
+              padding-top: 20px;
+              border-top: 1px solid #e2e8f0;
+              font-size: 12px;
+              color: #64748b;
+            }
+            @media print {
+              body { margin: 0; padding: 10px; }
+              .coupon { box-shadow: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="coupon">
+            <div class="header">
+              <div class="logo">🎯 BUSINESS DAILY DEALS</div>
+              <div class="tagline">South Africa's Premier B2B Marketplace</div>
+            </div>
+            
+            <div class="deal-title">${coupon.dealTitle}</div>
+            
+            <div class="price-section">
+              <span class="current-price">R${parseFloat(coupon.dealPrice).toLocaleString()}</span>
+              ${coupon.dealOriginalPrice ? `<span class="original-price">R${parseFloat(coupon.dealOriginalPrice).toLocaleString()}</span>` : ''}
+              ${discount > 0 ? `<div class="savings">Save ${discount}% • R${(parseFloat(coupon.dealOriginalPrice || '0') - parseFloat(coupon.dealPrice)).toLocaleString()} off!</div>` : ''}
+            </div>
+            
+            <div class="details-grid">
+              <div class="detail-section">
+                <div class="detail-title">Coupon Holder</div>
+                <div class="detail-value">
+                  <strong>${coupon.buyerFirstName} ${coupon.buyerLastName}</strong><br>
+                  ${coupon.buyerCompanyName ? `${coupon.buyerCompanyName}<br>` : ''}
+                  ${coupon.buyerCity || coupon.buyerProvince ? `${coupon.buyerCity || ''}${coupon.buyerCity && coupon.buyerProvince ? ', ' : ''}${coupon.buyerProvince || ''}` : 'Location not specified'}
+                </div>
+              </div>
+              
+              <div class="detail-section">
+                <div class="detail-title">Supplier Details</div>
+                <div class="detail-value">
+                  ${coupon.supplierCompanyName || 'Company Name Not Available'}<br>
+                  ${coupon.supplierCity || coupon.supplierProvince ? `${coupon.supplierCity || ''}${coupon.supplierCity && coupon.supplierProvince ? ', ' : ''}${coupon.supplierProvince || ''}` : 'Location not specified'}<br>
+                  Category: ${coupon.dealCategory}
+                </div>
+              </div>
+            </div>
+            
+            <div class="coupon-code">
+              <div class="code-label">COUPON CODE</div>
+              <div class="code-value">${coupon.couponCode}</div>
+            </div>
+            
+            <div class="validity">
+              ${isExpired ? 'EXPIRED' : 'VALID'} until ${format(new Date(coupon.expiresAt), 'MMMM dd, yyyy')}
+            </div>
+            
+            <div class="detail-section" style="margin-top: 20px;">
+              <div class="detail-title">Coupon Information</div>
+              <div class="detail-value">
+                <strong>Generated:</strong> ${format(new Date(coupon.createdAt), 'MMMM dd, yyyy \'at\' HH:mm')}<br>
+                <strong>Status:</strong> ${coupon.isRedeemed ? 'REDEEMED' : 'ACTIVE'}<br>
+                <strong>Offer Details:</strong> Special pricing on ${coupon.dealTitle} - ${discount > 0 ? `${discount}% discount` : 'Exclusive deal pricing'}
+              </div>
+            </div>
+            
+            <div class="footer">
+              <strong>www.businessdailydeals.co.za</strong><br>
+              Present this coupon to the supplier to claim your deal.<br>
+              Terms and conditions may apply. Coupon valid for single use only.
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+  };
 
   if (isLoading) {
     return (
@@ -267,19 +479,41 @@ export default function LiveCoupons() {
                       >
                         Copy Code
                       </button>
-                      <button 
-                        onClick={() => window.print()}
-                        className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200 transition-colors"
-                        data-testid={`button-print-${coupon.id}`}
-                      >
-                        Print Coupon
-                      </button>
                     </div>
                   </div>
 
                   {/* Expiry */}
                   <div className="text-xs text-gray-500">
                     {isExpired ? 'Expired' : 'Valid until'} {format(new Date(coupon.expiresAt), 'MMM dd, yyyy')}
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 mt-3">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => printCoupon(coupon)}
+                      className="flex items-center gap-1"
+                      data-testid={`button-print-${coupon.id}`}
+                    >
+                      <Printer className="h-3 w-3" />
+                      Print
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = `data:text/plain;charset=utf-8,${encodeURIComponent(`Business Daily Deals Coupon\nCode: ${coupon.couponCode}\nDeal: ${coupon.dealTitle}\nPrice: R${coupon.dealPrice}\nValid until: ${format(new Date(coupon.expiresAt), 'MMM dd, yyyy')}`)}`;
+                        link.download = `coupon-${coupon.couponCode}.txt`;
+                        link.click();
+                      }}
+                      className="flex items-center gap-1"
+                      data-testid={`button-save-${coupon.id}`}
+                    >
+                      <Save className="h-3 w-3" />
+                      Save
+                    </Button>
                   </div>
                 </div>
               </CardContent>
