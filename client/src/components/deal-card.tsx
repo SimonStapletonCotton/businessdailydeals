@@ -25,10 +25,54 @@ type DealWithSupplier = Deal & {
 
 interface DealCardProps {
   deal: DealWithSupplier;
-  variant?: "hot" | "regular";
+  variant?: "hot" | "regular" | "compact";
 }
 
 export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
+  // Compact badge-style layout for grid displays
+  if (variant === "compact") {
+    return (
+      <Card className="hover:shadow-lg transition-shadow border-2 border-red-200 hover:border-red-300 h-fit">
+        <CardContent className="p-4">
+          {deal.imageUrl && (
+            <img 
+              src={deal.imageUrl} 
+              alt={deal.title}
+              className="w-full h-32 object-cover rounded mb-3"
+            />
+          )}
+          <div className="flex items-center justify-between mb-2">
+            <Badge className="bg-red-600 text-white text-xs">HOT DEAL</Badge>
+            {deal.discount > 0 && (
+              <Badge variant="outline" className="text-green-600 border-green-600 text-xs">
+                {deal.discount}% OFF
+              </Badge>
+            )}
+          </div>
+          <h3 className="font-semibold text-slate-900 mb-2 text-sm line-clamp-2">{deal.title}</h3>
+          <p className="text-xs text-slate-600 mb-3 line-clamp-2">{deal.description}</p>
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <span className="text-lg font-bold text-slate-900">R{parseFloat(deal.price).toLocaleString()}</span>
+              {deal.originalPrice && parseFloat(deal.originalPrice) > parseFloat(deal.price) && (
+                <span className="text-xs text-slate-500 line-through ml-2">R{parseFloat(deal.originalPrice).toLocaleString()}</span>
+              )}
+            </div>
+          </div>
+          <div className="text-xs text-slate-500 mb-3">
+            Min. order: {deal.minOrder} unit{deal.minOrder !== 1 ? "s" : ""}
+          </div>
+          <Button
+            size="sm" 
+            className="w-full bg-red-600 hover:bg-red-700 text-white text-xs h-8"
+            onClick={() => window.location.href = `/hot-deals#${deal.id}`}
+          >
+            View Deal
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
   const { toast } = useToast();
   const { isAuthenticated } = useAuth();
   const [showInquiryForm, setShowInquiryForm] = useState(false);

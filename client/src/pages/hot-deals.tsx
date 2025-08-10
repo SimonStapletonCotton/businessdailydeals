@@ -177,7 +177,7 @@ export default function HotDeals() {
               <div className="mb-4 text-sm text-slate-600 bg-yellow-100 p-2 rounded">
                 DEBUG: Showing {deals.length} hot deal{deals.length === 1 ? '' : 's'} - {JSON.stringify(deals.map(d => d.title))}
               </div>
-              <div className="grid grid-cols-5 gap-4 min-h-[800px]">{/* Fixed 5-column layout, 10 rows = 50 deals */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 min-h-[800px]">{/* Responsive grid layout */}
                 {deals.slice(0, displayCount).map((deal) => (
                   <DealCard 
                     key={deal.id} 
@@ -192,7 +192,7 @@ export default function HotDeals() {
                         isVerified: deal.supplier.isVerified || false,
                       }
                     }} 
-                    variant="hot" 
+                    variant="compact" 
                   />
                 ))}
               </div>
