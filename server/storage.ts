@@ -573,7 +573,12 @@ export class DatabaseStorage implements IStorage {
   async createDeal(dealData: InsertDeal): Promise<Deal> {
     // Calculate credits cost based on deal type
     const creditsCost = this.calculateDealCredits(dealData.dealType || 'regular');
-    const dealWithCredits = { ...dealData, creditsCost: creditsCost.toFixed(2) };
+    const dealWithCredits = { 
+      ...dealData, 
+      creditsCost: creditsCost.toString(),
+      price: dealData.price?.toString(),
+      originalPrice: dealData.originalPrice?.toString()
+    };
 
     const [deal] = await db.insert(deals).values(dealWithCredits).returning();
     
