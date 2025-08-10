@@ -13,6 +13,12 @@ NEW PROMOTIONAL PERIOD: FREE deal posting for suppliers until 31st December 2025
 Color scheme preference: Orange halftone casino-style theme with animated red 7's, professional gradient backgrounds (specific: orange halftone on left #ffcc80 → #ffb74d graduating to slate halftone #c8b8a0 → #8fa3b8 on right), mid charcoal navbar (#64748b)
 Quality expectations: Comprehensive implementations with thorough attention to detail - "master coder should think of every combination"
 Backup requirements: Critical - cannot start from beginning if crashes occur, need complete documentation
+RECENT PROGRESS (August 10, 2025):
+- Fixed extend functionality completely - resolved "Insufficient credits" error with promotional period logic
+- Corrected promotional period end date from January 1st, 2026 to December 31st, 2025 across all components
+- UI styling improvements: POST DEAL button changed to red background (bg-red-600), HOT/REGULAR DEALS buttons updated to mid orange (bg-orange-500)
+- All deals posted during promotional period (until Dec 31, 2025) are completely FREE
+- Dashboard extend functionality fully working with proper promotional period bypass
 
 ## System Architecture
 
