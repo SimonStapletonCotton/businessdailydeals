@@ -174,6 +174,14 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 src={deal.imageUrl} 
                 alt={deal.title}
                 className="w-full h-32 object-cover rounded mb-3"
+                onError={(e) => {
+                  console.error('Image failed to load:', deal.imageUrl);
+                  console.error('Deal:', deal.title);
+                  e.currentTarget.style.display = 'none';
+                }}
+                onLoad={(e) => {
+                  console.log('Image loaded successfully:', deal.imageUrl);
+                }}
               />
             )}
             <div className="flex items-center justify-between mb-2">
@@ -245,6 +253,13 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                       src={deal.imageUrl} 
                       alt={deal.title}
                       className="w-full h-48 object-cover rounded mb-4"
+                      onError={(e) => {
+                        console.error('Modal image failed to load:', deal.imageUrl);
+                        e.currentTarget.style.display = 'none';
+                      }}
+                      onLoad={(e) => {
+                        console.log('Modal image loaded successfully:', deal.imageUrl);
+                      }}
                     />
                   )}
                   <div className="space-y-3">
@@ -392,6 +407,13 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 src={deal.imageUrl} 
                 alt={deal.title}
                 className="w-full h-48 object-cover rounded-lg"
+                onError={(e) => {
+                  console.error('Regular image failed to load:', deal.imageUrl);
+                  e.currentTarget.style.display = 'none';
+                }}
+                onLoad={(e) => {
+                  console.log('Regular image loaded successfully:', deal.imageUrl);
+                }}
               />
             ) : (
               <div className="w-full h-48 bg-slate-100 rounded-lg flex items-center justify-center">
