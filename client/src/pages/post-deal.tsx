@@ -18,7 +18,7 @@ import { ImageUpload } from "@/components/image-upload";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { insertDealSchema } from "@shared/schema";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -136,6 +136,9 @@ export default function PostDeal() {
         title: "Deal Posted Successfully",
         description: "Your deal has been posted and is now live.",
       });
+      // Invalidate supplier dashboard queries to refresh the deals list
+      queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/deals"] });
       setLocation("/supplier-dashboard");
     },
     onError: (error: any) => {

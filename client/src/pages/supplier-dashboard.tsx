@@ -47,9 +47,10 @@ export default function SupplierDashboard() {
     }
   }, [isAuthenticated, isLoading, user, toast]);
 
-  const { data: deals, isLoading: dealsLoading } = useQuery<DealWithSupplier[]>({
+  const { data: deals, isLoading: dealsLoading, refetch: refetchDeals } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/supplier/deals"],
     enabled: isAuthenticated && user?.userType === "supplier",
+    staleTime: 0, // Always fetch fresh data
   });
 
   const { data: inquiries, isLoading: inquiriesLoading } = useQuery<InquiryWithDetails[]>({
