@@ -71,7 +71,7 @@ export default function Home() {
           <Link href="/hot-deals">
             <Button 
               size="lg" 
-              className="bg-red-600 hover:bg-red-700 text-white border-2 border-red-800 px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+              className="bg-orange-500 hover:bg-orange-600 text-white border-2 border-orange-700 px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               data-testid="button-hot-deals"
             >
               🔥 HOT DEALS
@@ -81,7 +81,7 @@ export default function Home() {
           <Link href="/regular-deals">
             <Button 
               size="lg" 
-              className="bg-orange-600 hover:bg-orange-700 text-white border-2 border-orange-800 px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+              className="bg-orange-500 hover:bg-orange-600 text-white border-2 border-orange-700 px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               data-testid="button-regular-deals"
             >
               📦 REGULAR DEALS
