@@ -14,7 +14,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageUpload } from "@/components/image-upload";
@@ -309,8 +309,9 @@ export default function SupplierDashboard() {
 
   const handleEditDeal = (deal: DealWithSupplier) => {
     console.log("Edit button clicked for deal:", deal.id, deal.title);
-    setEditingDeal(deal);
-    setEditFormData({
+    console.log("Deal data:", deal);
+    
+    const formData = {
       title: deal.title || "",
       description: deal.description || "",
       category: deal.category || "",
@@ -320,8 +321,11 @@ export default function SupplierDashboard() {
       size: deal.size || "",
       quantityAvailable: deal.quantityAvailable || 1,
       productSpecifications: deal.productSpecifications || ""
-    });
-    console.log("Edit form data set:", editFormData);
+    };
+    
+    console.log("Setting form data:", formData);
+    setEditFormData(formData);
+    setEditingDeal(deal);
   };
 
   const handleSaveEdit = () => {
@@ -670,7 +674,11 @@ export default function SupplierDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleEditDeal(deal)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleEditDeal(deal);
+                          }}
                           className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                           data-testid={`button-edit-deal-${deal.id}`}
                         >
@@ -681,7 +689,11 @@ export default function SupplierDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteDeal(deal.id)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDeleteDeal(deal.id);
+                          }}
                           disabled={deletingDealId === deal.id}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                           data-testid={`button-delete-deal-${deal.id}`}
@@ -925,6 +937,9 @@ export default function SupplierDashboard() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Deal {editingDeal ? `- ${editingDeal.title}` : ""}</DialogTitle>
+            <DialogDescription>
+              Update your deal information below. Changes will be saved immediately.
+            </DialogDescription>
           </DialogHeader>
             <div className="space-y-4">
               <div>
