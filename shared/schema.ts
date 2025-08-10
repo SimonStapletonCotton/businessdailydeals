@@ -196,7 +196,8 @@ export const creditTransactions = pgTable("credit_transactions", {
   type: varchar("type").notNull(), // "purchase", "spend", "refund"
   description: text("description").notNull(),
   dealId: varchar("deal_id").references(() => deals.id),
-  stripePaymentIntentId: varchar("stripe_payment_intent_id"),
+  paymentReference: varchar("payment_reference"), // PayFast payment_id 
+  merchantReference: varchar("merchant_reference"), // Custom reference for bank reconciliation
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -210,7 +211,8 @@ export const orders = pgTable("orders", {
   shippingCost: decimal("shipping_cost", { precision: 10, scale: 2 }).default('0.00'),
   shippingAddress: text("shipping_address"),
   status: varchar("status").notNull().default("pending"), // "pending", "confirmed", "shipped", "delivered", "cancelled"
-  stripePaymentIntentId: varchar("stripe_payment_intent_id"),
+  paymentReference: varchar("payment_reference"), // PayFast payment_id
+  merchantReference: varchar("merchant_reference"), // Custom reference for bank reconciliation
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
