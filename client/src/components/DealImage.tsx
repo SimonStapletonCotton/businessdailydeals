@@ -12,11 +12,8 @@ export function DealImage({ src, alt, className = "", fallbackClassName = "" }: 
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  console.log('DealImage render:', { src, imageError, imageLoaded });
-
   // If no src provided or image failed to load, show fallback
   if (!src || imageError) {
-    console.log('Showing fallback for:', src, 'error:', imageError);
     return (
       <div className={`bg-slate-100 flex items-center justify-center ${className} ${fallbackClassName}`}>
         <Package className="h-12 w-12 text-slate-400" />
@@ -31,11 +28,10 @@ export function DealImage({ src, alt, className = "", fallbackClassName = "" }: 
         alt={alt}
         className={className}
         onLoad={() => {
-          console.log('Image onLoad triggered for:', src);
           setImageLoaded(true);
         }}
         onError={(e) => {
-          console.error('Image onError triggered for:', src);
+          console.error('Image failed to load:', src);
           setImageError(true);
         }}
       />
