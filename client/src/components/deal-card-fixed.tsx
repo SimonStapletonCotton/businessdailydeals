@@ -69,11 +69,20 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
       
       toast({
         title: "Coupon Generated Successfully!",
-        description: `Your coupon code: ${couponCode}. Valid until ${expiresAt ? new Date(expiresAt).toLocaleDateString() : 'N/A'}.`,
+        description: `Your coupon code: ${couponCode}. Valid until ${expiresAt ? new Date(expiresAt).toLocaleDateString() : 'N/A'}. Visit "My Coupons" to view all your coupons.`,
       });
       setShowCompactModal(false);
+      
+      // Show navigation hint after a short delay
+      setTimeout(() => {
+        const viewCoupons = confirm("Would you like to view all your coupons now?");
+        if (viewCoupons) {
+          window.location.href = "/my-coupons";
+        }
+      }, 3000);
+      
       // Invalidate coupons cache
-      queryClient.invalidateQueries({ queryKey: ["/api/coupons"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/buyer/coupons"] });
     },
     onError: (error: any) => {
       console.error("Coupon generation failed:", error);
@@ -295,12 +304,6 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                         }
                         
                         console.log("Attempting to create coupon...");
-                        
-                        // For testing: Show immediate success message first
-                        toast({
-                          title: "Coupon Generation Started",
-                          description: "Processing your coupon request...",
-                        });
                         
                         // Direct API call for coupon generation
                         console.log("Calling mutation with:", { dealId: deal.id, supplierId: deal.supplierId });

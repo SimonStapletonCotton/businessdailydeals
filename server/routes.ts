@@ -665,6 +665,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/buyer/coupons', isAuthenticated, async (req: any, res) => {
+    try {
+      const buyerId = req.user.claims.sub;
+      const coupons = await storage.getCouponsByBuyer(buyerId);
+      res.json(coupons);
+    } catch (error) {
+      console.error("Error fetching buyer coupons:", error);
+      res.status(500).json({ message: "Failed to fetch coupons" });
+    }
+  });
+
   app.patch('/api/inquiries/:id/status', isAuthenticated, async (req, res) => {
     try {
       const { status } = req.body;
