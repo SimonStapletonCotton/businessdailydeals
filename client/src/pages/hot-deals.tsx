@@ -20,6 +20,21 @@ export default function HotDeals() {
   const [sortBy, setSortBy] = useState("latest");
   const [displayCount, setDisplayCount] = useState(50); // Show 10 rows of 5 deals each (50 deals per page)
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    // Force immediate scroll to top
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Also add a small delay to handle any async content loading
+    const timeoutId = setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   // Remove authentication redirect - let pages load for everyone
 
   const { data: deals, isLoading: dealsLoading, error } = useQuery<DealWithSupplier[]>({
