@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const categories = [
   'All', 'Agriculture', 'Automotive', 'Construction', 'Electronics', 'Fashion',
   'Food & Beverage', 'Healthcare', 'Industrial', 'IT & Software', 'Manufacturing',
-  'Mining', 'Office Supplies', 'Retail', 'Security', 'Tourism', 'Transport', 
+  'Mining', 'General Industry', 'Residential', 'Office Supplies', 'Retail', 'Security', 'Tourism', 'Transport', 
   'Utilities', 'Water', 'Other'
 ];
 
