@@ -326,6 +326,7 @@ export default function SupplierDashboard() {
     console.log("Setting form data:", formData);
     setEditFormData(formData);
     setEditingDeal(deal);
+    console.log("editingDeal state set to:", deal.id);
   };
 
   const handleSaveEdit = () => {
@@ -933,7 +934,11 @@ export default function SupplierDashboard() {
       </main>
 
       {/* Edit Deal Modal */}
-      <Dialog open={!!editingDeal} onOpenChange={() => setEditingDeal(null)}>
+      {console.log("Rendering modal, editingDeal:", editingDeal)}
+      <Dialog open={!!editingDeal} onOpenChange={(open) => {
+        console.log("Dialog onOpenChange:", open);
+        if (!open) setEditingDeal(null);
+      }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Deal {editingDeal ? `- ${editingDeal.title}` : ""}</DialogTitle>
