@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RatesTableUpload from "@/components/rates-table-upload";
 import { FileText, Upload, Database, BarChart3, Flame } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { BackButton } from "@/components/back-button";
 
 export default function RatesManagement() {
   const { data: rates, isLoading } = useQuery({
@@ -17,6 +18,7 @@ export default function RatesManagement() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <BackButton label="← Back to Home" />
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">

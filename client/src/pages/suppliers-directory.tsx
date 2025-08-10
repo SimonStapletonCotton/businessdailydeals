@@ -20,6 +20,7 @@ import {
   Calendar
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { BackButton } from "@/components/back-button";
 
 interface SupplierWithStats {
   id: string;
@@ -130,6 +131,7 @@ export default function SuppliersDirectory() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <BackButton label="← Back to Home" />
         {/* Header */}
         <div className="mb-12 text-center">
           <div className="flex items-center justify-center mb-4">

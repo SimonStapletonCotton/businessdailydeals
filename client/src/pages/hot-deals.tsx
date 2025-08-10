@@ -11,6 +11,7 @@ import { useState } from "react";
 import type { DealWithSupplier } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { BackButton } from "@/components/back-button";
 
 export default function HotDeals() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -107,6 +108,7 @@ export default function HotDeals() {
       <Navbar />
       <div className="page-deals">
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <BackButton label="← Back to Home" />
         {/* Modern Header Section */}
         <div className="mb-12 text-center">
           <div className="flex items-center justify-center mb-4">

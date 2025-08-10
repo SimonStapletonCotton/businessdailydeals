@@ -16,6 +16,7 @@ import { Search, MapPin, Package, CreditCard, Ruler, Hash, Send } from "lucide-r
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { BackButton } from "@/components/back-button";
 
 const findDealSchema = z.object({
   productName: z.string().min(2, "Product name must be at least 2 characters"),
@@ -149,6 +150,7 @@ export default function FindMeDeal() {
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <BackButton label="← Back to Home" />
         {/* Modern Header */}
         <div className="mb-12 text-center">
           <div className="flex items-center justify-center mb-4">

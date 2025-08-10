@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Deal, Company } from "@shared/schema";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BackButton } from "@/components/back-button";
 
 const categories = [
   'All', 'Agriculture', 'Automotive', 'Construction', 'Electronics', 'Fashion',
@@ -45,6 +46,7 @@ export default function SearchPage() {
       {/* Header */}
       <div className="bg-white border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
+          <BackButton label="← Back to Home" />
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-slate-900 mb-2" data-testid="text-search-title">
               Advanced Search & Discovery
