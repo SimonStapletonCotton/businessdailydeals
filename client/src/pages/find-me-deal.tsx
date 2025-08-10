@@ -269,20 +269,20 @@ export default function FindMeDeal() {
                         <MapPin className="mr-2 h-4 w-4 text-violet-600" />
                         Delivery Destination *
                       </FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} value={field.value || ""} defaultValue="">
                           <SelectTrigger className="p-3 border-2 border-slate-200 focus:border-violet-500" data-testid="select-delivery-destination">
                             <SelectValue placeholder="Select delivery city or area" />
                           </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {southAfricanCities.map((city) => (
-                            <SelectItem key={city} value={city}>
-                              {city}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                          <SelectContent>
+                            {southAfricanCities.map((city) => (
+                              <SelectItem key={city} value={city}>
+                                {city}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                       <FormDescription>
                         Where do you need the products delivered?
                       </FormDescription>
