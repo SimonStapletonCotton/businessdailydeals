@@ -260,36 +260,35 @@ export default function FindMeDeal() {
                 </div>
 
                 {/* Delivery Destination */}
-                <FormField
-                  control={form.control}
-                  name="deliveryDestination"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center font-semibold">
-                        <MapPin className="mr-2 h-4 w-4 text-violet-600" />
-                        Delivery Destination *
-                      </FormLabel>
-                      <FormControl>
-                        <Select onValueChange={field.onChange} value={field.value || ""} defaultValue="">
-                          <SelectTrigger className="p-3 border-2 border-slate-200 focus:border-violet-500" data-testid="select-delivery-destination">
-                            <SelectValue placeholder="Select delivery city or area" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {southAfricanCities.map((city) => (
-                              <SelectItem key={city} value={city}>
-                                {city}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormDescription>
-                        Where do you need the products delivered?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
+                <div className="space-y-2">
+                  <label className="flex items-center font-semibold text-sm">
+                    <MapPin className="mr-2 h-4 w-4 text-violet-600" />
+                    Delivery Destination *
+                  </label>
+                  <Select 
+                    value={form.watch("deliveryDestination")} 
+                    onValueChange={(value) => form.setValue("deliveryDestination", value)}
+                  >
+                    <SelectTrigger className="p-3 border-2 border-slate-200 focus:border-violet-500" data-testid="select-delivery-destination">
+                      <SelectValue placeholder="Select delivery city or area" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {southAfricanCities.map((city) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-slate-600">
+                    Where do you need the products delivered?
+                  </p>
+                  {form.formState.errors.deliveryDestination && (
+                    <p className="text-sm text-red-600">
+                      {form.formState.errors.deliveryDestination.message}
+                    </p>
                   )}
-                />
+                </div>
 
                 {/* Price Range */}
                 <div className="space-y-4">
