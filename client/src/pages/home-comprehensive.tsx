@@ -167,7 +167,7 @@ export default function HomeComprehensive() {
               <Link href="/hot-deals">
                 <Button 
                   size="lg" 
-                  className="bg-red-600 text-white hover:bg-red-700 px-8 py-3 text-lg font-semibold shadow-lg"
+                  className="bg-orange-500 text-white hover:bg-orange-600 px-8 py-3 text-lg font-semibold shadow-lg"
                   onClick={() => {
                     // Force scroll to top when navigating to hot deals
                     setTimeout(() => {
@@ -182,7 +182,7 @@ export default function HomeComprehensive() {
                 </Button>
               </Link>
               <Link href="/regular-deals">
-                <Button size="lg" className="bg-blue-800 text-white hover:bg-blue-900 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
+                <Button size="lg" className="bg-orange-500 text-white hover:bg-orange-600 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
                   Browse Regular Deals
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
