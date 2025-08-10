@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { sendDealRequestToAdmin } from "./email";
+import { sendDealRequestToAdmin, sendPaymentNotificationToAdmin } from "./email";
 import Stripe from "stripe";
 import {
   generalLimiter,
@@ -1054,7 +1054,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         amount: (amount / 100).toFixed(2),
         type: 'purchase',
         description,
-        stripePaymentIntentId: paymentIntent.id
+        paymentReference: paymentIntent.id,
+        merchantReference: `BDD-${credits}CRED-${Date.now()}`
       });
 
       res.json({ 
@@ -1064,6 +1065,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating credit purchase:", error);
       res.status(500).json({ message: "Failed to create purchase" });
+    }
+  });
+
+  // PayFast Payment Success Handler (Webhook/Callback)
+  app.post('/api/payfast/success', async (req, res) => {
+    try {
+      const paymentData = req.body;
+      console.log('PayFast payment success:', paymentData);
+      
+      // Find the pending transaction
+      const transaction = await storage.getCreditTransactionByReference(
+        paymentData.payment_id || paymentData.pf_payment_id
+      );
+      
+      if (transaction) {
+        // Update transaction status to completed
+        await storage.updateCreditTransaction(transaction.id, {
+          status: 'completed'
+        });
+        
+        // Add credits to user account
+        await storage.addCreditsToUser(transaction.userId, transaction.credits);
+        
+        // Get user details for email
+        const user = await storage.getUser(transaction.userId);
+        
+        if (user) {
+          // Send admin notification email
+          await sendPaymentNotificationToAdmin({
+            customerName: user.name || user.username,
+            customerEmail: user.email || 'No email provided',
+            packageType: transaction.description,
+            credits: Math.floor(parseFloat(transaction.amount) / 2.5), // R2.50 per credit
+            amount: `R${transaction.amount}`,
+            paymentReference: paymentData.payment_id || paymentData.pf_payment_id,
+            merchantReference: transaction.merchantReference || `BDD-${transaction.id}`,
+            paymentMethod: paymentData.payment_method || 'PayFast',
+            paidAt: new Date().toLocaleString('en-ZA', {
+              timeZone: 'Africa/Johannesburg',
+              year: 'numeric',
+              month: '2-digit', 
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })
+          });
+          
+          console.log(`Payment notification sent to admin for ${user.email}`);
+        }
+      }
+      
+      res.status(200).send('OK');
+    } catch (error) {
+      console.error("Error processing PayFast payment success:", error);
+      res.status(500).send('Error');
     }
   });
 

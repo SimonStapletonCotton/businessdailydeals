@@ -156,6 +156,98 @@ This inquiry has been sent to the supplier and copied here for your records.
   return supplierSuccess || adminSuccess;
 }
 
+// Payment notification email data
+interface PaymentNotificationData {
+  customerName: string;
+  customerEmail: string;
+  packageType: string;
+  credits: number;
+  amount: string;
+  paymentReference: string;
+  merchantReference: string;
+  paymentMethod: string; // 'PayFast EFT', 'PayFast Card', etc.
+  paidAt: string;
+}
+
+export async function sendPaymentNotificationToAdmin(paymentData: PaymentNotificationData): Promise<boolean> {
+  const adminEmail = 'admin@businessdailydeals.co.za';
+  const fromEmail = 'noreply@businessdailydeals.co.za';
+
+  const emailContent = `
+Payment Successfully Processed
+==============================
+
+Payment Details:
+- Amount: ${paymentData.amount}
+- Payment Reference: ${paymentData.paymentReference}
+- Merchant Reference: ${paymentData.merchantReference}
+- Payment Method: ${paymentData.paymentMethod}
+- Date/Time: ${paymentData.paidAt}
+
+Customer Information:
+- Name: ${paymentData.customerName}
+- Email: ${paymentData.customerEmail}
+
+Purchase Details:
+- Package: ${paymentData.packageType}
+- Credits Purchased: ${paymentData.credits}
+
+This payment should appear in your Nedbank account within 24 hours.
+Use the Merchant Reference (${paymentData.merchantReference}) to match with your bank statement.
+
+Business Daily Deals Admin Panel
+www.businessdailydeals.co.za
+  `;
+
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 2px solid #22c55e; border-radius: 12px;">
+      <div style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; padding: 20px; border-radius: 10px 10px 0 0;">
+        <h2 style="margin: 0; font-size: 24px;">💰 Payment Successfully Processed</h2>
+        <p style="margin: 5px 0 0 0; opacity: 0.9;">Business Daily Deals</p>
+      </div>
+      
+      <div style="padding: 30px;">
+        <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; border-left: 4px solid #22c55e; margin-bottom: 20px;">
+          <h3 style="color: #15803d; margin-top: 0; font-size: 18px;">💳 Payment Details</h3>
+          <div style="display: grid; gap: 8px;">
+            <p style="margin: 0;"><strong>Amount:</strong> <span style="color: #15803d; font-size: 20px; font-weight: bold;">${paymentData.amount}</span></p>
+            <p style="margin: 0;"><strong>Payment Reference:</strong> <code style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px;">${paymentData.paymentReference}</code></p>
+            <p style="margin: 0;"><strong>Merchant Reference:</strong> <code style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px;">${paymentData.merchantReference}</code></p>
+            <p style="margin: 0;"><strong>Payment Method:</strong> ${paymentData.paymentMethod}</p>
+            <p style="margin: 0;"><strong>Date/Time:</strong> ${paymentData.paidAt}</p>
+          </div>
+        </div>
+
+        <div style="background-color: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: #92400e; margin-top: 0;">👤 Customer Information</h3>
+          <p style="margin: 5px 0;"><strong>Name:</strong> ${paymentData.customerName}</p>
+          <p style="margin: 5px 0;"><strong>Email:</strong> ${paymentData.customerEmail}</p>
+        </div>
+
+        <div style="background-color: #f0f9ff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: #1e40af; margin-top: 0;">📦 Purchase Details</h3>
+          <p style="margin: 5px 0;"><strong>Package:</strong> ${paymentData.packageType}</p>
+          <p style="margin: 5px 0;"><strong>Credits Purchased:</strong> <span style="color: #1e40af; font-weight: bold;">${paymentData.credits}</span></p>
+        </div>
+
+        <div style="background-color: #e0f2fe; padding: 15px; border-radius: 8px; border: 1px solid #0284c7;">
+          <p style="margin: 0; color: #0c4a6e;"><strong>📱 Bank Reconciliation:</strong></p>
+          <p style="margin: 5px 0 0 0; color: #0c4a6e;">This payment should appear in your Nedbank account within 24 hours.</p>
+          <p style="margin: 5px 0 0 0; color: #0c4a6e;">Use reference: <strong>${paymentData.merchantReference}</strong> to match with your bank statement.</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  return await sendEmail({
+    to: adminEmail,
+    from: fromEmail,
+    subject: `💰 Payment Received: ${paymentData.amount} - ${paymentData.merchantReference}`,
+    text: emailContent,
+    html: htmlContent,
+  });
+}
+
 export async function sendDealRequestToAdmin(dealRequestData: DealRequestEmailData): Promise<boolean> {
   const adminEmail = 'admin@businessdailydeals.co.za';
   const fromEmail = 'noreply@businessdailydeals.co.za';
