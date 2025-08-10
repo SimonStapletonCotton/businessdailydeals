@@ -190,7 +190,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               <div>
                 <span className="text-lg font-bold text-slate-900">R{parseFloat(deal.price).toLocaleString()}</span>
                 {deal.originalPrice && parseFloat(deal.originalPrice) > parseFloat(deal.price) && (
-                  <span className="text-sm text-slate-700 line-through ml-2 font-medium">R{parseFloat(deal.originalPrice).toLocaleString()}</span>
+                  <span className="text-lg text-slate-700 line-through ml-2 font-medium">R{parseFloat(deal.originalPrice).toLocaleString()}</span>
                 )}
               </div>
             </div>
@@ -271,7 +271,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                     <div className="mb-3">
                       <span className="text-3xl font-bold text-slate-900">R{parseFloat(deal.price).toLocaleString()}</span>
                       {deal.originalPrice && parseFloat(deal.originalPrice) > parseFloat(deal.price) && (
-                        <span className="text-xl text-slate-700 line-through ml-2 font-medium">R{parseFloat(deal.originalPrice).toLocaleString()}</span>
+                        <span className="text-3xl text-slate-700 line-through ml-2 font-medium">R{parseFloat(deal.originalPrice).toLocaleString()}</span>
                       )}
                     </div>
                     <p className="text-sm text-slate-600">
@@ -449,7 +449,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                   {formatPrice(deal.price)}
                 </div>
                 {deal.originalPrice && parseFloat(deal.originalPrice) > parseFloat(deal.price) && (
-                  <div className="text-xl text-slate-700 line-through font-medium">
+                  <div className="text-3xl text-slate-700 line-through font-medium">
                     {formatPrice(deal.originalPrice)}
                   </div>
                 )}

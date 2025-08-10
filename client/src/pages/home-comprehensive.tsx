@@ -64,7 +64,7 @@ function HotDealsHomepage() {
               <div>
                 <span className="text-lg font-bold text-slate-900">R{deal.price}</span>
                 {deal.originalPrice && (
-                  <span className="text-sm text-slate-700 line-through ml-2 font-medium">R{deal.originalPrice}</span>
+                  <span className="text-lg text-slate-700 line-through ml-2 font-medium">R{deal.originalPrice}</span>
                 )}
               </div>
               <Link href="/hot-deals">
