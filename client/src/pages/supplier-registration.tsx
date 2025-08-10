@@ -26,7 +26,7 @@ const supplierRegistrationSchema = z.object({
   confirmPassword: z.string().min(8, "Please confirm your password"),
   numberOfItems: z.string().min(1, "Number of items to be uploaded is required"),
   rrpPerItem: z.string().min(1, "RRP of each item is required"),
-  discountPerItem: z.string().min(2, "Discount on each item is required (minimum 20%)"),
+  discountPerItem: z.string().min(1, "Discount on each item is required"),
   itemDescriptions: z.string().min(10, "Detailed description of each item is required"),
   dealType: z.enum(["hot", "regular"], {
     required_error: "Please select whether to load as 24hr deal or regular deal",
@@ -40,9 +40,9 @@ const supplierRegistrationSchema = z.object({
   path: ["confirmPassword"],
 }).refine((data) => {
   const discount = parseFloat(data.discountPerItem);
-  return !isNaN(discount) && discount >= 20;
+  return !isNaN(discount) && discount > 0;
 }, {
-  message: "Minimum discount of 20% is required",
+  message: "Discount must be greater than 0%",
   path: ["discountPerItem"],
 }).refine((data) => data.dealType !== "regular" || data.regularDealDuration, {
   message: "Please select duration for regular deals (7 or 14 days)",
@@ -372,7 +372,7 @@ export default function SupplierRegistration() {
                         <FormItem>
                           <FormLabel className="flex items-center gap-2">
                             <Percent className="h-4 w-4" />
-                            Discount % (min 20%)
+                            Discount %
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="e.g. 25" {...field} data-testid="input-discount" />
