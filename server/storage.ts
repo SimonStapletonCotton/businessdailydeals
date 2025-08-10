@@ -573,18 +573,23 @@ export class DatabaseStorage implements IStorage {
   async createDeal(dealData: InsertDeal): Promise<Deal> {
     // Calculate credits cost based on deal type
     const creditsCost = this.calculateDealCredits(dealData.dealType || 'regular');
+    
+    // Check if supplier is in promotional period (FREE until Jan 1, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    const finalCreditsCost = isPromotionalPeriod ? 0 : creditsCost;
+    
     const dealWithCredits = { 
       ...dealData, 
-      creditsCost: creditsCost.toString(),
+      creditsCost: finalCreditsCost.toString(),
       price: dealData.price?.toString(),
       originalPrice: dealData.originalPrice?.toString()
     };
 
     const [deal] = await db.insert(deals).values(dealWithCredits).returning();
     
-    // Charge credits to supplier
-    if (creditsCost > 0 && dealData.supplierId) {
-      await this.chargeDealCredits(dealData.supplierId, creditsCost, deal.id, dealData.dealType || 'regular');
+    // Charge credits to supplier (only if not in promotional period)
+    if (finalCreditsCost > 0 && dealData.supplierId && !isPromotionalPeriod) {
+      await this.chargeDealCredits(dealData.supplierId, finalCreditsCost, deal.id, dealData.dealType || 'regular');
     }
     
     // Create notifications for users with matching keywords
