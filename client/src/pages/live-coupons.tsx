@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Ticket, Clock, Building, Package, TrendingUp, Users } from "lucide-react";
 import { format } from "date-fns";
+import Navbar from "@/components/navbar";
 
 interface PublicCoupon {
   id: string;
@@ -25,17 +26,27 @@ interface PublicCoupon {
 }
 
 export default function LiveCoupons() {
-  const { data: coupons, isLoading } = useQuery<PublicCoupon[]>({
+  const { data: coupons, isLoading, error } = useQuery<PublicCoupon[]>({
     queryKey: ["/api/coupons/public"],
   });
 
-  const { data: stats } = useQuery<{
+  const { data: stats, error: statsError } = useQuery<{
     totalCoupons: number;
     activeCoupons: number;
     redeemedCoupons: number;
     totalSavings: string;
   }>({
     queryKey: ["/api/coupons/stats"],
+  });
+
+  // Debug logging (can be removed in production)
+  console.log("LiveCoupons debug:", { 
+    coupons, 
+    isLoading, 
+    error, 
+    stats, 
+    statsError,
+    couponsLength: coupons?.length 
   });
 
   if (isLoading) {
@@ -54,7 +65,9 @@ export default function LiveCoupons() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <>
+      <Navbar />
+      <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -138,19 +151,7 @@ export default function LiveCoupons() {
         </p>
       </div>
 
-      {/* Debug info */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
-          <div className="text-sm text-yellow-800">
-            Debug: Coupons data = {JSON.stringify({ 
-              length: coupons?.length, 
-              isLoading, 
-              hasData: !!coupons,
-              firstCoupon: coupons?.[0] || null 
-            }, null, 2)}
-          </div>
-        </div>
-      )}
+
 
       {/* Coupons Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -301,6 +302,7 @@ export default function LiveCoupons() {
       )}
 
 
-    </div>
+      </div>
+    </>
   );
 }
