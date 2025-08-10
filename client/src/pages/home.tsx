@@ -87,7 +87,7 @@ export default function Home() {
               📦 REGULAR DEALS
             </Button>
           </Link>
-          
+
           <Link href="/post-deal">
             <Button 
               size="lg" 
