@@ -304,7 +304,7 @@ export default function Navbar() {
                             
                             {(user as UserType)?.userType === "supplier" && (
                               <Link href="/post-deal">
-                                <Button className="w-full bg-accent hover:bg-accent/90" onClick={() => setMobileMenuOpen(false)} data-testid="button-post-deal-mobile">
+                                <Button className="w-full bg-red-600 text-white hover:bg-red-700" onClick={() => setMobileMenuOpen(false)} data-testid="button-post-deal-mobile">
                                   <Plus className="h-4 w-4 mr-2" />
                                   Post Deal
                                 </Button>
@@ -351,7 +351,7 @@ export default function Navbar() {
 
                 {(user as UserType)?.userType === "supplier" && (
                   <Link href="/post-deal">
-                    <Button className="bg-white text-slate-600 hover:bg-white/90 hover:text-slate-700 font-medium" data-testid="button-post-deal-navbar">
+                    <Button className="bg-red-600 text-white hover:bg-red-700 hover:text-white font-medium" data-testid="button-post-deal-navbar">
                       <Plus className="h-4 w-4 mr-2" />
                       Post Deal
                     </Button>
