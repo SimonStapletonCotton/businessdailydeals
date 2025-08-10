@@ -59,7 +59,15 @@ export default function Navbar() {
           variant={location === "/hot-deals" ? "secondary" : "ghost"}
           className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20 whitespace-nowrap flex-shrink-0"}
           data-testid="link-hot-deals"
-          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+          onClick={() => {
+            if (mobile) setMobileMenuOpen(false);
+            // Force scroll to top when navigating to hot deals
+            setTimeout(() => {
+              window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            }, 50);
+          }}
         >
           <Flame className="h-4 w-4 mr-2" />
           HOT deals
@@ -71,7 +79,15 @@ export default function Navbar() {
           variant={location === "/regular-deals" ? "secondary" : "ghost"}
           className={mobile ? "w-full justify-start" : "text-sm font-medium text-white hover:text-slate-900 hover:bg-white/20 whitespace-nowrap flex-shrink-0"}
           data-testid="link-regular-deals"
-          onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+          onClick={() => {
+            if (mobile) setMobileMenuOpen(false);
+            // Force scroll to top when navigating to regular deals
+            setTimeout(() => {
+              window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            }, 50);
+          }}
         >
           <Ticket className="h-4 w-4 mr-2" />
           REGULAR deals

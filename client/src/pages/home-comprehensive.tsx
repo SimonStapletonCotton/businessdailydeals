@@ -68,7 +68,18 @@ function HotDealsHomepage() {
                 )}
               </div>
               <Link href="/hot-deals">
-                <Button size="sm" className="bg-red-600 hover:bg-red-700 text-white">
+                <Button 
+                  size="sm" 
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                  onClick={() => {
+                    // Force scroll to top when navigating to hot deals
+                    setTimeout(() => {
+                      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                      document.documentElement.scrollTop = 0;
+                      document.body.scrollTop = 0;
+                    }, 50);
+                  }}
+                >
                   View Deal
                 </Button>
               </Link>
@@ -154,7 +165,18 @@ export default function HomeComprehensive() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <Link href="/hot-deals">
-                <Button size="lg" className="bg-red-600 text-white hover:bg-red-700 px-8 py-3 text-lg font-semibold shadow-lg">
+                <Button 
+                  size="lg" 
+                  className="bg-red-600 text-white hover:bg-red-700 px-8 py-3 text-lg font-semibold shadow-lg"
+                  onClick={() => {
+                    // Force scroll to top when navigating to hot deals
+                    setTimeout(() => {
+                      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                      document.documentElement.scrollTop = 0;
+                      document.body.scrollTop = 0;
+                    }, 50);
+                  }}
+                >
                   <Flame className="w-5 h-5 mr-2" />
                   Browse Hot Deals
                 </Button>
