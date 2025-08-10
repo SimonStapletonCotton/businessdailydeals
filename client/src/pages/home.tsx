@@ -91,7 +91,7 @@ export default function Home() {
           <Link href="/post-deal">
             <Button 
               size="lg" 
-              className="bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-800 px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+              className="bg-red-600 hover:bg-red-700 text-white border-2 border-red-800 px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               data-testid="button-post-deal"
             >
               ➕ POST DEAL
