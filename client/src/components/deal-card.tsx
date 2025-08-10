@@ -239,12 +239,12 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                   variant="outline"
                   className="w-full border-olive-600 text-olive-600 hover:bg-olive-50 h-10 flex items-center justify-center"
                   onClick={() => {
-                    console.log("AUTH VIEW: Opening modal for deal:", deal.id);
+                    console.log("🔥 AUTHENTICATED: Opening TEST modal for deal:", deal.id);
                     setShowDetails(true);
                   }}
                   data-testid="button-view-details"
                 >
-                  View Details
+                  🔥 TEST MODAL
                 </Button>
               </>
             ) : (
@@ -261,12 +261,12 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                   variant="outline"
                   className="w-full border-olive-600 text-olive-600 hover:bg-olive-50 h-10 flex items-center justify-center"
                   onClick={() => {
-                    console.log("AUTH VIEW: Opening modal for deal:", deal.id);
+                    console.log("🔥 NON-AUTH: Opening TEST modal for deal:", deal.id);
                     setShowDetails(true);
                   }}
                   data-testid="button-view-details"
                 >
-                  View Details
+                  🔥 TEST MODAL
                 </Button>
               </>
             )}
