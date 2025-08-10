@@ -65,13 +65,26 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           <Button
             size="sm" 
             className="w-full bg-red-600 hover:bg-red-700 text-white text-xs h-8"
-            onClick={() => {
-              console.log("🔥 COMPACT: Opening TEST modal for deal:", deal.id);
-              // For now, show alert - will replace with modal
-              alert(`Deal: ${deal.title}\nPrice: R${deal.price}\nSupplier: ${deal.supplier.companyName || deal.supplier.firstName}`);
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log("🔥 COMPACT CARD: Button clicked for deal:", deal.id, deal.title);
+              
+              // Create a detailed alert to test functionality
+              const alertMessage = [
+                `DEAL DETAILS:`,
+                `Title: ${deal.title}`,
+                `Price: R${parseFloat(deal.price).toLocaleString()}`,
+                `Min Order: ${deal.minOrder} unit${deal.minOrder !== 1 ? 's' : ''}`,
+                `Supplier: ${deal.supplier.companyName || deal.supplier.firstName || 'Unknown'}`,
+                `Category: ${deal.category}`,
+                `Deal ID: ${deal.id}`
+              ].join('\n');
+              
+              alert(alertMessage);
             }}
           >
-            View Deal
+            🔥 CLICK ME
           </Button>
         </CardContent>
       </Card>
