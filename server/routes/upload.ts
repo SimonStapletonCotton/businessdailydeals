@@ -78,7 +78,8 @@ router.post('/image', isAuthenticated, upload.single('file'), async (req: Multer
     
     // Generate unique filename for public directory
     const fileExtension = extname(req.file.originalname);
-    const fileName = `public/product-images/${nanoid()}${fileExtension}`;
+    const uniqueId = nanoid();
+    const fileName = `public/product-images/${uniqueId}${fileExtension}`;
     
     const file = bucket.file(fileName);
     const stream = file.createWriteStream({
@@ -98,7 +99,7 @@ router.post('/image', isAuthenticated, upload.single('file'), async (req: Multer
     stream.on('finish', async () => {
       try {
         // Get the public URL for serving via our public objects endpoint
-        const publicUrl = `/public-objects/product-images/${nanoid()}${fileExtension}`;
+        const publicUrl = `/public-objects/product-images/${uniqueId}${fileExtension}`;
         
         res.json({
           url: publicUrl,

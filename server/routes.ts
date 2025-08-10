@@ -1344,6 +1344,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public objects serving route (for serving uploaded images)
+  app.get("/public-objects/:filePath(*)", async (req, res) => {
+    try {
+      const filePath = req.params.filePath;
+      const bucketId = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID;
+      if (!bucketId) {
+        return res.status(500).json({ error: "Object storage not configured" });
+      }
+
+      // Import object storage client with proper configuration
+      const { Storage } = await import("@google-cloud/storage");
+      const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
+      
+      const storage = new Storage({
+        credentials: {
+          audience: "replit",
+          subject_token_type: "access_token",
+          token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
+          type: "external_account",
+          credential_source: {
+            url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
+            format: {
+              type: "json",
+              subject_token_field_name: "access_token",
+            },
+          },
+          universe_domain: "googleapis.com",
+        },
+        projectId: "",
+      });
+
+      const bucket = storage.bucket(bucketId);
+      const file = bucket.file(`public/${filePath}`);
+      
+      // Check if file exists
+      const [exists] = await file.exists();
+      if (!exists) {
+        return res.status(404).json({ error: "File not found" });
+      }
+
+      // Get file metadata and set headers
+      const [metadata] = await file.getMetadata();
+      res.set({
+        "Content-Type": metadata.contentType || "application/octet-stream",
+        "Content-Length": metadata.size,
+        "Cache-Control": "public, max-age=3600",
+      });
+
+      // Stream the file to the response
+      const stream = file.createReadStream();
+      stream.on("error", (err) => {
+        console.error("Stream error:", err);
+        if (!res.headersSent) {
+          res.status(500).json({ error: "Error streaming file" });
+        }
+      });
+      stream.pipe(res);
+      
+    } catch (error) {
+      console.error("Error serving public object:", error);
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Internal server error" });
+      }
+    }
+  });
+
   // Upload routes - import at top level
   const uploadRoutes = (await import('./routes/upload')).default;
   app.use('/api/upload', uploadRoutes);
