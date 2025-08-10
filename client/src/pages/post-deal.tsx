@@ -384,20 +384,20 @@ export default function PostDeal() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category *</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger data-testid="select-category" className="w-full">
-                              <SelectValue placeholder="Select a category" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="max-h-[200px] z-50">
+                        <FormControl>
+                          <select
+                            {...field}
+                            data-testid="select-category"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            <option value="">Select a category</option>
                             {categories.map((category) => (
-                              <SelectItem key={category} value={category} className="cursor-pointer">
+                              <option key={category} value={category}>
                                 {category}
-                              </SelectItem>
+                              </option>
                             ))}
-                          </SelectContent>
-                        </Select>
+                          </select>
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -535,17 +535,17 @@ export default function PostDeal() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Deal Type *</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                          <FormControl>
-                            <SelectTrigger data-testid="select-deal-type">
-                              <SelectValue placeholder="Select deal type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="regular">Regular Deal</SelectItem>
-                            <SelectItem value="hot">Hot Deal (Premium)</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <FormControl>
+                          <select
+                            {...field}
+                            data-testid="select-deal-type"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            <option value="">Select deal type</option>
+                            <option value="regular">Regular Deal</option>
+                            <option value="hot">Hot Deal (Premium)</option>
+                          </select>
+                        </FormControl>
                         <FormDescription>
                           Hot deals get premium placement and higher visibility
                         </FormDescription>
