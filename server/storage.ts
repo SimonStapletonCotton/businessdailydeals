@@ -719,7 +719,13 @@ export class DatabaseStorage implements IStorage {
 
   // Credit management for deals
   private calculateDealCredits(dealType: 'hot' | 'regular'): number {
-    // Credit pricing structure
+    // Check if we're in the promotional period (FREE until Jan 1, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    if (isPromotionalPeriod) {
+      return 0; // All deals are FREE during promotional period
+    }
+    
+    // Credit pricing structure (after promotional period ends)
     const creditPricing = {
       'hot': 50,     // R125 (50 credits × R2.50) - Premium placement on home page
       'regular': 20  // R50 (20 credits × R2.50) - Standard deal listing
@@ -729,25 +735,26 @@ export class DatabaseStorage implements IStorage {
   }
 
   private async chargeDealCredits(supplierId: string, credits: number, dealId: string, dealType: string): Promise<void> {
-    // Check if supplier has sufficient credits
-    const supplier = await this.getUser(supplierId);
-    if (!supplier) throw new Error('Supplier not found');
-    
-    // Check if supplier is in FREE 4-month promotional period
-    if (await this.isSupplierInPromotionalPeriod(supplierId)) {
+    // Check if we're in the global promotional period (FREE until Jan 1, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    if (isPromotionalPeriod || credits === 0) {
       // FREE period - no credits charged
-      console.log(`Supplier ${supplierId} is in FREE promotional period - no credits charged for ${dealType} deal`);
+      console.log(`All deals are FREE until Jan 1, 2026 - no credits charged for ${dealType} deal`);
       
       // Record the transaction as FREE
       await this.createCreditTransaction({
         userId: supplierId,
         amount: '0.00',
         type: 'promotional_free',
-        description: `FREE promotional period - ${dealType.toUpperCase()} deal posting (normally ${credits} credits)`,
+        description: `FREE promotional period until Jan 1, 2026 - ${dealType.toUpperCase()} deal posting (normally ${credits > 0 ? credits : (dealType === 'hot' ? 50 : 20)} credits)`,
         dealId: dealId
       });
       return;
     }
+
+    // Check if supplier has sufficient credits (only after promotional period)
+    const supplier = await this.getUser(supplierId);
+    if (!supplier) throw new Error('Supplier not found');
     
     const currentBalance = parseFloat(supplier.creditBalance || '0');
     if (currentBalance < credits) {
@@ -789,32 +796,49 @@ export class DatabaseStorage implements IStorage {
     const newCredits = this.calculateDealCredits(newDealType);
     const creditDifference = newCredits - originalCredits;
 
-    if (creditDifference > 0) {
-      // Charge additional credits for upgrade (regular → hot)
-      await this.chargeDealCredits(
-        originalDeal.supplierId, 
-        creditDifference, 
-        originalDeal.id, 
-        `${originalDeal.dealType} → ${newDealType} upgrade`
-      );
-    } else if (creditDifference < 0) {
-      // Refund excess credits for downgrade (hot → regular)
-      const refundAmount = Math.abs(creditDifference);
-      await this.updateUserCreditBalance(originalDeal.supplierId, refundAmount.toString(), 'add');
+    // Check if we're in the promotional period (FREE until Jan 1, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+
+    if (isPromotionalPeriod) {
+      // During promotional period, all changes are FREE
+      console.log(`Deal type change is FREE during promotional period: ${originalDeal.dealType} → ${newDealType}`);
       
       await this.createCreditTransaction({
         userId: originalDeal.supplierId,
-        amount: refundAmount.toFixed(2),
-        type: 'refund',
-        description: `Deal type change refund - ${originalDeal.dealType} → ${newDealType} (${refundAmount} credits)`,
+        amount: '0.00',
+        type: 'promotional_free',
+        description: `FREE promotional period - Deal type change ${originalDeal.dealType} → ${newDealType} (normally ${Math.abs(creditDifference)} credits)`,
         dealId: originalDeal.id
       });
+    } else {
+      // After promotional period, handle normal credit logic
+      if (creditDifference > 0) {
+        // Charge additional credits for upgrade (regular → hot)
+        await this.chargeDealCredits(
+          originalDeal.supplierId, 
+          creditDifference, 
+          originalDeal.id, 
+          `${originalDeal.dealType} → ${newDealType} upgrade`
+        );
+      } else if (creditDifference < 0) {
+        // Refund excess credits for downgrade (hot → regular)
+        const refundAmount = Math.abs(creditDifference);
+        await this.updateUserCreditBalance(originalDeal.supplierId, refundAmount.toString(), 'add');
+        
+        await this.createCreditTransaction({
+          userId: originalDeal.supplierId,
+          amount: refundAmount.toFixed(2),
+          type: 'refund',
+          description: `Deal type change refund - ${originalDeal.dealType} → ${newDealType} (${refundAmount} credits)`,
+          dealId: originalDeal.id
+        });
+      }
     }
 
-    // Update the deal's credit cost
+    // Update the deal's credit cost (will be 0 during promotional period)
     await db
       .update(deals)
-      .set({ creditsCost: newCredits.toFixed(2) })
+      .set({ creditsCost: newCredits.toString() })
       .where(eq(deals.id, originalDeal.id));
   }
 
