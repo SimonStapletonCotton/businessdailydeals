@@ -237,18 +237,30 @@ export default function LiveCoupons() {
             </div>
             
             <div class="detail-section" style="margin-top: 20px;">
+              <div class="detail-title">Deal Information</div>
+              <div class="detail-value">
+                <strong>Deal Title:</strong> ${coupon.dealTitle}<br>
+                <strong>Category:</strong> ${coupon.dealCategory}<br>
+                <strong>Coupon Price:</strong> R${parseFloat(coupon.dealPrice).toLocaleString()}<br>
+                ${coupon.dealOriginalPrice ? `<strong>Original Price:</strong> R${parseFloat(coupon.dealOriginalPrice).toLocaleString()}<br>` : ''}
+                ${discount > 0 ? `<strong>Your Savings:</strong> ${discount}% off (R${(parseFloat(coupon.dealOriginalPrice || '0') - parseFloat(coupon.dealPrice)).toLocaleString()})<br>` : ''}
+                <strong>Deal Description:</strong> This coupon entitles the holder to purchase "${coupon.dealTitle}" at the special deal price of R${parseFloat(coupon.dealPrice).toLocaleString()}.
+              </div>
+            </div>
+            
+            <div class="detail-section" style="margin-top: 15px;">
               <div class="detail-title">Coupon Information</div>
               <div class="detail-value">
                 <strong>Generated:</strong> ${format(new Date(coupon.createdAt), 'MMMM dd, yyyy \'at\' HH:mm')}<br>
                 <strong>Status:</strong> ${coupon.isRedeemed ? 'REDEEMED' : 'ACTIVE'}<br>
-                <strong>Offer Details:</strong> Special pricing on ${coupon.dealTitle} - ${discount > 0 ? `${discount}% discount` : 'Exclusive deal pricing'}
+                <strong>Redemption:</strong> Present this coupon to the supplier to purchase at the deal price
               </div>
             </div>
             
             <div class="footer">
               <strong>www.businessdailydeals.co.za</strong><br>
-              Present this coupon to the supplier to claim your deal.<br>
-              Terms and conditions may apply. Coupon valid for single use only.
+              <strong>HOW TO REDEEM:</strong> Present this coupon to the supplier listed above to purchase "${coupon.dealTitle}" at the special deal price of R${parseFloat(coupon.dealPrice).toLocaleString()}.<br>
+              Terms and conditions may apply. Coupon valid for single use only. Valid until ${format(new Date(coupon.expiresAt), 'MMMM dd, yyyy')}.
             </div>
           </div>
         </body>
