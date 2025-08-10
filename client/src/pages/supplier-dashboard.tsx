@@ -1033,11 +1033,33 @@ export default function SupplierDashboard() {
               
               <div>
                 <Label>Image</Label>
-                <ImageUpload
-                  onImagesChange={handleImageChange}
-                  maxImages={1}
-                  existingImages={editFormData.imageUrl ? [editFormData.imageUrl] : []}
-                />
+                <div className="space-y-2">
+                  <Input
+                    type="url"
+                    value={editFormData.imageUrl}
+                    onChange={(e) => setEditFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+                    placeholder="Image URL (or upload new image below)"
+                  />
+                  {editFormData.imageUrl && (
+                    <div className="border rounded-lg p-2">
+                      <img 
+                        src={editFormData.imageUrl} 
+                        alt="Current deal image" 
+                        className="w-full h-32 object-cover rounded"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
+                  <ImageUpload
+                    images={editFormData.imageUrl ? [editFormData.imageUrl] : []}
+                    onImagesChange={handleImageChange}
+                    maxImages={1}
+                    label="Upload New Image"
+                    description="Upload a new image to replace the current one"
+                  />
+                </div>
               </div>
               
               <div className="flex justify-end space-x-2 pt-4">
