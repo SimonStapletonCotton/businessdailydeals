@@ -308,6 +308,7 @@ export default function SupplierDashboard() {
   };
 
   const handleEditDeal = (deal: DealWithSupplier) => {
+    console.log("Edit button clicked for deal:", deal.id, deal.title);
     setEditingDeal(deal);
     setEditFormData({
       title: deal.title || "",
@@ -320,6 +321,7 @@ export default function SupplierDashboard() {
       quantityAvailable: deal.quantityAvailable || 1,
       productSpecifications: deal.productSpecifications || ""
     });
+    console.log("Edit form data set:", editFormData);
   };
 
   const handleSaveEdit = () => {
@@ -919,12 +921,11 @@ export default function SupplierDashboard() {
       </main>
 
       {/* Edit Deal Modal */}
-      {editingDeal && (
-        <Dialog open={!!editingDeal} onOpenChange={() => setEditingDeal(null)}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Edit Deal</DialogTitle>
-            </DialogHeader>
+      <Dialog open={!!editingDeal} onOpenChange={() => setEditingDeal(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Deal {editingDeal ? `- ${editingDeal.title}` : ""}</DialogTitle>
+          </DialogHeader>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="edit-title">Title</Label>
@@ -1080,7 +1081,6 @@ export default function SupplierDashboard() {
             </div>
           </DialogContent>
         </Dialog>
-      )}
-    </div>
-  );
+      </div>
+    );
 }
