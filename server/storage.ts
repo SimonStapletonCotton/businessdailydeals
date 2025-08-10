@@ -660,24 +660,42 @@ export class DatabaseStorage implements IStorage {
     const deal = await this.getDeal(id);
     if (!deal) throw new Error('Deal not found');
 
+    // First delete related records to avoid foreign key constraints
+    // Delete related credit transactions
+    await db.delete(creditTransactions).where(eq(creditTransactions.dealId, id));
+    
+    // Delete related notifications
+    await db.delete(notifications).where(eq(notifications.dealId, id));
+    
+    // Delete related inquiries
+    await db.delete(inquiries).where(eq(inquiries.dealId, id));
+    
+    // Now delete the deal
+    await db.delete(deals).where(eq(deals.id, id));
+
     // Check if we're in promotional period (FREE until Jan 1, 2026) 
     const isPromotionalPeriod = new Date() < new Date('2026-01-01');
     
-    if (!isPromotionalPeriod && parseFloat(deal.creditsCost) > 0) {
+    if (!isPromotionalPeriod && parseFloat(deal.creditsCost || '0') > 0) {
       // Refund credits if deal was paid for (only after promotional period)
-      await this.refundDealCredits(deal);
-    } else {
-      // During promotional period, just record the deletion
+      // Add credits back to user's balance
+      const currentBalance = await this.getCreditBalance(deal.supplierId);
+      const refundAmount = parseFloat(deal.creditsCost);
+      const newBalance = parseFloat(currentBalance.balance) + refundAmount;
+      
+      await db.update(users)
+        .set({ creditBalance: newBalance.toString() })
+        .where(eq(users.id, deal.supplierId));
+
+      // Record the refund transaction (without dealId since deal is deleted)
       await this.createCreditTransaction({
         userId: deal.supplierId,
-        amount: '0.00',
-        type: 'promotional_free',
-        description: `FREE promotional period - Deal deleted: ${deal.title} (no credits to refund)`,
-        dealId: deal.id
+        amount: refundAmount.toString(),
+        type: 'refund',
+        description: `Refund for deleted deal: ${deal.title}`,
+        dealId: null
       });
     }
-
-    await db.delete(deals).where(eq(deals.id, id));
   }
 
   // Promotional period management
