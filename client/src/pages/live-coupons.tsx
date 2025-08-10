@@ -69,126 +69,130 @@ export default function LiveCoupons() {
             body { 
               font-family: Arial, sans-serif; 
               margin: 0; 
-              padding: 20px; 
+              padding: 10px; 
               background: white;
+              font-size: 12px;
             }
             .coupon {
-              max-width: 600px;
+              max-width: 700px;
               margin: 0 auto;
-              border: 3px dashed #ff6b35;
-              border-radius: 15px;
-              padding: 30px;
+              border: 2px dashed #ff6b35;
+              border-radius: 10px;
+              padding: 15px;
               background: linear-gradient(135deg, #fff5f0 0%, #ffe5d9 100%);
-              box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
+              page-break-inside: avoid;
             }
             .header {
               text-align: center;
-              border-bottom: 2px solid #ff6b35;
-              padding-bottom: 20px;
-              margin-bottom: 25px;
+              border-bottom: 1px solid #ff6b35;
+              padding-bottom: 8px;
+              margin-bottom: 12px;
             }
             .logo {
-              font-size: 28px;
+              font-size: 20px;
               font-weight: bold;
               color: #ff6b35;
-              margin-bottom: 5px;
+              margin-bottom: 2px;
             }
             .tagline {
               color: #64748b;
-              font-size: 14px;
+              font-size: 10px;
             }
             .deal-title {
-              font-size: 24px;
+              font-size: 18px;
               font-weight: bold;
               color: #1e293b;
-              margin: 20px 0 15px 0;
+              margin: 8px 0;
               text-align: center;
             }
             .price-section {
               text-align: center;
-              margin: 20px 0;
-              padding: 15px;
+              margin: 10px 0;
+              padding: 8px;
               background: rgba(255, 107, 53, 0.1);
-              border-radius: 10px;
+              border-radius: 6px;
             }
             .current-price {
-              font-size: 32px;
+              font-size: 24px;
               font-weight: bold;
               color: #16a34a;
             }
             .original-price {
-              font-size: 18px;
+              font-size: 14px;
               text-decoration: line-through;
               color: #64748b;
-              margin-left: 10px;
+              margin-left: 8px;
             }
             .savings {
               color: #dc2626;
               font-weight: bold;
-              font-size: 16px;
+              font-size: 12px;
             }
             .details-grid {
               display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 20px;
-              margin: 25px 0;
+              grid-template-columns: 1fr 1fr 1fr;
+              gap: 10px;
+              margin: 12px 0;
             }
             .detail-section {
               background: rgba(255, 255, 255, 0.8);
-              padding: 15px;
-              border-radius: 8px;
+              padding: 8px;
+              border-radius: 4px;
               border: 1px solid #e2e8f0;
             }
             .detail-title {
               font-weight: bold;
               color: #ff6b35;
-              margin-bottom: 8px;
-              font-size: 14px;
+              margin-bottom: 4px;
+              font-size: 10px;
               text-transform: uppercase;
             }
             .detail-value {
               color: #1e293b;
-              font-size: 13px;
-              line-height: 1.4;
+              font-size: 10px;
+              line-height: 1.2;
             }
             .coupon-code {
               text-align: center;
-              margin: 25px 0;
-              padding: 15px;
+              margin: 12px 0;
+              padding: 8px;
               background: #1e293b;
               color: white;
-              border-radius: 8px;
+              border-radius: 4px;
               font-family: 'Courier New', monospace;
             }
             .code-label {
-              font-size: 12px;
-              margin-bottom: 5px;
+              font-size: 10px;
+              margin-bottom: 2px;
               opacity: 0.8;
             }
             .code-value {
-              font-size: 20px;
+              font-size: 16px;
               font-weight: bold;
-              letter-spacing: 2px;
+              letter-spacing: 1px;
             }
             .validity {
               text-align: center;
-              margin-top: 20px;
-              padding: 10px;
+              margin: 8px 0;
+              padding: 6px;
               ${isExpired ? 'background: #fee2e2; color: #dc2626;' : 'background: #dcfce7; color: #16a34a;'}
-              border-radius: 6px;
+              border-radius: 4px;
               font-weight: bold;
+              font-size: 11px;
             }
             .footer {
               text-align: center;
-              margin-top: 25px;
-              padding-top: 20px;
+              margin-top: 10px;
+              padding-top: 8px;
               border-top: 1px solid #e2e8f0;
-              font-size: 12px;
+              font-size: 9px;
               color: #64748b;
+              line-height: 1.2;
             }
             @media print {
-              body { margin: 0; padding: 10px; }
-              .coupon { box-shadow: none; }
+              body { margin: 0; padding: 5px; font-size: 11px; }
+              .coupon { box-shadow: none; max-width: 100%; }
+              .details-grid { grid-template-columns: 1fr 1fr 1fr; }
             }
           </style>
         </head>
@@ -225,6 +229,18 @@ export default function LiveCoupons() {
                   Category: ${coupon.dealCategory}
                 </div>
               </div>
+              
+              <div class="detail-section">
+                <div class="detail-title">Deal Information</div>
+                <div class="detail-value">
+                  <strong>Deal:</strong> ${coupon.dealTitle}<br>
+                  <strong>Price:</strong> R${parseFloat(coupon.dealPrice).toLocaleString()}<br>
+                  ${coupon.dealOriginalPrice ? `<strong>Was:</strong> R${parseFloat(coupon.dealOriginalPrice).toLocaleString()}<br>` : ''}
+                  ${discount > 0 ? `<strong>Save:</strong> ${discount}% (R${(parseFloat(coupon.dealOriginalPrice || '0') - parseFloat(coupon.dealPrice)).toLocaleString()})<br>` : ''}
+                  <strong>Generated:</strong> ${format(new Date(coupon.createdAt), 'MMM dd, yyyy')}<br>
+                  <strong>Status:</strong> ${coupon.isRedeemed ? 'REDEEMED' : 'ACTIVE'}
+                </div>
+              </div>
             </div>
             
             <div class="coupon-code">
@@ -236,31 +252,11 @@ export default function LiveCoupons() {
               ${isExpired ? 'EXPIRED' : 'VALID'} until ${format(new Date(coupon.expiresAt), 'MMMM dd, yyyy')}
             </div>
             
-            <div class="detail-section" style="margin-top: 20px;">
-              <div class="detail-title">Deal Information</div>
-              <div class="detail-value">
-                <strong>Deal Title:</strong> ${coupon.dealTitle}<br>
-                <strong>Category:</strong> ${coupon.dealCategory}<br>
-                <strong>Coupon Price:</strong> R${parseFloat(coupon.dealPrice).toLocaleString()}<br>
-                ${coupon.dealOriginalPrice ? `<strong>Original Price:</strong> R${parseFloat(coupon.dealOriginalPrice).toLocaleString()}<br>` : ''}
-                ${discount > 0 ? `<strong>Your Savings:</strong> ${discount}% off (R${(parseFloat(coupon.dealOriginalPrice || '0') - parseFloat(coupon.dealPrice)).toLocaleString()})<br>` : ''}
-                <strong>Deal Description:</strong> This coupon entitles the holder to purchase "${coupon.dealTitle}" at the special deal price of R${parseFloat(coupon.dealPrice).toLocaleString()}.
-              </div>
-            </div>
-            
-            <div class="detail-section" style="margin-top: 15px;">
-              <div class="detail-title">Coupon Information</div>
-              <div class="detail-value">
-                <strong>Generated:</strong> ${format(new Date(coupon.createdAt), 'MMMM dd, yyyy \'at\' HH:mm')}<br>
-                <strong>Status:</strong> ${coupon.isRedeemed ? 'REDEEMED' : 'ACTIVE'}<br>
-                <strong>Redemption:</strong> Present this coupon to the supplier to purchase at the deal price
-              </div>
-            </div>
+
             
             <div class="footer">
-              <strong>www.businessdailydeals.co.za</strong><br>
-              <strong>HOW TO REDEEM:</strong> Present this coupon to the supplier listed above to purchase "${coupon.dealTitle}" at the special deal price of R${parseFloat(coupon.dealPrice).toLocaleString()}.<br>
-              Terms and conditions may apply. Coupon valid for single use only. Valid until ${format(new Date(coupon.expiresAt), 'MMMM dd, yyyy')}.
+              <strong>www.businessdailydeals.co.za</strong> | <strong>REDEMPTION:</strong> Present to supplier above for "${coupon.dealTitle}" at R${parseFloat(coupon.dealPrice).toLocaleString()}<br>
+              Single use only. Valid until ${format(new Date(coupon.expiresAt), 'MMM dd, yyyy')}. Terms may apply.
             </div>
           </div>
         </body>
