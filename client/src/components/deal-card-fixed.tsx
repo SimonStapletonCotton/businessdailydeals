@@ -177,7 +177,9 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               />
             )}
             <div className="flex items-center justify-between mb-2">
-              <Badge className="bg-red-600 text-white text-xs">HOT DEAL</Badge>
+              <Badge className={`text-white text-xs ${deal.dealType === 'hot' ? 'bg-red-600' : 'bg-orange-500'}`}>
+                {deal.dealType === 'hot' ? 'HOT DEAL' : 'REGULAR DEAL'}
+              </Badge>
               {deal.discount && deal.discount > 0 && (
                 <Badge variant="outline" className="text-green-600 border-green-600 text-xs">
                   {deal.discount}% OFF
@@ -261,7 +263,9 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 <div>
                   <div className="bg-slate-50 p-4 rounded-lg mb-4">
                     <div className="flex items-center justify-between mb-2">
-                      <Badge className="bg-red-600 text-white">HOT DEAL</Badge>
+                      <Badge className={`text-white ${deal.dealType === 'hot' ? 'bg-red-600' : 'bg-orange-500'}`}>
+                        {deal.dealType === 'hot' ? 'HOT DEAL' : 'REGULAR DEAL'}
+                      </Badge>
                       {deal.discount && deal.discount > 0 && (
                         <Badge variant="outline" className="text-green-600 border-green-600">
                           {deal.discount}% OFF
@@ -399,9 +403,9 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           {/* Middle Column - Deal Details */}
           <div className="lg:col-span-1 space-y-4">
             <div className="flex items-center gap-2 mb-2">
-              {variant === "hot" && (
-                <Badge className="bg-red-600 text-white">HOT DEAL</Badge>
-              )}
+              <Badge className={`text-white ${deal.dealType === 'hot' ? 'bg-red-600' : 'bg-orange-500'}`}>
+                {deal.dealType === 'hot' ? 'HOT DEAL' : 'REGULAR DEAL'}
+              </Badge>
               {deal.discount && deal.discount > 0 && (
                 <Badge variant="outline" className="text-green-600 border-green-600">
                   <Percent className="h-3 w-3 mr-1" />
