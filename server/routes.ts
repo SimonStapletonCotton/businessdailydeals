@@ -508,39 +508,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
       const creditsNeeded = extraDays * creditsPerDay;
 
-      // Check if supplier has enough credits
+      // Check if we're in promotional period (FREE until January 1st, 2026)
+      const promotionalEndDate = new Date('2026-01-01T00:00:00.000Z');
+      const isPromotionalPeriod = new Date() < promotionalEndDate;
+      
+      // Get credit balance for response (needed regardless of promotional period)
       const creditBalance = await storage.getUserCreditBalance(userId);
       const currentBalance = parseFloat(creditBalance.creditBalance);
-      
-      if (currentBalance < creditsNeeded) {
-        return res.status(400).json({ 
-          message: "Insufficient credits", 
-          creditsNeeded,
-          currentBalance: currentBalance,
-          shortfall: creditsNeeded - currentBalance
+
+      if (!isPromotionalPeriod) {
+        // Check if supplier has enough credits (only after promotional period)
+        if (currentBalance < creditsNeeded) {
+          return res.status(400).json({ 
+            message: "Insufficient credits", 
+            creditsNeeded,
+            currentBalance: currentBalance,
+            shortfall: creditsNeeded - currentBalance
+          });
+        }
+
+        // Charge credits for extension
+        await storage.updateUserCreditBalance(userId, creditsNeeded.toString(), 'subtract');
+        
+        // Create credit transaction record
+        await storage.createCreditTransaction({
+          userId,
+          amount: creditsNeeded.toString(),
+          type: 'debit',
+          description: `Deal extension: ${extraDays} extra days for "${deal.title}"`,
+          dealId: dealId
         });
       }
-
-      // Charge credits for extension
-      await storage.updateUserCreditBalance(userId, creditsNeeded.toString(), 'subtract');
-      
-      // Create credit transaction record
-      await storage.createCreditTransaction({
-        userId,
-        amount: creditsNeeded.toString(),
-        type: 'debit',
-        description: `Deal extension: ${extraDays} extra days for "${deal.title}"`,
-        dealId: dealId
-      });
 
       // Update the deal's expiry date
       await storage.updateDealExpiry(dealId, expiresAt);
       
       res.json({ 
-        message: "Deal expiry date extended successfully",
-        creditsCharged: creditsNeeded,
-        remainingCredits: currentBalance - creditsNeeded,
-        extraDays
+        message: isPromotionalPeriod ? 
+          "Deal expiry date extended successfully (FREE promotional period)" : 
+          "Deal expiry date extended successfully",
+        creditsCharged: isPromotionalPeriod ? 0 : creditsNeeded,
+        remainingCredits: isPromotionalPeriod ? currentBalance : (currentBalance - creditsNeeded),
+        extraDays,
+        promotionalPeriod: isPromotionalPeriod
       });
     } catch (error) {
       console.error("Error extending deal:", error);
