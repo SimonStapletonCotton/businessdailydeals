@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Navbar from "@/components/navbar";
-import DealCard from "@/components/deal-card";
+import DealCard from "@/components/deal-card-fixed";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
