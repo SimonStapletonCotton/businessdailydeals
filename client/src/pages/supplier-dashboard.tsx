@@ -4,7 +4,7 @@ import DealCard from "@/components/deal-card-fixed";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard, BarChart3, Calendar, Clock, Trash2 } from "lucide-react";
+import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard, BarChart3, Calendar, Clock, Trash2, Edit } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { DealWithSupplier, InquiryWithDetails } from "@/../../server/storage";
@@ -15,6 +15,9 @@ import { isUnauthorizedError } from "@/lib/authUtils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ImageUpload } from "@/components/image-upload";
 
 export default function SupplierDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -25,6 +28,18 @@ export default function SupplierDashboard() {
   const [extendingDealId, setExtendingDealId] = useState<string | null>(null);
   const [extendExpirationDate, setExtendExpirationDate] = useState("");
   const [deletingDealId, setDeletingDealId] = useState<string | null>(null);
+  const [editingDeal, setEditingDeal] = useState<DealWithSupplier | null>(null);
+  const [editFormData, setEditFormData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    price: "",
+    originalPrice: "",
+    imageUrl: "",
+    size: "",
+    quantityAvailable: 1,
+    productSpecifications: ""
+  });
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -174,6 +189,40 @@ export default function SupplierDashboard() {
     },
   });
 
+  // Edit deal mutation
+  const editDealMutation = useMutation({
+    mutationFn: async (dealData: any) => {
+      await apiRequest("PATCH", `/api/deals/${dealData.id}`, dealData);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Deal Updated",
+        description: "Your deal has been successfully updated.",
+      });
+      setEditingDeal(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/deals"] });
+    },
+    onError: (error: any) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 1000);
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to update deal. Please try again.",
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
   const handleDeleteDeal = (dealId: string) => {
     if (window.confirm("Are you sure you want to delete this deal? This action cannot be undone.")) {
       deleteDealMutation.mutate(dealId);
@@ -256,6 +305,38 @@ export default function SupplierDashboard() {
     }
 
     reactivateDealMutation.mutate({ dealId, expiresAt: newExpirationDate });
+  };
+
+  const handleEditDeal = (deal: DealWithSupplier) => {
+    setEditingDeal(deal);
+    setEditFormData({
+      title: deal.title || "",
+      description: deal.description || "",
+      category: deal.category || "",
+      price: deal.price || "",
+      originalPrice: deal.originalPrice || "",
+      imageUrl: deal.imageUrl || "",
+      size: deal.size || "",
+      quantityAvailable: deal.quantityAvailable || 1,
+      productSpecifications: deal.productSpecifications || ""
+    });
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingDeal) return;
+    
+    const updatedDeal = {
+      id: editingDeal.id,
+      ...editFormData,
+      price: editFormData.price.toString(),
+      originalPrice: editFormData.originalPrice ? editFormData.originalPrice.toString() : null
+    };
+    
+    editDealMutation.mutate(updatedDeal);
+  };
+
+  const handleImageChange = (images: string[]) => {
+    setEditFormData(prev => ({ ...prev, imageUrl: images[0] || "" }));
   };
 
   if (isLoading) {
@@ -587,6 +668,17 @@ export default function SupplierDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
+                          onClick={() => handleEditDeal(deal)}
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                          data-testid={`button-edit-deal-${deal.id}`}
+                        >
+                          <Edit className="h-4 w-4 mr-1" />
+                          Edit
+                        </Button>
+                        
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleDeleteDeal(deal.id)}
                           disabled={deletingDealId === deal.id}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
@@ -825,6 +917,148 @@ export default function SupplierDashboard() {
             )}
         </Card>
       </main>
+
+      {/* Edit Deal Modal */}
+      {editingDeal && (
+        <Dialog open={!!editingDeal} onOpenChange={() => setEditingDeal(null)}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Edit Deal</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="edit-title">Title</Label>
+                <Input
+                  id="edit-title"
+                  value={editFormData.title}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Deal title"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="edit-description">Description</Label>
+                <Textarea
+                  id="edit-description"
+                  value={editFormData.description}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Deal description"
+                  rows={3}
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="edit-category">Category</Label>
+                <Select
+                  value={editFormData.category}
+                  onValueChange={(value) => setEditFormData(prev => ({ ...prev, category: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Electronics">Electronics</SelectItem>
+                    <SelectItem value="Industrial Equipment">Industrial Equipment</SelectItem>
+                    <SelectItem value="Office Supplies">Office Supplies</SelectItem>
+                    <SelectItem value="Software & Services">Software & Services</SelectItem>
+                    <SelectItem value="Construction & Building">Construction & Building</SelectItem>
+                    <SelectItem value="Automotive & Transport">Automotive & Transport</SelectItem>
+                    <SelectItem value="Food & Beverage">Food & Beverage</SelectItem>
+                    <SelectItem value="Healthcare & Medical">Healthcare & Medical</SelectItem>
+                    <SelectItem value="Agriculture & Farming">Agriculture & Farming</SelectItem>
+                    <SelectItem value="Mining">Mining</SelectItem>
+                    <SelectItem value="General Industry">General Industry</SelectItem>
+                    <SelectItem value="Residential">Residential</SelectItem>
+                    <SelectItem value="Textiles & Clothing">Textiles & Clothing</SelectItem>
+                    <SelectItem value="Energy & Utilities">Energy & Utilities</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="edit-price">Price (R)</Label>
+                  <Input
+                    id="edit-price"
+                    type="number"
+                    value={editFormData.price}
+                    onChange={(e) => setEditFormData(prev => ({ ...prev, price: e.target.value }))}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-original-price">Original Price (R)</Label>
+                  <Input
+                    id="edit-original-price"
+                    type="number"
+                    value={editFormData.originalPrice}
+                    onChange={(e) => setEditFormData(prev => ({ ...prev, originalPrice: e.target.value }))}
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="edit-size">Size/Dimensions</Label>
+                <Input
+                  id="edit-size"
+                  value={editFormData.size}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, size: e.target.value }))}
+                  placeholder="e.g., 50m x 50m"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="edit-quantity">Quantity Available</Label>
+                <Input
+                  id="edit-quantity"
+                  type="number"
+                  value={editFormData.quantityAvailable}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, quantityAvailable: parseInt(e.target.value) || 1 }))}
+                  min="1"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="edit-specifications">Product Specifications</Label>
+                <Textarea
+                  id="edit-specifications"
+                  value={editFormData.productSpecifications}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, productSpecifications: e.target.value }))}
+                  placeholder="Additional product details"
+                  rows={2}
+                />
+              </div>
+              
+              <div>
+                <Label>Image</Label>
+                <ImageUpload
+                  onImagesChange={handleImageChange}
+                  maxImages={1}
+                  existingImages={editFormData.imageUrl ? [editFormData.imageUrl] : []}
+                />
+              </div>
+              
+              <div className="flex justify-end space-x-2 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setEditingDeal(null)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSaveEdit}
+                  disabled={editDealMutation.isPending}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  {editDealMutation.isPending ? "Saving..." : "Save Changes"}
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
