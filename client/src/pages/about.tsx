@@ -1,7 +1,9 @@
 import Navbar from "@/components/navbar";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Heart, Target, Users, Zap, Search, TrendingUp } from "lucide-react";
+import { Link } from "wouter";
 
 export default function About() {
   return (
@@ -113,6 +115,17 @@ export default function About() {
               <p className="text-slate-600 mb-4 leading-relaxed">
                 If at any time you land on our site and can't find the deal you are looking for, send us a request on what you're looking for and we will actively track down a supplier that is prepared to offer your item at a discount.
               </p>
+              
+              <div className="mb-6">
+                <Link href="/find-me-deal">
+                  <Button 
+                    className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 text-lg"
+                    data-testid="button-find-me-deal"
+                  >
+                    🔍 FIND ME A DEAL
+                  </Button>
+                </Link>
+              </div>
               <p className="text-slate-600 leading-relaxed">
                 Remember to choose TWO KEYWORDS that best describe your item, and include your mobile number. Once we have the necessary info we will load the deal for you to snap up, by sending you an SMS or E-MAIL notifying you that your deal has been loaded.
               </p>
