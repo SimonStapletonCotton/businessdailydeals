@@ -43,7 +43,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           )}
           <div className="flex items-center justify-between mb-2">
             <Badge className="bg-red-600 text-white text-xs">HOT DEAL</Badge>
-            {deal.discount > 0 && (
+            {deal.discount && deal.discount > 0 && (
               <Badge variant="outline" className="text-green-600 border-green-600 text-xs">
                 {deal.discount}% OFF
               </Badge>
@@ -65,7 +65,11 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
           <Button
             size="sm" 
             className="w-full bg-red-600 hover:bg-red-700 text-white text-xs h-8"
-            onClick={() => window.location.href = `/hot-deals#${deal.id}`}
+            onClick={() => {
+              console.log("🔥 COMPACT: Opening TEST modal for deal:", deal.id);
+              // For now, show alert - will replace with modal
+              alert(`Deal: ${deal.title}\nPrice: R${deal.price}\nSupplier: ${deal.supplier.companyName || deal.supplier.firstName}`);
+            }}
           >
             View Deal
           </Button>
