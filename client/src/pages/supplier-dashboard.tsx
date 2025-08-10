@@ -934,18 +934,18 @@ export default function SupplierDashboard() {
       </main>
 
       {/* Edit Deal Modal */}
-      {console.log("Rendering modal, editingDeal:", editingDeal)}
-      <Dialog open={!!editingDeal} onOpenChange={(open) => {
-        console.log("Dialog onOpenChange:", open);
-        if (!open) setEditingDeal(null);
-      }}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Edit Deal {editingDeal ? `- ${editingDeal.title}` : ""}</DialogTitle>
-            <DialogDescription>
-              Update your deal information below. Changes will be saved immediately.
-            </DialogDescription>
-          </DialogHeader>
+      {editingDeal && (
+        <Dialog open={true} onOpenChange={(open) => {
+          console.log("Dialog onOpenChange:", open);
+          if (!open) setEditingDeal(null);
+        }}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Edit Deal - {editingDeal.title}</DialogTitle>
+              <DialogDescription>
+                Update your deal information below. Changes will be saved immediately.
+              </DialogDescription>
+            </DialogHeader>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="edit-title">Title</Label>
@@ -1101,6 +1101,7 @@ export default function SupplierDashboard() {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
-    );
+      )}
+    </div>
+  );
 }
