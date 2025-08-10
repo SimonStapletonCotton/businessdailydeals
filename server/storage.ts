@@ -1091,19 +1091,29 @@ export class DatabaseStorage implements IStorage {
         )
       );
 
-    // Calculate total savings (difference between original and deal prices for redeemed coupons)
-    const [savingsResult] = await db
+    // Calculate total savings - simplified to avoid empty string conversion errors
+    const redeemedCoupons = await db
       .select({
-        totalSavings: sql<string>`COALESCE(SUM(CASE WHEN ${coupons.dealOriginalPrice} IS NOT NULL AND ${coupons.dealOriginalPrice} != '' AND ${coupons.dealOriginalPrice} != '0' AND ${coupons.dealPrice} IS NOT NULL AND ${coupons.dealPrice} != '' THEN CAST(${coupons.dealOriginalPrice} AS DECIMAL) - CAST(${coupons.dealPrice} AS DECIMAL) ELSE 0 END), 0)`
+        dealOriginalPrice: coupons.dealOriginalPrice,
+        dealPrice: coupons.dealPrice
       })
       .from(coupons)
       .where(eq(coupons.isRedeemed, true));
+    
+    let totalSavings = 0;
+    for (const coupon of redeemedCoupons) {
+      const originalPrice = parseFloat(coupon.dealOriginalPrice || '0');
+      const dealPrice = parseFloat(coupon.dealPrice || '0');
+      if (originalPrice > dealPrice) {
+        totalSavings += (originalPrice - dealPrice);
+      }
+    }
 
     return {
       totalCoupons: totalResult?.count || 0,
       activeCoupons: activeResult?.count || 0,
       redeemedCoupons: redeemedResult?.count || 0,
-      totalSavings: savingsResult?.totalSavings || '0',
+      totalSavings: totalSavings.toFixed(2),
     };
   }
 

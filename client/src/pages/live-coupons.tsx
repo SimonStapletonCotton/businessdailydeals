@@ -138,6 +138,20 @@ export default function LiveCoupons() {
         </p>
       </div>
 
+      {/* Debug info */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
+          <div className="text-sm text-yellow-800">
+            Debug: Coupons data = {JSON.stringify({ 
+              length: coupons?.length, 
+              isLoading, 
+              hasData: !!coupons,
+              firstCoupon: coupons?.[0] || null 
+            }, null, 2)}
+          </div>
+        </div>
+      )}
+
       {/* Coupons Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {coupons?.map((coupon) => {
@@ -286,29 +300,7 @@ export default function LiveCoupons() {
         </div>
       )}
 
-      {/* Call to Action */}
-      <div className="mt-12 text-center bg-gradient-to-r from-green-50 to-blue-50 p-8 rounded-lg border">
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">
-          Ready to Save Money?
-        </h3>
-        <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-          Join Business Daily Deals today and start generating your own coupons from thousands of deals across South Africa.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <a
-            href="/register-buyer"
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Register as Buyer
-          </a>
-          <a
-            href="/"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Browse Deals
-          </a>
-        </div>
-      </div>
+
     </div>
   );
 }
