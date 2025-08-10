@@ -11,6 +11,8 @@ Target market: South African B2B marketplace
 Pricing structure: Hot deals (premium home page placement, higher pricing) vs Regular deals (dropdown sections, standard pricing)
 NEW PROMOTIONAL PERIOD: FREE deal posting for suppliers until 1st January 2026 to build user base quickly, then start charging
 Color scheme preference: Orange halftone casino-style theme with animated red 7's, professional gradient backgrounds (specific: orange halftone on left #ffcc80 → #ffb74d graduating to slate halftone #c8b8a0 → #8fa3b8 on right), mid charcoal navbar (#64748b)
+Quality expectations: Comprehensive implementations with thorough attention to detail - "master coder should think of every combination"
+Backup requirements: Critical - cannot start from beginning if crashes occur, need complete documentation
 
 ## System Architecture
 
@@ -62,6 +64,7 @@ Color scheme preference: Orange halftone casino-style theme with animated red 7'
 - **Supplier Verification**: Optional verification system with VAT and business registration number fields, verified supplier badges.
 - **Legal & Support Pages**: Comprehensive Terms of Service, Privacy Policy, Support Center.
 - **Security Features**: Multi-layer security including rate limiting, input validation, security headers, IP blocking, and protection against common web attacks.
+- **Live Coupons System**: Public coupon tracking page with comprehensive buyer identification details, individual coupon printing with professional Business Daily Deals design, single-page print optimization, and complete deal information display.
 
 ## External Dependencies
 
