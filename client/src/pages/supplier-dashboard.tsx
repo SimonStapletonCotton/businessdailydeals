@@ -4,7 +4,7 @@ import DealCard from "@/components/deal-card-fixed";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard, BarChart3, Calendar, Clock } from "lucide-react";
+import { Plus, Package, TrendingUp, Users, MessageCircle, Flame, RotateCcw, ChevronDown, ChevronUp, CreditCard, BarChart3, Calendar, Clock, Trash2 } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { DealWithSupplier, InquiryWithDetails } from "@/../../server/storage";
@@ -136,6 +136,44 @@ export default function SupplierDashboard() {
       setExtendingDealId(null);
     },
   });
+
+  const deleteDealMutation = useMutation({
+    mutationFn: async (dealId: string) => {
+      await apiRequest("DELETE", `/api/deals/${dealId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/supplier/expired-deals"] });
+      toast({
+        title: "Deal Deleted",
+        description: "Deal removed successfully.",
+      });
+    },
+    onError: (error: any) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Session Expired",
+          description: "Please log in again to continue.",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 1000);
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to delete deal. Please try again.",
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  const handleDeleteDeal = (dealId: string) => {
+    if (window.confirm("Are you sure you want to delete this deal? This action cannot be undone.")) {
+      deleteDealMutation.mutate(dealId);
+    }
+  };
 
   const handleExtendDeal = async (dealId: string) => {
     if (!extendExpirationDate) {
@@ -541,6 +579,18 @@ export default function SupplierDashboard() {
                       </div>
                       
                       <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteDeal(deal.id)}
+                          disabled={deleteDealMutation.isPending}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          data-testid={`button-delete-deal-${deal.id}`}
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          {deleteDealMutation.isPending ? "Deleting..." : "Delete"}
+                        </Button>
+                        
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button
@@ -682,6 +732,18 @@ export default function SupplierDashboard() {
                         </p>
                       </div>
                       <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteDeal(deal.id)}
+                          disabled={deleteDealMutation.isPending}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          data-testid={`button-delete-expired-deal-${deal.id}`}
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          {deleteDealMutation.isPending ? "Deleting..." : "Delete"}
+                        </Button>
+                        
                         {reactivatingDealId === deal.id ? (
                           <div className="flex items-center space-x-2">
                             <div>

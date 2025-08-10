@@ -320,6 +320,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete deal (suppliers only)
+  app.delete('/api/deals/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const dealId = req.params.id;
+      
+      // Get the deal to verify ownership
+      const deal = await storage.getDeal(dealId);
+      if (!deal) {
+        return res.status(404).json({ message: "Deal not found" });
+      }
+      
+      // Check if the user owns this deal
+      if (deal.supplierId !== userId) {
+        return res.status(403).json({ message: "You can only delete your own deals" });
+      }
+      
+      // Delete the deal
+      await storage.deleteDeal(dealId);
+      
+      res.json({ message: "Deal deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting deal:", error);
+      res.status(500).json({ message: "Failed to delete deal" });
+    }
+  });
+
   app.post('/api/deals', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;

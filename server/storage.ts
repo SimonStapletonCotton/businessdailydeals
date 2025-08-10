@@ -657,17 +657,27 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteDeal(id: string): Promise<void> {
-    // Get deal info before deletion for credit refund
     const deal = await this.getDeal(id);
     if (!deal) throw new Error('Deal not found');
 
-    // Delete the deal
-    await db.delete(deals).where(eq(deals.id, id));
-
-    // Process credit refund if deal was active and had credits spent
-    if (deal.status === 'active' && parseFloat(deal.creditsCost || '0') > 0) {
+    // Check if we're in promotional period (FREE until Jan 1, 2026) 
+    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    
+    if (!isPromotionalPeriod && parseFloat(deal.creditsCost) > 0) {
+      // Refund credits if deal was paid for (only after promotional period)
       await this.refundDealCredits(deal);
+    } else {
+      // During promotional period, just record the deletion
+      await this.createCreditTransaction({
+        userId: deal.supplierId,
+        amount: '0.00',
+        type: 'promotional_free',
+        description: `FREE promotional period - Deal deleted: ${deal.title} (no credits to refund)`,
+        dealId: deal.id
+      });
     }
+
+    await db.delete(deals).where(eq(deals.id, id));
   }
 
   // Promotional period management
