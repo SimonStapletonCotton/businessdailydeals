@@ -19,6 +19,7 @@ RECENT PROGRESS (August 10, 2025):
 - UI styling improvements: POST DEAL button changed to red background (bg-red-600), HOT/REGULAR DEALS buttons updated to mid orange (bg-orange-500)
 - All deals posted during promotional period (until Dec 31, 2025) are completely FREE
 - Dashboard extend functionality fully working with proper promotional period bypass
+- Enhanced crossed-out original price visibility: made them darker (text-slate-700), same size as discounted prices, and medium font weight across all deal displays
 
 ## System Architecture
 
