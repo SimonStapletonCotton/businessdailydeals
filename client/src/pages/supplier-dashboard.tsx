@@ -719,6 +719,103 @@ export default function SupplierDashboard() {
                     </div>
                   </Card>
                 ))}
+                
+                {/* Extend Modal */}
+                {extendingDealId && (
+                  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+                      <h3 className="text-lg font-semibold mb-4">Extend Deal Expiry</h3>
+                      
+                      {(() => {
+                        const currentDeal = deals?.find(d => d.id === extendingDealId);
+                        if (!currentDeal) return null;
+                        
+                        return (
+                          <div className="space-y-4">
+                            <div className="text-sm">
+                              <strong>{currentDeal.title}</strong>
+                              <div className="mt-2 p-3 bg-slate-50 rounded border">
+                                <div>Current expiry: {currentDeal.expiresAt ? new Date(currentDeal.expiresAt).toLocaleDateString() : 'Not set'}</div>
+                                <div>Deal type: {currentDeal.dealType === "hot" ? "HOT DEAL" : "REGULAR DEAL"}</div>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <Label htmlFor="extend-expiry-date">New Expiry Date</Label>
+                              <Input
+                                id="extend-expiry-date"
+                                type="date"
+                                value={extendExpirationDate}
+                                onChange={(e) => setExtendExpirationDate(e.target.value)}
+                                className="mt-1"
+                                min={new Date().toISOString().split('T')[0]}
+                              />
+                            </div>
+                            
+                            {extendExpirationDate && currentDeal.expiresAt && (
+                              <div className="p-3 bg-blue-50 rounded border border-blue-200">
+                                <div className="text-sm font-medium text-blue-900 mb-1">Extension Cost</div>
+                                <div className="text-sm text-blue-800">
+                                  {(() => {
+                                    const currentExpiry = new Date(currentDeal.expiresAt);
+                                    const newExpiry = new Date(extendExpirationDate);
+                                    const extraDays = Math.ceil((newExpiry.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
+                                    
+                                    if (extraDays <= 0) return "Please select a date after the current expiry";
+                                    
+                                    // Check if we're in promotional period
+                                    const promotionalEndDate = new Date('2026-01-01T00:00:00.000Z');
+                                    const isPromotionalPeriod = new Date() < promotionalEndDate;
+                                    
+                                    if (isPromotionalPeriod) {
+                                      return (
+                                        <div className="text-green-700 font-medium">
+                                          <div>{extraDays} extra day{extraDays > 1 ? 's' : ''}</div>
+                                          <div>🎉 FREE during promotional period!</div>
+                                          <div className="text-xs">Free until January 1st, 2026</div>
+                                        </div>
+                                      );
+                                    }
+                                    
+                                    // Calculate cost: HOT deals = 5 credits per day, REGULAR = 2 credits per day
+                                    const creditsPerDay = currentDeal.dealType === "hot" ? 5 : 2;
+                                    const totalCredits = extraDays * creditsPerDay;
+                                    const totalCost = totalCredits * 2.5; // R2.50 per credit
+                                    
+                                    return (
+                                      <div>
+                                        <div>{extraDays} extra day{extraDays > 1 ? 's' : ''} × {creditsPerDay} credits = {totalCredits} credits</div>
+                                        <div className="font-medium">Total cost: R{totalCost.toFixed(2)}</div>
+                                      </div>
+                                    );
+                                  })()}
+                                </div>
+                              </div>
+                            )}
+                            
+                            <div className="flex justify-end space-x-2">
+                              <Button
+                                variant="outline"
+                                onClick={() => {
+                                  setExtendingDealId(null);
+                                  setExtendExpirationDate("");
+                                }}
+                              >
+                                Cancel
+                              </Button>
+                              <Button
+                                onClick={() => handleExtendDeal(extendingDealId)}
+                                disabled={extendDealMutation.isPending || !extendExpirationDate}
+                              >
+                                {extendDealMutation.isPending ? "Extending..." : "Extend Deal"}
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="text-center py-8">
