@@ -349,6 +349,15 @@ export default function Navbar() {
 
 
 
+                {(user as UserType)?.userType === "supplier" && (
+                  <Link href="/post-deal">
+                    <Button className="bg-white text-slate-600 hover:bg-white/90 hover:text-slate-700 font-medium" data-testid="button-post-deal-navbar">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Post Deal
+                    </Button>
+                  </Link>
+                )}
+
                 <Button 
                   variant="ghost" 
                   className="text-white hover:text-slate-900 hover:bg-white/20 px-3" 
