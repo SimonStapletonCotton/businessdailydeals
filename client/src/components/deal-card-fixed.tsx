@@ -205,12 +205,15 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
 
         {/* Compact Deal Modal */}
         {showCompactModal && (
-          <>
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             <div 
-              className="fixed inset-0 bg-black bg-opacity-50 z-50"
+              className="absolute inset-0 bg-black bg-opacity-50"
               onClick={() => setShowCompactModal(false)}
             />
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 z-51 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div 
+              className="relative bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-xl font-bold text-slate-900">{deal.title}</h2>
                 <Button
@@ -315,7 +318,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 </div>
               </div>
             </div>
-          </>
+          </div>
         )}
       </>
     );
