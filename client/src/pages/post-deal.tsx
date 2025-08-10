@@ -62,7 +62,7 @@ export default function PostDeal() {
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const [mainImage, setMainImage] = useState<string>("");
-  const [productImages, setProductImages] = useState<string[]>([]);
+
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -99,7 +99,7 @@ export default function PostDeal() {
       dealType: "regular",
       imageUrl: "",
       keywords: [],
-      productImages: [],
+
       size: "",
       quantityAvailable: undefined,
       productSpecifications: "",
@@ -120,7 +120,7 @@ export default function PostDeal() {
         imageUrl: mainImage || "",
         keywords: keywords.length > 0 ? keywords : [],
         expiresAt: data.expiresAt,
-        productImages: productImages.length > 0 ? productImages : [],
+
         size: data.size || undefined,
         quantityAvailable: data.quantityAvailable || undefined,
         productSpecifications: data.productSpecifications || undefined,
@@ -201,9 +201,7 @@ export default function PostDeal() {
     setMainImage(images[0] || "");
   };
 
-  const handleProductImagesChange = (images: string[]) => {
-    setProductImages(images);
-  };
+
 
   const calculateDiscount = () => {
     const price = parseFloat(form.watch("price") || "0");
@@ -527,7 +525,7 @@ export default function PostDeal() {
                   />
                 </div>
 
-                {/* Deal Type and Image */}
+                {/* Deal Type and Main Image */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
@@ -560,27 +558,12 @@ export default function PostDeal() {
                       onImagesChange={handleMainImageChange}
                       maxImages={1}
                       label="Main Cover Image"
-                      description="Upload a main cover image for your deal (max 1 image, 5MB max)"
+                      description="Upload one main image for your deal (max 5MB)"
                     />
                   </div>
                 </div>
 
-                {/* Product Images Section */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Package className="h-5 w-5 text-slate-600" />
-                    <h3 className="text-lg font-semibold text-slate-900">Product Images *</h3>
-                  </div>
-                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                    <ImageUpload
-                      images={productImages}
-                      onImagesChange={handleProductImagesChange}
-                      maxImages={5}
-                      label="Product Images"
-                      description="Upload images of your product from different angles (max 5 images, 5MB each)"
-                    />
-                  </div>
-                </div>
+
 
                 {/* Product Details Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
