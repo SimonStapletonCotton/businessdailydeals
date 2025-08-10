@@ -38,19 +38,40 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
 
   const createCouponMutation = useMutation({
     mutationFn: async (data: { dealId: string; supplierId: string }) => {
-      return await apiRequest("POST", "/api/coupons", data);
+      console.log("Creating coupon for deal:", data);
+      const response = await apiRequest("POST", "/api/coupons", data);
+      console.log("Coupon response:", response);
+      return response;
     },
     onSuccess: (response: any) => {
+      console.log("Coupon success:", response);
       toast({
         title: "Coupon Generated!",
         description: `Your coupon code: ${response.couponCode}. Valid until ${new Date(response.expiresAt).toLocaleDateString()}.`,
       });
       setShowCompactModal(false);
+      // Invalidate coupons cache
+      queryClient.invalidateQueries({ queryKey: ["/api/coupons"] });
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error("Coupon generation error:", error);
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      
+      // More specific error handling
+      const errorMessage = error?.message || error?.error || "Failed to generate coupon. Please try again.";
       toast({
         title: "Error",
-        description: "Failed to generate coupon. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -218,7 +239,11 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                     {isAuthenticated ? (
                       <Button
                         className="w-full bg-green-600 hover:bg-green-700 text-white"
-                        onClick={() => createCouponMutation.mutate({ dealId: deal.id, supplierId: deal.supplierId })}
+                        onClick={() => {
+                          console.log("Button clicked, authenticated:", isAuthenticated);
+                          console.log("Creating coupon for:", { dealId: deal.id, supplierId: deal.supplierId });
+                          createCouponMutation.mutate({ dealId: deal.id, supplierId: deal.supplierId });
+                        }}
                         disabled={createCouponMutation.isPending}
                       >
                         <Ticket className="h-4 w-4 mr-2" />
@@ -227,10 +252,13 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                     ) : (
                       <Button
                         className="w-full bg-green-600 hover:bg-green-700 text-white"
-                        onClick={() => window.location.href = '/register-buyer'}
+                        onClick={() => {
+                          console.log("Not authenticated, redirecting to login");
+                          window.location.href = '/api/login';
+                        }}
                       >
                         <UserPlus className="h-4 w-4 mr-2" />
-                        Register to Get Coupon
+                        Login to Get Coupon
                       </Button>
                     )}
                     <Button
