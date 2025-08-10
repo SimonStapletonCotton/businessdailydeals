@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Building2, CreditCard, Mail, Phone, MapPin, Award, ShoppingBag, Target } from "lucide-react";
+import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Building2, CreditCard, Mail, Phone, MapPin, Award, ShoppingBag, Target, Plus } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 
@@ -185,6 +185,12 @@ export default function HomeComprehensive() {
                 <Button size="lg" className="bg-blue-800 text-white hover:bg-blue-900 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-browse-regular-deals">
                   Browse Regular Deals
                   <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Link href="/post-deal">
+                <Button size="lg" className="bg-green-600 text-white hover:bg-green-700 px-8 py-3 text-lg font-semibold shadow-lg" data-testid="button-post-deal">
+                  <Plus className="w-5 h-5 mr-2" />
+                  Post Deal
                 </Button>
               </Link>
             </div>
