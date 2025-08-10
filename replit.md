@@ -133,6 +133,7 @@ Color scheme preference: Orange halftone casino-style theme with animated red 7'
 - **GRID LAYOUT IMPLEMENTATION COMPLETED**: Implemented fixed 5-column × 10-row layout for Hot Deals and Regular Deals pages (50 deals per page) with "Show More" pagination functionality
 - **NAVIGATION REORDERED**: Updated menu order to: Home/HOT deals → Regular Deals → Register as Supplier → Register as Buyer for better user flow
 - **COUPON SYSTEM FULLY OPERATIONAL**: Fixed all database schema issues, created sample data, and confirmed coupon generation and Live Coupons page functionality
+- **SCROLL NAVIGATION FIXED (January 10, 2025)**: Completely resolved page navigation scroll issues where Hot Deals and Regular Deals pages opened at bottom instead of top. Added comprehensive scroll-to-top functionality for all navigation links, homepage deal cards, and hero section buttons with multiple fallback methods and proper timing.
 
 **COMPLETED MODAL IMPLEMENTATION (January 10, 2025)**:
 - **Solution**: Created comprehensive deal-card-fixed.tsx component with proper modal structure
