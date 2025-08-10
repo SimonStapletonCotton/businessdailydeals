@@ -1,125 +1,129 @@
-# Business Daily Deals - Comprehensive Testing & Stability Plan
+# Comprehensive Test Plan - Preventing Functionality Degradation
 
-## Critical Stability Issues Identified
-- Deal type labeling reverting to hardcoded values
-- Find Me a Deal dropdown functionality breaking
-- Image display intermittently failing
-- Components becoming unstable between sessions
+## Critical Functionality Testing
 
-## 1. AUTOMATED TESTING FRAMEWORK
+### 1. Image Display System
+**Status**: RECENTLY FIXED - Monitor closely for regression
+- Hot Deals images loading correctly
+- Regular Deals images loading correctly
+- Fallback system working for missing images
+- DealImage component error handling
 
-### Backend API Tests
+**Test Commands**:
 ```bash
-# Core functionality tests to run before any deployment
-curl -f http://localhost:5000/api/health || exit 1
-curl -f http://localhost:5000/api/deals | grep -q "dealType" || exit 1
-curl -f http://localhost:5000/public-objects/product-images/test.jpg || echo "Image serving test needed"
+curl -I http://localhost:5000/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg
 ```
 
-### Database Integrity Checks
-```sql
--- Verify deal types are properly stored
-SELECT DISTINCT deal_type FROM deals;
--- Should return: hot, regular
+### 2. Deal Management System
+- Deal creation workflow
+- Deal listing (Hot/Regular)
+- Deal editing and updates
+- Deal expiry extension
+- Deal status management
 
--- Check image URLs are properly formatted
-SELECT COUNT(*) FROM deals WHERE image_url LIKE '/public-objects/%';
--- Should match deals with images
+### 3. Authentication System
+- Login/logout functionality
+- Session persistence
+- Role-based access (buyer/supplier)
+- Protected route access
 
--- Verify promotional period logic
-SELECT COUNT(*) FROM users WHERE promotional_period_ends = '2025-12-31';
-```
+### 4. Payment Integration
+- PayFast integration
+- Credit purchase workflow
+- Coupon purchase workflow
+- Email confirmation system
 
-## 2. COMPONENT STABILITY CHECKLIST
+### 5. Database Operations
+- User registration
+- Deal CRUD operations
+- Coupon generation
+- Business statistics calculation
 
-### Critical Components to Monitor
-- [ ] deal-card-fixed.tsx (dealType logic)
-- [ ] find-me-deal.tsx (dropdown functionality)
-- [ ] home-comprehensive.tsx (image display)
-- [ ] supplier-dashboard.tsx (extend functionality)
+### 6. Email System
+- Registration confirmations
+- Payment confirmations
+- Find Me a Deal notifications
+- Admin notifications
 
-### Required Checks Before Any Code Changes
-1. Backup current working state
-2. Test deal type display (hot vs regular)
-3. Test Find Me a Deal form submission
-4. Verify image loading on all pages
-5. Check promotional period logic
+## Regression Prevention Strategies
 
-## 3. DEPLOYMENT SAFEGUARDS
+### 1. Component Isolation
+- Each major component has fallback mechanisms
+- Error boundaries prevent cascade failures
+- Graceful degradation for non-critical features
 
-### Pre-Deployment Checklist
-- [ ] All LSP diagnostics resolved
-- [ ] No hardcoded values in components
-- [ ] Database schema matches code expectations
-- [ ] Object storage connectivity verified
-- [ ] Email notification system ready (SendGrid)
+### 2. Data Integrity
+- Database constraints prevent corruption
+- Input validation on all endpoints
+- Transaction rollback on failures
 
-### Post-Deployment Verification
-- [ ] Homepage loads with correct deal types
-- [ ] Images display properly
-- [ ] Forms submit successfully
-- [ ] Navigation functions work
-- [ ] Dynamic statistics update
+### 3. Monitoring & Alerts
+- Health check endpoints (`/api/health/detailed`)
+- Automated stability checks (`stability-check.sh`)
+- Performance monitoring
+- Error logging and tracking
 
-## 4. BACKUP AND RECOVERY STRATEGY
+### 4. Recovery Procedures
+- Automatic component restart mechanisms
+- Database connection pool management
+- Session recovery for interrupted workflows
+- Graceful handling of external service failures
 
-### Critical Files to Monitor
-- client/src/components/deal-card-fixed.tsx
-- client/src/pages/find-me-deal.tsx
-- client/src/pages/home-comprehensive.tsx
-- server/routes.ts
-- shared/schema.ts
-
-### Recovery Procedures
-1. Document exact working state before changes
-2. Create checkpoint snapshots
-3. Maintain rollback procedures
-4. Test recovery process
-
-## 5. MONITORING AND ALERTS
-
-### Key Metrics to Track
-- Deal type accuracy (no hardcoded "HOT DEAL")
-- Image load success rate
-- Form submission success rate
-- API response times
-- Database connection stability
-
-### Error Patterns to Watch
-- Components reverting to hardcoded states
-- Form validation breaking
-- Object storage connectivity issues
-- Authentication/session problems
-
-## 6. STABILITY MAINTENANCE PROTOCOL
+## Stability Maintenance Schedule
 
 ### Daily Checks
-1. Verify deal type labels are dynamic
-2. Test form functionality
-3. Check image loading
-4. Confirm promotional period logic
+- Run stability-check.sh
+- Monitor error logs
+- Verify critical user paths
 
-### Weekly Maintenance
-1. Review and update this test plan
-2. Verify backup procedures
-3. Test rollback capabilities
-4. Update documentation
+### Weekly Reviews
+- Performance metrics analysis
+- Database maintenance
+- Security updates
+- Dependency updates
 
-## 7. CYBERSMART PRODUCTION READINESS
+### Monthly Assessments
+- Full system health audit
+- Component interaction testing
+- Scalability testing
+- Backup and recovery testing
 
-### Final Deployment Criteria
-- [ ] All automated tests passing
-- [ ] No known stability issues
-- [ ] Complete backup documentation
-- [ ] Recovery procedures tested
-- [ ] Performance optimization complete
+## Critical Path Monitoring
 
-### Production Monitoring Setup
-- Health check endpoints active
-- Error logging configured
-- Performance metrics tracking
-- User feedback collection system
+### User Registration Flow
+1. Registration form submission
+2. Database user creation
+3. Session establishment
+4. Dashboard access
 
----
-**Last Updated:** August 10, 2025
-**Status:** Active monitoring required before Cybersmart deployment
+### Deal Posting Flow
+1. Authenticated supplier access
+2. Deal form completion
+3. Image upload (if applicable)
+4. Database storage
+5. Deal visibility in listings
+
+### Deal Discovery Flow
+1. Deal listing page access
+2. Image loading and display
+3. Deal filtering and search
+4. Coupon generation for inquiries
+
+### Payment Processing Flow
+1. Credit/coupon purchase initiation
+2. PayFast redirection
+3. Payment processing
+4. Webhook handling
+5. Email confirmations
+6. Database updates
+
+## Automated Testing Integration
+
+The system includes:
+- Health monitoring endpoints
+- Automated stability checks
+- Error recovery mechanisms
+- Performance monitoring
+- Database integrity checks
+
+Run `./stability-check.sh` regularly to ensure system health and prevent functionality degradation.

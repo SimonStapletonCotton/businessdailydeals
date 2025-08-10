@@ -26,6 +26,7 @@ import {
   insertBasketItemSchema 
 } from "@shared/schema";
 import { z } from "zod";
+import { healthMonitor } from "./healthMonitor";
 
 // Initialize Stripe if keys are available
 let stripe: Stripe | null = null;
@@ -51,29 +52,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return generalLimiter(req, res, next);
   });
   
-  // Health check endpoint for autoscale deployment diagnostics
+  // Basic health check endpoint
   app.get('/api/health', async (req, res) => {
     try {
-      // Test database connection by checking if we can query users table
       await storage.getUser('health-check-test');
-      
       res.status(200).json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development',
-        port: process.env.PORT || '5000',
-        database: 'connected',
         service: 'Business Daily Deals B2B Marketplace'
       });
     } catch (error) {
       res.status(503).json({
         status: 'unhealthy',
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development',
-        port: process.env.PORT || '5000',
-        database: 'disconnected',
         service: 'Business Daily Deals B2B Marketplace',
         error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // Comprehensive health monitoring endpoint
+  app.get('/api/health/detailed', async (req, res) => {
+    try {
+      const healthReport = await healthMonitor.performComprehensiveHealthCheck();
+      
+      const statusCode = healthReport.overall_status === 'critical' ? 503 : 
+                        healthReport.overall_status === 'degraded' ? 206 : 200;
+      
+      res.status(statusCode).json({
+        service: 'Business Daily Deals B2B Marketplace',
+        ...healthReport,
+        environment: process.env.NODE_ENV || 'development'
+      });
+    } catch (error) {
+      res.status(500).json({
+        service: 'Business Daily Deals B2B Marketplace',
+        overall_status: 'critical',
+        timestamp: new Date(),
+        error: error instanceof Error ? error.message : 'Health check system failure',
+        checks: []
       });
     }
   });
