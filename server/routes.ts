@@ -994,13 +994,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // PayFast Credit Purchase Endpoint
   app.post('/api/credits/purchase', isAuthenticated, async (req: any, res) => {
-    if (!stripe) {
-      return res.status(500).json({ 
-        message: "Payment system not configured. Please contact support." 
-      });
-    }
-
     try {
       const userId = req.user.claims.sub;
       const { packageId, customAmount } = req.body;
@@ -1023,48 +1018,150 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ message: "Invalid package" });
         }
         
-        amount = pkg.price * 100; // Convert to cents
+        amount = pkg.price; // PayFast uses Rand amounts directly
         credits = pkg.credits;
         description = `${packageId.charAt(0).toUpperCase() + packageId.slice(1)} Package - ${credits} Credits`;
       } else if (customAmount) {
         if (customAmount < 50) {
           return res.status(400).json({ message: "Minimum purchase is R50" });
         }
-        amount = Math.round(customAmount * 100); // Convert to cents
+        amount = Math.round(customAmount * 100) / 100; // Clean decimal
         credits = Math.floor(customAmount / 2.5); // R2.50 per credit
         description = `Custom Credit Purchase - ${credits} Credits`;
       } else {
         return res.status(400).json({ message: "Package ID or custom amount required" });
       }
 
-      // Create payment intent
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount,
-        currency: 'zar',
-        metadata: {
-          userId,
-          credits: credits.toString(),
-          type: 'credit_purchase'
-        }
-      });
+      // Generate unique merchant payment ID
+      const merchantPaymentId = `BDD-${credits}CRED-${Date.now()}`;
 
       // Create pending transaction record
-      await storage.createCreditTransaction({
+      const transaction = await storage.createCreditTransaction({
         userId,
-        amount: (amount / 100).toFixed(2),
+        amount: amount.toFixed(2),
         type: 'purchase',
         description,
-        paymentReference: paymentIntent.id,
-        merchantReference: `BDD-${credits}CRED-${Date.now()}`
+        paymentReference: merchantPaymentId, // Will be updated with PayFast reference
+        merchantReference: merchantPaymentId
       });
 
+      // Get user details for PayFast
+      const user = await storage.getUser(userId);
+      const customerName = (user?.firstName && user?.lastName) ? 
+        `${user.firstName} ${user.lastName}` : 
+        user?.companyName || 'Business Daily Deals Customer';
+
+      // PayFast payment data
+      const paymentData = {
+        merchant_id: process.env.PAYFAST_MERCHANT_ID,
+        merchant_key: process.env.PAYFAST_MERCHANT_KEY,
+        return_url: `${req.protocol}://${req.get('host')}/payment-success`,
+        cancel_url: `${req.protocol}://${req.get('host')}/payment-cancelled`,
+        notify_url: `${req.protocol}://${req.get('host')}/api/payfast/success`,
+        name_first: user?.firstName || 'Customer',
+        name_last: user?.lastName || '',
+        email_address: user?.email || '',
+        m_payment_id: merchantPaymentId,
+        amount: amount.toFixed(2),
+        item_name: description,
+        item_description: `Business Daily Deals - ${description}`,
+        custom_str1: userId,
+        custom_str2: credits.toString(),
+        custom_str3: 'credit_purchase'
+      };
+
       res.json({ 
-        clientSecret: paymentIntent.client_secret,
-        credits 
+        paymentData,
+        transactionId: transaction.id,
+        credits,
+        paymentUrl: process.env.NODE_ENV === 'production' 
+          ? 'https://www.payfast.co.za/eng/process' 
+          : 'https://sandbox.payfast.co.za/eng/process'
       });
     } catch (error) {
-      console.error("Error creating credit purchase:", error);
+      console.error("Error creating PayFast credit purchase:", error);
       res.status(500).json({ message: "Failed to create purchase" });
+    }
+  });
+
+  // PayFast Coupon Purchase Endpoint
+  app.post('/api/coupons/purchase', isAuthenticated, async (req: any, res) => {
+    try {
+      const buyerId = req.user.claims.sub;
+      const { dealId } = req.body;
+
+      // Get the deal details
+      const deal = await storage.getDealById(dealId);
+      if (!deal) {
+        return res.status(404).json({ message: "Deal not found" });
+      }
+
+      // Check if promotional period (FREE until Dec 31, 2025)
+      const now = new Date();
+      const promotionalEndDate = new Date('2025-12-31T23:59:59Z');
+      
+      if (now <= promotionalEndDate) {
+        // FREE during promotional period - create coupon directly
+        const couponCode = `BDD${Date.now()}${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+        
+        const coupon = await storage.createCoupon({
+          code: couponCode,
+          dealId,
+          buyerId,
+          supplierName: deal.companyName || 'Supplier',
+          buyerName: 'Customer', // Will be updated with real name
+          originalPrice: deal.originalPrice,
+          discountedPrice: deal.discountedPrice,
+          validUntil: deal.expiresAt,
+          status: 'active',
+          purchasedAt: now,
+          notes: 'FREE promotional period purchase'
+        });
+
+        return res.json({ 
+          coupon,
+          message: 'Coupon generated for FREE during promotional period',
+          promotional: true
+        });
+      }
+
+      // Regular paid purchase after promotional period
+      const amount = parseFloat(deal.discountedPrice);
+      const merchantPaymentId = `BDD-COUP-${dealId.substring(0, 8)}-${Date.now()}`;
+
+      // Get user details
+      const user = await storage.getUser(buyerId);
+
+      // PayFast payment data for coupon purchase
+      const paymentData = {
+        merchant_id: process.env.PAYFAST_MERCHANT_ID,
+        merchant_key: process.env.PAYFAST_MERCHANT_KEY,
+        return_url: `${req.protocol}://${req.get('host')}/coupon-payment-success`,
+        cancel_url: `${req.protocol}://${req.get('host')}/payment-cancelled`,
+        notify_url: `${req.protocol}://${req.get('host')}/api/payfast/coupon-success`,
+        name_first: user?.firstName || 'Customer',
+        name_last: user?.lastName || '',
+        email_address: user?.email || '',
+        m_payment_id: merchantPaymentId,
+        amount: amount.toFixed(2),
+        item_name: `Coupon: ${deal.title}`,
+        item_description: `Business Daily Deals Coupon - ${deal.title}`,
+        custom_str1: buyerId,
+        custom_str2: dealId,
+        custom_str3: 'coupon_purchase'
+      };
+
+      res.json({ 
+        paymentData,
+        dealTitle: deal.title,
+        amount: amount.toFixed(2),
+        paymentUrl: process.env.NODE_ENV === 'production' 
+          ? 'https://www.payfast.co.za/eng/process' 
+          : 'https://sandbox.payfast.co.za/eng/process'
+      });
+    } catch (error) {
+      console.error("Error creating PayFast coupon purchase:", error);
+      res.status(500).json({ message: "Failed to create coupon purchase" });
     }
   });
 
@@ -1130,6 +1227,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(200).send('OK');
     } catch (error) {
       console.error("Error processing PayFast payment success:", error);
+      res.status(500).send('Error');
+    }
+  });
+
+  // PayFast Coupon Payment Success Handler
+  app.post('/api/payfast/coupon-success', async (req, res) => {
+    try {
+      const paymentData = req.body;
+      console.log('PayFast coupon payment success:', paymentData);
+      
+      const buyerId = paymentData.custom_str1;
+      const dealId = paymentData.custom_str2;
+      const merchantPaymentId = paymentData.m_payment_id;
+
+      if (buyerId && dealId) {
+        // Get deal and user details
+        const [deal, user] = await Promise.all([
+          storage.getDealById(dealId),
+          storage.getUser(buyerId)
+        ]);
+
+        if (deal && user) {
+          // Generate coupon code
+          const couponCode = `BDD${Date.now()}${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+          
+          // Create the coupon
+          const coupon = await storage.createCoupon({
+            code: couponCode,
+            dealId,
+            buyerId,
+            supplierName: deal.companyName || 'Supplier',
+            buyerName: (user.firstName && user.lastName) ? 
+              `${user.firstName} ${user.lastName}` : 
+              user.companyName || 'Customer',
+            originalPrice: deal.originalPrice,
+            discountedPrice: deal.discountedPrice,
+            validUntil: deal.expiresAt,
+            status: 'active',
+            purchasedAt: new Date(),
+            notes: `Paid via PayFast - ${merchantPaymentId}`
+          });
+
+          // Send confirmation emails for coupon purchase
+          const paymentEmailData = {
+            customerName: (user.firstName && user.lastName) ? 
+              `${user.firstName} ${user.lastName}` : 
+              user.companyName || 'Valued Customer',
+            customerEmail: user.email || 'No email provided',
+            packageType: `Coupon: ${deal.title}`,
+            credits: 1, // 1 coupon purchased
+            amount: `R${deal.discountedPrice}`,
+            paymentReference: paymentData.payment_id || paymentData.pf_payment_id,
+            merchantReference: merchantPaymentId,
+            paymentMethod: paymentData.payment_method || 'PayFast',
+            paidAt: new Date().toLocaleString('en-ZA', {
+              timeZone: 'Africa/Johannesburg',
+              year: 'numeric',
+              month: '2-digit', 
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })
+          };
+
+          // Send emails to both admin and customer
+          const [adminEmailSent, customerEmailSent] = await Promise.all([
+            sendPaymentNotificationToAdmin(paymentEmailData),
+            user.email ? sendPaymentConfirmationToCustomer({
+              ...paymentEmailData,
+              packageType: `Coupon Purchase: ${deal.title}`,
+              credits: 1 // For display purposes
+            }) : Promise.resolve(false)
+          ]);
+
+          console.log(`Coupon payment emails - Admin: ${adminEmailSent ? 'sent' : 'failed'}, Customer: ${customerEmailSent ? 'sent' : user.email ? 'failed' : 'no email'}`);
+          console.log(`Coupon generated: ${couponCode} for deal ${deal.title}`);
+        }
+      }
+      
+      res.status(200).send('OK');
+    } catch (error) {
+      console.error("Error processing PayFast coupon payment:", error);
       res.status(500).send('Error');
     }
   });
