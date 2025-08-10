@@ -169,6 +169,91 @@ interface PaymentNotificationData {
   paidAt: string;
 }
 
+export async function sendPaymentConfirmationToCustomer(paymentData: PaymentNotificationData): Promise<boolean> {
+  const fromEmail = 'noreply@businessdailydeals.co.za';
+
+  const emailContent = `
+Payment Confirmation - Business Daily Deals
+==========================================
+
+Dear ${paymentData.customerName},
+
+Thank you for your payment! Your credit purchase has been successfully processed.
+
+Payment Details:
+- Amount Paid: ${paymentData.amount}
+- Credits Added: ${paymentData.credits}
+- Package: ${paymentData.packageType}
+- Payment Reference: ${paymentData.paymentReference}
+- Date/Time: ${paymentData.paidAt}
+
+Your credits have been added to your Business Daily Deals account and are ready to use.
+You can now start posting deals, extending existing deals, or purchasing premium advertising space.
+
+Next Steps:
+1. Log into your account at www.businessdailydeals.co.za
+2. Visit your dashboard to see your updated credit balance
+3. Start posting hot deals or regular deals
+4. Use the "Find Me a Deal" feature if you're a buyer
+
+Thank you for choosing Business Daily Deals!
+
+Best regards,
+Business Daily Deals Team
+www.businessdailydeals.co.za
+  `;
+
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 2px solid #16a34a; border-radius: 12px;">
+      <div style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 20px; border-radius: 10px 10px 0 0;">
+        <h2 style="margin: 0; font-size: 24px;">Payment Confirmation</h2>
+        <p style="margin: 5px 0 0 0; opacity: 0.9;">Business Daily Deals</p>
+      </div>
+      
+      <div style="padding: 30px;">
+        <p style="font-size: 18px; color: #374151; margin-bottom: 20px;">Dear ${paymentData.customerName},</p>
+        <p style="color: #374151; margin-bottom: 20px;">Thank you for your payment! Your credit purchase has been successfully processed.</p>
+
+        <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; border-left: 4px solid #16a34a; margin-bottom: 20px;">
+          <h3 style="color: #15803d; margin-top: 0;">Payment Details</h3>
+          <p style="margin: 5px 0;"><strong>Amount Paid:</strong> <span style="color: #15803d; font-size: 18px; font-weight: bold;">${paymentData.amount}</span></p>
+          <p style="margin: 5px 0;"><strong>Credits Added:</strong> <span style="color: #15803d; font-weight: bold;">${paymentData.credits}</span></p>
+          <p style="margin: 5px 0;"><strong>Package:</strong> ${paymentData.packageType}</p>
+          <p style="margin: 5px 0;"><strong>Payment Reference:</strong> ${paymentData.paymentReference}</p>
+          <p style="margin: 5px 0;"><strong>Date/Time:</strong> ${paymentData.paidAt}</p>
+        </div>
+
+        <div style="background-color: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: #92400e; margin-top: 0;">What's Next?</h3>
+          <ol style="color: #92400e; margin: 10px 0;">
+            <li>Log into your account at <strong>www.businessdailydeals.co.za</strong></li>
+            <li>Visit your dashboard to see your updated credit balance</li>
+            <li>Start posting hot deals or regular deals</li>
+            <li>Use the "Find Me a Deal" feature if you're a buyer</li>
+          </ol>
+        </div>
+
+        <div style="background-color: #e0f2fe; padding: 15px; border-radius: 8px; text-align: center;">
+          <p style="margin: 0; color: #0c4a6e; font-weight: bold;">Your credits are ready to use!</p>
+        </div>
+
+        <p style="color: #6b7280; margin-top: 30px; text-align: center;">
+          Thank you for choosing Business Daily Deals!<br>
+          <strong>www.businessdailydeals.co.za</strong>
+        </p>
+      </div>
+    </div>
+  `;
+
+  return await sendEmail({
+    to: paymentData.customerEmail,
+    from: fromEmail,
+    subject: `Payment Confirmation - ${paymentData.credits} Credits Added to Your Account`,
+    text: emailContent,
+    html: htmlContent,
+  });
+}
+
 export async function sendPaymentNotificationToAdmin(paymentData: PaymentNotificationData): Promise<boolean> {
   const adminEmail = 'admin@businessdailydeals.co.za';
   const fromEmail = 'noreply@businessdailydeals.co.za';

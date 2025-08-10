@@ -107,6 +107,9 @@ export interface IStorage {
   getUserCreditTransactions(userId: string): Promise<CreditTransaction[]>;
   updateUserCreditBalance(userId: string, amount: string, operation: 'add' | 'subtract'): Promise<User>;
   updateUserStripeInfo(userId: string, data: { stripeCustomerId?: string; stripeSubscriptionId?: string }): Promise<User>;
+  getCreditTransactionByReference(paymentReference: string): Promise<CreditTransaction | undefined>;
+  updateCreditTransaction(id: string, updates: Partial<InsertCreditTransaction>): Promise<CreditTransaction>;
+  addCreditsToUser(userId: string, credits: number): Promise<void>;
   
   // Direct purchase operations
   createOrder(order: InsertOrder): Promise<Order>;
@@ -1439,6 +1442,30 @@ export class DatabaseStorage implements IStorage {
       console.error('Error in getSuppliersDirectory:', error);
       return [];
     }
+  }
+
+  // PayFast Payment Methods
+  async getCreditTransactionByReference(paymentReference: string): Promise<CreditTransaction | undefined> {
+    const [transaction] = await db.select()
+      .from(creditTransactions)
+      .where(eq(creditTransactions.paymentReference, paymentReference));
+    return transaction;
+  }
+
+  async updateCreditTransaction(id: string, updates: Partial<InsertCreditTransaction>): Promise<CreditTransaction> {
+    const [transaction] = await db.update(creditTransactions)
+      .set(updates)
+      .where(eq(creditTransactions.id, id))
+      .returning();
+    return transaction;
+  }
+
+  async addCreditsToUser(userId: string, credits: number): Promise<void> {
+    await db.update(users)
+      .set({
+        creditBalance: sql`CAST(COALESCE(${users.creditBalance}, '0') AS DECIMAL) + ${credits.toString()}`
+      })
+      .where(eq(users.id, userId));
   }
 }
 

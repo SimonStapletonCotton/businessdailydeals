@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { sendDealRequestToAdmin, sendPaymentNotificationToAdmin } from "./email";
+import { sendDealRequestToAdmin, sendPaymentNotificationToAdmin, sendPaymentConfirmationToCustomer } from "./email";
 import Stripe from "stripe";
 import {
   generalLimiter,
@@ -1092,9 +1092,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const user = await storage.getUser(transaction.userId);
         
         if (user) {
-          // Send admin notification email
-          await sendPaymentNotificationToAdmin({
-            customerName: user.name || user.username,
+          const paymentEmailData = {
+            customerName: (user.firstName && user.lastName) ? 
+              `${user.firstName} ${user.lastName}` : 
+              user.companyName || 'Valued Customer',
             customerEmail: user.email || 'No email provided',
             packageType: transaction.description,
             credits: Math.floor(parseFloat(transaction.amount) / 2.5), // R2.50 per credit
@@ -1111,9 +1112,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
               minute: '2-digit',
               second: '2-digit'
             })
-          });
+          };
+
+          // Send admin notification email
+          const adminEmailSent = await sendPaymentNotificationToAdmin(paymentEmailData);
           
-          console.log(`Payment notification sent to admin for ${user.email}`);
+          // Send customer confirmation email (only if customer has email)
+          let customerEmailSent = false;
+          if (user.email) {
+            customerEmailSent = await sendPaymentConfirmationToCustomer(paymentEmailData);
+          }
+          
+          console.log(`Payment emails - Admin: ${adminEmailSent ? 'sent' : 'failed'}, Customer: ${customerEmailSent ? 'sent' : user.email ? 'failed' : 'no email'}`);
         }
       }
       
