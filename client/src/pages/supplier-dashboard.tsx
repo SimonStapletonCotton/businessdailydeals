@@ -24,6 +24,7 @@ export default function SupplierDashboard() {
   const [newExpirationDate, setNewExpirationDate] = useState("");
   const [extendingDealId, setExtendingDealId] = useState<string | null>(null);
   const [extendExpirationDate, setExtendExpirationDate] = useState("");
+  const [deletingDealId, setDeletingDealId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -139,17 +140,20 @@ export default function SupplierDashboard() {
 
   const deleteDealMutation = useMutation({
     mutationFn: async (dealId: string) => {
+      setDeletingDealId(dealId);
       await apiRequest("DELETE", `/api/deals/${dealId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
       queryClient.invalidateQueries({ queryKey: ["/api/supplier/expired-deals"] });
+      setDeletingDealId(null);
       toast({
         title: "Deal Deleted",
         description: "Deal removed successfully.",
       });
     },
     onError: (error: any) => {
+      setDeletingDealId(null);
       if (isUnauthorizedError(error)) {
         toast({
           title: "Session Expired",
@@ -583,12 +587,12 @@ export default function SupplierDashboard() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteDeal(deal.id)}
-                          disabled={deleteDealMutation.isPending}
+                          disabled={deletingDealId === deal.id}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                           data-testid={`button-delete-deal-${deal.id}`}
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
-                          {deleteDealMutation.isPending ? "Deleting..." : "Delete"}
+                          {deletingDealId === deal.id ? "Deleting..." : "Delete"}
                         </Button>
                         
                         <Dialog>
@@ -736,12 +740,12 @@ export default function SupplierDashboard() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteDeal(deal.id)}
-                          disabled={deleteDealMutation.isPending}
+                          disabled={deletingDealId === deal.id}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                           data-testid={`button-delete-expired-deal-${deal.id}`}
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
-                          {deleteDealMutation.isPending ? "Deleting..." : "Delete"}
+                          {deletingDealId === deal.id ? "Deleting..." : "Delete"}
                         </Button>
                         
                         {reactivatingDealId === deal.id ? (
