@@ -82,15 +82,20 @@ function HotDealsHomepage() {
     queryKey: ["/api/deals", "hot"],
     queryFn: async () => {
       const res = await fetch("/api/deals?type=hot", {
-        credentials: "include"
+        credentials: "include",
+        cache: "no-cache" // Force fresh data
       });
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
-      return res.json();
+      const data = await res.json();
+      console.log("🔥 HOT DEALS API RESPONSE:", data.length, "deals received");
+      return data;
     },
-    staleTime: 30000, // Cache for 30 seconds
-    cacheTime: 300000, // Keep in cache for 5 minutes
+    staleTime: 0, // Always fetch fresh data
+    cacheTime: 0, // Don't cache
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   if (isLoading) {
@@ -167,15 +172,20 @@ function RegularDealsHomepage() {
     queryKey: ["/api/deals", "regular"],
     queryFn: async () => {
       const res = await fetch("/api/deals?type=regular", {
-        credentials: "include"
+        credentials: "include",
+        cache: "no-cache" // Force fresh data
       });
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
-      return res.json();
+      const data = await res.json();
+      console.log("🟠 REGULAR DEALS API RESPONSE:", data.length, "deals received");
+      return data;
     },
-    staleTime: 30000, // Cache for 30 seconds
-    cacheTime: 300000, // Keep in cache for 5 minutes
+    staleTime: 0, // Always fetch fresh data
+    cacheTime: 0, // Don't cache
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   if (isLoading) {
