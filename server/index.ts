@@ -66,6 +66,7 @@ app.use((req, res, next) => {
       process.exit(1);
     }
 
+    // Register API routes BEFORE Vite middleware to ensure proper routing
     const server = await registerRoutes(app);
     log("✅ Routes registered successfully");
 
