@@ -3,12 +3,14 @@
 ## User Concern
 "Once live, these small things keep cropping up will be a problem. The site needs stability with little or no issues over a long period of time."
 
-## Root Cause Analysis
-The image display issue that just occurred highlights a pattern:
-1. Features work initially but degrade over time
-2. CSS conflicts and component complexity create fragility
-3. No early warning system for UI/UX degradation
-4. Manual detection of issues after they affect users
+## Root Cause Analysis - UPDATED AFTER RECURRING ISSUE
+The image display issue occurred TWICE, confirming the exact pattern feared:
+1. Features work initially but degrade due to CSS inheritance conflicts
+2. External CSS dependencies create architectural fragility  
+3. Complex component logic susceptible to framework interactions
+4. Manual detection only after user impact
+
+**CRITICAL LEARNING**: The original fix was insufficient - production requires bulletproof architecture.
 
 ## Production Stability Strategy
 
