@@ -1688,33 +1688,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
 
         try {
-          const { Storage } = await import("@google-cloud/storage");
-          const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
-          
-          const storage = new Storage({
-            credentials: {
-              audience: "replit",
-              subject_token_type: "access_token",
-              token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
-              type: "external_account",
-              credential_source: {
-                url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
-                format: {
-                  type: "json",
-                  subject_token_field_name: "access_token",
+          // Use the same singleton client for validation
+          if (!global.objectStorageClient) {
+            const { Storage } = await import("@google-cloud/storage");
+            const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
+            
+            global.objectStorageClient = new Storage({
+              credentials: {
+                audience: "replit",
+                subject_token_type: "access_token",
+                token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
+                type: "external_account",
+                credential_source: {
+                  url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
+                  format: {
+                    type: "json",
+                    subject_token_field_name: "access_token",
+                  },
                 },
+                universe_domain: "googleapis.com",
               },
-              universe_domain: "googleapis.com",
-            },
-            projectId: "",
-          });
+              projectId: "",
+              retryOptions: {
+                autoRetry: true,
+                maxRetries: 3,
+                retryDelayMultiplier: 2,
+                totalTimeout: 30000,
+                maxRetryDelay: 10000,
+              },
+            });
+          }
 
-          const bucket = storage.bucket(bucketId);
+          const bucket = global.objectStorageClient.bucket(bucketId);
           const file = bucket.file(`public/${filePath}`);
           const [exists] = await file.exists();
           
           return res.json({ valid: exists });
-        } catch {
+        } catch (error) {
+          console.error(`🔴 VALIDATION ERROR for ${filePath}:`, error.message);
           return res.json({ valid: false });
         }
       }
@@ -1734,27 +1745,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(500).json({ error: "Object storage not configured" });
       }
 
-      // Import object storage client with proper configuration
-      const { Storage } = await import("@google-cloud/storage");
-      const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
-      
-      const storage = new Storage({
-        credentials: {
-          audience: "replit",
-          subject_token_type: "access_token",
-          token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
-          type: "external_account",
-          credential_source: {
-            url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
-            format: {
-              type: "json",
-              subject_token_field_name: "access_token",
+      // Use singleton object storage client with retry configuration
+      if (!global.objectStorageClient) {
+        const { Storage } = await import("@google-cloud/storage");
+        const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
+        
+        global.objectStorageClient = new Storage({
+          credentials: {
+            audience: "replit",
+            subject_token_type: "access_token",
+            token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
+            type: "external_account",
+            credential_source: {
+              url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
+              format: {
+                type: "json",
+                subject_token_field_name: "access_token",
+              },
             },
+            universe_domain: "googleapis.com",
           },
-          universe_domain: "googleapis.com",
-        },
-        projectId: "",
-      });
+          projectId: "",
+          retryOptions: {
+            autoRetry: true,
+            maxRetries: 3,
+            retryDelayMultiplier: 2,
+            totalTimeout: 30000,
+            maxRetryDelay: 10000,
+          },
+        });
+      }
+      const storage = global.objectStorageClient;
 
       const bucket = storage.bucket(bucketId);
       const file = bucket.file(`public/${filePath}`);
@@ -1773,18 +1794,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "Cache-Control": "public, max-age=3600",
       });
 
-      // Stream the file to the response
-      const stream = file.createReadStream();
+      // Robust streaming with timeout and retry
+      console.log(`🔄 STREAMING IMAGE: ${filePath} from bucket ${bucketId}`);
+      
+      // Set a reasonable timeout for the response
+      res.setTimeout(30000, () => {
+        console.error(`⏰ TIMEOUT streaming ${filePath}`);
+        if (!res.headersSent) {
+          res.status(504).json({ error: "Stream timeout" });
+        }
+      });
+      
+      const stream = file.createReadStream({
+        validation: false, // Skip integrity checks for speed
+      });
+      
+      let streamStarted = false;
+      
       stream.on("error", (err) => {
-        console.error("Stream error:", err);
+        console.error(`🔴 STREAM ERROR for ${filePath}:`, err.message);
         if (!res.headersSent) {
           res.status(500).json({ error: "Error streaming file" });
         }
       });
+      
+      stream.on("data", () => {
+        if (!streamStarted) {
+          streamStarted = true;
+          console.log(`📡 STREAM STARTED: ${filePath}`);
+        }
+      });
+      
+      stream.on("end", () => {
+        console.log(`✅ STREAM COMPLETE: ${filePath}`);
+      });
+      
       stream.pipe(res);
       
     } catch (error) {
-      console.error("Error serving public object:", error);
+      console.error(`🔴 ERROR serving file ${req.params.filePath}:`, error);
       if (!res.headersSent) {
         res.status(500).json({ error: "Internal server error" });
       }
