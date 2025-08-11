@@ -1,4 +1,4 @@
-// FORCE DISPLAY WITH BACKGROUND IMAGE
+// FORCE DISPLAY WITH DIRECT IMG ELEMENT
 export function DealImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
   if (!src) {
     return (
@@ -9,23 +9,20 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
   }
 
   return (
-    <div 
-      className={`w-full h-[200px] bg-slate-100 rounded-lg overflow-hidden ${className}`}
-      style={{
-        backgroundImage: `url(${src})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-      title={alt}
-    >
-      {/* Hidden img for accessibility */}
+    <div className={`w-full h-[200px] bg-slate-100 rounded-lg overflow-hidden relative ${className}`}>
       <img 
         src={src} 
         alt={alt} 
-        className="sr-only" 
-        onLoad={() => console.log('✅ Background image loaded:', src)}
-        onError={() => console.error('❌ Background image failed:', src)}
+        className="w-full h-full object-cover absolute inset-0"
+        style={{
+          display: 'block',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover'
+        }}
+        onLoad={() => console.log('✅ Image loaded successfully:', src)}
+        onError={() => console.error('❌ Image failed to load:', src)}
+        loading="eager"
       />
     </div>
   );
