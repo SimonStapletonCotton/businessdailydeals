@@ -110,7 +110,7 @@ function HotDealsHomepage() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {hotDeals.slice(0, 8).map((deal: any) => (
+      {hotDeals.map((deal: any) => (
         <Card key={deal.id} className="hover:shadow-lg transition-shadow border-2 border-red-200 hover:border-red-300">
           <CardContent className="p-4">
             <DealImage
@@ -147,6 +147,81 @@ function HotDealsHomepage() {
                       document.body.scrollTop = 0;
                     }, 50);
                   }}
+                >
+                  View Deal
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+// Component to display regular deals on homepage
+function RegularDealsHomepage() {
+  const { data: regularDeals, isLoading } = useQuery({
+    queryKey: ["/api/deals", { type: "regular" }],
+    queryFn: async () => {
+      const res = await fetch("/api/deals?type=regular", {
+        credentials: "include",
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-8">
+        <div className="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full mx-auto"></div>
+        <p className="mt-2 text-slate-600">Loading regular deals...</p>
+      </div>
+    );
+  }
+
+  if (!regularDeals || !Array.isArray(regularDeals) || regularDeals.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-slate-600">No regular deals available at the moment. Check back soon!</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {regularDeals.map((deal: any) => (
+        <Card key={deal.id} className="hover:shadow-lg transition-shadow border-2 border-orange-200 hover:border-orange-300">
+          <CardContent className="p-4">
+            <DealImage
+              src={deal.imageUrl}
+              alt={deal.title}
+              className="w-full h-32 object-cover rounded mb-3"
+            />
+            <div className="flex items-center justify-between mb-2">
+              <Badge className="bg-orange-600 text-white">REGULAR DEAL</Badge>
+              {deal.discount > 0 && (
+                <Badge variant="outline" className="text-green-600 border-green-600">
+                  {deal.discount}% OFF
+                </Badge>
+              )}
+            </div>
+            <h3 className="font-semibold text-slate-900 mb-2">{deal.title}</h3>
+            <p className="text-sm text-slate-600 mb-3 line-clamp-2">{deal.description}</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-lg font-bold text-slate-900">R{deal.price}</span>
+                {deal.originalPrice && (
+                  <span className="text-lg text-slate-700 line-through ml-2 font-medium">R{deal.originalPrice}</span>
+                )}
+              </div>
+              <Link href="/regular-deals">
+                <Button 
+                  size="sm" 
+                  className="bg-orange-600 hover:bg-orange-700 text-white"
                 >
                   View Deal
                 </Button>
@@ -302,6 +377,23 @@ export default function HomeComprehensive() {
           
           {/* Hot Deals Display */}
           <HotDealsHomepage />
+        </div>
+      </section>
+
+      {/* REGULAR DEALS Section */}
+      <section className="bg-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+              REGULAR DEALS
+            </h2>
+            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+              Standard deals with competitive pricing and broad visibility
+            </p>
+          </div>
+          
+          {/* Regular Deals Display */}
+          <RegularDealsHomepage />
         </div>
       </section>
 
