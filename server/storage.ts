@@ -519,6 +519,8 @@ export class DatabaseStorage implements IStorage {
       whereCondition = and(eq(deals.dealStatus, 'active'), eq(deals.dealType, dealType))!;
     }
 
+    console.log(`🔍 FETCHING DEALS: dealType=${dealType || 'all'}`);
+
     const result = await db
       .select({
         deals: deals,
@@ -549,6 +551,9 @@ export class DatabaseStorage implements IStorage {
       .leftJoin(users, eq(deals.supplierId, users.id))
       .where(whereCondition)
       .orderBy(desc(deals.createdAt));
+
+    console.log(`📊 QUERY RESULT COUNT: ${result.length} deals found`);
+    console.log(`📋 TITLES:`, result.map(r => r.deals.title));
 
     return result.map(row => ({
       ...row.deals,

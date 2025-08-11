@@ -277,6 +277,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/deals', async (req, res) => {
     try {
       const { type, search, category } = req.query;
+      console.log(`🚀 API REQUEST: /api/deals?type=${type}&search=${search}&category=${category}`);
       
       let deals;
       if (search) {
@@ -285,6 +286,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         deals = await storage.getDeals(type as 'hot' | 'regular');
       }
       
+      console.log(`📤 API RESPONSE: ${deals.length} deals returned`);
+      // Disable caching for deals API
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
       res.json(deals);
     } catch (error) {
       console.error("Error fetching deals:", error);

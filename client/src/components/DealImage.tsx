@@ -37,7 +37,7 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
       onLoad={() => console.log('✅ INLINE IMG loaded:', src)}
       onError={(e) => {
         console.error('❌ INLINE IMG failed:', src);
-        e.currentTarget.style.display = 'none';
+        // Don't hide the image on error, show placeholder instead
       }}
     />
   );
