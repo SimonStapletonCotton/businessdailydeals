@@ -849,6 +849,124 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Production database population endpoint (admin only)
+  app.post('/api/admin/populate-deals', isAuthenticated, async (req: any, res) => {
+    try {
+      // Check if user is admin (you can modify this check as needed)
+      const userId = req.user.claims.sub;
+      if (userId !== "46102542") { // Your admin user ID
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      const workingDeals = [
+        {
+          id: "6cbd7a6a-e4ab-496b-a365-6fd2883b8e53",
+          supplierId: "46102542",
+          title: "DAM LINERS",
+          description: "Dam liners for bulk water storage - can be made up in the factory up to generally around 250sqm, or if larger we come to site and install with our experienced team, at any destination world wide",
+          price: "140.00",
+          originalPrice: "180.00",
+          dealType: "hot" as const,
+          category: "Mining",
+          keywords: [],
+          imageUrl: "/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg",
+          expiryDate: new Date("2026-06-10T00:00:00.000Z"),
+          dealStatus: "active" as const,
+          viewCount: 0,
+          inquiryCount: 0,
+          creditsCost: 0
+        },
+        {
+          id: "vitamin-c-hot-deal-456",
+          supplierId: "46102542", 
+          title: "Vitamin C",
+          description: "High quality vitamin C supplements for health and wellness",
+          price: "45.00",
+          originalPrice: "55.00",
+          dealType: "hot" as const,
+          category: "Health",
+          keywords: [],
+          imageUrl: "/public-objects/product-images/Tg7hPOh3CxbWQt8rzmY1N.jpg",
+          expiryDate: new Date("2025-12-31T00:00:00.000Z"),
+          dealStatus: "active" as const,
+          viewCount: 0,
+          inquiryCount: 0,
+          creditsCost: 0
+        },
+        {
+          id: "industrial-bladders-789",
+          supplierId: "46102542",
+          title: "Industrial Water Bladders - Bulk Storage", 
+          description: "Industrial grade water bladders for bulk storage solutions",
+          price: "2500.00",
+          originalPrice: "3200.00", 
+          dealType: "hot" as const,
+          category: "Industrial",
+          keywords: [],
+          imageUrl: "/public-objects/product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG",
+          expiryDate: new Date("2025-12-31T00:00:00.000Z"),
+          dealStatus: "active" as const,
+          viewCount: 0,
+          inquiryCount: 0,
+          creditsCost: 0
+        },
+        {
+          id: "regular-bladders-012",
+          supplierId: "46102542",
+          title: "Bladders",
+          description: "Standard water storage bladders for various applications",
+          price: "850.00",
+          originalPrice: "1000.00",
+          dealType: "regular" as const,
+          category: "Storage", 
+          keywords: [],
+          imageUrl: "/public-objects/product-images/OjuD4ef-pGlmFVsGktiuC.JPG",
+          expiryDate: new Date("2025-12-31T00:00:00.000Z"),
+          dealStatus: "active" as const,
+          viewCount: 0,
+          inquiryCount: 0,
+          creditsCost: 0
+        },
+        {
+          id: "regular-dam-liners-345", 
+          supplierId: "46102542",
+          title: "Dam liners",
+          description: "Made to fit in our factory with custom specifications",
+          price: "200.00",
+          originalPrice: "235.00",
+          dealType: "regular" as const,
+          category: "Other",
+          keywords: [],
+          imageUrl: "/public-objects/product-images/OjuD4ef-pGlmFVsGktiuC.JPG",
+          expiryDate: new Date("2025-08-12T22:00:00.000Z"),
+          dealStatus: "active" as const,
+          viewCount: 0,
+          inquiryCount: 0,
+          creditsCost: 1
+        }
+      ];
+
+      // Populate deals
+      let successCount = 0;
+      for (const dealData of workingDeals) {
+        try {
+          await storage.createDeal(dealData);
+          successCount++;
+        } catch (error) {
+          console.log(`Deal ${dealData.title} already exists or error:`, error.message);
+        }
+      }
+
+      res.json({ 
+        message: `Successfully populated ${successCount} deals`,
+        total: workingDeals.length
+      });
+    } catch (error) {
+      console.error("Error populating production deals:", error);
+      res.status(500).json({ message: "Failed to populate deals" });
+    }
+  });
+
   // Business statistics endpoint for homepage
   app.get('/api/business/stats', async (req, res) => {
     try {
