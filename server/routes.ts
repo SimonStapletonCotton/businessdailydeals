@@ -849,41 +849,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Simple test endpoint to check what's wrong with production database
-  app.post('/api/admin/test-schema', async (req: any, res) => {
+  // Direct production fix endpoint 
+  app.post('/api/admin/fix-production', async (req: any, res) => {
     try {
-      // Try the absolute minimum deal insertion
-      console.log("Testing minimal deal creation...");
-      const minimalDeal = {
-        id: "test-minimal-deal",
-        supplierId: "46102542", 
-        title: "Test Deal",
-        description: "Testing",
-        price: "100",
-        originalPrice: "120",
-        category: "Test"
-      };
+      console.log("🔧 Starting production database fix...");
       
-      // Import sql for raw queries
-      const { sql } = await import('drizzle-orm');
-      
-      // Direct SQL to see what columns actually exist
-      const [result] = await db.execute(sql`
-        INSERT INTO deals (id, supplier_id, title, description, price, original_price, category)
-        VALUES (${minimalDeal.id}, ${minimalDeal.supplierId}, ${minimalDeal.title}, 
-                ${minimalDeal.description}, ${minimalDeal.price}, ${minimalDeal.originalPrice}, 
-                ${minimalDeal.category})
-        RETURNING *
-      `);
-      
-      console.log("✅ Minimal deal created:", result);
-      res.json({ success: true, result });
+      // Clear existing deals first
+      await db.delete(deals);
+      console.log("✅ Cleared existing deals");
+
+      // Create deals with only essential fields that we know exist
+      const productionDeals = [
+        {
+          id: "prod-deal-1",
+          supplierId: "46102542",
+          title: "DAM LINERS - Premium Quality",
+          description: "Professional dam liners for bulk water storage with worldwide installation service",
+          price: "140.00",
+          originalPrice: "180.00",
+          category: "Mining",
+          dealType: "hot",
+          dealStatus: "active"
+        },
+        {
+          id: "prod-deal-2", 
+          supplierId: "46102542",
+          title: "Vitamin C Supplements",
+          description: "High quality vitamin C supplements for health and wellness",
+          price: "45.00",
+          originalPrice: "55.00",
+          category: "Health",
+          dealType: "hot",
+          dealStatus: "active"
+        },
+        {
+          id: "prod-deal-3",
+          supplierId: "46102542", 
+          title: "Premium Business Cards",
+          description: "Professional business cards with premium printing quality",
+          price: "25.00",
+          originalPrice: "35.00",
+          category: "Printing",
+          dealType: "regular",
+          dealStatus: "active"
+        }
+      ];
+
+      let successCount = 0;
+      for (const deal of productionDeals) {
+        try {
+          await db.insert(deals).values({
+            id: deal.id,
+            supplierId: deal.supplierId,
+            title: deal.title,
+            description: deal.description,
+            price: deal.price,
+            originalPrice: deal.originalPrice,
+            category: deal.category,
+            dealType: deal.dealType as "hot" | "regular",
+            dealStatus: deal.dealStatus as "active"
+          });
+          console.log(`✅ Created deal: ${deal.title}`);
+          successCount++;
+        } catch (dealError) {
+          console.error(`❌ Failed to create deal ${deal.title}:`, dealError);
+        }
+      }
+
+      console.log(`🎉 Production fix complete: ${successCount} deals created`);
+      res.json({ 
+        success: true, 
+        message: `Successfully populated ${successCount} deals`,
+        total: productionDeals.length 
+      });
+
     } catch (error) {
-      console.error("❌ Schema test error:", error);
+      console.error("❌ Production fix failed:", error);
       res.status(500).json({ 
         error: error.message,
-        code: error.code,
-        details: "Raw SQL insert failed - schema mismatch"
+        details: "Production database population failed"
       });
     }
   });
