@@ -385,54 +385,7 @@ export default function HomeComprehensive() {
         </div>
       </section>
 
-      {/* HOT DEALS Section */}
-      <section className="bg-gradient-to-r from-orange-50 to-red-50 py-12 border-t-4 border-orange-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <div className="flex justify-center items-center mb-4">
-              <Flame className="h-8 w-8 text-orange-600 mr-3" />
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-                🔥 HOT DEALS
-              </h2>
-              <Flame className="h-8 w-8 text-orange-600 ml-3" />
-            </div>
-            <p className="text-slate-700 text-lg max-w-2xl mx-auto font-semibold">
-              Premium deals with exclusive pricing and featured home page placement
-            </p>
-          </div>
-          
-          {/* Hot Deals Display */}
-          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border-2 border-orange-200">
-            <HotDealsHomepage />
-          </div>
-        </div>
-      </section>
 
-      {/* Separator */}
-      <div className="h-8 bg-gradient-to-r from-slate-300 to-slate-400"></div>
-
-      {/* REGULAR DEALS Section */}
-      <section className="bg-gradient-to-r from-slate-50 to-blue-50 py-12 border-t-4 border-slate-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <div className="flex justify-center items-center mb-4">
-              <Package className="h-8 w-8 text-slate-600 mr-3" />
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-                📦 REGULAR DEALS
-              </h2>
-              <Package className="h-8 w-8 text-slate-600 ml-3" />
-            </div>
-            <p className="text-slate-700 text-lg max-w-2xl mx-auto font-semibold">
-              Standard deals with competitive pricing and broad visibility
-            </p>
-          </div>
-          
-          {/* Regular Deals Display */}
-          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border-2 border-slate-200">
-            <RegularDealsHomepage />
-          </div>
-        </div>
-      </section>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
