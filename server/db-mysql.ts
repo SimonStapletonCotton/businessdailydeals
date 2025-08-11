@@ -1,15 +1,33 @@
 import { drizzle } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
-import * as schema from "@shared/schema.mysql";
+import * as schema from '@shared/schema';
 
-// Cybersmart MySQL connection configuration
+// MySQL connection for Cybersmart production hosting
 const connectionConfig = {
-  host: 'localhost',
-  port: 3306,
-  user: 'simonsta_user',
-  password: '+9#XPRw!{~8K',
-  database: 'simonsta_businessdailydeals'
+  host: process.env.MYSQL_HOST || 'localhost',
+  port: parseInt(process.env.MYSQL_PORT || '3306'),
+  user: process.env.MYSQL_USER || 'root',
+  password: process.env.MYSQL_PASSWORD || '',
+  database: process.env.MYSQL_DATABASE || 'businessdailydeals',
+  ssl: process.env.MYSQL_SSL === 'true' ? {} : false,
 };
 
-export const connection = mysql.createPool(connectionConfig);
-export const db = drizzle(connection, { schema });
+// Create connection pool
+export const mysqlConnection = mysql.createPool(connectionConfig);
+
+// Create Drizzle instance
+export const mysqlDb = drizzle(mysqlConnection, { schema, mode: 'default' });
+
+// Test connection function
+export async function testMySQLConnection() {
+  try {
+    const connection = await mysqlConnection.getConnection();
+    await connection.ping();
+    connection.release();
+    console.log('✅ MySQL connection successful');
+    return true;
+  } catch (error) {
+    console.error('❌ MySQL connection failed:', error);
+    return false;
+  }
+}
