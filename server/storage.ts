@@ -824,9 +824,9 @@ export class DatabaseStorage implements IStorage {
   async deleteAllDeals(): Promise<void> {
     // Delete all related records first to avoid foreign key constraints
     await db.delete(coupons);
-    await db.delete(creditTransactions).where(eq(creditTransactions.dealId, sql`deals.id`));
-    await db.delete(notifications).where(eq(notifications.dealId, sql`deals.id`));
-    await db.delete(inquiries).where(eq(inquiries.dealId, sql`deals.id`));
+    await db.delete(creditTransactions);
+    await db.delete(notifications);  
+    await db.delete(inquiries);
     
     // Finally delete all deals
     await db.delete(deals);
