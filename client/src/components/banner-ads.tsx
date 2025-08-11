@@ -163,8 +163,19 @@ export function BannerAds({ position, className = "" }: BannerAdsProps) {
               <img
                 src={currentAd.imageUrl}
                 alt={`${currentAd.companyName} advertisement`}
-                className="w-20 h-16 sm:w-24 sm:h-18 object-cover rounded-lg border border-blue-200 dark:border-slate-600 group-hover:scale-105 transition-transform duration-200"
+                style={{
+                  width: '80px',
+                  height: '64px',
+                  objectFit: 'cover' as const,
+                  borderRadius: '8px',
+                  border: '1px solid #dbeafe',
+                  display: 'block',
+                  transition: 'transform 0.2s ease'
+                }}
+                className="sm:w-24 sm:h-18 group-hover:scale-105"
+                onLoad={() => console.log('🟢 BANNER AD: Image loaded', currentAd.imageUrl)}
                 onError={(e) => {
+                  console.log('🔴 BANNER AD: Image failed, using fallback', currentAd.imageUrl);
                   (e.target as HTMLImageElement).src = 'https://via.placeholder.com/96x72/3b82f6/white?text=Ad';
                 }}
               />

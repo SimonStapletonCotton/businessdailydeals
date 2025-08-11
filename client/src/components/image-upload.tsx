@@ -173,8 +173,20 @@ export function ImageUpload({
                   <img
                     src={imageUrl}
                     alt={`Product image ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover' as const,
+                      display: 'block',
+                      border: 'none',
+                      outline: 'none'
+                    }}
                     data-testid={`image-preview-${index}`}
+                    onLoad={() => console.log('🟢 UPLOAD PREVIEW: Image loaded', imageUrl)}
+                    onError={(e) => {
+                      console.log('🔴 UPLOAD PREVIEW: Image failed, using fallback', imageUrl);
+                      (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIEVycm9yPC90ZXh0Pjwvc3ZnPg==';
+                    }}
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <Button
