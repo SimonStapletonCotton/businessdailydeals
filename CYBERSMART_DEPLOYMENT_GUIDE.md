@@ -1,101 +1,148 @@
-# Cybersmart Production Deployment Guide
+# Business Daily Deals - Cybersmart Deployment Guide
 
-## Pre-Deployment Stability Verification
+## Project Overview
+Business Daily Deals is a full-stack B2B marketplace for the South African market connecting suppliers and buyers. The platform is built with Node.js, React, TypeScript, and PostgreSQL.
 
-### Current System Status
-- ✅ Database: PostgreSQL with enterprise-grade connection pooling
-- ✅ Images: Permanent fix implemented and user-verified
-- ✅ Monitoring: Comprehensive health checks operational
-- ✅ Architecture: Simplified, stable components
-- ✅ Error Handling: Graceful fallbacks for all components
+**Domain:** www.businessdailydeals.co.za
 
-### Production Environment Requirements
+## Technical Requirements
 
-#### Server Specifications (Cybersmart)
-- **Node.js**: Version 18+ required
-- **PostgreSQL**: Database with connection pooling
-- **Memory**: Minimum 1GB RAM (2GB recommended)
-- **Storage**: Minimum 10GB for application and logs
+### Server Environment
+- **Node.js:** Version 18 or higher
+- **Database:** PostgreSQL (latest stable version)
+- **SSL Certificate:** Required for www.businessdailydeals.co.za
+- **File Storage:** Local file storage OR Google Cloud Storage integration
+- **Email Support:** SMTP or SendGrid integration capability
 
-#### Environment Variables Required
-```
-DATABASE_URL=postgresql://username:password@host:port/database
-PGHOST=database.host
-PGDATABASE=database_name
-PGUSER=username
-PGPASSWORD=password
-PGPORT=5432
+### Domain Configuration
+- Point www.businessdailydeals.co.za to your server
+- Configure SSL/HTTPS (essential for authentication and payments)
+- Ensure proper DNS propagation
+
+### Database Setup
+Please provide:
+- PostgreSQL database with full admin access
+- Database connection URL in this format:
+  ```
+  postgresql://username:password@host:port/database_name
+  ```
+
+### Environment Variables
+Configure these environment variables on your server:
+
+```bash
+# Database
+DATABASE_URL=postgresql://[your_provided_connection_string]
+
+# Application
 NODE_ENV=production
-PORT=5000
+PORT=80
+SESSION_SECRET=[generate_secure_random_string_64_chars]
+
+# Additional variables will be provided for:
+# - SENDGRID_API_KEY (for email notifications)
+# - PAYFAST credentials (for payments)
+# - Google Cloud Storage (if using cloud storage)
 ```
 
-#### Optional Environment Variables
-```
-SENDGRID_API_KEY=your_sendgrid_key (for email notifications)
-PAYFAST_MERCHANT_ID=your_payfast_id (for payments)
-PAYFAST_MERCHANT_KEY=your_payfast_key
-```
+## Deployment Process
 
-### Deployment Checklist
+### Step 1: Code Deployment
+1. We will provide you with the complete application codebase
+2. Extract to your web server directory
+3. Install dependencies: `npm install`
+4. Build the application: `npm run build` (if required)
 
-#### Phase 1: Server Setup
-- [ ] Node.js 18+ installed
-- [ ] PostgreSQL database created
-- [ ] Environment variables configured
-- [ ] SSL certificate configured for HTTPS
-- [ ] Domain pointing to www.businessdailydeals.co.za
+### Step 2: Database Setup
+1. Create the PostgreSQL database
+2. Run database migrations: `npm run db:push`
+3. Verify database connection
 
-#### Phase 2: Application Deployment
-- [ ] Upload application files to server
-- [ ] Run `npm install --production`
-- [ ] Run database migrations: `npm run db:push`
-- [ ] Start application: `npm start`
-- [ ] Verify health check: `curl https://www.businessdailydeals.co.za/api/health`
+### Step 3: Application Startup
+1. Start the application: `npm start`
+2. Verify the application runs on your assigned port
+3. Test access via www.businessdailydeals.co.za
 
-#### Phase 3: Production Verification
-- [ ] Homepage loads correctly
-- [ ] Hot deals display with images
-- [ ] Regular deals display with images  
-- [ ] Registration system functional
-- [ ] Deal posting works
-- [ ] Coupon system operational
+### Step 4: SSL and Security
+1. Configure SSL certificate for HTTPS
+2. Ensure all traffic redirects to HTTPS
+3. Verify secure connection for login functionality
 
-### Post-Deployment Monitoring
+## File Upload Configuration
 
-#### Daily (Automated)
-- Health check endpoint monitoring
-- Database connectivity verification
-- Error log review
+### Option A: Local File Storage
+- Ensure sufficient disk space for user uploads
+- Configure proper file permissions
+- Set up backup procedures for uploaded files
 
-#### Weekly (Manual)
-- Performance metrics review
-- User experience verification
-- Business statistics accuracy
+### Option B: Google Cloud Storage (Recommended)
+- We can provide Google Cloud Storage credentials
+- More scalable and reliable for production use
+- Automatic backup and CDN capabilities
 
-#### Monthly (Maintenance)
-- Log cleanup and rotation
-- Performance optimization review
-- Security updates if needed
+## Payment Integration Requirements
 
-### Production Support Protocol
+### PayFast Webhook Support
+- Server must support incoming webhook POST requests
+- HTTPS required for PayFast integration
+- Webhook endpoints will be configured at:
+  - `/api/payfast/success`
+  - `/api/payfast/coupon-success`
 
-#### For Cybersmart Hosting Team
-1. **Health Check URL**: `https://www.businessdailydeals.co.za/api/health`
-2. **Detailed Diagnostics**: `https://www.businessdailydeals.co.za/api/health/detailed`
-3. **Expected Response**: `{"status": "healthy"}`
+## Email Notifications
 
-#### Emergency Procedures
-If health check fails:
-1. Check database connectivity
-2. Restart Node.js application
-3. Verify environment variables
-4. Contact development team if issues persist
+### SendGrid Integration
+- We will provide SendGrid API key when ready
+- Used for deal notifications and payment confirmations
+- Admin notifications sent to: admin@businessdailydeals.co.za
 
-### Expected Stability Profile
-- **Uptime**: 99.9%+ (limited only by server infrastructure)
-- **Performance**: Sub-2 second page loads
-- **Maintenance**: Quarterly reviews, minimal interventions
-- **Updates**: Annual security updates only
+## Monitoring and Maintenance
 
-## Deployment Confidence Level: HIGH
-The application is architected for production stability with minimal ongoing maintenance requirements.
+### Health Checks
+- Application provides health check endpoint: `/api/health`
+- Monitor this endpoint for application status
+- Database connectivity verification included
+
+### Log Files
+- Application logs important events and errors
+- Please ensure log rotation is configured
+- Monitor for any database connection issues
+
+## Security Considerations
+
+- HTTPS is mandatory for all traffic
+- Session data is stored securely in PostgreSQL
+- Rate limiting is implemented in the application
+- Input validation and sanitization included
+
+## Support and Testing
+
+### Pre-Launch Testing
+1. Verify all pages load correctly
+2. Test user registration and login
+3. Confirm deal posting functionality
+4. Validate image uploads work properly
+5. Test email notifications (when configured)
+
+### Go-Live Checklist
+- [ ] Domain points to server
+- [ ] SSL certificate active
+- [ ] Database connected and migrated
+- [ ] Application starts without errors
+- [ ] File uploads working
+- [ ] Health check endpoint responding
+- [ ] Email notifications configured (optional initially)
+
+## Contact Information
+Once deployment begins, we can provide:
+- Real-time support during setup
+- Additional configuration details as needed
+- Testing assistance before go-live
+
+## Next Steps
+1. Confirm technical requirements can be met
+2. Provide database connection details
+3. Schedule deployment window
+4. We'll prepare the complete codebase package
+
+Please confirm if you can meet these requirements and provide the database connection details when ready.
