@@ -1,9 +1,6 @@
 // FORCE DISPLAY WITH BACKGROUND IMAGE
 export function DealImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
-  console.log('🖼️ DealImage rendering with src:', src, 'alt:', alt);
-  
   if (!src) {
-    console.log('❌ No src provided, showing placeholder');
     return (
       <div className={`w-full h-[200px] bg-slate-100 rounded-lg flex items-center justify-center ${className}`}>
         <span className="text-4xl">📦</span>
@@ -11,7 +8,6 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
     );
   }
 
-  console.log('✅ Rendering background image with src:', src);
   return (
     <div 
       className={`w-full h-[200px] bg-slate-100 rounded-lg overflow-hidden ${className}`}
