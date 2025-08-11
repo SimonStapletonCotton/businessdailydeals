@@ -1,44 +1,29 @@
-// EMERGENCY PRODUCTION FIX: Zero dependencies, cannot fail
+// ULTIMATE PRODUCTION FIX: Direct HTML approach - cannot be broken by React/CSS
 export function DealImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
-  // No state, no useEffect, no external dependencies - just direct rendering
   if (!src) {
     return (
       <div 
-        style={{
-          width: '100%', 
-          height: '128px',
-          backgroundColor: '#f1f5f9',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          border: '1px solid #e2e8f0'
+        dangerouslySetInnerHTML={{
+          __html: `<div style="width:100%;height:128px;background-color:#f1f5f9;display:flex;align-items:center;justify-content:center;border:1px solid #e2e8f0;font-size:24px;">📦</div>`
         }}
-      >
-        📦
-      </div>
+      />
     );
   }
 
+  // Direct HTML injection - bypasses all React/CSS framework interactions
   return (
-    <img
-      src={src}
-      alt={alt}
-      style={{
-        width: '100%',
-        height: 'auto',
-        display: 'block',
-        objectFit: 'cover' as const,
-        maxWidth: '100%',
-        minHeight: '128px',
-        border: 'none',
-        outline: 'none',
-        backgroundColor: '#f8fafc'
-      }}
-      onLoad={() => console.log('🟢 EMERGENCY FIX: Image loaded', src)}
-      onError={(e) => {
-        console.error('🔴 EMERGENCY FIX: Image failed', src);
-        // Replace with fallback on error
-        (e.target as HTMLImageElement).style.display = 'none';
+    <div 
+      className={className}
+      dangerouslySetInnerHTML={{
+        __html: `
+          <img 
+            src="${src}" 
+            alt="${alt}"
+            style="width:100%;height:auto;display:block;object-fit:cover;max-width:100%;min-height:128px;border:none;outline:none;background-color:#f8fafc;"
+            onload="console.log('🟢 DIRECT HTML: Image loaded', '${src}')"
+            onerror="console.error('🔴 DIRECT HTML: Image failed', '${src}'); this.style.display='none';"
+          />
+        `
       }}
     />
   );
