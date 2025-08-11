@@ -3,32 +3,44 @@
 ## Your Production URL
 **Current Live Site**: https://deal-stream-simons27.replit.app
 
-## How to Point www.businessdailydeals.co.za to Your Site
+## IMPORTANT: Replit Custom Domain Requirements
 
-### DNS Configuration Required
+⚠️ **COMPATIBILITY ISSUE IDENTIFIED**: Custom domains on Replit require **A records and TXT records**, NOT CNAME records.
 
-You need to configure DNS records with your domain registrar or hosting provider to point your custom domain to the Replit-generated URL.
+### How to Point www.businessdailydeals.co.za to Your Site
 
-### Step 1: Access Your Domain Settings
-1. Log into your domain registrar (where you bought businessdailydeals.co.za)
-2. Find the DNS settings or DNS management section
+### Step 1: Set Up Custom Domain in Replit
+1. Go to your Replit project: deal-stream-simons27
+2. Click the **"Deployments"** tab
+3. Select **"Settings"** tab  
+4. Click **"Link a domain"** or **"Manually connect from another registrar"**
+5. Enter your domain: **businessdailydeals.co.za**
+6. Replit will generate the **A records and TXT records** you need
 
-### Step 2: Add CNAME Record
-Create a CNAME record with these settings:
+### Step 2: Add DNS Records (Provided by Replit)
+Replit will give you specific records to add to your DNS:
 
-**For www subdomain:**
+**A Records** (for root domain):
 ```
-Type: CNAME
-Host/Name: www
-Target/Points to: deal-stream-simons27.replit.app
+Type: A
+Host/Name: @ (or businessdailydeals.co.za)
+Target/Points to: [IP Address provided by Replit]
 TTL: 3600 (or default)
 ```
 
-**For root domain (optional):**
+**A Records** (for www subdomain):
 ```
-Type: A Record or CNAME
-Host/Name: @ (or blank)
-Target/Points to: deal-stream-simons27.replit.app
+Type: A  
+Host/Name: www
+Target/Points to: [IP Address provided by Replit]
+TTL: 3600 (or default)
+```
+
+**TXT Record** (for verification):
+```
+Type: TXT
+Host/Name: @ (or businessdailydeals.co.za)
+Value: [Verification code provided by Replit]
 TTL: 3600 (or default)
 ```
 
@@ -51,6 +63,11 @@ TTL: 3600 (or default)
 2. Go to Domain Portfolio
 3. Click DNS next to your domain
 4. Add the CNAME record
+
+### Step 3: Wait for DNS Propagation
+- DNS changes can take 5 minutes to 48 hours to propagate
+- You can check status in Replit Deployments → Settings
+- Domain will show "Verified" status when ready
 
 ### Step 4: SSL Certificate (Automatic)
 Replit automatically provides SSL certificates, so your site will be secure with https:// once DNS propagates.
