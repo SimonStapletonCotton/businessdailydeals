@@ -1,50 +1,47 @@
-// BULLETPROOF IMAGE DISPLAY - FORCE IMMEDIATE LOADING
-import { useState, useEffect, useRef } from "react";
+// NATIVE DOM APPROACH - BYPASS REACT RENDERING COMPLETELY
+import { useEffect, useRef } from "react";
 
 export function DealImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Force immediate image loading on mount and src change
   useEffect(() => {
-    if (!src) return;
+    if (!containerRef.current || !src) return;
+
+    const container = containerRef.current;
     
-    setImageLoaded(false);
-    setImageError(false);
+    // Clear any existing content
+    container.innerHTML = '';
     
-    // Create a new image to preload
-    const img = new Image();
-    img.crossOrigin = "anonymous";
+    // Create loading state
+    container.innerHTML = `
+      <div class="w-full h-full flex items-center justify-center">
+        <div class="animate-spin w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full"></div>
+      </div>
+    `;
     
-    const handleLoad = () => {
-      setImageLoaded(true);
-      setImageError(false);
-      console.log('✅ Image preloaded successfully:', src);
-      
-      // Force update the actual img element
-      if (imgRef.current) {
-        imgRef.current.src = src;
-        imgRef.current.style.display = 'block';
-        imgRef.current.style.opacity = '1';
-      }
+    // Create image element using native DOM
+    const img = document.createElement('img');
+    img.alt = alt;
+    img.className = 'w-full h-full object-cover';
+    img.style.display = 'none';
+    
+    const handleSuccess = () => {
+      console.log('✅ Native DOM image loaded:', src);
+      container.innerHTML = '';
+      img.style.display = 'block';
+      container.appendChild(img);
     };
     
     const handleError = () => {
-      console.error('❌ Image preload failed:', src);
-      // Try again with cache buster
-      const cacheBuster = `?t=${Date.now()}&cb=${Math.random()}`;
-      const retryImg = new Image();
-      retryImg.crossOrigin = "anonymous";
-      retryImg.onload = handleLoad;
-      retryImg.onerror = () => {
-        setImageError(true);
-        console.error('❌ Image retry failed:', src);
-      };
-      retryImg.src = src + cacheBuster;
+      console.error('❌ Native DOM image failed:', src);
+      container.innerHTML = `
+        <div class="w-full h-full flex items-center justify-center">
+          <span class="text-4xl">📦</span>
+        </div>
+      `;
     };
     
-    img.onload = handleLoad;
+    img.onload = handleSuccess;
     img.onerror = handleError;
     img.src = src;
     
@@ -52,9 +49,9 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
       img.onload = null;
       img.onerror = null;
     };
-  }, [src]);
+  }, [src, alt]);
 
-  if (!src || imageError) {
+  if (!src) {
     return (
       <div className={`w-full h-[200px] bg-slate-100 rounded-lg flex items-center justify-center ${className}`}>
         <span className="text-4xl">📦</span>
@@ -63,31 +60,9 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
   }
 
   return (
-    <div className={`w-full h-[200px] bg-slate-100 rounded-lg overflow-hidden ${className}`}>
-      {!imageLoaded && (
-        <div className="w-full h-full flex items-center justify-center absolute z-10">
-          <div className="animate-spin w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full"></div>
-        </div>
-      )}
-      <img
-        ref={imgRef}
-        src={src}
-        alt={alt}
-        className="w-full h-full object-cover"
-        style={{ 
-          display: imageLoaded ? 'block' : 'none',
-          opacity: imageLoaded ? 1 : 0,
-          transition: 'opacity 0.2s ease-in-out'
-        }}
-        onLoad={() => {
-          setImageLoaded(true);
-          console.log('✅ Final image display confirmed:', src);
-        }}
-        onError={() => {
-          setImageError(true);
-          console.error('❌ Final image display failed:', src);
-        }}
-      />
-    </div>
+    <div 
+      ref={containerRef}
+      className={`w-full h-[200px] bg-slate-100 rounded-lg overflow-hidden ${className}`}
+    />
   );
 }
