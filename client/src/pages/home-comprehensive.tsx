@@ -79,11 +79,15 @@ function BusinessStatistics() {
 // Component to display hot deals on homepage
 function HotDealsHomepage() {
   const { data: hotDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", "hot"],
+    queryKey: ["/api/deals", "hot", Date.now()], // Force cache refresh
     queryFn: async () => {
-      const res = await fetch("/api/deals?type=hot", {
+      const res = await fetch(`/api/deals?type=hot&t=${Date.now()}`, {
         credentials: "include",
-        cache: "no-cache" // Force fresh data
+        cache: "no-cache", // Force fresh data
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
       });
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -168,11 +172,15 @@ function HotDealsHomepage() {
 // Component to display regular deals on homepage
 function RegularDealsHomepage() {
   const { data: regularDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", "regular"],
+    queryKey: ["/api/deals", "regular", Date.now()], // Force cache refresh
     queryFn: async () => {
-      const res = await fetch("/api/deals?type=regular", {
+      const res = await fetch(`/api/deals?type=regular&t=${Date.now()}`, {
         credentials: "include",
-        cache: "no-cache" // Force fresh data
+        cache: "no-cache", // Force fresh data
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
       });
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
