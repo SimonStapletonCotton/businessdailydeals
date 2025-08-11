@@ -29,7 +29,6 @@ export const users = pgTable("users", {
   // Buyer specific fields
   companyName: text("company_name"),
   representativeName: text("representative_name"),
-  keywordsForNotifications: jsonb("keywords_for_notifications").$type<string[]>(),
   emailNotifications: boolean("allow_email_notifications").default(true),
   smsNotifications: boolean("allow_sms_notifications").default(false),
   whatsappNotifications: boolean("allow_whatsapp_notifications").default(false),

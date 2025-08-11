@@ -520,7 +520,31 @@ export class DatabaseStorage implements IStorage {
     }
 
     const result = await db
-      .select()
+      .select({
+        deals: deals,
+        users: {
+          id: users.id,
+          email: users.email,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          profileImageUrl: users.profileImageUrl,
+          userType: users.userType,
+          mobile: users.mobile,
+          province: users.province,
+          companyName: users.companyName,
+          representativeName: users.representativeName,
+          emailNotifications: users.emailNotifications,
+          smsNotifications: users.smsNotifications,
+          whatsappNotifications: users.whatsappNotifications,
+          address: users.address,
+          vatNumber: users.vatNumber,
+          businessRegistrationNumber: users.businessRegistrationNumber,
+          isVerified: users.isVerified,
+          creditBalance: users.creditBalance,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt
+        }
+      })
       .from(deals)
       .leftJoin(users, eq(deals.supplierId, users.id))
       .where(whereCondition)
@@ -534,7 +558,31 @@ export class DatabaseStorage implements IStorage {
 
   async getDeal(id: string): Promise<DealWithSupplier | undefined> {
     const result = await db
-      .select()
+      .select({
+        deals: deals,
+        users: {
+          id: users.id,
+          email: users.email,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          profileImageUrl: users.profileImageUrl,
+          userType: users.userType,
+          mobile: users.mobile,
+          province: users.province,
+          companyName: users.companyName,
+          representativeName: users.representativeName,
+          emailNotifications: users.emailNotifications,
+          smsNotifications: users.smsNotifications,
+          whatsappNotifications: users.whatsappNotifications,
+          address: users.address,
+          vatNumber: users.vatNumber,
+          businessRegistrationNumber: users.businessRegistrationNumber,
+          isVerified: users.isVerified,
+          creditBalance: users.creditBalance,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt
+        }
+      })
       .from(deals)
       .leftJoin(users, eq(deals.supplierId, users.id))
       .where(eq(deals.id, id));
@@ -555,7 +603,31 @@ export class DatabaseStorage implements IStorage {
 
   async getDealsBySupplier(supplierId: string): Promise<DealWithSupplier[]> {
     const result = await db
-      .select()
+      .select({
+        deals: deals,
+        users: {
+          id: users.id,
+          email: users.email,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          profileImageUrl: users.profileImageUrl,
+          userType: users.userType,
+          mobile: users.mobile,
+          province: users.province,
+          companyName: users.companyName,
+          representativeName: users.representativeName,
+          emailNotifications: users.emailNotifications,
+          smsNotifications: users.smsNotifications,
+          whatsappNotifications: users.whatsappNotifications,
+          address: users.address,
+          vatNumber: users.vatNumber,
+          businessRegistrationNumber: users.businessRegistrationNumber,
+          isVerified: users.isVerified,
+          creditBalance: users.creditBalance,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt
+        }
+      })
       .from(deals)
       .leftJoin(users, eq(deals.supplierId, users.id))
       .where(and(eq(deals.supplierId, supplierId), eq(deals.status, 'active')))
@@ -569,7 +641,31 @@ export class DatabaseStorage implements IStorage {
 
   async getExpiredDealsBySupplier(supplierId: string): Promise<DealWithSupplier[]> {
     const result = await db
-      .select()
+      .select({
+        deals: deals,
+        users: {
+          id: users.id,
+          email: users.email,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          profileImageUrl: users.profileImageUrl,
+          userType: users.userType,
+          mobile: users.mobile,
+          province: users.province,
+          companyName: users.companyName,
+          representativeName: users.representativeName,
+          emailNotifications: users.emailNotifications,
+          smsNotifications: users.smsNotifications,
+          whatsappNotifications: users.whatsappNotifications,
+          address: users.address,
+          vatNumber: users.vatNumber,
+          businessRegistrationNumber: users.businessRegistrationNumber,
+          isVerified: users.isVerified,
+          creditBalance: users.creditBalance,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt
+        }
+      })
       .from(deals)
       .leftJoin(users, eq(deals.supplierId, users.id))
       .where(and(eq(deals.supplierId, supplierId), eq(deals.status, 'expired')))
@@ -898,7 +994,31 @@ export class DatabaseStorage implements IStorage {
     }
 
     const result = await db
-      .select()
+      .select({
+        deals: deals,
+        users: {
+          id: users.id,
+          email: users.email,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          profileImageUrl: users.profileImageUrl,
+          userType: users.userType,
+          mobile: users.mobile,
+          province: users.province,
+          companyName: users.companyName,
+          representativeName: users.representativeName,
+          emailNotifications: users.emailNotifications,
+          smsNotifications: users.smsNotifications,
+          whatsappNotifications: users.whatsappNotifications,
+          address: users.address,
+          vatNumber: users.vatNumber,
+          businessRegistrationNumber: users.businessRegistrationNumber,
+          isVerified: users.isVerified,
+          creditBalance: users.creditBalance,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt
+        }
+      })
       .from(deals)
       .leftJoin(users, eq(deals.supplierId, users.id))
       .where(whereCondition)
