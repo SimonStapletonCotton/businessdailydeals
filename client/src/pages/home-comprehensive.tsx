@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Building2, CreditCard, Mail, Phone, MapPin, Award, ShoppingBag, Target, Plus } from "lucide-react";
+import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Building2, CreditCard, Mail, Phone, MapPin, Award, ShoppingBag, Target, Plus, Package } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { DealImage } from "@/components/DealImage";
@@ -79,7 +79,7 @@ function BusinessStatistics() {
 // Component to display hot deals on homepage
 function HotDealsHomepage() {
   const { data: hotDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", "hot", Date.now()], // Force cache refresh
+    queryKey: ["deals", "hot"], // Simplified and unique key
     queryFn: async () => {
       const res = await fetch(`/api/deals?type=hot&t=${Date.now()}`, {
         credentials: "include",
@@ -94,6 +94,7 @@ function HotDealsHomepage() {
       }
       const data = await res.json();
       console.log("🔥 HOT DEALS API RESPONSE:", data.length, "deals received");
+      console.log("HOT DEALS IDs:", data.map(d => d.id));
       return data;
     },
     staleTime: 0, // Always fetch fresh data
@@ -172,7 +173,7 @@ function HotDealsHomepage() {
 // Component to display regular deals on homepage
 function RegularDealsHomepage() {
   const { data: regularDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", "regular", Date.now()], // Force cache refresh
+    queryKey: ["deals", "regular"], // Simplified and unique key
     queryFn: async () => {
       const res = await fetch(`/api/deals?type=regular&t=${Date.now()}`, {
         credentials: "include",
@@ -187,6 +188,7 @@ function RegularDealsHomepage() {
       }
       const data = await res.json();
       console.log("🟠 REGULAR DEALS API RESPONSE:", data.length, "deals received");
+      console.log("REGULAR DEALS IDs:", data.map(d => d.id));
       return data;
     },
     staleTime: 0, // Always fetch fresh data
@@ -384,36 +386,51 @@ export default function HomeComprehensive() {
       </section>
 
       {/* HOT DEALS Section */}
-      <section className="bg-slate-100 py-8">
+      <section className="bg-gradient-to-r from-orange-50 to-red-50 py-12 border-t-4 border-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-              HOT DEALS
-            </h2>
-            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Premium deals with exclusive pricing and featured placement
+            <div className="flex justify-center items-center mb-4">
+              <Flame className="h-8 w-8 text-orange-600 mr-3" />
+              <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
+                🔥 HOT DEALS
+              </h2>
+              <Flame className="h-8 w-8 text-orange-600 ml-3" />
+            </div>
+            <p className="text-slate-700 text-lg max-w-2xl mx-auto font-semibold">
+              Premium deals with exclusive pricing and featured home page placement
             </p>
           </div>
           
           {/* Hot Deals Display */}
-          <HotDealsHomepage />
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border-2 border-orange-200">
+            <HotDealsHomepage />
+          </div>
         </div>
       </section>
 
+      {/* Separator */}
+      <div className="h-8 bg-gradient-to-r from-slate-300 to-slate-400"></div>
+
       {/* REGULAR DEALS Section */}
-      <section className="bg-white py-8">
+      <section className="bg-gradient-to-r from-slate-50 to-blue-50 py-12 border-t-4 border-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-              REGULAR DEALS
-            </h2>
-            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+            <div className="flex justify-center items-center mb-4">
+              <Package className="h-8 w-8 text-slate-600 mr-3" />
+              <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
+                📦 REGULAR DEALS
+              </h2>
+              <Package className="h-8 w-8 text-slate-600 ml-3" />
+            </div>
+            <p className="text-slate-700 text-lg max-w-2xl mx-auto font-semibold">
               Standard deals with competitive pricing and broad visibility
             </p>
           </div>
           
           {/* Regular Deals Display */}
-          <RegularDealsHomepage />
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border-2 border-slate-200">
+            <RegularDealsHomepage />
+          </div>
         </div>
       </section>
 
