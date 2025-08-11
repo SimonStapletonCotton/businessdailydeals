@@ -175,9 +175,6 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               alt={deal.title}
               className="w-full h-32 object-cover rounded mb-3"
             />
-            <div className="text-xs text-gray-500 p-1 bg-yellow-100">
-              DEBUG: imageUrl = {deal.imageUrl || 'null'}
-            </div>
             <div className="flex items-center justify-between mb-2">
               <Badge className={`text-white text-xs ${deal.dealType === 'hot' ? 'bg-red-600' : 'bg-orange-500'}`}>
                 {deal.dealType === 'hot' ? 'HOT DEAL' : 'REGULAR DEAL'}

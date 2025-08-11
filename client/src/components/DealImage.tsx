@@ -36,11 +36,9 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
           setImageLoaded(true);
           console.log('✅ Image loaded:', src);
         }}
-        onError={(e) => {
+        onError={() => {
           setImageError(true);
           console.error('❌ Image failed:', src);
-          console.error('❌ Error details:', e);
-          console.error('❌ Image element:', e.target);
         }}
       />
     </div>
