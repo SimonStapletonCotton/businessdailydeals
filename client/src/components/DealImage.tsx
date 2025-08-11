@@ -1,4 +1,4 @@
-// ULTIMATE PRODUCTION FIX: Bypass React entirely with native DOM manipulation
+// PRODUCTION IMAGE DISPLAY: Native DOM manipulation bypassing React virtual DOM
 import { useEffect, useRef } from "react";
 
 export function DealImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
@@ -19,7 +19,7 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
     const img = document.createElement('img');
     img.src = src;
     img.alt = alt;
-    img.style.cssText = 'width:100% !important;height:200px !important;display:block !important;object-fit:cover !important;max-width:100% !important;border:3px solid blue !important;outline:none !important;background-color:#f8fafc !important;visibility:visible !important;opacity:1 !important;position:relative !important;z-index:999 !important;';
+    img.style.cssText = 'width:100% !important;height:200px !important;display:block !important;object-fit:cover !important;max-width:100% !important;border:none !important;outline:none !important;background-color:#f8fafc !important;visibility:visible !important;opacity:1 !important;position:relative !important;border-radius:8px !important;';
     
     img.onload = () => {
       console.log('🟢 NATIVE DOM: Image loaded successfully', src);
@@ -27,7 +27,7 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
       console.log('🔍 IMAGE SRC:', img.src);
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
-        containerRef.current.style.cssText = 'width:100% !important;height:200px !important;display:block !important;visibility:visible !important;opacity:1 !important;position:relative !important;overflow:visible !important;background-color:#f0f0f0 !important;border:2px solid green !important;';
+        containerRef.current.style.cssText = 'width:100% !important;height:200px !important;display:block !important;visibility:visible !important;opacity:1 !important;position:relative !important;overflow:hidden !important;border-radius:8px !important;';
         containerRef.current.appendChild(img);
         console.log('🔍 CONTAINER AFTER APPEND:', containerRef.current.innerHTML.length, 'chars');
       }
@@ -58,9 +58,9 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
         visibility: 'visible',
         opacity: 1,
         position: 'relative',
-        overflow: 'visible',
+        overflow: 'hidden',
         backgroundColor: '#f8fafc',
-        border: '2px solid red' // DEBUG: Make container visible
+        borderRadius: '8px'
       }}
     />
   );
