@@ -21,24 +21,63 @@ export function DealImage({ src, alt, className = "", fallbackClassName = "" }: 
     );
   }
 
+  // BULLETPROOF: Force absolute image display with inline styles only
   return (
-    <div className="relative overflow-hidden">
+    <div 
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        width: '100%'
+      }}
+    >
       <img
         src={src}
         alt={alt}
-        className={className}
-        onLoad={() => setImageLoaded(true)}
-        onError={() => setImageError(true)}
+        onLoad={() => {
+          console.log('✅ Image loaded:', src);
+          setImageLoaded(true);
+        }}
+        onError={() => {
+          console.error('❌ Image failed:', src);
+          setImageError(true);
+        }}
         style={{
-          display: 'block',
+          display: 'block !important',
+          visibility: 'visible !important',
+          opacity: '1 !important',
           width: '100%',
           height: 'auto',
-          objectFit: 'cover'
+          objectFit: 'cover',
+          maxWidth: '100%',
+          border: 'none',
+          outline: 'none'
         }}
+        className={className}
       />
-      {!imageLoaded && (
-        <div className="absolute inset-0 bg-slate-100 flex items-center justify-center">
-          <div className="animate-spin w-6 h-6 border-2 border-slate-300 border-t-slate-600 rounded-full"></div>
+      {!imageLoaded && !imageError && (
+        <div 
+          style={{
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
+            backgroundColor: '#f1f5f9',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <div 
+            style={{
+              width: '24px',
+              height: '24px',
+              border: '2px solid #cbd5e1',
+              borderTop: '2px solid #475569',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }}
+          />
         </div>
       )}
     </div>

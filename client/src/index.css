@@ -4,6 +4,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* BULLETPROOF: Prevent any CSS from hiding images */
+img[src*="public-objects"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
 
 
