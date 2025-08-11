@@ -65,7 +65,7 @@ export const deals = pgTable("deals", {
   category: text("category").notNull(),
   keywords: jsonb("keywords").$type<string[]>(),
   imageUrl: text("image_url"),
-  expiryDate: timestamp("expiry_date"),
+  expiryDate: timestamp("expires_at"),
   status: text("status").notNull().default("active"), // 'active', 'expired', 'draft'
   viewCount: integer("view_count").default(0),
   inquiryCount: integer("inquiry_count").default(0),

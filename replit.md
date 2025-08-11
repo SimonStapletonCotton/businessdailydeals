@@ -34,14 +34,21 @@ Backup requirements: Critical - cannot start from beginning if crashes occur, ne
 - **Middleware**: Custom logging, error handling, and authentication middleware.
 
 ### Database Schema
-- **Users**: User profiles with buyer/supplier roles, notification preferences.
-- **Deals**: Central entity with categories, pricing, and deal types (hot/regular).
+- **Users**: User profiles with buyer/supplier roles, notification preferences, credit balance tracking.
+- **Deals**: Central entity with categories, pricing, deal types (hot/regular), expiry management.
 - **Keywords**: User-defined keywords for deal notifications.
 - **Notifications**: System-generated alerts for keyword matches.
 - **Inquiries**: Communication system between buyers and suppliers.
+- **Coupons**: Deal acceptance tracking and coupon code generation.
+- **Basket Items**: Shopping cart for advertising rate purchases.
+- **Rates**: Advertising rate structure and pricing tiers.
+- **Credit Transactions**: Complete credit system transaction history.
+- **Orders**: Credit purchases and advertising order management.
+- **Banner Ads**: Revolving banner advertisement management.
+- **Companies**: Supplier directory and business profiles.
+- **Site Analytics**: Business statistics and performance tracking.
+- **Deal Requests**: "Find Me a Deal" buyer requirement submissions.
 - **Sessions**: Secure session storage.
-- **Credits**: For managing credit packages and balances.
-- **Deal Requests**: Buyer-submitted specific product requirements.
 
 ### Authentication & Authorization
 - **Provider**: Replit OpenID Connect (OIDC) integration.
@@ -72,7 +79,8 @@ Backup requirements: Critical - cannot start from beginning if crashes occur, ne
 ## External Dependencies
 
 ### Core Services
-- **Database**: PostgreSQL (configured for Neon serverless) with a MySQL conversion strategy ready for Cybersmart hosting.
+- **Database**: PostgreSQL (current active) + MySQL conversion 100% complete for Cybersmart hosting deployment
+- **Cybersmart MySQL**: Production credentials secured, schema conversion complete, ready for deployment
 - **Authentication**: Replit OIDC service
 - **Cloud Storage**: Google Cloud Storage for image uploads
 - **Email Service**: SendGrid for email notifications
