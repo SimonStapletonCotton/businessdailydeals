@@ -513,10 +513,10 @@ export class DatabaseStorage implements IStorage {
 
   // Deal operations
   async getDeals(dealType?: 'hot' | 'regular'): Promise<DealWithSupplier[]> {
-    let whereCondition = eq(deals.status, 'active');
+    let whereCondition = eq(deals.dealStatus, 'active');
     
     if (dealType) {
-      whereCondition = and(eq(deals.status, 'active'), eq(deals.dealType, dealType))!;
+      whereCondition = and(eq(deals.dealStatus, 'active'), eq(deals.dealType, dealType))!;
     }
 
     const result = await db
@@ -630,7 +630,7 @@ export class DatabaseStorage implements IStorage {
       })
       .from(deals)
       .leftJoin(users, eq(deals.supplierId, users.id))
-      .where(and(eq(deals.supplierId, supplierId), eq(deals.status, 'active')))
+      .where(and(eq(deals.supplierId, supplierId), eq(deals.dealStatus, 'active')))
       .orderBy(desc(deals.createdAt));
 
     return result.map(row => ({
@@ -668,7 +668,7 @@ export class DatabaseStorage implements IStorage {
       })
       .from(deals)
       .leftJoin(users, eq(deals.supplierId, users.id))
-      .where(and(eq(deals.supplierId, supplierId), eq(deals.status, 'expired')))
+      .where(and(eq(deals.supplierId, supplierId), eq(deals.dealStatus, 'expired')))
       .orderBy(desc(deals.createdAt));
 
     return result.map(row => ({
