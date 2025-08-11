@@ -194,9 +194,6 @@ export default function HotDeals() {
             </div>
           ) : deals && deals.length > 0 ? (
             <>
-              <div className="mb-4 text-sm text-slate-600 bg-yellow-100 p-2 rounded">
-                DEBUG: Showing {deals.length} hot deal{deals.length === 1 ? '' : 's'} - {JSON.stringify(deals.map(d => d.title))}
-              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 min-h-[800px]">{/* Responsive grid layout */}
                 {deals.slice(0, displayCount).map((deal) => (
                   <DealCard 
@@ -235,9 +232,6 @@ export default function HotDeals() {
             </>
           ) : (
             <div className="text-center py-20">
-              <div className="bg-red-100 p-4 rounded mb-4">
-                DEBUG: No deals found. Loading: {dealsLoading.toString()}, Error: {error?.message || 'none'}, Deals: {JSON.stringify(deals)}
-              </div>
               <div className="bg-gradient-to-br from-accent/10 to-primary/10 p-6 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
                 <Flame className="h-12 w-12 text-accent" />
               </div>
