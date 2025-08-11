@@ -952,9 +952,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       for (const dealData of workingDeals) {
         try {
           await storage.createDeal(dealData);
+          console.log(`✅ Successfully created deal: ${dealData.title}`);
           successCount++;
         } catch (error) {
-          console.log(`Deal ${dealData.title} already exists or error:`, error.message);
+          console.error(`❌ Failed to create deal ${dealData.title}:`, error);
+          console.error(`Full error details:`, JSON.stringify(error, null, 2));
         }
       }
 
