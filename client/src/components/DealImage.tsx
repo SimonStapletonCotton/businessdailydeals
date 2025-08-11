@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Package } from "lucide-react";
 
 interface DealImageProps {
@@ -12,6 +12,12 @@ export function DealImage({ src, alt, className = "", fallbackClassName = "" }: 
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  // Reset states when src changes
+  useEffect(() => {
+    setImageError(false);
+    setImageLoaded(false);
+  }, [src]);
+
   // If no src provided or image failed to load, show fallback
   if (!src || imageError) {
     return (
@@ -21,63 +27,40 @@ export function DealImage({ src, alt, className = "", fallbackClassName = "" }: 
     );
   }
 
-  // BULLETPROOF: Force absolute image display with inline styles only
+  // ULTIMATE FIX: Render direct img with zero dependencies on external CSS
   return (
-    <div 
-      style={{
-        position: 'relative',
-        overflow: 'hidden',
-        width: '100%'
-      }}
-    >
+    <div className={className} style={{ position: 'relative', overflow: 'hidden' }}>
       <img
         src={src}
         alt={alt}
         onLoad={() => {
-          console.log('✅ Image loaded:', src);
+          console.log('✅ Image loaded successfully:', src);
           setImageLoaded(true);
         }}
         onError={() => {
-          console.error('❌ Image failed:', src);
+          console.error('❌ Image error:', src);
           setImageError(true);
         }}
         style={{
-          display: 'block !important',
-          visibility: 'visible !important',
-          opacity: '1 !important',
           width: '100%',
           height: 'auto',
-          objectFit: 'cover',
-          maxWidth: '100%',
-          border: 'none',
-          outline: 'none'
+          display: 'block',
+          objectFit: 'cover' as const
         }}
-        className={className}
       />
-      {!imageLoaded && !imageError && (
-        <div 
-          style={{
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            right: '0',
-            bottom: '0',
-            backgroundColor: '#f1f5f9',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <div 
-            style={{
-              width: '24px',
-              height: '24px',
-              border: '2px solid #cbd5e1',
-              borderTop: '2px solid #475569',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite'
-            }}
-          />
+      {!imageLoaded && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: '#f1f5f9',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          Loading...
         </div>
       )}
     </div>
