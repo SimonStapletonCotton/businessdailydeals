@@ -519,8 +519,6 @@ export class DatabaseStorage implements IStorage {
     if (dealType) {
       whereCondition = and(eq(deals.dealStatus, 'active'), eq(deals.dealType, dealType))!;
     }
-    
-    console.log(`🔍 QUERYING DEALS: dealType=${dealType}, activeDealsOnly=${!dealType ? 'all' : dealType}`);
 
     const result = await db
       .select({
@@ -558,13 +556,7 @@ export class DatabaseStorage implements IStorage {
       supplier: row.users!
     }));
     
-    console.log(`📊 DEAL QUERY RESULTS: Found ${mappedResults.length} deals for dealType=${dealType}`);
-    if (mappedResults.length > 0) {
-      console.log(`🔍 First deal: ${mappedResults[0].title} (${mappedResults[0].dealType})`);
-      if (mappedResults.length > 1) {
-        console.log(`🔍 Last deal: ${mappedResults[mappedResults.length - 1].title} (${mappedResults[mappedResults.length - 1].dealType})`);
-      }
-    }
+
     
     return mappedResults;
   }

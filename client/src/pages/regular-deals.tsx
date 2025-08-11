@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Search, Package } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import type { DealWithSupplier } from "@/../../server/storage";
+import type { DealWithSupplier } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { BackButton } from "@/components/back-button";
