@@ -849,15 +849,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Simple test endpoint to check what's wrong with production database
+  app.post('/api/admin/test-schema', async (req: any, res) => {
+    try {
+      // Try the absolute minimum deal insertion
+      console.log("Testing minimal deal creation...");
+      const minimalDeal = {
+        id: "test-minimal-deal",
+        supplierId: "46102542", 
+        title: "Test Deal",
+        description: "Testing",
+        price: "100",
+        originalPrice: "120",
+        category: "Test"
+      };
+      
+      // Import sql for raw queries
+      const { sql } = await import('drizzle-orm');
+      
+      // Direct SQL to see what columns actually exist
+      const [result] = await db.execute(sql`
+        INSERT INTO deals (id, supplier_id, title, description, price, original_price, category)
+        VALUES (${minimalDeal.id}, ${minimalDeal.supplierId}, ${minimalDeal.title}, 
+                ${minimalDeal.description}, ${minimalDeal.price}, ${minimalDeal.originalPrice}, 
+                ${minimalDeal.category})
+        RETURNING *
+      `);
+      
+      console.log("✅ Minimal deal created:", result);
+      res.json({ success: true, result });
+    } catch (error) {
+      console.error("❌ Schema test error:", error);
+      res.status(500).json({ 
+        error: error.message,
+        code: error.code,
+        details: "Raw SQL insert failed - schema mismatch"
+      });
+    }
+  });
+
   // Production database population endpoint (admin only)
   app.post('/api/admin/populate-deals', async (req: any, res) => {
     try {
       // Allow this endpoint to work without authentication for production sync
       // In production, restrict this to specific conditions if needed
-
-      // Import database and schema directly
-      const { db } = await import('./db');
-      const { deals, eq } = await import('drizzle-orm');
 
       // First delete all existing deals to clean the database
       await storage.deleteAllDeals();
