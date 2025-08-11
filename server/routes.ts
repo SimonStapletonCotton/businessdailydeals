@@ -855,6 +855,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Allow this endpoint to work without authentication for production sync
       // In production, restrict this to specific conditions if needed
 
+      // Import database and schema directly
+      const { db } = await import('./db');
+      const { deals, eq } = await import('drizzle-orm');
+
       // First delete all existing deals to clean the database
       await storage.deleteAllDeals();
       console.log("Cleared existing deals from production database");
@@ -947,12 +951,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       ];
 
+      // Create a single test deal first to check schema
+      console.log("Testing database schema with simple deal...");
+      try {
+        const testDeal = {
+          id: "test-deal-schema-check",
+          supplierId: "46102542",
+          title: "Test Deal",
+          description: "Testing database schema",
+          price: "100.00",
+          originalPrice: "120.00",
+          dealType: "regular" as const,
+          category: "Test",
+          dealStatus: "active" as const,
+          viewCount: 0,
+          inquiryCount: 0,
+          creditsCost: 0
+        };
+        
+        const [deal] = await db.insert(deals).values(testDeal).returning();
+        console.log("✅ Test deal created successfully:", deal.title);
+        await db.delete(deals).where(eq(deals.id, "test-deal-schema-check"));
+        console.log("✅ Test deal cleaned up");
+      } catch (testError) {
+        console.error("❌ Database schema test failed:", testError);
+        return res.status(500).json({ 
+          message: "Database schema mismatch", 
+          error: testError.message,
+          details: "Production database schema doesn't match development"
+        });
+      }
+
       // Populate deals
       let successCount = 0;
       for (const dealData of workingDeals) {
         try {
-          await storage.createDeal(dealData);
-          console.log(`✅ Successfully created deal: ${dealData.title}`);
+          // Use direct database insert to avoid storage layer issues
+          const dealForDB = {
+            ...dealData,
+            price: dealData.price.toString(),
+            originalPrice: dealData.originalPrice.toString(),
+            creditsCost: dealData.creditsCost.toString()
+          };
+          
+          const [deal] = await db.insert(deals).values(dealForDB).returning();
+          console.log(`✅ Successfully created deal: ${deal.title}`);
           successCount++;
         } catch (error) {
           console.error(`❌ Failed to create deal ${dealData.title}:`, error);
