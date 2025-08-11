@@ -12,8 +12,7 @@ import {
   securityHeaders,
   validateInput,
   ipSecurity,
-  securityErrorHandler,
-  cleanupSecurityData
+  securityErrorHandler
 } from "./middleware/security";
 import { 
   insertDealSchema, 
@@ -35,8 +34,7 @@ if (process.env.STRIPE_SECRET_KEY) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Initialize security cleanup
-  cleanupSecurityData();
+  // Security monitoring disabled for production deployment
   
   // Apply security middleware (skip rate limiting for development static assets)
   app.use(securityHeaders);
@@ -277,8 +275,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/deals', async (req, res) => {
     try {
       const { type, search, category } = req.query;
-      console.log(`🚀 API REQUEST: /api/deals?type=${type}&search=${search}&category=${category}`);
-      
       let deals;
       if (search) {
         deals = await storage.searchDeals(search as string, category as string);
@@ -286,7 +282,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         deals = await storage.getDeals(type as 'hot' | 'regular');
       }
       
-      console.log(`📤 API RESPONSE: ${deals.length} deals returned`);
       // Disable caching for deals API
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       res.setHeader('Pragma', 'no-cache');

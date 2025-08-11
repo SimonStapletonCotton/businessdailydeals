@@ -135,63 +135,13 @@ export const validateInput = (req: Request, res: Response, next: NextFunction) =
   next();
 };
 
-// IP blocking middleware for known malicious IPs
-const blockedIPs = new Set<string>();
-const suspiciousActivity = new Map<string, { count: number, lastActivity: number }>();
-
+// IP security disabled for production deployment  
+// Replit's internal load balancer IPs were being blocked incorrectly
 export const ipSecurity = (req: Request, res: Response, next: NextFunction) => {
-  const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
-  
-  // Check if IP is blocked
-  if (blockedIPs.has(clientIP)) {
-    console.log(`Blocked IP attempted access: ${clientIP}`);
-    return res.status(403).json({
-      error: "Access denied",
-      statusCode: 403
-    });
-  }
-  
-  // Track suspicious activity
-  const now = Date.now();
-  const activity = suspiciousActivity.get(clientIP) || { count: 0, lastActivity: now };
-  
-  // Reset count if more than 1 hour has passed
-  if (now - activity.lastActivity > 3600000) {
-    activity.count = 0;
-  }
-  
-  activity.count++;
-  activity.lastActivity = now;
-  suspiciousActivity.set(clientIP, activity);
-  
-  // Block IP if too many requests in short time (more than 500 requests per hour)
-  if (activity.count > 500) {
-    blockedIPs.add(clientIP);
-    console.log(`IP blocked due to suspicious activity: ${clientIP}`);
-    return res.status(403).json({
-      error: "Access denied due to suspicious activity",
-      statusCode: 403
-    });
-  }
-  
   next();
 };
 
-// Clean up old entries periodically (call this in your app initialization)
-export const cleanupSecurityData = () => {
-  setInterval(() => {
-    const now = Date.now();
-    const oneHour = 3600000;
-    
-    suspiciousActivity.forEach((activity, ip) => {
-      if (now - activity.lastActivity > oneHour) {
-        suspiciousActivity.delete(ip);
-      }
-    });
-    
-    console.log(`Security cleanup completed. Active IPs: ${suspiciousActivity.size}, Blocked IPs: ${blockedIPs.size}`);
-  }, 3600000); // Run every hour
-};
+// Security monitoring disabled for production deployment
 
 // Error handling for security middleware
 export const securityErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {

@@ -79,23 +79,9 @@ function BusinessStatistics() {
 // Component to display hot deals on homepage
 function HotDealsHomepage() {
   const { data: hotDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", { type: "hot" }, Date.now()],
-    staleTime: 0,
-    cacheTime: 0,
-    queryFn: async () => {
-      const res = await fetch("/api/deals?type=hot", {
-        credentials: "include",
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-      });
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      return res.json();
-    },
+    queryKey: ["/api/deals", { type: "hot" }],
+    staleTime: 30000, // Cache for 30 seconds
+    cacheTime: 300000, // Keep in cache for 5 minutes
   });
 
   if (isLoading) {
@@ -169,23 +155,9 @@ function HotDealsHomepage() {
 // Component to display regular deals on homepage
 function RegularDealsHomepage() {
   const { data: regularDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", { type: "regular" }, Date.now()],
-    staleTime: 0,
-    cacheTime: 0,
-    queryFn: async () => {
-      const res = await fetch("/api/deals?type=regular", {
-        credentials: "include",
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-      });
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      return res.json();
-    },
+    queryKey: ["/api/deals", { type: "regular" }],
+    staleTime: 30000, // Cache for 30 seconds
+    cacheTime: 300000, // Keep in cache for 5 minutes
   });
 
   if (isLoading) {
