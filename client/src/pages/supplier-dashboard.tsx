@@ -83,6 +83,31 @@ export default function SupplierDashboard() {
     enabled: isAuthenticated && user?.userType === "supplier",
   });
 
+  // Production sync mutation
+  const syncProductionMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("POST", "/api/admin/populate-deals", {});
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Production Sync Complete! 🎉",
+        description: `Successfully populated ${data.total} deals with images. Production is now synchronized!`,
+      });
+      // Refresh all deal queries
+      queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/deals"] });
+    },
+    onError: (error: any) => {
+      console.error("Production sync error:", error);
+      toast({
+        title: "Sync Failed",
+        description: "Failed to sync production database. Please check console for details.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const reactivateDealMutation = useMutation({
     mutationFn: async ({ dealId, expiresAt }: { dealId: string; expiresAt: string }) => {
       await apiRequest("PATCH", `/api/deals/${dealId}/reactivate`, { expiresAt });
@@ -414,7 +439,7 @@ export default function SupplierDashboard() {
           <p className="text-slate-600 text-lg max-w-2xl mx-auto mb-8">
             Welcome back, {user.firstName || user.companyName || "Supplier"}. Manage your deals and connect with buyers.
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-wrap">
             <Link href="/post-deal">
               <Button className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-3 text-lg shadow-lg" data-testid="button-post-deal">
                 <Plus className="h-5 w-5 mr-2" />
@@ -427,6 +452,24 @@ export default function SupplierDashboard() {
                 View Analytics
               </Button>
             </Link>
+            <Button 
+              onClick={() => syncProductionMutation.mutate()}
+              disabled={syncProductionMutation.isPending}
+              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 text-lg shadow-lg"
+              data-testid="button-sync-production"
+            >
+              {syncProductionMutation.isPending ? (
+                <>
+                  <Clock className="h-5 w-5 mr-2 animate-spin" />
+                  Syncing...
+                </>
+              ) : (
+                <>
+                  <RotateCcw className="h-5 w-5 mr-2" />
+                  Fix Production
+                </>
+              )}
+            </Button>
           </div>
         </div>
 
