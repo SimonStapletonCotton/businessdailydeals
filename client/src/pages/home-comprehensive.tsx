@@ -93,7 +93,6 @@ function HotDealsHomepage() {
       return data;
     },
     staleTime: 0, // Always fetch fresh data
-    cacheTime: 0, // Don't cache
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });
@@ -183,7 +182,6 @@ function RegularDealsHomepage() {
       return data;
     },
     staleTime: 0, // Always fetch fresh data
-    cacheTime: 0, // Don't cache
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });
