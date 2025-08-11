@@ -4,6 +4,9 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { sendDealRequestToAdmin, sendPaymentNotificationToAdmin, sendPaymentConfirmationToCustomer } from "./email";
 import Stripe from "stripe";
+import { db } from "./db";
+import { deals } from "@shared/schema";
+import { eq } from "drizzle-orm";
 import {
   generalLimiter,
   authLimiter,
