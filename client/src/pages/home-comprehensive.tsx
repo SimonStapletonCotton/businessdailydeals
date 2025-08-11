@@ -79,7 +79,16 @@ function BusinessStatistics() {
 // Component to display hot deals on homepage
 function HotDealsHomepage() {
   const { data: hotDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", { type: "hot" }],
+    queryKey: ["/api/deals", "hot"],
+    queryFn: async () => {
+      const res = await fetch("/api/deals?type=hot", {
+        credentials: "include"
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    },
     staleTime: 30000, // Cache for 30 seconds
     cacheTime: 300000, // Keep in cache for 5 minutes
   });
@@ -155,7 +164,16 @@ function HotDealsHomepage() {
 // Component to display regular deals on homepage
 function RegularDealsHomepage() {
   const { data: regularDeals, isLoading } = useQuery({
-    queryKey: ["/api/deals", { type: "regular" }],
+    queryKey: ["/api/deals", "regular"],
+    queryFn: async () => {
+      const res = await fetch("/api/deals?type=regular", {
+        credentials: "include"
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    },
     staleTime: 30000, // Cache for 30 seconds
     cacheTime: 300000, // Keep in cache for 5 minutes
   });
