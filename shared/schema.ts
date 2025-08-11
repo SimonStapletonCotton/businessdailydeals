@@ -28,23 +28,35 @@ export const users = pgTable("users", {
   
   // Buyer specific fields
   companyName: text("company_name"),
-  jobTitle: text("job_title"),
-  industry: text("industry"),
+  representativeName: text("representative_name"),
   keywordsForNotifications: jsonb("keywords_for_notifications").$type<string[]>(),
-  emailNotifications: boolean("email_notifications").default(true),
-  smsNotifications: boolean("sms_notifications").default(false),
-  whatsappNotifications: boolean("whatsapp_notifications").default(false),
+  emailNotifications: boolean("allow_email_notifications").default(true),
+  smsNotifications: boolean("allow_sms_notifications").default(false),
+  whatsappNotifications: boolean("allow_whatsapp_notifications").default(false),
   
-  // Supplier specific fields
-  businessDescription: text("business_description"),
-  phone: text("phone"),
-  website: text("website"),
-  city: text("city"),
-  streetAddress: text("street_address"),
-  postalCode: text("postal_code"),
+  // Supplier specific fields  
+  address: text("address"),
   vatNumber: text("vat_number"),
   businessRegistrationNumber: text("business_registration_number"),
   isVerified: boolean("is_verified").default(false),
+  verifiedAt: timestamp("verified_at"),
+  
+  // Additional supplier fields from database
+  numberOfItems: integer("number_of_items"),
+  itemDescriptions: text("item_descriptions"),
+  rrpPerItem: decimal("rrp_per_item", { precision: 10, scale: 2 }),
+  discountPerItem: decimal("discount_per_item", { precision: 5, scale: 2 }),
+  regularDealDuration: integer("regular_deal_duration"),
+  preferredDealType: text("preferred_deal_type"),
+  isInPromotionalPeriod: boolean("is_in_promotional_period").default(true),
+  promotionalPeriodEnds: timestamp("promotional_period_ends"),
+  subscribeToNewsletter: boolean("subscribe_to_newsletter").default(false),
+  acceptDataOffer: boolean("accept_data_offer").default(false),
+  mobileProvider: text("mobile_provider"),
+  notificationMethod: text("notification_method"),
+  totalCreditsSpent: decimal("total_credits_spent", { precision: 10, scale: 2 }).default("0.00"),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
   
   // Credits system
   creditBalance: decimal("credit_balance", { precision: 10, scale: 2 }).default("0.00"),
@@ -146,37 +158,46 @@ export const creditTransactions = pgTable("credit_transactions", {
   id: text("id").primaryKey(),
   userId: text("user_id").notNull(),
   amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
-  credits: integer("credits").notNull(),
-  transactionType: text("transaction_type").notNull(), // 'purchase', 'spend', 'refund'
+  dealId: text("deal_id"),
+  transactionType: text("type").notNull(), // 'purchase', 'spend', 'refund'
   description: text("description"),
-  paymentReference: text("payment_reference"),
-  status: text("status").notNull().default("completed"), // 'pending', 'completed', 'failed'
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
   createdAt: timestamp("created_at").defaultNow()
 });
 
-// Orders table for rate purchases
+// Orders table for purchases
 export const orders = pgTable("orders", {
   id: text("id").primaryKey(),
-  userId: text("user_id").notNull(),
-  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
-  totalCredits: integer("total_credits").notNull(),
-  status: text("status").notNull().default("pending"), // 'pending', 'completed', 'cancelled'
+  buyerId: text("buyer_id").notNull(),
+  sellerId: text("seller_id").notNull(),
+  dealId: text("deal_id").notNull(),
+  quantity: integer("quantity").notNull().default(1),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  deliveryCost: decimal("delivery_cost", { precision: 10, scale: 2 }),
+  deliveryAddress: text("delivery_address"),
+  orderStatus: text("order_status").notNull().default("pending"),
+  paymentStatus: text("payment_status").notNull().default("pending"),
   paymentReference: text("payment_reference"),
   orderItems: jsonb("order_items").$type<Array<{rateId: string, quantity: number, price: string, credits: number}>>(),
   createdAt: timestamp("created_at").defaultNow(),
-  completedAt: timestamp("completed_at")
+  completedAt: timestamp("completed_at"),
+  updatedAt: timestamp("updated_at").defaultNow()
 });
 
-// Banner ads table
+// Banner advertisements
 export const bannerAds = pgTable("banner_ads", {
   id: text("id").primaryKey(),
+  advertiserId: text("advertiser_id").notNull(),
   title: text("title").notNull(),
   imageUrl: text("image_url").notNull(),
-  linkUrl: text("link_url"),
+  linkUrl: text("link_url").notNull(),
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
   isActive: boolean("is_active").default(true),
   position: integer("position").default(1),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow()
+  impressions: integer("impressions").default(0),
+  clicks: integer("clicks").default(0),
+  createdAt: timestamp("created_at").defaultNow()
 });
 
 // Companies table for directory
@@ -316,9 +337,19 @@ export const creditTransactionsRelations = relations(creditTransactions, ({ one 
 }));
 
 export const ordersRelations = relations(orders, ({ one }) => ({
-  user: one(users, {
-    fields: [orders.userId],
-    references: [users.id]
+  buyer: one(users, {
+    fields: [orders.buyerId],
+    references: [users.id],
+    relationName: "buyer"
+  }),
+  seller: one(users, {
+    fields: [orders.sellerId],
+    references: [users.id],
+    relationName: "seller"
+  }),
+  deal: one(deals, {
+    fields: [orders.dealId],
+    references: [deals.id]
   })
 }));
 
