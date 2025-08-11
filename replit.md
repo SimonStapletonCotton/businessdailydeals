@@ -1,7 +1,7 @@
 # Business Daily Deals B2B Marketplace
 
 ## Overview
-Business Daily Deals (www.businessdailydeals.co.za) is a full-stack B2B marketplace for the South African market. It connects suppliers and buyers, facilitating the exchange of goods and services through targeted deal notifications and special pricing. The platform aims to be a fully operational and modern B2B e-commerce solution, currently under development on Replit with production deployment hosted by Cybersmart (www.cybersmart.co.za) in South Africa. Key capabilities include suppliers posting premium "hot deals" and standard "regular deals," and buyers discovering opportunities via search, categories, and keyword-based notifications. Platform features dynamic business analytics starting with authentic user data that scales organically with growth.
+Business Daily Deals (www.businessdailydeals.co.za) is a full-stack B2B marketplace for the South African market. It connects suppliers and buyers, facilitating the exchange of goods and services through targeted deal notifications and special pricing. The platform aims to be a fully operational and modern B2B e-commerce solution, currently under development, with production deployment hosted by Cybersmart in South Africa. Key capabilities include suppliers posting premium "hot deals" and standard "regular deals," and buyers discovering opportunities via search, categories, and keyword-based notifications. The platform features dynamic business analytics that scale organically with growth.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -13,28 +13,6 @@ NEW PROMOTIONAL PERIOD: FREE deal posting for suppliers until 31st December 2025
 Color scheme preference: Orange halftone casino-style theme with animated red 7's, professional gradient backgrounds (specific: orange halftone on left #ffcc80 → #ffb74d graduating to slate halftone #c8b8a0 → #8fa3b8 on right), mid charcoal navbar (#64748b)
 Quality expectations: Comprehensive implementations with thorough attention to detail - "master coder should think of every combination"
 Backup requirements: Critical - cannot start from beginning if crashes occur, need complete documentation
-RECENT PROGRESS (August 10, 2025):
-- Fixed extend functionality completely - resolved "Insufficient credits" error with promotional period logic
-- Corrected promotional period end date from January 1st, 2026 to December 31st, 2025 across all components
-- UI styling improvements: POST DEAL button changed to red background (bg-red-600), HOT/REGULAR DEALS buttons updated to mid orange (bg-orange-500)
-- All deals posted during promotional period (until Dec 31, 2025) are completely FREE
-- Dashboard extend functionality fully working with proper promotional period bypass
-- Enhanced crossed-out original price visibility: made them darker (text-slate-700), same size as discounted prices, and medium font weight across all deal displays
-- Implemented organized coupon management with separate tabs: Active, Redeemed, and Expired coupons with proper filtering, visual styling, and count indicators
-- DYNAMIC BUSINESS STATISTICS: Replaced hardcoded homepage monitors with real-time data that scales with platform growth. Shows actual suppliers, deals posted (starting with user's 4 deals), connections made, and total savings calculated from deals. API endpoint: /api/business/stats provides live metrics from database
-- COMPREHENSIVE BACK BUTTON NAVIGATION: Added consistent "← Back to Home" buttons across all key pages (Product Directory, Suppliers Directory, Find Me a Deal, Hot Deals, Regular Deals, Search, Rates Management) with reusable BackButton component for improved user experience
-- FIND ME A DEAL FIX: Fixed delivery destination dropdown that wasn't opening by replacing problematic Select component with reliable native HTML select element, maintaining all form validation and styling
-- FIND ME A DEAL EMAIL NOTIFICATIONS: System configured to send admin email notifications when buyers submit product requests. Requires SENDGRID_API_KEY for activation. Form successfully saves requests to database.
-- DEAL TYPE LABELING FIX: Fixed issue where regular deals were incorrectly labeled as "HOT DEAL". Updated deal-card-fixed.tsx component to properly display "REGULAR DEAL" (orange) vs "HOT DEAL" (red) based on actual dealType from database.
-- CYBERSMART HOSTING COMPATIBILITY SOLUTION (August 11, 2025): Cybersmart confirmed Node.js 18-20 and SSL support but cannot provide PostgreSQL or PM2. Created complete MySQL conversion strategy with schema.mysql.ts (296 lines), drizzle.config.mysql.ts, and server/db-mysql.ts for Cybersmart compatibility. User prefers staying with Cybersmart for consistency. MySQL confirmation email template prepared. Full PostgreSQL schema restored and application running normally while MySQL conversion stands ready for deployment.
-- CYBERSMART MYSQL CONFIRMED (August 11, 2025): Cybersmart confirmed MySQL 5.7.44 support with phpMyAdmin access, 51,200 MB storage, 151 concurrent connections, weekly backups, and localhost:3306 connectivity. Complete MySQL conversion ready: schema.mysql.ts (296 lines), storage-mysql.ts, db-mysql.ts. Database credentials request email template created. Ready for 3-4 hour deployment once credentials received.
-- STABILITY SAFEGUARDS: Implemented comprehensive testing framework with automated stability checks, component monitoring, and recovery procedures to prevent recurring issues. Created COMPREHENSIVE_TEST_PLAN.md and stability-check.sh script for deployment safety.
-- STABILITY MONITORING SYSTEM (August 10, 2025): Comprehensive stability monitoring system implemented to prevent functionality degradation over time. Includes detailed health checks (/api/health/detailed), automated stability testing script (stability-check.sh), component monitoring, database integrity checks, and proactive error detection. System tracks critical functionality including image display, deal management, authentication, payments, and business statistics. Addresses user concern about functionality creep with automated recovery procedures and comprehensive testing framework.
-- PAYMENT GATEWAY RESEARCH: Comprehensive South African payment gateway analysis completed. PayFast identified as optimal choice over Stripe for local business - zero monthly fees, lower transaction costs (2% for EFT vs 3.2% cards), Nedbank integration ready. User has existing PayFast account with FNB, planning to switch to Nedbank early this week. Integration ready pending API credentials.
-- DUAL EMAIL CONFIRMATION SYSTEM: Implemented comprehensive payment confirmation system where BOTH admin and customer receive professional payment confirmation emails. Admin receives business notification with bank reconciliation details at admin@businessdailydeals.co.za, while customers receive personalized payment confirmation with credit balance updates and next steps guidance. PayFast webhook handlers (/api/payfast/success for credits, /api/payfast/coupon-success for coupons) process successful payments and trigger both email notifications automatically.
-- PAYFAST CARD PAYMENT INTEGRATION: Complete PayFast integration for both credit purchases and coupon purchases using any Visa/Mastercard/American Express cards. Payment flow: Customer → PayFast card processing → funds to Nedbank account → automatic confirmation emails to admin and customer. During promotional period (until Dec 31, 2025), coupon purchases remain FREE, but after that customers can pay via any credit/debit card through PayFast.
-- PAYMENT MODAL INTERFACES: Created professional payment selection modals (CouponPurchaseModal.tsx and CreditPurchaseModal.tsx) showing clear payment options for suppliers. Coupon purchases display promotional FREE status or PayFast card payment options. Credit purchases show predefined packages (Starter R250/100 credits, Business R1000/550 credits, Enterprise R1800/1200 credits, Premium R3200/2500 credits) plus custom amount option with R2.50 per credit rate.
-- IMAGE DISPLAY RESOLUTION CONFIRMED (August 11, 2025): Images display correctly on desktop/PC browsers, confirming technical implementation is working. Mobile browser cache issue identified as cause of placeholder boxes on user's phone. Server streaming images correctly, all technical approaches functional. Solution: Clear mobile browser cache (Settings → Safari → Clear History and Website Data for iPhone, or Chrome → Settings → Clear browsing data for Android). Current implementation uses inline styles for maximum compatibility across all devices.
 
 ## System Architecture
 
@@ -46,17 +24,17 @@ RECENT PROGRESS (August 10, 2025):
 - **Styling**: Tailwind CSS with CSS variables for theming
 - **Form Handling**: React Hook Form with Zod validation
 - **Build Tool**: Vite for development and bundling
-- **UI/UX Decisions**: Orange casino-themed design with animated red 7's spinning at different speeds, gradient backgrounds, enhanced layouts, professional interface. Engaging one-armed bandit style animations on homepage. Spot colored action buttons for better visibility.
+- **UI/UX Decisions**: Orange casino-themed design with animated red 7's, gradient backgrounds, enhanced layouts, professional interface. Engaging one-armed bandit style animations on homepage. Spot colored action buttons.
 
 ### Backend Architecture
 - **Framework**: Express.js with TypeScript
 - **API Design**: RESTful API structure with modular route handlers
 - **Database Layer**: Drizzle ORM for type-safe database operations
-- **Session Management**: Express sessions with PostgreSQL storage
-- **Middleware**: Custom logging, error handling, and authentication middleware
+- **Session Management**: Express sessions.
+- **Middleware**: Custom logging, error handling, and authentication middleware.
 
 ### Database Schema
-- **Users**: User profiles with buyer/supplier roles, notification preferences (email, SMS, WhatsApp).
+- **Users**: User profiles with buyer/supplier roles, notification preferences.
 - **Deals**: Central entity with categories, pricing, and deal types (hot/regular).
 - **Keywords**: User-defined keywords for deal notifications.
 - **Notifications**: System-generated alerts for keyword matches.
@@ -68,36 +46,37 @@ RECENT PROGRESS (August 10, 2025):
 ### Authentication & Authorization
 - **Provider**: Replit OpenID Connect (OIDC) integration.
 - **Strategy**: Passport.js with custom OpenID strategy.
-- **Session Security**: HTTP-only cookies with PostgreSQL session store; extended session duration and rolling sessions.
+- **Session Security**: HTTP-only cookies; extended session duration and rolling sessions.
 - **Role-based Access**: Buyer and supplier roles with route protection.
 
 ### Key Features
-- **Deal Management**: Suppliers can create, edit, manage hot and regular deals, extend deal expiry dates (FREE during promotional period until Dec 31, 2025), and reactivate expired deals.
+- **Deal Management**: Suppliers can create, edit, manage hot and regular deals, extend expiry, and reactivate expired deals (FREE during promotional period until Dec 31, 2025).
 - **Smart Notifications**: Keyword-based matching system for relevant deal alerts with multi-channel support.
 - **Search & Discovery**: Comprehensive search for products, companies, and hot deals with category filters.
 - **Inquiry System**: Direct communication between buyers and suppliers.
-- **Supplier Dashboard**: Comprehensive dashboard with deal management (edit, delete, extend expiry), inquiries tracking, expired deals management, promotional period banners, and credit system integration.
+- **Supplier Dashboard**: Comprehensive dashboard with deal management, inquiries tracking, expired deals management, promotional banners, and credit system integration.
 - **Credit System**: Credit packages, local ZAR payment integration, balance management, and transaction history.
 - **Image Upload**: Professional file upload with Google Cloud Storage integration.
-- **"Find Me a Deal"**: System for buyers to submit specific product requirements.
+- **"Find Me a Deal"**: System for buyers to submit specific product requirements with admin email notifications.
 - **Rates per Advert**: Comprehensive advertising rates marketplace with shopping basket functionality.
 - **Registration System**: Detailed buyer and supplier registration pages with keyword notification setup and multi-channel alert preferences.
-- **Homepage**: Comprehensive design with animated casino-style one-armed bandit, dynamic business statistics (real-time data), Quick Access Features, How It Works 3-step process, value proposition, and comprehensive footer. All content accessible to everyone.
-- **Navigation Enhancement**: Reusable BackButton component with consistent "← Back to Home" navigation across all key pages for improved user experience.
+- **Homepage**: Comprehensive design with animated casino-style one-armed bandit, dynamic business statistics (real-time data), Quick Access Features, How It Works 3-step process, value proposition, and comprehensive footer.
+- **Navigation Enhancement**: Reusable BackButton component with consistent "← Back to Home" navigation across all key pages.
 - **Supplier Verification**: Optional verification system with VAT and business registration number fields, verified supplier badges.
 - **Legal & Support Pages**: Comprehensive Terms of Service, Privacy Policy, Support Center.
 - **Security Features**: Multi-layer security including rate limiting, input validation, security headers, IP blocking, and protection against common web attacks.
-- **Live Coupons System**: Public coupon tracking page with comprehensive buyer identification details, individual coupon printing with professional Business Daily Deals design, single-page print optimization, and complete deal information display.
-- **Dynamic Analytics**: Real-time business statistics system tracking active suppliers, total deals, successful connections, and calculated savings. Automatically scales with platform growth.
+- **Live Coupons System**: Public coupon tracking page with comprehensive buyer identification details, individual coupon printing, and complete deal information display.
+- **Dynamic Analytics**: Real-time business statistics system tracking active suppliers, total deals, successful connections, and calculated savings, scaling with platform growth.
+- **Payment Confirmation**: Dual email confirmation system for admin and customers upon successful payments via PayFast.
 
 ## External Dependencies
 
 ### Core Services
-- **Database**: PostgreSQL (configured for Neon serverless)
+- **Database**: PostgreSQL (configured for Neon serverless) with a MySQL conversion strategy ready for Cybersmart hosting.
 - **Authentication**: Replit OIDC service
-- **Session Storage**: PostgreSQL with connect-pg-simple
 - **Cloud Storage**: Google Cloud Storage for image uploads
 - **Email Service**: SendGrid for email notifications
+- **Payment Gateway**: PayFast (South African local payment gateway)
 
 ### Frontend Libraries
 - **UI Framework**: Radix UI primitives, Shadcn/ui
