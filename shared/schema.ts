@@ -68,7 +68,7 @@ export const deals = pgTable("deals", {
   expiryDate: timestamp("expires_at"),
   status: text("deal_status").notNull().default("active"), // 'active', 'expired', 'draft'
   viewCount: integer("view_count").default(0),
-  inquiryCount: integer("inquiry_count").default(0),
+  inquiryCount: integer("click_count").default(0),
   creditsCost: decimal("credits_cost", { precision: 5, scale: 2 }).default("0.00"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow()
