@@ -858,6 +858,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied" });
       }
 
+      // First delete all existing deals to clean the database
+      await storage.deleteAllDeals();
+      console.log("Cleared existing deals from production database");
+
       const workingDeals = [
         {
           id: "6cbd7a6a-e4ab-496b-a365-6fd2883b8e53",

@@ -69,6 +69,7 @@ export interface IStorage {
   updateDeal(id: string, deal: Partial<InsertDeal>): Promise<Deal>;
   reactivateDeal(id: string, newExpiresAt: Date): Promise<Deal>;
   deleteDeal(id: string): Promise<void>;
+  deleteAllDeals(): Promise<void>;
   searchDeals(query: string, category?: string): Promise<DealWithSupplier[]>;
   
   // Keyword operations
@@ -818,6 +819,17 @@ export class DatabaseStorage implements IStorage {
         dealId: null
       });
     }
+  }
+
+  async deleteAllDeals(): Promise<void> {
+    // Delete all related records first to avoid foreign key constraints
+    await db.delete(coupons);
+    await db.delete(creditTransactions).where(eq(creditTransactions.dealId, sql`deals.id`));
+    await db.delete(notifications).where(eq(notifications.dealId, sql`deals.id`));
+    await db.delete(inquiries).where(eq(inquiries.dealId, sql`deals.id`));
+    
+    // Finally delete all deals
+    await db.delete(deals);
   }
 
   // Promotional period management
