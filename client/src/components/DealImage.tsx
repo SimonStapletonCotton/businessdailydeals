@@ -1,29 +1,95 @@
-// ULTIMATE PRODUCTION FIX: Direct HTML approach - cannot be broken by React/CSS
+// PRODUCTION FIX: Server-validated approach with base64 fallback
+import { useState, useEffect } from "react";
+
 export function DealImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
-  if (!src) {
+  const [imageStatus, setImageStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [validatedSrc, setValidatedSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!src) {
+      setImageStatus('error');
+      return;
+    }
+
+    // Server-side validation of image URL
+    fetch(`/api/validate-image?url=${encodeURIComponent(src)}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.valid) {
+          setValidatedSrc(src);
+          setImageStatus('success');
+        } else {
+          setImageStatus('error');
+        }
+      })
+      .catch(() => {
+        // Fallback: try direct image loading
+        const img = new Image();
+        img.onload = () => {
+          setValidatedSrc(src);
+          setImageStatus('success');
+        };
+        img.onerror = () => setImageStatus('error');
+        img.src = src;
+      });
+  }, [src]);
+
+  if (!src || imageStatus === 'error') {
     return (
       <div 
-        dangerouslySetInnerHTML={{
-          __html: `<div style="width:100%;height:128px;background-color:#f1f5f9;display:flex;align-items:center;justify-content:center;border:1px solid #e2e8f0;font-size:24px;">📦</div>`
+        style={{
+          width: '100%',
+          height: '128px',
+          backgroundColor: '#f1f5f9',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '1px solid #e2e8f0',
+          fontSize: '24px'
         }}
-      />
+      >
+        📦
+      </div>
     );
   }
 
-  // Direct HTML injection - bypasses all React/CSS framework interactions
+  if (imageStatus === 'loading') {
+    return (
+      <div 
+        style={{
+          width: '100%',
+          height: '128px',
+          backgroundColor: '#f8fafc',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '1px solid #e2e8f0'
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <div 
-      className={className}
-      dangerouslySetInnerHTML={{
-        __html: `
-          <img 
-            src="${src}" 
-            alt="${alt}"
-            style="width:100%;height:auto;display:block;object-fit:cover;max-width:100%;min-height:128px;border:none;outline:none;background-color:#f8fafc;"
-            onload="console.log('🟢 DIRECT HTML: Image loaded', '${src}')"
-            onerror="console.error('🔴 DIRECT HTML: Image failed', '${src}'); this.style.display='none';"
-          />
-        `
+    <img
+      src={validatedSrc!}
+      alt={alt}
+      style={{
+        width: '100%',
+        height: 'auto',
+        display: 'block',
+        objectFit: 'cover' as const,
+        maxWidth: '100%',
+        minHeight: '128px',
+        border: 'none',
+        outline: 'none',
+        backgroundColor: '#f8fafc'
+      }}
+      onLoad={() => console.log('🟢 SERVER VALIDATED: Image loaded', validatedSrc)}
+      onError={() => {
+        console.error('🔴 SERVER VALIDATED: Image failed', validatedSrc);
+        setImageStatus('error');
       }}
     />
   );

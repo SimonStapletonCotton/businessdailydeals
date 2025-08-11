@@ -1670,6 +1670,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Image validation endpoint
+  app.get("/api/validate-image", async (req, res) => {
+    try {
+      const imageUrl = req.query.url as string;
+      if (!imageUrl) {
+        return res.json({ valid: false });
+      }
+
+      // Check if it's our own image URL
+      if (imageUrl.startsWith('/public-objects/')) {
+        const filePath = imageUrl.replace('/public-objects/', '');
+        const bucketId = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID;
+        
+        if (!bucketId) {
+          return res.json({ valid: false });
+        }
+
+        try {
+          const { Storage } = await import("@google-cloud/storage");
+          const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
+          
+          const storage = new Storage({
+            credentials: {
+              audience: "replit",
+              subject_token_type: "access_token",
+              token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
+              type: "external_account",
+              credential_source: {
+                url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
+                format: {
+                  type: "json",
+                  subject_token_field_name: "access_token",
+                },
+              },
+              universe_domain: "googleapis.com",
+            },
+            projectId: "",
+          });
+
+          const bucket = storage.bucket(bucketId);
+          const file = bucket.file(`public/${filePath}`);
+          const [exists] = await file.exists();
+          
+          return res.json({ valid: exists });
+        } catch {
+          return res.json({ valid: false });
+        }
+      }
+
+      res.json({ valid: true });
+    } catch (error) {
+      res.json({ valid: false });
+    }
+  });
+
   // Public objects serving route (for serving uploaded images)
   app.get("/public-objects/:filePath(*)", async (req, res) => {
     try {

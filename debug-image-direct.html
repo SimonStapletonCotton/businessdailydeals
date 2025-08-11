@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Image Test</title>
+</head>
+<body>
+    <h1>Direct Image Test</h1>
+    <p>Testing image URLs directly without React:</p>
+    
+    <h2>Test 1: Direct IMG tag</h2>
+    <img src="/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg" alt="Test 1" style="width:200px;height:150px;border:1px solid red;" />
+    
+    <h2>Test 2: Background Image</h2>
+    <div style="width:200px;height:150px;background-image:url('/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg');background-size:cover;border:1px solid blue;"></div>
+    
+    <h2>Test 3: Hardcoded Working Image</h2>
+    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=200&h=150" alt="Test 3" style="width:200px;height:150px;border:1px solid green;" />
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = document.querySelector('img[alt="Test 1"]');
+            img.onload = () => console.log('✅ Direct HTML test: Image loaded successfully');
+            img.onerror = () => console.error('❌ Direct HTML test: Image failed to load');
+        });
+    </script>
+</body>
+</html>
