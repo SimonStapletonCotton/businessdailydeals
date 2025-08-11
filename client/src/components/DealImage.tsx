@@ -12,80 +12,35 @@ export function DealImage({ src, alt, className = "", fallbackClassName = "" }: 
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  console.log('DealImage DEBUG:', { src, imageError, imageLoaded, className });
-
-  // ABSOLUTE EMERGENCY: Return direct img element for maximum visibility
+  // If no src provided or image failed to load, show fallback
   if (!src || imageError) {
-    console.log('DealImage FALLBACK MODE:', { src, imageError });
     return (
-      <div 
-        className="bg-red-500 text-white p-8 flex items-center justify-center"
-        style={{ minHeight: '200px', backgroundColor: 'red', color: 'white' }}
-      >
-        <Package className="h-12 w-12 mr-2" />
-        <span>NO IMAGE: {src || 'No source'}</span>
+      <div className={`bg-slate-100 flex items-center justify-center ${className} ${fallbackClassName}`}>
+        <Package className="h-12 w-12 text-slate-400" />
       </div>
     );
   }
 
-  // FORCE ABSOLUTE VISIBILITY
   return (
-    <div style={{ 
-      backgroundColor: '#ff0000', 
-      padding: '20px', 
-      border: '5px solid blue',
-      minHeight: '250px',
-      position: 'relative'
-    }}>
-      <div style={{
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        backgroundColor: '#000000',
-        color: '#ffffff',
-        padding: '5px',
-        zIndex: '9999',
-        fontSize: '12px'
-      }}>
-        FORCED VISIBLE: {imageLoaded ? 'LOADED' : 'LOADING'}
-      </div>
-      
+    <div className="relative overflow-hidden">
       <img
         src={src}
         alt={alt}
-        onLoad={(e) => {
-          console.log('FORCE IMAGE LOADED:', src);
-          console.log('DIMENSIONS:', e.target.naturalWidth, 'x', e.target.naturalHeight);
-          setImageLoaded(true);
-        }}
-        onError={(e) => {
-          console.error('FORCE IMAGE ERROR:', src, e);
-          setImageError(true);
-        }}
+        className={className}
+        onLoad={() => setImageLoaded(true)}
+        onError={() => setImageError(true)}
         style={{
           display: 'block',
           width: '100%',
           height: 'auto',
-          maxWidth: '100%',
-          visibility: 'visible',
-          opacity: '1',
-          border: '3px solid #00ff00',
-          backgroundColor: '#ffffff',
-          zIndex: '100'
+          objectFit: 'cover'
         }}
       />
-      
-      <div style={{
-        position: 'absolute',
-        bottom: '0',
-        right: '0',
-        backgroundColor: '#00ff00',
-        color: '#000000',
-        padding: '5px',
-        fontSize: '10px'
-      }}>
-        SRC: {src?.split('/').pop()}
-      </div>
+      {!imageLoaded && (
+        <div className="absolute inset-0 bg-slate-100 flex items-center justify-center">
+          <div className="animate-spin w-6 h-6 border-2 border-slate-300 border-t-slate-600 rounded-full"></div>
+        </div>
+      )}
     </div>
   );
 }
