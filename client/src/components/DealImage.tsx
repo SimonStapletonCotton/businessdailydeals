@@ -19,13 +19,17 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
     const img = document.createElement('img');
     img.src = src;
     img.alt = alt;
-    img.style.cssText = 'width:100%;height:auto;display:block;object-fit:cover;max-width:100%;min-height:128px;border:none;outline:none;background-color:#f8fafc;';
+    img.style.cssText = 'width:100% !important;height:200px !important;display:block !important;object-fit:cover !important;max-width:100% !important;border:3px solid blue !important;outline:none !important;background-color:#f8fafc !important;visibility:visible !important;opacity:1 !important;position:relative !important;z-index:999 !important;';
     
     img.onload = () => {
       console.log('🟢 NATIVE DOM: Image loaded successfully', src);
+      console.log('🔍 IMAGE DIMENSIONS:', img.naturalWidth, 'x', img.naturalHeight);
+      console.log('🔍 IMAGE SRC:', img.src);
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
+        containerRef.current.style.cssText = 'width:100% !important;height:200px !important;display:block !important;visibility:visible !important;opacity:1 !important;position:relative !important;overflow:visible !important;background-color:#f0f0f0 !important;border:2px solid green !important;';
         containerRef.current.appendChild(img);
+        console.log('🔍 CONTAINER AFTER APPEND:', containerRef.current.innerHTML.length, 'chars');
       }
     };
     
@@ -43,5 +47,21 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
     };
   }, [src, alt]);
 
-  return <div ref={containerRef} className={className} />;
+  return (
+    <div 
+      ref={containerRef} 
+      className={className}
+      style={{
+        width: '100%',
+        height: '200px',
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1,
+        position: 'relative',
+        overflow: 'visible',
+        backgroundColor: '#f8fafc',
+        border: '2px solid red' // DEBUG: Make container visible
+      }}
+    />
+  );
 }
