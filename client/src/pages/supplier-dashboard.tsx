@@ -282,7 +282,7 @@ export default function SupplierDashboard() {
 
     // Find the deal to calculate credits
     const deal = deals?.find(d => d.id === dealId);
-    if (!deal || !deal.expiresAt) {
+    if (!deal || !deal.expiryDate) {
       toast({
         title: "Error",
         description: "Deal information not found.",
@@ -291,7 +291,7 @@ export default function SupplierDashboard() {
       return;
     }
 
-    const currentExpiry = new Date(deal.expiresAt);
+    const currentExpiry = new Date(deal.expiryDate);
     const extraDays = Math.ceil((selectedDate.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
     const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
     const totalCredits = extraDays * creditsPerDay;
@@ -353,9 +353,9 @@ export default function SupplierDashboard() {
       price: deal.price || "",
       originalPrice: deal.originalPrice || "",
       imageUrl: deal.imageUrl || "",
-      size: deal.size || "",
-      quantityAvailable: deal.quantityAvailable || 1,
-      productSpecifications: deal.productSpecifications || ""
+      size: "",
+      quantityAvailable: 1,
+      productSpecifications: ""
     };
     
     console.log("Setting form data:", formData);
@@ -418,7 +418,7 @@ export default function SupplierDashboard() {
 
   const hotDeals = deals?.filter((deal: DealWithSupplier) => deal.dealType === "hot") || [];
   const regularDeals = deals?.filter((deal: DealWithSupplier) => deal.dealType === "regular") || [];
-  const activeDeals = deals?.filter((deal: DealWithSupplier) => deal.status === "active") || [];
+  const activeDeals = deals?.filter((deal: DealWithSupplier) => deal.dealStatus === "active") || [];
   const pendingInquiries = inquiries?.filter((inquiry: InquiryWithDetails) => inquiry.status === "pending") || [];
 
   return (
@@ -713,11 +713,11 @@ export default function SupplierDashboard() {
                         <div className="flex items-center gap-4 text-sm">
                           <div className="flex items-center text-muted-foreground">
                             <Clock className="h-4 w-4 mr-1" />
-                            Current expiry: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'No expiry set'}
+                            Current expiry: {deal.expiryDate ? new Date(deal.expiryDate).toLocaleDateString() : 'No expiry set'}
                           </div>
                           <div className="text-orange-600">
-                            {deal.expiresAt ? (() => {
-                              const daysLeft = Math.ceil((new Date(deal.expiresAt).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                            {deal.expiryDate ? (() => {
+                              const daysLeft = Math.ceil((new Date(deal.expiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
                               return daysLeft > 0 ? `${daysLeft} day${daysLeft > 1 ? 's' : ''} left` : 'Expired';
                             })() : 'No expiry'}
                           </div>
@@ -788,7 +788,7 @@ export default function SupplierDashboard() {
                             <div className="text-sm">
                               <strong>{currentDeal.title}</strong>
                               <div className="mt-2 p-3 bg-slate-50 rounded border">
-                                <div>Current expiry: {currentDeal.expiresAt ? new Date(currentDeal.expiresAt).toLocaleDateString() : 'Not set'}</div>
+                                <div>Current expiry: {currentDeal.expiryDate ? new Date(currentDeal.expiryDate).toLocaleDateString() : 'Not set'}</div>
                                 <div>Deal type: {currentDeal.dealType === "hot" ? "HOT DEAL" : "REGULAR DEAL"}</div>
                               </div>
                             </div>
@@ -805,12 +805,12 @@ export default function SupplierDashboard() {
                               />
                             </div>
                             
-                            {extendExpirationDate && currentDeal.expiresAt && (
+                            {extendExpirationDate && currentDeal.expiryDate && (
                               <div className="p-3 bg-blue-50 rounded border border-blue-200">
                                 <div className="text-sm font-medium text-blue-900 mb-1">Extension Cost</div>
                                 <div className="text-sm text-blue-800">
                                   {(() => {
-                                    const currentExpiry = new Date(currentDeal.expiresAt);
+                                    const currentExpiry = new Date(currentDeal.expiryDate);
                                     const newExpiry = new Date(extendExpirationDate);
                                     const extraDays = Math.ceil((newExpiry.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
                                     
@@ -921,7 +921,7 @@ export default function SupplierDashboard() {
                           {deal.category} • R{deal.price}
                         </p>
                         <p className="text-xs text-red-600" data-testid={`text-expired-deal-date-${deal.id}`}>
-                          Expired: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'Unknown date'}
+                          Expired: {deal.expiryDate ? new Date(deal.expiryDate).toLocaleDateString() : 'Unknown date'}
                         </p>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -1042,7 +1042,7 @@ export default function SupplierDashboard() {
                   <div className="text-sm">
                     <strong>{deal.title}</strong>
                     <div className="mt-2 p-3 bg-slate-50 rounded border">
-                      <div>Current expiry: {deal.expiresAt ? new Date(deal.expiresAt).toLocaleDateString() : 'Not set'}</div>
+                      <div>Current expiry: {deal.expiryDate ? new Date(deal.expiryDate).toLocaleDateString() : 'Not set'}</div>
                       <div>Deal type: {deal.dealType === "hot" ? "HOT DEAL" : "REGULAR DEAL"}</div>
                     </div>
                   </div>
@@ -1059,12 +1059,12 @@ export default function SupplierDashboard() {
                     />
                   </div>
                   
-                  {extendExpirationDate && deal.expiresAt && (
+                  {extendExpirationDate && deal.expiryDate && (
                     <div className="p-3 bg-blue-50 rounded border border-blue-200">
                       <div className="text-sm font-medium text-blue-900 mb-1">Extension Cost</div>
                       <div className="text-sm text-blue-800">
                         {(() => {
-                          const currentExpiry = new Date(deal.expiresAt);
+                          const currentExpiry = new Date(deal.expiryDate);
                           const newExpiry = new Date(extendExpirationDate);
                           const daysDiff = Math.ceil((newExpiry.getTime() - currentExpiry.getTime()) / (1000 * 60 * 60 * 24));
                           const costPerDay = deal.dealType === "hot" ? 2 : 1;
