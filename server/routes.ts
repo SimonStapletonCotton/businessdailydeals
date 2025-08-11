@@ -1670,6 +1670,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Pre-signed URL endpoint - bypasses server streaming completely
+  app.get("/api/get-signed-url", async (req, res) => {
+    try {
+      const imagePath = req.query.path as string;
+      if (!imagePath || !imagePath.startsWith('/public-objects/')) {
+        return res.json({ signedUrl: null });
+      }
+
+      const filePath = imagePath.replace('/public-objects/', '');
+      const bucketId = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID;
+      
+      if (!bucketId) {
+        return res.json({ signedUrl: null });
+      }
+
+      // Use singleton client for signed URL generation
+      if (!global.objectStorageClient) {
+        const { Storage } = await import("@google-cloud/storage");
+        const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
+        
+        global.objectStorageClient = new Storage({
+          credentials: {
+            audience: "replit",
+            subject_token_type: "access_token",
+            token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
+            type: "external_account",
+            credential_source: {
+              url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
+              format: {
+                type: "json",
+                subject_token_field_name: "access_token",
+              },
+            },
+            universe_domain: "googleapis.com",
+          },
+          projectId: "",
+          retryOptions: {
+            autoRetry: true,
+            maxRetries: 3,
+            retryDelayMultiplier: 2,
+            totalTimeout: 30000,
+            maxRetryDelay: 10000,
+          },
+        });
+      }
+
+      const bucket = global.objectStorageClient.bucket(bucketId);
+      const file = bucket.file(`public/${filePath}`);
+      
+      // Check if file exists first
+      const [exists] = await file.exists();
+      if (!exists) {
+        return res.json({ signedUrl: null });
+      }
+
+      // Generate signed URL for direct access (valid for 1 hour)
+      const [signedUrl] = await file.getSignedUrl({
+        action: 'read',
+        expires: Date.now() + 3600 * 1000, // 1 hour
+      });
+
+      console.log(`🔗 SIGNED URL: Generated for ${filePath}`);
+      res.json({ signedUrl });
+    } catch (error) {
+      console.error(`🔴 SIGNED URL ERROR:`, error.message);
+      res.json({ signedUrl: null });
+    }
+  });
+
   // Image validation endpoint
   app.get("/api/validate-image", async (req, res) => {
     try {
