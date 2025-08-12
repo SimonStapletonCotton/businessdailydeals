@@ -2376,13 +2376,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const [buffer] = await file.download();
       console.log(`✅ Served: ${bucketPath} (${buffer.length} bytes)`);
       
-      // Set proper headers
+      // Set proper headers with CSP compliance
       const contentType = filePath.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg';
       res.set({
         'Content-Type': contentType,
         'Content-Length': buffer.length.toString(),
         'Cache-Control': 'public, max-age=86400',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
+        'X-Content-Type-Options': 'nosniff',
+        'Content-Security-Policy': 'default-src \'self\''
       });
       
       res.send(buffer);

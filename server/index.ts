@@ -75,6 +75,27 @@ app.use((req, res, next) => {
         log("⚠️ Falling back to PostgreSQL");
         await testDatabaseConnection();
       }
+      
+      // Pre-initialize object storage to prevent timing issues
+      if (process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID) {
+        log("🔄 Pre-initializing Google Cloud Storage...");
+        const { Storage } = await import("@google-cloud/storage");
+        global.objectStorageClient = new Storage({
+          credentials: {
+            audience: "replit",
+            subject_token_type: "access_token",
+            token_url: "http://127.0.0.1:1106/token",
+            type: "external_account",
+            credential_source: {
+              url: "http://127.0.0.1:1106/credential",
+              format: { type: "json", subject_token_field_name: "access_token" }
+            },
+            universe_domain: "googleapis.com"
+          },
+          projectId: ""
+        });
+        log("✅ Google Cloud Storage pre-initialized");
+      }
     } else {
       log("ℹ️ Using PostgreSQL development database");
       await testDatabaseConnection();
