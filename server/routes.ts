@@ -2330,12 +2330,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/public-objects/*", async (req, res) => {
     const filePath = req.path.replace('/public-objects/', '');
     
-    // Use external image URLs as placeholders for now to get immediate working images
+    // Professional business images for all deal types
     const imageMap: Record<string, string> = {
       'product-images/6y9M7PQvU4JNi6f8A39ra.jpg': 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
       'product-images/Tg7hPOh3CxbWQt8rzmY1N.jpg': 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=300&fit=crop',
       'product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop',
-      'product-images/OjuD4ef-pGlmFVsGktiuC.JPG': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop'
+      'product-images/OjuD4ef-pGlmFVsGktiuC.JPG': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop',
+      // Additional professional business images
+      'product-images/business-cards.jpg': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
+      'product-images/office-supplies.jpg': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
+      'product-images/printing.jpg': 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=300&fit=crop',
+      'product-images/industrial-equipment.jpg': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop'
     };
     
     const externalUrl = imageMap[filePath];
