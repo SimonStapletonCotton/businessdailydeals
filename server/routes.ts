@@ -2342,6 +2342,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       if (!global.objectStorageClient) {
+        console.log('🔄 Initializing Google Cloud Storage...');
         const { Storage } = await import("@google-cloud/storage");
         global.objectStorageClient = new Storage({
           credentials: {
@@ -2357,6 +2358,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           },
           projectId: ""
         });
+        console.log('✅ Google Cloud Storage initialized');
       }
 
       const bucket = global.objectStorageClient.bucket(bucketId);
@@ -2386,7 +2388,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.send(buffer);
       
     } catch (error) {
-      console.log(`❌ Image error:`, error.message);
+      console.log(`❌ Image error for ${filePath}:`, error.message);
+      console.log(`❌ Full error:`, error);
       res.status(500).send('Server error');
     }
   });
