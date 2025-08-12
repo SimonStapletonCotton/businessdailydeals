@@ -1,20 +1,18 @@
-// DIRECT IMAGE TESTING WITH ABSOLUTE PATHS
 export function DealImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
-  console.log('🖼️ DealImage render:', { src, alt });
-  
+  // If no image, show simple placeholder
   if (!src) {
-    console.log('❌ No src provided, showing placeholder');
     return (
       <div 
         style={{
           width: '100%',
           height: '200px',
-          backgroundColor: '#f1f5f9',
+          backgroundColor: '#e2e8f0',
           borderRadius: '8px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '2rem'
+          fontSize: '3rem',
+          color: '#64748b'
         }}
         className={className}
       >
@@ -23,31 +21,24 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
     );
   }
 
-  // Use relative path since CSP is fixed
-  console.log('✅ Rendering image with src:', src);
-
-  // Use stable cache busting to force browser refresh after route fix
-  const cacheBustedSrc = `${src}?v=fixed-${Math.floor(Date.now() / 10000)}`;
-  
+  // Use simple approach - just show the image without complex error handling
   return (
     <img 
-      src={cacheBustedSrc} 
+      src={src} 
       alt={alt} 
       style={{
         width: '100%',
         height: '200px',
         objectFit: 'cover',
         borderRadius: '8px',
-        display: 'block',
-        border: 'none',
-        outline: 'none'
+        display: 'block'
       }}
       className={className}
-      onLoad={() => console.log('✅ IMAGE LOADED SUCCESSFULLY:', cacheBustedSrc)}
       onError={(e) => {
-        console.error('❌ IMAGE FAILED TO LOAD:', cacheBustedSrc, e);
-        // Show placeholder on error
-        (e.target as HTMLImageElement).style.display = 'none';
+        // Replace with placeholder on error
+        const target = e.target as HTMLImageElement;
+        target.style.display = 'none';
+        target.parentElement!.innerHTML = `<div style="width: 100%; height: 200px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #64748b;">📷</div>`;
       }}
     />
   );

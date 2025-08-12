@@ -2326,7 +2326,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // DUPLICATE ROUTE REMOVED - keeping only the working one below
+  // Simple image serving - bypass all complex streaming
+  app.get("/public-objects/:filePath(*)", async (req, res) => {
+    try {
+      const filePath = req.params.filePath;
+      const bucketId = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID;
+      
+      if (!bucketId) {
+        return res.status(404).send('Not configured');
+      }
+
+      if (!global.objectStorageClient) {
+        const { Storage } = await import("@google-cloud/storage");
+        global.objectStorageClient = new Storage({
+          credentials: {
+            audience: "replit",
+            subject_token_type: "access_token",
+            token_url: "http://127.0.0.1:1106/token",
+            type: "external_account",
+            credential_source: {
+              url: "http://127.0.0.1:1106/credential",
+              format: { type: "json", subject_token_field_name: "access_token" }
+            },
+            universe_domain: "googleapis.com"
+          },
+          projectId: ""
+        });
+      }
+
+      const bucket = global.objectStorageClient.bucket(bucketId);
+      const file = bucket.file(`public/${filePath}`);
+      
+      // Just download and send - no complex streaming
+      const [buffer] = await file.download();
+      
+      res.set({
+        'Content-Type': filePath.toLowerCase().endsWith('.jpg') || filePath.toLowerCase().endsWith('.jpeg') ? 'image/jpeg' : 
+                       filePath.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg',
+        'Content-Length': buffer.length.toString(),
+        'Cache-Control': 'public, max-age=3600'
+      });
+      
+      res.send(buffer);
+      
+    } catch (error) {
+      res.status(404).send('Image not found');
+    }
+  });
 
   // Debug page route
   app.get('/debug-image-test.html', (req, res) => {
