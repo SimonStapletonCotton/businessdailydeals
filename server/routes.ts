@@ -2439,11 +2439,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       stream.on('end', () => {
         console.log(`✅ STREAM COMPLETE: ${filePath}`);
+        // Ensure response ends properly if not already ended
+        if (!res.headersSent && !res.destroyed) {
+          res.end();
+        }
       });
 
       stream.on('error', (error: any) => {
         console.error(`❌ STREAM ERROR for ${filePath}:`, error);
-        if (!res.headersSent) {
+        if (!res.headersSent && !res.destroyed) {
           res.status(500).json({ error: "Stream error", details: error.message });
         }
       });
