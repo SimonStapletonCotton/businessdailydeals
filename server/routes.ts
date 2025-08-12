@@ -2441,7 +2441,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log(`✅ STREAM COMPLETE: ${filePath}`);
       });
 
-      stream.on('error', (error) => {
+      stream.on('error', (error: any) => {
         console.error(`❌ STREAM ERROR for ${filePath}:`, error);
         if (!res.headersSent) {
           res.status(500).json({ error: "Stream error", details: error.message });
@@ -2451,10 +2451,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Pipe the stream to response
       stream.pipe(res);
       
-    } catch (error) {
+    } catch (error: any) {
       console.error(`🔴 ERROR serving file ${req.params.filePath}:`, error);
       if (!res.headersSent) {
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", details: error.message });
       }
     }
   });
