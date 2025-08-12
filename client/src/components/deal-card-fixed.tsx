@@ -9,7 +9,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { DealImage } from "@/components/DealImage";
+import { SimpleImage } from "@/components/SimpleImage";
 
 // Define extended deal type with supplier info
 type DealWithSupplier = Deal & {
@@ -170,7 +170,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
       <>
         <Card className="hover:shadow-lg transition-shadow border-2 border-red-200 hover:border-red-300 h-fit">
           <CardContent className="p-4">
-            <DealImage
+            <SimpleImage
               src={deal.imageUrl}
               alt={deal.title}
               className="w-full h-32 object-cover rounded mb-3"
@@ -239,7 +239,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Left Column - Deal Info */}
                 <div>
-                  <DealImage
+                  <SimpleImage
                     src={deal.imageUrl}
                     alt={deal.title}
                     className="w-full h-48 object-cover rounded mb-4"
@@ -384,7 +384,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Image */}
           <div className="lg:col-span-1">
-            <DealImage
+            <SimpleImage
               src={deal.imageUrl}
               alt={deal.title}
               className="w-full h-48 object-cover rounded-lg"
