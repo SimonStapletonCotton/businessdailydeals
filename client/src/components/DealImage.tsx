@@ -26,9 +26,12 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
   // Use relative path since CSP is fixed
   console.log('✅ Rendering image with src:', src);
 
+  // Add cache busting to force browser refresh
+  const cacheBustedSrc = `${src}?v=${Date.now()}`;
+  
   return (
     <img 
-      src={src} 
+      src={cacheBustedSrc} 
       alt={alt} 
       style={{
         width: '100%',
@@ -40,9 +43,9 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
         outline: 'none'
       }}
       className={className}
-      onLoad={() => console.log('✅ IMAGE LOADED SUCCESSFULLY:', src)}
+      onLoad={() => console.log('✅ IMAGE LOADED SUCCESSFULLY:', cacheBustedSrc)}
       onError={(e) => {
-        console.error('❌ IMAGE FAILED TO LOAD:', src, e);
+        console.error('❌ IMAGE FAILED TO LOAD:', cacheBustedSrc, e);
         // Show placeholder on error
         (e.target as HTMLImageElement).style.display = 'none';
       }}

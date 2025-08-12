@@ -2405,7 +2405,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.set({
         "Content-Type": contentType,
         "Content-Length": metadata.size,
-        "Cache-Control": "public, max-age=3600",
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Force browser to refresh
+        "Pragma": "no-cache",
+        "Expires": "0",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET",
         "Access-Control-Allow-Headers": "Content-Type"
