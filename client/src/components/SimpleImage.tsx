@@ -1,4 +1,10 @@
+import { useState, useEffect } from 'react';
+
 export function SimpleImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
   // Show placeholder for missing images
   if (!src) {
     return (
@@ -21,13 +27,92 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
     );
   }
 
-  // Create a full URL with cache busting to completely avoid relative path issues
-  const fullUrl = `${window.location.origin}${src.startsWith('/') ? src : `/${src}`}?t=${Date.now()}`;
-  console.log('SimpleImage: src =', src, 'fullUrl =', fullUrl);
+  useEffect(() => {
+    // Fetch image data directly to bypass browser path resolution issues
+    const fetchImage = async () => {
+      setLoading(true);
+      setError(false);
+      
+      try {
+        console.log('🔄 Fetching image:', src);
+        const response = await fetch(src);
+        console.log('🔄 Response status:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        setImageSrc(objectUrl);
+        console.log('✅ Image loaded successfully:', src);
+        
+      } catch (err) {
+        console.log('❌ Image fetch failed:', src, err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchImage();
+
+    // Cleanup object URL on unmount
+    return () => {
+      if (imageSrc && imageSrc.startsWith('blob:')) {
+        URL.revokeObjectURL(imageSrc);
+      }
+    };
+  }, [src]);
+
+  if (loading) {
+    return (
+      <div 
+        style={{
+          width: '100%',
+          height: '200px',
+          backgroundColor: '#f1f5f9',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '2rem',
+          color: '#64748b'
+        }}
+        className={className}
+      >
+        🔄
+      </div>
+    );
+  }
+
+  if (error || !imageSrc) {
+    return (
+      <div 
+        style={{
+          width: '100%',
+          height: '200px',
+          background: '#fca5a5',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '1rem',
+          color: '#991b1b',
+          textAlign: 'center',
+          padding: '10px'
+        }}
+        className={className}
+      >
+        ⚠️<br/>Image Loading Error<br/>
+        <small style={{ fontSize: '0.8rem' }}>{src?.split('/').pop()}</small>
+      </div>
+    );
+  }
   
   return (
     <img 
-      src={fullUrl} 
+      src={imageSrc} 
       alt={alt} 
       style={{
         width: '100%',
@@ -36,18 +121,6 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
         borderRadius: '8px'
       }}
       className={className}
-      onLoad={() => console.log('✅ SimpleImage loaded:', fullUrl)}
-      onError={(e) => {
-        console.log('❌ SimpleImage failed:', fullUrl);
-        console.log('❌ Error event details:', e);
-        const target = e.target as HTMLImageElement;
-        console.log('❌ Image element src when failed:', target.src);
-        target.style.display = 'none';
-        const parent = target.parentElement;
-        if (parent) {
-          parent.innerHTML = `<div style="width: 100%; height: 200px; background: #fca5a5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #991b1b; text-align: center; padding: 10px;">⚠️<br/>Image Loading Error<br/><small style="font-size: 0.8rem;">${fullUrl.split('/').pop()}</small></div>`;
-        }
-      }}
     />
   );
 }
