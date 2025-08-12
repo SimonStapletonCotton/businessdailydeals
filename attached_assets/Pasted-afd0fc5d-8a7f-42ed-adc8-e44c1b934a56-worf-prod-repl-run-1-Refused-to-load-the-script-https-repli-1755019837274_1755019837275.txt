@@ -1,0 +1,27 @@
+afd0fc5d-8a7f-42ed-adc8-e44c1b934a56.worf.prod.repl.run/:1 Refused to load the script 'https://replit.com/public/js/replit-dev-banner.js' because it violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' 'unsafe-eval'". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+Understand this error
+index-BXTnKgVX.js:732 main.tsx loading...
+index-BXTnKgVX.js:732 Root element found: <div id=​"root" style=​"width:​ 100vw;​ max-width:​ none;​">​…​</div>​
+index-BXTnKgVX.js:732 React mounted successfully
+index-BXTnKgVX.js:715 Router state - Location: / URL: /
+api/auth/user:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+index-BXTnKgVX.js:477 Hot deals state: Object
+index-BXTnKgVX.js:477 Fetching hot deals with params: type=hot
+index-BXTnKgVX.js:477 Hot deals data received: Array(8)
+index-BXTnKgVX.js:477 Hot deals state: Object
+index-BXTnKgVX.js:477 🔄 Fetching image: /public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg
+index-BXTnKgVX.js:477 🔄 Clean URL: /public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg
+index-BXTnKgVX.js:477 🔄 Fetching image: /public-objects/product-images/Tg7hPOh3CxbWQt8rzmY1N.jpg
+index-BXTnKgVX.js:477 🔄 Clean URL: /public-objects/product-images/Tg7hPOh3CxbWQt8rzmY1N.jpg
+index-BXTnKgVX.js:477 🔄 Fetching image: /public-objects/product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG
+index-BXTnKgVX.js:477 🔄 Clean URL: /public-objects/product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG
+public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg:1  Failed to load resource: the server responded with a status of 404 ()Understand this error
+index-BXTnKgVX.js:477 🔄 Response status: 404
+public-objects/product-images/Tg7hPOh3CxbWQt8rzmY1N.jpg:1  Failed to load resource: the server responded with a status of 404 ()Understand this error
+index-BXTnKgVX.js:477 🔄 Response status: 404
+2index-BXTnKgVX.js:477 Uncaught (in promise) ReferenceError: cleanSrc is not defined
+    at index-BXTnKgVX.js:477:31953Understand this error
+public-objects/product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG:1  Failed to load resource: the server responded with a status of 404 ()Understand this error
+index-BXTnKgVX.js:477 🔄 Response status: 404
+index-BXTnKgVX.js:477 Uncaught (in promise) ReferenceError: cleanSrc is not defined
+    at index-BXTnKgVX.js:477:31953
