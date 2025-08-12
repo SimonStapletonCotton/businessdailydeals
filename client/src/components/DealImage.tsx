@@ -23,13 +23,12 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
     );
   }
 
-  // Test with absolute URL to rule out relative path issues
-  const testSrc = src.startsWith('/') ? `http://localhost:5000${src}` : src;
-  console.log('✅ Rendering image with ABSOLUTE src:', testSrc);
+  // Use relative path since CSP is fixed
+  console.log('✅ Rendering image with src:', src);
 
   return (
     <img 
-      src={testSrc} 
+      src={src} 
       alt={alt} 
       style={{
         width: '100%',
@@ -37,17 +36,15 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
         objectFit: 'cover',
         borderRadius: '8px',
         display: 'block',
-        border: '2px solid red', // DEBUG: Red border to see if element renders
+        border: 'none',
         outline: 'none'
       }}
       className={className}
-      onLoad={() => console.log('✅ IMAGE LOADED SUCCESSFULLY:', testSrc)}
+      onLoad={() => console.log('✅ IMAGE LOADED SUCCESSFULLY:', src)}
       onError={(e) => {
-        console.error('❌ IMAGE FAILED TO LOAD:', testSrc, e);
-        console.error('❌ ERROR EVENT:', e.type, e.target);
-        // Show error state visually
-        (e.target as HTMLImageElement).style.backgroundColor = '#ffcccc';
-        (e.target as HTMLImageElement).style.border = '2px solid red';
+        console.error('❌ IMAGE FAILED TO LOAD:', src, e);
+        // Show placeholder on error
+        (e.target as HTMLImageElement).style.display = 'none';
       }}
     />
   );

@@ -69,9 +69,9 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   res.setHeader('Content-Security-Policy', [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Allow inline scripts for React
-    "style-src 'self' 'unsafe-inline'", // Allow inline styles for Tailwind
-    "img-src 'self' data: https: blob:",
-    "font-src 'self' data:",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // Allow Google Fonts
+    "img-src 'self' data: https: blob: http://localhost:5000", // Allow local images
+    "font-src 'self' data: https://fonts.gstatic.com", // Allow Google Fonts
     "connect-src 'self'",
     "media-src 'self'",
     "object-src 'none'",
