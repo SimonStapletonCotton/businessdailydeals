@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Debug Test</title>
+</head>
+<body>
+    <h1>Direct Image Test</h1>
+    
+    <h2>Test 1: Direct URL</h2>
+    <img src="http://localhost:5000/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg" 
+         style="width: 300px; height: 200px; border: 2px solid red;" 
+         onload="console.log('✅ Direct image loaded')"
+         onerror="console.error('❌ Direct image failed')">
+    
+    <h2>Test 2: Relative URL</h2>
+    <img src="/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg" 
+         style="width: 300px; height: 200px; border: 2px solid blue;" 
+         onload="console.log('✅ Relative image loaded')"
+         onerror="console.error('❌ Relative image failed')">
+    
+    <h2>Test 3: Another Image</h2>
+    <img src="/public-objects/product-images/OjuD4ef-pGlmFVsGktiuC.JPG" 
+         style="width: 300px; height: 200px; border: 2px solid green;" 
+         onload="console.log('✅ JPG image loaded')"
+         onerror="console.error('❌ JPG image failed')">
+
+    <script>
+        console.log('🔍 Image debug page loaded');
+        setTimeout(() => {
+            console.log('🔍 Checking all images after 2 seconds...');
+            const images = document.querySelectorAll('img');
+            images.forEach((img, i) => {
+                console.log(`Image ${i+1}: complete=${img.complete}, naturalWidth=${img.naturalWidth}, src=${img.src}`);
+            });
+        }, 2000);
+    </script>
+</body>
+</html>
