@@ -2326,11 +2326,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Simple image serving - bypass all complex streaming
-  app.get("/public-objects/:filePath(*)", async (req, res) => {
+  // Image serving route - handle all image requests
+  app.get("/public-objects/*", async (req, res) => {
     try {
-      const filePath = req.params.filePath;
-      console.log(`🌟 Image request received: ${req.url} -> filePath: ${filePath}`);
+      // Extract path after /public-objects/
+      const fullPath = req.path;
+      const filePath = fullPath.replace('/public-objects/', '');
+      
+      console.log(`📸 Image request: ${fullPath} -> ${filePath}`);
+      
       const bucketId = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID;
       
       if (!bucketId) {
@@ -2356,30 +2360,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const bucket = global.objectStorageClient.bucket(bucketId);
-      const file = bucket.file(`public/${filePath}`);
+      const bucketPath = `public/${filePath}`;
+      const file = bucket.file(bucketPath);
       
-      // Check if file exists first
+      // Check if file exists
       const [exists] = await file.exists();
       if (!exists) {
-        console.log(`❌ File not found in bucket: public/${filePath}`);
-        return res.status(404).send('File not found');
+        console.log(`❌ Not found: ${bucketPath}`);
+        return res.status(404).send('Image not found');
       }
       
-      // Download and send
+      // Get file and stream directly
       const [buffer] = await file.download();
-      console.log(`✅ File downloaded: public/${filePath}, size: ${buffer.length} bytes`);
+      console.log(`✅ Served: ${bucketPath} (${buffer.length} bytes)`);
       
+      // Set proper headers
+      const contentType = filePath.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg';
       res.set({
-        'Content-Type': filePath.toLowerCase().endsWith('.jpg') || filePath.toLowerCase().endsWith('.jpeg') ? 'image/jpeg' : 
-                       filePath.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg',
+        'Content-Type': contentType,
         'Content-Length': buffer.length.toString(),
-        'Cache-Control': 'public, max-age=3600'
+        'Cache-Control': 'public, max-age=86400',
+        'Access-Control-Allow-Origin': '*'
       });
       
       res.send(buffer);
       
     } catch (error) {
-      res.status(404).send('Image not found');
+      console.log(`❌ Image error:`, error.message);
+      res.status(500).send('Server error');
     }
   });
 
