@@ -39,7 +39,7 @@ export default function HotDeals() {
   // Remove authentication redirect - let pages load for everyone
 
   const { data: deals, isLoading: dealsLoading, error } = useQuery<DealWithSupplier[]>({
-    queryKey: ["/api/deals", "hot", searchQuery, selectedCategory],
+    queryKey: ["/api/deals", "hot", searchQuery, selectedCategory, Date.now()],
     queryFn: async () => {
       const params = new URLSearchParams();
       params.set("type", "hot");
