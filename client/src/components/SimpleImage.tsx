@@ -21,7 +21,9 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
     );
   }
 
-  // Simple image with error fallback
+  // Add debugging to see what URL is being used
+  console.log('SimpleImage rendering with src:', src);
+  
   return (
     <img 
       src={src} 
@@ -33,12 +35,14 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
         borderRadius: '8px'
       }}
       className={className}
+      onLoad={() => console.log('✅ SimpleImage loaded:', src)}
       onError={(e) => {
+        console.log('❌ SimpleImage failed:', src);
         const target = e.target as HTMLImageElement;
         target.style.display = 'none';
         const parent = target.parentElement;
         if (parent) {
-          parent.innerHTML = '<div style="width: 100%; height: 200px; background: #fca5a5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #991b1b;">⚠️ Image Error</div>';
+          parent.innerHTML = '<div style="width: 100%; height: 200px; background: #fca5a5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #991b1b; text-align: center;">⚠️<br/>Image Not Found</div>';
         }
       }}
     />
