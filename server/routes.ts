@@ -232,7 +232,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Serve the test authentication page
   app.get("/test-auth", (req, res) => {
+    const path = require('path');
     res.sendFile(path.join(process.cwd(), 'test-auth.html'));
+  });
+
+  // Simple login endpoint that works
+  app.post("/api/simple-login", async (req, res) => {
+    try {
+      // Get or create test user
+      let testUser = await storage.getUser("test-user-debug-123");
+      if (!testUser) {
+        testUser = await storage.createUser({
+          id: "test-user-debug-123",
+          email: `test-supplier@businessdailydeals.co.za`,
+          firstName: "Test",
+          lastName: "Supplier",
+          userType: "supplier"
+        });
+      }
+
+      // Set user in session manually
+      req.session.passport = { user: testUser };
+      req.user = testUser;
+      
+      console.log("🔐 SIMPLE LOGIN: User set in session:", testUser.id);
+      console.log("🔐 SIMPLE LOGIN: Session ID:", req.sessionID);
+      
+      res.json({ 
+        success: true,
+        message: "Logged in successfully", 
+        user: testUser,
+        sessionId: req.sessionID
+      });
+    } catch (error) {
+      console.error("Simple login error:", error);
+      res.status(500).json({ error: "Login failed", details: error.message });
+    }
   });
 
   // Authentication status page for browser testing

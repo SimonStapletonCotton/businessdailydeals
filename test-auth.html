@@ -18,6 +18,7 @@
     
     <button class="button" onclick="testAuth()">Check Authentication Status</button>
     <button class="button" onclick="debugLogin()">Debug Login</button>
+    <button class="button" onclick="simpleLogin()">Simple Login (New)</button>
     <button class="button" onclick="testSupplierDashboard()">Test Supplier Dashboard</button>
     
     <h2>Test Results</h2>
@@ -46,6 +47,23 @@
         async function debugLogin() {
             try {
                 const response = await fetch('/api/debug/auth', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+                
+                // Test auth status after login
+                setTimeout(testAuth, 1000);
+            } catch (error) {
+                document.getElementById('results').textContent = error.message;
+            }
+        }
+
+        async function simpleLogin() {
+            try {
+                const response = await fetch('/api/simple-login', {
+                    method: 'POST',
                     credentials: 'include'
                 });
                 const data = await response.json();
