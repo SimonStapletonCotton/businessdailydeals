@@ -5,6 +5,7 @@ import {
   notifications,
   inquiries,
   coupons,
+  couponRedemptions,
   basketItems,
   rates,
   creditTransactions,
@@ -25,6 +26,8 @@ import {
   type InsertInquiry,
   type Coupon,
   type InsertCoupon,
+  type CouponRedemption,
+  type InsertCouponRedemption,
   type Rate,
   type InsertRate,
   type CreditTransaction,
@@ -94,8 +97,22 @@ export interface IStorage {
   getCouponsByBuyer(buyerId: string): Promise<CouponWithDetails[]>;
   getCouponsBySupplier(supplierId: string): Promise<CouponWithDetails[]>;
   getCouponByCode(couponCode: string): Promise<CouponWithDetails | undefined>;
-  redeemCoupon(couponCode: string, redemptionNotes?: string): Promise<Coupon>;
+  redeemCoupon(couponCode: string, redemptionData?: {
+    location?: string;
+    notes?: string;
+    ipAddress?: string;
+    userAgent?: string;
+  }): Promise<{ success: boolean; coupon?: Coupon; message: string }>;
+  getCouponRedemptionHistory(couponCode: string): Promise<CouponRedemption[]>;
+  validateCouponForRedemption(couponCode: string): Promise<{
+    valid: boolean; 
+    coupon?: Coupon; 
+    message: string;
+    canRedeem: boolean;
+  }>;
   expireCoupon(id: string): Promise<Coupon>;
+  getPublicCoupons(limit?: number): Promise<any[]>;
+  getCouponStats(): Promise<any>;
   
   // Rates operations
   getRates(): Promise<Rate[]>;
@@ -1207,21 +1224,164 @@ export class DatabaseStorage implements IStorage {
     };
   }
 
-  async redeemCoupon(couponCode: string, redemptionNotes?: string): Promise<Coupon> {
-    const [coupon] = await db
-      .update(coupons)
-      .set({ 
-        isRedeemed: true,
-        redeemedAt: new Date(),
-      })
+  async redeemCoupon(
+    couponCode: string, 
+    redemptionData: {
+      location?: string;
+      notes?: string;
+      ipAddress?: string;
+      userAgent?: string;
+    } = {}
+  ): Promise<{ success: boolean; coupon?: Coupon; message: string }> {
+    // First, check if coupon exists and get its current status
+    const [existingCoupon] = await db
+      .select()
+      .from(coupons)
       .where(eq(coupons.couponCode, couponCode))
-      .returning();
-    
-    if (!coupon) {
-      throw new Error("Coupon not found");
+      .limit(1);
+
+    const redemptionId = nanoid();
+    const auditLog: InsertCouponRedemption = {
+      id: redemptionId,
+      couponId: existingCoupon?.id || "unknown",
+      couponCode: couponCode,
+      attemptedAt: new Date(),
+      success: false,
+      location: redemptionData.location,
+      notes: redemptionData.notes,
+      ipAddress: redemptionData.ipAddress,
+      userAgent: redemptionData.userAgent,
+      failureReason: null
+    };
+
+    try {
+      // VALIDATION 1: Check if coupon exists
+      if (!existingCoupon) {
+        auditLog.failureReason = "Coupon code not found";
+        await db.insert(couponRedemptions).values(auditLog);
+        return { 
+          success: false, 
+          message: "Invalid coupon code. Please verify the code and try again." 
+        };
+      }
+
+      // VALIDATION 2: Check if already redeemed
+      if (existingCoupon.isRedeemed) {
+        auditLog.couponId = existingCoupon.id;
+        auditLog.failureReason = `Already redeemed on ${existingCoupon.redeemedAt?.toLocaleDateString()} ${existingCoupon.redemptionLocation ? `at ${existingCoupon.redemptionLocation}` : ''}`;
+        await db.insert(couponRedemptions).values(auditLog);
+        return { 
+          success: false, 
+          message: `This coupon was already used on ${existingCoupon.redeemedAt?.toLocaleDateString('en-ZA')} ${existingCoupon.redemptionLocation ? `at ${existingCoupon.redemptionLocation}` : ''}. Each coupon can only be redeemed once.` 
+        };
+      }
+
+      // VALIDATION 3: Check if expired
+      if (existingCoupon.expiryDate && new Date() > existingCoupon.expiryDate) {
+        auditLog.couponId = existingCoupon.id;
+        auditLog.failureReason = "Coupon expired";
+        await db.insert(couponRedemptions).values(auditLog);
+        return { 
+          success: false, 
+          message: `This coupon expired on ${existingCoupon.expiryDate.toLocaleDateString('en-ZA')}. Expired coupons cannot be redeemed.` 
+        };
+      }
+
+      // Generate unique verification code for this redemption
+      const verificationCode = `VER-${nanoid(8).toUpperCase()}`;
+
+      // REDEEM THE COUPON: Mark as redeemed with full tracking
+      const [redeemedCoupon] = await db
+        .update(coupons)
+        .set({
+          isRedeemed: true,
+          redeemedAt: new Date(),
+          redemptionLocation: redemptionData.location,
+          redemptionNotes: redemptionData.notes,
+          redemptionVerificationCode: verificationCode
+        })
+        .where(eq(coupons.couponCode, couponCode))
+        .returning();
+
+      // Log successful redemption
+      auditLog.couponId = redeemedCoupon.id;
+      auditLog.success = true;
+      auditLog.failureReason = null;
+      await db.insert(couponRedemptions).values(auditLog);
+
+      return {
+        success: true,
+        coupon: redeemedCoupon,
+        message: `Coupon successfully redeemed! Verification code: ${verificationCode}`
+      };
+
+    } catch (error) {
+      // Log failed redemption attempt
+      auditLog.failureReason = `System error: ${error instanceof Error ? error.message : 'Unknown error'}`;
+      await db.insert(couponRedemptions).values(auditLog);
+      
+      console.error("Error redeeming coupon:", error);
+      return {
+        success: false,
+        message: "System error occurred during redemption. Please try again or contact support."
+      };
     }
-    
-    return coupon;
+  }
+
+  // Get redemption history for audit purposes
+  async getCouponRedemptionHistory(couponCode: string): Promise<CouponRedemption[]> {
+    return await db
+      .select()
+      .from(couponRedemptions)
+      .where(eq(couponRedemptions.couponCode, couponCode))
+      .orderBy(desc(couponRedemptions.attemptedAt));
+  }
+
+  // Check if coupon is valid for redemption (without redeeming)
+  async validateCouponForRedemption(couponCode: string): Promise<{
+    valid: boolean; 
+    coupon?: Coupon; 
+    message: string;
+    canRedeem: boolean;
+  }> {
+    const [coupon] = await db
+      .select()
+      .from(coupons)
+      .where(eq(coupons.couponCode, couponCode))
+      .limit(1);
+
+    if (!coupon) {
+      return {
+        valid: false,
+        message: "Coupon code not found",
+        canRedeem: false
+      };
+    }
+
+    if (coupon.isRedeemed) {
+      return {
+        valid: true,
+        coupon,
+        message: `Already redeemed on ${coupon.redeemedAt?.toLocaleDateString('en-ZA')} ${coupon.redemptionLocation ? `at ${coupon.redemptionLocation}` : ''}`,
+        canRedeem: false
+      };
+    }
+
+    if (coupon.expiryDate && new Date() > coupon.expiryDate) {
+      return {
+        valid: true,
+        coupon,
+        message: `Expired on ${coupon.expiryDate.toLocaleDateString('en-ZA')}`,
+        canRedeem: false
+      };
+    }
+
+    return {
+      valid: true,
+      coupon,
+      message: "Valid coupon ready for redemption",
+      canRedeem: true
+    };
   }
 
   async expireCoupon(id: string): Promise<Coupon> {

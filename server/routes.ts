@@ -1341,14 +1341,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Enhanced coupon redemption with security and audit trail
   app.post('/api/coupons/:code/redeem', async (req, res) => {
     try {
-      const { redemptionNotes } = req.body;
-      const coupon = await storage.redeemCoupon(req.params.code, redemptionNotes);
-      res.json(coupon);
+      const { location, notes } = req.body;
+      const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+      const userAgent = req.get('User-Agent') || 'unknown';
+      
+      const result = await storage.redeemCoupon(req.params.code, {
+        location,
+        notes,
+        ipAddress: clientIp,
+        userAgent
+      });
+      
+      if (result.success) {
+        res.json({
+          success: true,
+          message: result.message,
+          coupon: result.coupon,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: result.message,
+          timestamp: new Date().toISOString()
+        });
+      }
     } catch (error) {
       console.error("Error redeeming coupon:", error);
-      res.status(500).json({ message: "Failed to redeem coupon" });
+      res.status(500).json({ 
+        success: false,
+        message: "System error occurred during redemption. Please try again or contact support.",
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+
+  // New endpoint: Validate coupon without redeeming
+  app.get('/api/coupons/:code/validate', async (req, res) => {
+    try {
+      const validation = await storage.validateCouponForRedemption(req.params.code);
+      res.json(validation);
+    } catch (error) {
+      console.error("Error validating coupon:", error);
+      res.status(500).json({ 
+        valid: false,
+        message: "Error validating coupon",
+        canRedeem: false
+      });
+    }
+  });
+
+  // New endpoint: Get redemption audit trail
+  app.get('/api/coupons/:code/history', async (req, res) => {
+    try {
+      const history = await storage.getCouponRedemptionHistory(req.params.code);
+      res.json(history);
+    } catch (error) {
+      console.error("Error fetching coupon history:", error);
+      res.status(500).json({ message: "Failed to fetch coupon history" });
     }
   });
 

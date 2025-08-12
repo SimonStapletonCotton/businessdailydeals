@@ -127,8 +127,25 @@ export const coupons = pgTable("coupons", {
   purchasePrice: decimal("purchase_price", { precision: 10, scale: 2 }).notNull(),
   isRedeemed: boolean("is_redeemed").default(false),
   redeemedAt: timestamp("redeemed_at"),
+  redemptionLocation: text("redemption_location"), // Branch/location where redeemed
+  redemptionNotes: text("redemption_notes"), // Additional redemption details
+  redemptionVerificationCode: text("redemption_verification_code"), // Unique verification for redemption
   expiryDate: timestamp("expiry_date"),
   createdAt: timestamp("created_at").defaultNow()
+});
+
+// Coupon redemption audit trail
+export const couponRedemptions = pgTable("coupon_redemptions", {
+  id: text("id").primaryKey(),
+  couponId: text("coupon_id").notNull(),
+  couponCode: text("coupon_code").notNull(),
+  attemptedAt: timestamp("attempted_at").defaultNow(),
+  success: boolean("success").notNull(),
+  location: text("location"), // Branch/store location
+  notes: text("notes"), // Redemption attempt notes
+  ipAddress: text("ip_address"), // IP tracking for security
+  userAgent: text("user_agent"), // Browser/device info
+  failureReason: text("failure_reason") // Why redemption failed if applicable
 });
 
 // Shopping basket for rates/advertising
@@ -374,6 +391,7 @@ export const insertBannerAdSchema = createInsertSchema(bannerAds);
 export const insertCompanySchema = createInsertSchema(companies);
 export const insertSiteAnalyticsSchema = createInsertSchema(siteAnalytics);
 export const insertDealRequestSchema = createInsertSchema(dealRequests);
+export const insertCouponRedemptionSchema = createInsertSchema(couponRedemptions);
 
 // Update schemas
 export const upsertUserSchema = insertUserSchema.partial().extend({
@@ -395,6 +413,7 @@ export const selectBannerAdSchema = createSelectSchema(bannerAds);
 export const selectCompanySchema = createSelectSchema(companies);
 export const selectSiteAnalyticsSchema = createSelectSchema(siteAnalytics);
 export const selectDealRequestSchema = createSelectSchema(dealRequests);
+export const selectCouponRedemptionSchema = createSelectSchema(couponRedemptions);
 
 // Type exports
 export type User = typeof users.$inferSelect;
@@ -426,6 +445,8 @@ export type SiteAnalytics = typeof siteAnalytics.$inferSelect;
 export type InsertSiteAnalytics = z.infer<typeof insertSiteAnalyticsSchema>;
 export type DealRequest = typeof dealRequests.$inferSelect;
 export type InsertDealRequest = z.infer<typeof insertDealRequestSchema>;
+export type CouponRedemption = typeof couponRedemptions.$inferSelect;
+export type InsertCouponRedemption = z.infer<typeof insertCouponRedemptionSchema>;
 
 // Complex types
 export type DealWithSupplier = Deal & { supplier: User };
