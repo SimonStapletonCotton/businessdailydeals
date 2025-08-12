@@ -26,8 +26,8 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
   // Use relative path since CSP is fixed
   console.log('✅ Rendering image with src:', src);
 
-  // Remove cache busting for now to test base functionality
-  const cacheBustedSrc = src;
+  // Use stable cache busting to force browser refresh after route fix
+  const cacheBustedSrc = `${src}?v=fixed-${Math.floor(Date.now() / 10000)}`;
   
   return (
     <img 
