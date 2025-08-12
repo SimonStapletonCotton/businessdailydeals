@@ -30,8 +30,9 @@ export default function WorkingHome() {
               <Badge variant="secondary">South Africa's B2B Marketplace</Badge>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/test-dashboard" className="text-orange-200 hover:text-white">Test Dashboard</Link>
+              <Link href="/supplier-dashboard" className="text-orange-200 hover:text-white">Suppliers</Link>
               <Link href="/hot-deals" className="text-orange-200 hover:text-white">Hot Deals</Link>
+              <Link href="/search" className="text-orange-200 hover:text-white">Search</Link>
             </div>
           </div>
         </div>
@@ -47,10 +48,10 @@ export default function WorkingHome() {
             Connect suppliers with buyers through exclusive daily deals and special pricing
           </p>
           <div className="flex justify-center space-x-4">
-            <Link href="/test-dashboard">
+            <Link href="/supplier-dashboard">
               <Button size="lg" className="bg-orange-600 hover:bg-orange-700">
                 <Package className="h-5 w-5 mr-2" />
-                View Dashboard
+                Supplier Portal
               </Button>
             </Link>
             <Link href="/hot-deals">
@@ -196,11 +197,11 @@ export default function WorkingHome() {
 
         {/* Quick Access */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Link href="/test-dashboard">
+          <Link href="/supplier-dashboard">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="p-6 text-center">
                 <Package className="h-12 w-12 text-orange-600 mx-auto mb-4" />
-                <h3 className="font-semibold mb-2">Supplier Dashboard</h3>
+                <h3 className="font-semibold mb-2">Supplier Portal</h3>
                 <p className="text-sm text-gray-600">Manage deals and track performance</p>
               </CardContent>
             </Card>
