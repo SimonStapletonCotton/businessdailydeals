@@ -163,6 +163,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Auth middleware
   await setupAuth(app);
+  
+  // TEMPORARY: Debug authentication endpoint to bypass login for testing
+  app.get("/api/debug/auth", async (req, res) => {
+    try {
+      // Create a test user for debugging
+      const testUser = await storage.upsertUser({
+        id: "test-user-debug-123",
+        email: "test@example.com",
+        firstName: "Test",
+        lastName: "User",
+        userType: "supplier"
+      });
+      
+      // Manually set the session
+      req.session.passport = { user: testUser };
+      req.user = testUser;
+      
+      res.json({ 
+        message: "Debug authentication successful", 
+        user: testUser,
+        session: req.session.id
+      });
+    } catch (error) {
+      console.error("Debug auth error:", error);
+      res.status(500).json({ 
+        error: "Debug auth failed", 
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
 
   // SYSTEM ADMIN ENDPOINTS - Using different path to avoid middleware conflicts
   
