@@ -58,13 +58,26 @@ app.use((req, res, next) => {
     }
     
     log("✅ Environment variables verified");
-
-    // Test database connection before starting server
-    try {
+    
+    // Check MySQL credentials and initialize database
+    const hasMySQLCredentials = process.env.MYSQL_HOST && 
+                              process.env.MYSQL_USER && 
+                              process.env.MYSQL_PASSWORD && 
+                              process.env.MYSQL_DATABASE;
+    
+    if (hasMySQLCredentials) {
+      log("🔄 MySQL credentials detected, initializing unified database...");
+      try {
+        const db = await initializeDatabase();
+        log("✅ MySQL unified database connection established");
+      } catch (error) {
+        log(`❌ MySQL connection failed: ${error}`);
+        log("⚠️ Falling back to PostgreSQL");
+        await testDatabaseConnection();
+      }
+    } else {
+      log("ℹ️ Using PostgreSQL development database");
       await testDatabaseConnection();
-    } catch (error) {
-      log(`❌ Database connection test failed: ${error}`);
-      process.exit(1);
     }
 
     // Register API routes BEFORE Vite middleware to ensure proper routing
