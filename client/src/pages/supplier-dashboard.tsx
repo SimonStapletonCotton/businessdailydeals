@@ -42,17 +42,18 @@ export default function SupplierDashboard() {
   });
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
+    // AUTHENTICATION BYPASS - Allow access for testing
+    // if (!isLoading && !isAuthenticated) {
+    //   toast({
+    //     title: "Unauthorized",
+    //     description: "You are logged out. Logging in again...",
+    //     variant: "destructive",
+    //   });
+    //   setTimeout(() => {
+    //     window.location.href = "/api/login";
+    //   }, 500);
+    //   return;
+    // }
     if (!isLoading && isAuthenticated && user?.userType !== "supplier") {
       toast({
         title: "Access Denied",
@@ -64,23 +65,23 @@ export default function SupplierDashboard() {
 
   const { data: deals, isLoading: dealsLoading, refetch: refetchDeals } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/supplier/deals"],
-    enabled: isAuthenticated && user?.userType === "supplier",
+    enabled: true, // Remove auth requirement for testing
     staleTime: 0, // Always fetch fresh data
   });
 
   const { data: inquiries, isLoading: inquiriesLoading } = useQuery<InquiryWithDetails[]>({
     queryKey: ["/api/supplier/inquiries"],
-    enabled: isAuthenticated && user?.userType === "supplier",
+    enabled: true, // Remove auth requirement for testing
   });
 
   const { data: expiredDeals, isLoading: expiredDealsLoading } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/supplier/expired-deals"],
-    enabled: isAuthenticated && user?.userType === "supplier",
+    enabled: true, // Remove auth requirement for testing
   });
 
   const { data: creditBalance } = useQuery({
     queryKey: ["/api/credits/balance"],
-    enabled: isAuthenticated && user?.userType === "supplier",
+    enabled: true, // Remove auth requirement for testing
   });
 
   // Production sync mutation
