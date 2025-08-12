@@ -2357,8 +2357,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const bucket = global.objectStorageClient.bucket(bucketId);
       const file = bucket.file(`public/${filePath}`);
       
-      // Just download and send - no complex streaming
+      // Check if file exists first
+      const [exists] = await file.exists();
+      if (!exists) {
+        console.log(`❌ File not found in bucket: public/${filePath}`);
+        return res.status(404).send('File not found');
+      }
+      
+      // Download and send
       const [buffer] = await file.download();
+      console.log(`✅ File downloaded: public/${filePath}, size: ${buffer.length} bytes`);
       
       res.set({
         'Content-Type': filePath.toLowerCase().endsWith('.jpg') || filePath.toLowerCase().endsWith('.jpeg') ? 'image/jpeg' : 
