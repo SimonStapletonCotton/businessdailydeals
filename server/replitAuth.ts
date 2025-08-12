@@ -126,9 +126,30 @@ export async function setupAuth(app: Express) {
   app.get("/api/callback", (req, res, next) => {
     // Always use the configured domain from REPLIT_DOMAINS
     const domain = process.env.REPLIT_DOMAINS!.split(",")[0];
-    passport.authenticate(`replitauth:${domain}`, {
-      successReturnToOrRedirect: "/",
-      failureRedirect: "/api/login?error=callback_failed",
+    console.log("🔐 AUTH CALLBACK: Processing callback for domain:", domain);
+    console.log("🔐 AUTH CALLBACK: Query params:", req.query);
+    
+    passport.authenticate(`replitauth:${domain}`, (err, user, info) => {
+      if (err) {
+        console.error("🔐 AUTH ERROR:", err);
+        return res.redirect("/api/login?error=auth_error");
+      }
+      if (!user) {
+        console.error("🔐 AUTH FAILED: No user returned:", info);
+        return res.redirect("/api/login?error=no_user");
+      }
+      
+      console.log("🔐 AUTH SUCCESS: User authenticated:", user.id);
+      
+      req.logIn(user, (loginErr) => {
+        if (loginErr) {
+          console.error("🔐 LOGIN ERROR:", loginErr);
+          return res.redirect("/api/login?error=login_failed");
+        }
+        
+        console.log("🔐 SESSION CREATED: User logged in successfully");
+        return res.redirect("/");
+      });
     })(req, res, next);
   });
 
