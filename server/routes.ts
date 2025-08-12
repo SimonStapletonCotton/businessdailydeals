@@ -167,23 +167,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // TEMPORARY: Debug authentication endpoint to bypass login for testing
   app.get("/api/debug/auth", async (req, res) => {
     try {
-      // Create a test user for debugging
-      const testUser = await storage.upsertUser({
-        id: "test-user-debug-123",
-        email: "test@example.com",
-        firstName: "Test",
-        lastName: "User",
-        userType: "supplier"
-      });
+      // Create or get existing test user for debugging
+      let testUser;
+      try {
+        testUser = await storage.upsertUser({
+          id: "test-user-debug-123",
+          email: `test-debug-${Date.now()}@businessdailydeals.co.za`,
+          firstName: "Test",
+          lastName: "Supplier",
+          userType: "supplier"
+        });
+      } catch (error) {
+        // If user exists, just use the existing user by ID
+        testUser = await storage.getUser("test-user-debug-123");
+        if (!testUser) {
+          // Create with unique email
+          testUser = await storage.createUser({
+            id: "test-user-debug-123",
+            email: `test-debug-${Date.now()}@businessdailydeals.co.za`,
+            firstName: "Test",
+            lastName: "Supplier",
+            userType: "supplier"
+          });
+        }
+      }
       
-      // Manually set the session
-      req.session.passport = { user: testUser };
-      req.user = testUser;
-      
-      res.json({ 
-        message: "Debug authentication successful", 
-        user: testUser,
-        session: req.session.id
+      // Manually login the user
+      req.login(testUser, (err) => {
+        if (err) {
+          console.error("Manual login error:", err);
+          return res.status(500).json({ error: "Login failed" });
+        }
+        
+        console.log("🔐 DEBUG AUTH: User logged in successfully:", testUser.id);
+        res.json({ 
+          message: "Debug authentication successful", 
+          user: testUser,
+          sessionId: req.sessionID,
+          isAuthenticated: req.isAuthenticated()
+        });
       });
     } catch (error) {
       console.error("Debug auth error:", error);
@@ -192,6 +214,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: error instanceof Error ? error.message : "Unknown error"
       });
     }
+  });
+  
+  // Simple session test endpoint
+  app.get("/api/test/session", (req, res) => {
+    res.json({
+      sessionId: req.sessionID,
+      isAuthenticated: req.isAuthenticated(),
+      user: req.user,
+      session: req.session
+    });
   });
 
   // SYSTEM ADMIN ENDPOINTS - Using different path to avoid middleware conflicts
