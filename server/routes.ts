@@ -2378,10 +2378,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Get file metadata and set headers
       const [metadata] = await file.getMetadata();
+      
+      // Determine content type from file extension if metadata doesn't have it
+      let contentType = metadata.contentType;
+      if (!contentType || contentType === "application/octet-stream") {
+        const ext = filePath.toLowerCase().split('.').pop();
+        switch (ext) {
+          case 'jpg':
+          case 'jpeg':
+            contentType = 'image/jpeg';
+            break;
+          case 'png':
+            contentType = 'image/png';
+            break;
+          case 'gif':
+            contentType = 'image/gif';
+            break;
+          case 'webp':
+            contentType = 'image/webp';
+            break;
+          default:
+            contentType = 'image/jpeg'; // fallback
+        }
+      }
+      
       res.set({
-        "Content-Type": metadata.contentType || "application/octet-stream",
+        "Content-Type": contentType,
         "Content-Length": metadata.size,
         "Cache-Control": "public, max-age=3600",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "Content-Type"
       });
 
       // Robust streaming with timeout and retry

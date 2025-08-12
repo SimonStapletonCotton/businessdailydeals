@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Test</title>
+</head>
+<body>
+    <h1>Direct Image Test</h1>
+    <img src="/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg" 
+         style="max-width: 300px; border: 2px solid red;" 
+         onload="console.log('✅ Image loaded successfully')"
+         onerror="console.error('❌ Image failed to load')">
+    
+    <img src="/public-objects/product-images/Tg7hPOh3CxbWQt8rzmY1N.jpg" 
+         style="max-width: 300px; border: 2px solid blue;" 
+         onload="console.log('✅ Image 2 loaded successfully')"
+         onerror="console.error('❌ Image 2 failed to load')">
+    
+    <img src="/public-objects/product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG" 
+         style="max-width: 300px; border: 2px solid green;" 
+         onload="console.log('✅ Image 3 loaded successfully')"
+         onerror="console.error('❌ Image 3 failed to load')">
+
+    <script>
+        // Test fetch directly
+        async function testImage() {
+            try {
+                const response = await fetch('/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg');
+                console.log('Fetch response status:', response.status);
+                console.log('Fetch response headers:', Object.fromEntries(response.headers.entries()));
+                if (response.ok) {
+                    const blob = await response.blob();
+                    console.log('Blob size:', blob.size, 'type:', blob.type);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+        testImage();
+    </script>
+</body>
+</html>
