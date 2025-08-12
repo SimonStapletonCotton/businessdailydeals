@@ -225,6 +225,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
       session: req.session
     });
   });
+  
+  // Authentication status page for browser testing
+  app.get("/auth-status", (req, res) => {
+    const authStatus = {
+      isAuthenticated: req.isAuthenticated(),
+      user: req.user,
+      sessionId: req.sessionID,
+      timestamp: new Date().toISOString()
+    };
+    
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Authentication Status - Business Daily Deals</title>
+        <meta charset="UTF-8">
+        <style>
+          body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+          .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+          .status { padding: 10px; border-radius: 4px; margin: 10px 0; }
+          .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+          .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+          .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+          pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+          .button { display: inline-block; padding: 10px 20px; margin: 10px 5px; text-decoration: none; border-radius: 4px; }
+          .btn-primary { background: #007bff; color: white; }
+          .btn-success { background: #28a745; color: white; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Business Daily Deals - Authentication Status</h1>
+          
+          <div class="status ${authStatus.isAuthenticated ? 'success' : 'error'}">
+            <strong>Authentication Status:</strong> ${authStatus.isAuthenticated ? 'AUTHENTICATED ✓' : 'NOT AUTHENTICATED ✗'}
+          </div>
+          
+          ${authStatus.isAuthenticated ? `
+            <div class="status success">
+              <strong>Welcome:</strong> ${authStatus.user.firstName} ${authStatus.user.lastName} (${authStatus.user.userType})
+            </div>
+            <div class="status info">
+              <strong>Email:</strong> ${authStatus.user.email}
+            </div>
+          ` : ''}
+          
+          <div class="status info">
+            <strong>Session ID:</strong> ${authStatus.sessionId}
+          </div>
+          
+          <div class="status info">
+            <strong>Timestamp:</strong> ${authStatus.timestamp}
+          </div>
+          
+          <h2>Actions</h2>
+          ${!authStatus.isAuthenticated ? `
+            <a href="/api/debug/auth" class="button btn-success">🔐 Debug Login (Test Account)</a>
+            <a href="/api/login" class="button btn-primary">🔑 Official Login (Replit OAuth)</a>
+          ` : `
+            <a href="/supplier-dashboard" class="button btn-primary">📊 Supplier Dashboard</a>
+            <a href="/" class="button btn-primary">🏠 Home Page</a>
+            <a href="/api/logout" class="button btn-primary">🚪 Logout</a>
+          `}
+          
+          <h2>Debug Information</h2>
+          <pre>${JSON.stringify(authStatus, null, 2)}</pre>
+        </div>
+      </body>
+      </html>
+    `);
+  });
 
   // SYSTEM ADMIN ENDPOINTS - Using different path to avoid middleware conflicts
   
