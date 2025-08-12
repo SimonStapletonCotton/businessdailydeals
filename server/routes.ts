@@ -2398,27 +2398,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const stream = file.createReadStream({
         validation: false, // Skip integrity checks for speed
       });
-      
+
       let streamStarted = false;
       
-      stream.on("error", (err) => {
-        console.error(`🔴 STREAM ERROR for ${filePath}:`, err.message);
-        if (!res.headersSent) {
-          res.status(500).json({ error: "Error streaming file" });
-        }
-      });
-      
-      stream.on("data", () => {
+      stream.on('data', () => {
         if (!streamStarted) {
-          streamStarted = true;
           console.log(`📡 STREAM STARTED: ${filePath}`);
+          streamStarted = true;
         }
       });
-      
-      stream.on("end", () => {
+
+      stream.on('end', () => {
         console.log(`✅ STREAM COMPLETE: ${filePath}`);
       });
-      
+
+      stream.on('error', (error) => {
+        console.error(`❌ STREAM ERROR for ${filePath}:`, error);
+        if (!res.headersSent) {
+          res.status(500).json({ error: "Stream error", details: error.message });
+        }
+      });
+
+      // Pipe the stream to response
       stream.pipe(res);
       
     } catch (error) {
