@@ -20,12 +20,24 @@ export default function NotFound() {
               The page you're looking for doesn't exist or has been moved.
             </p>
 
-            <Link href="/">
-              <Button className="w-full" data-testid="button-back-home">
-                <Home className="h-4 w-4 mr-2" />
-                Back to Home
-              </Button>
-            </Link>
+            <div className="space-y-3">
+              <Link href="/">
+                <Button className="w-full" data-testid="button-back-home">
+                  <Home className="h-4 w-4 mr-2" />
+                  Back to Home
+                </Button>
+              </Link>
+              <Link href="/test-dashboard">
+                <Button variant="outline" className="w-full" data-testid="button-test-dashboard">
+                  Test Dashboard (Working)
+                </Button>
+              </Link>
+              <Link href="/hot-deals">
+                <Button variant="outline" className="w-full" data-testid="button-hot-deals">
+                  Hot Deals (Working)
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
