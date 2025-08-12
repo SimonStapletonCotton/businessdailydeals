@@ -128,22 +128,57 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    // Always use the configured domain from REPLIT_DOMAINS
-    const domain = process.env.REPLIT_DOMAINS!.split(",")[0];
+    // Use the actual request host to handle URL changes
+    const domain = req.get('host') || process.env.REPLIT_DOMAINS!.split(",")[0];
+    console.log("🔐 LOGIN: Using domain:", domain);
+    console.log("🔐 LOGIN: Available strategies:", Object.keys(passport._strategies));
     
-    passport.authenticate(`replitauth:${domain}`, {
+    // Create strategy dynamically if it doesn't exist using the same config
+    const strategyName = `replitauth:${domain}`;
+    if (!passport._strategies[strategyName]) {
+      console.log(`🔐 LOGIN: Creating new strategy for domain: ${domain}`);
+      const strategy = new Strategy(
+        {
+          name: strategyName,
+          config,
+          scope: "openid email profile offline_access",
+          callbackURL: `https://${domain}/api/callback`,
+        },
+        verify,
+      );
+      passport.use(strategy);
+    }
+    
+    passport.authenticate(strategyName, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
-    // Always use the configured domain from REPLIT_DOMAINS
-    const domain = process.env.REPLIT_DOMAINS!.split(",")[0];
+    // Use the actual request host to handle URL changes
+    const domain = req.get('host') || process.env.REPLIT_DOMAINS!.split(",")[0];
     console.log("🔐 AUTH CALLBACK: Processing callback for domain:", domain);
     console.log("🔐 AUTH CALLBACK: Query params:", req.query);
+    console.log("🔐 AUTH CALLBACK: Available strategies:", Object.keys(passport._strategies));
     
-    passport.authenticate(`replitauth:${domain}`, (err, user, info) => {
+    // Create strategy dynamically if it doesn't exist using the same config
+    const strategyName = `replitauth:${domain}`;
+    if (!passport._strategies[strategyName]) {
+      console.log(`🔐 CALLBACK: Creating new strategy for domain: ${domain}`);
+      const strategy = new Strategy(
+        {
+          name: strategyName,
+          config,
+          scope: "openid email profile offline_access",
+          callbackURL: `https://${domain}/api/callback`,
+        },
+        verify,
+      );
+      passport.use(strategy);
+    }
+    
+    passport.authenticate(strategyName, (err, user, info) => {
       if (err) {
         console.error("🔐 AUTH ERROR:", err);
         return res.redirect("/api/login?error=auth_error");
