@@ -2459,6 +2459,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Debug page route
+  app.get('/debug-image-test.html', (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Test</title>
+    <style>
+        body { margin: 20px; font-family: Arial, sans-serif; }
+        img { margin: 10px; border: 2px solid #ccc; max-width: 300px; }
+        .working { border-color: green !important; }
+        .failed { border-color: red !important; }
+        .log { background: #f5f5f5; padding: 10px; margin: 10px 0; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Direct Image Test</h1>
+    <p>Testing image loading directly...</p>
+    <div id="log" class="log"></div>
+    
+    <img id="img1" src="/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg?t=${Date.now()}" 
+         onload="logSuccess('Image 1 loaded')" 
+         onerror="logError('Image 1 failed')">
+    
+    <img id="img2" src="/public-objects/product-images/Tg7hPOh3CxbWQt8rzmY1N.jpg?t=${Date.now()}" 
+         onload="logSuccess('Image 2 loaded')" 
+         onerror="logError('Image 2 failed')">
+    
+    <img id="img3" src="/public-objects/product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG?t=${Date.now()}" 
+         onload="logSuccess('Image 3 loaded')" 
+         onerror="logError('Image 3 failed')">
+
+    <script>
+        const logDiv = document.getElementById('log');
+        
+        function logMessage(msg, type = 'info') {
+            console.log(msg);
+            logDiv.innerHTML += \`<div style="color: \${type === 'error' ? 'red' : 'green'}">\${new Date().toLocaleTimeString()}: \${msg}</div>\`;
+        }
+        
+        function logSuccess(msg) {
+            logMessage('✅ ' + msg, 'success');
+        }
+        
+        function logError(msg) {
+            logMessage('❌ ' + msg, 'error');
+        }
+        
+        logMessage('Starting image tests...');
+        
+        // Test fetch directly
+        async function testFetch() {
+            try {
+                const response = await fetch('/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg?fetch=test');
+                logMessage(\`Fetch status: \${response.status} \${response.statusText}\`);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    logMessage(\`Blob size: \${blob.size} bytes, type: \${blob.type}\`);
+                } else {
+                    const text = await response.text();
+                    logMessage(\`Error response: \${text}\`, 'error');
+                }
+            } catch (error) {
+                logMessage(\`Fetch error: \${error.message}\`, 'error');
+            }
+        }
+        
+        setTimeout(testFetch, 1000);
+    </script>
+</body>
+</html>`);
+  });
+
   // Upload routes - import at top level
   const uploadRoutes = (await import('./routes/upload')).default;
   app.use('/api/upload', uploadRoutes);

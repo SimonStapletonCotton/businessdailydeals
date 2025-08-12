@@ -2,9 +2,16 @@
 <html>
 <head>
     <title>Image Test</title>
+    <style>
+        body { margin: 20px; font-family: Arial, sans-serif; }
+        img { margin: 10px; border: 2px solid #ccc; }
+        .working { border-color: green !important; }
+        .failed { border-color: red !important; }
+    </style>
 </head>
 <body>
     <h1>Direct Image Test</h1>
+    <p>Testing image loading directly...</p>
     <img src="/public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg" 
          style="max-width: 300px; border: 2px solid red;" 
          onload="console.log('✅ Image loaded successfully')"
