@@ -39,7 +39,7 @@ export default function HotDeals() {
   // Remove authentication redirect - let pages load for everyone
 
   const { data: deals, isLoading: dealsLoading, error } = useQuery<DealWithSupplier[]>({
-    queryKey: ["/api/deals", "hot", searchQuery, selectedCategory, Date.now()],
+    queryKey: ["/api/deals", "hot", searchQuery, selectedCategory],
     queryFn: async () => {
       const params = new URLSearchParams();
       params.set("type", "hot");
@@ -61,6 +61,8 @@ export default function HotDeals() {
       return data;
     },
     enabled: true, // Allow loading for everyone
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
   });
 
   console.log("Hot deals state:", { deals, dealsLoading, error });
