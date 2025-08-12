@@ -2330,6 +2330,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/public-objects/:filePath(*)", async (req, res) => {
     try {
       const filePath = req.params.filePath;
+      console.log(`🌟 Image request received: ${req.url} -> filePath: ${filePath}`);
       const bucketId = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID;
       
       if (!bucketId) {

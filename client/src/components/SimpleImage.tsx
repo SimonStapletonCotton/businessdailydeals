@@ -21,12 +21,13 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
     );
   }
 
-  // Add debugging to see what URL is being used
-  console.log('SimpleImage rendering with src:', src);
+  // Force absolute URL to prevent relative path issues
+  const absoluteSrc = src.startsWith('/') ? src : `/${src}`;
+  console.log('SimpleImage: src =', src, 'absoluteSrc =', absoluteSrc);
   
   return (
     <img 
-      src={src} 
+      src={absoluteSrc} 
       alt={alt} 
       style={{
         width: '100%',
@@ -35,9 +36,9 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
         borderRadius: '8px'
       }}
       className={className}
-      onLoad={() => console.log('✅ SimpleImage loaded:', src)}
+      onLoad={() => console.log('✅ SimpleImage loaded:', absoluteSrc)}
       onError={(e) => {
-        console.log('❌ SimpleImage failed:', src);
+        console.log('❌ SimpleImage failed:', absoluteSrc);
         const target = e.target as HTMLImageElement;
         target.style.display = 'none';
         const parent = target.parentElement;
