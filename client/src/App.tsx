@@ -35,6 +35,7 @@ import PrivacyPolicy from "@/pages/privacy-policy";
 import ColorSwatches from "@/pages/color-swatches";
 import LiveCoupons from "@/pages/live-coupons";
 import CouponVerification from "@/pages/coupon-verification";
+import TestDashboard from "@/pages/test-dashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -78,6 +79,7 @@ function Router() {
       <Route path="/coupon/:code" component={CouponPage} />
       <Route path="/live-coupons" component={LiveCoupons} />
       <Route path="/coupon-verification" component={CouponVerification} />
+      <Route path="/test-dashboard" component={TestDashboard} />
       
       {/* Make core pages accessible to everyone - ensure home is first */}
       <Route path="/" component={Home} />
