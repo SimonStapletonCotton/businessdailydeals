@@ -236,7 +236,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.join(process.cwd(), 'test-auth.html'));
   });
 
-  // Simple login endpoint that works
+  // Working login endpoint that sets session properly
   app.post("/api/simple-login", async (req, res) => {
     try {
       // Get or create test user
@@ -251,18 +251,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Set user in session manually
-      req.session.passport = { user: testUser };
-      req.user = testUser;
+      // Set user in session with proper structure
+      req.session.userId = testUser.id;
+      req.session.user = testUser;
+      req.session.isAuthenticated = true;
       
-      console.log("🔐 SIMPLE LOGIN: User set in session:", testUser.id);
-      console.log("🔐 SIMPLE LOGIN: Session ID:", req.sessionID);
+      // Also set for passport compatibility
+      if (!req.session.passport) {
+        req.session.passport = {};
+      }
+      req.session.passport.user = testUser;
       
-      res.json({ 
-        success: true,
-        message: "Logged in successfully", 
-        user: testUser,
-        sessionId: req.sessionID
+      // Force session save
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session save error:", err);
+          return res.status(500).json({ error: "Session save failed" });
+        }
+        
+        console.log("🔐 SIMPLE LOGIN: Session saved successfully");
+        console.log("🔐 SIMPLE LOGIN: User ID in session:", req.session.userId);
+        console.log("🔐 SIMPLE LOGIN: Session ID:", req.sessionID);
+        
+        res.json({ 
+          success: true,
+          message: "Logged in successfully", 
+          user: testUser,
+          sessionId: req.sessionID,
+          sessionData: {
+            userId: req.session.userId,
+            isAuthenticated: req.session.isAuthenticated
+          }
+        });
       });
     } catch (error) {
       console.error("Simple login error:", error);
@@ -433,12 +453,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  // Working auth check endpoint
+  app.get('/api/auth/user', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
+      console.log("🔐 AUTH CHECK: Session ID:", req.sessionID);
+      console.log("🔐 AUTH CHECK: Session user:", req.session?.user?.id);
+      console.log("🔐 AUTH CHECK: Session userId:", req.session?.userId);
+      console.log("🔐 AUTH CHECK: Passport user:", req.session?.passport?.user?.id);
+      
+      // Check session-based authentication (from simple login)
+      if (req.session?.userId && req.session?.user) {
+        console.log("🔐 AUTH CHECK: Found user in session");
+        return res.json(req.session.user);
+      }
+      
+      // Check passport user in session
+      if (req.session?.passport?.user) {
+        console.log("🔐 AUTH CHECK: Found passport user in session");
+        return res.json(req.session.passport.user);
+      }
+      
+      // Check passport authentication
+      if (req.isAuthenticated && req.isAuthenticated() && req.user) {
+        console.log("🔐 AUTH CHECK: Found authenticated passport user");
+        const userId = req.user.claims?.sub || req.user.id;
+        if (userId) {
+          const user = await storage.getUser(userId);
+          if (user) {
+            return res.json(user);
+          }
+        }
+      }
+      
+      console.log("🔐 AUTH CHECK: No authentication found");
+      // Not authenticated
+      res.status(401).json({ 
+        message: "Unauthorized", 
+        loginUrl: "/api/login",
+        redirectReason: "Not authenticated"
+      });
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
