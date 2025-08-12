@@ -2413,47 +2413,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "Access-Control-Allow-Headers": "Content-Type"
       });
 
-      // Robust streaming with timeout and retry
-      console.log(`🔄 STREAMING IMAGE: ${filePath} from bucket ${bucketId}`);
+      // Download to buffer first, then send to browser (more reliable)
+      console.log(`🔄 DOWNLOADING IMAGE: ${filePath} from bucket ${bucketId}`);
       
-      // Set a reasonable timeout for the response
-      res.setTimeout(30000, () => {
-        console.error(`⏰ TIMEOUT streaming ${filePath}`);
+      try {
+        // Download the entire file to buffer
+        const [buffer] = await file.download();
+        console.log(`📦 BUFFER SIZE: ${buffer.length} bytes for ${filePath}`);
+        
+        // Send the buffer directly to browser
+        res.send(buffer);
+        console.log(`✅ IMAGE SENT: ${filePath}`);
+        
+      } catch (downloadError: any) {
+        console.error(`❌ DOWNLOAD ERROR for ${filePath}:`, downloadError);
         if (!res.headersSent) {
-          res.status(504).json({ error: "Stream timeout" });
+          res.status(500).json({ error: "Download error", details: downloadError.message });
         }
-      });
-      
-      const stream = file.createReadStream({
-        validation: false, // Skip integrity checks for speed
-      });
-
-      let streamStarted = false;
-      
-      stream.on('data', () => {
-        if (!streamStarted) {
-          console.log(`📡 STREAM STARTED: ${filePath}`);
-          streamStarted = true;
-        }
-      });
-
-      stream.on('end', () => {
-        console.log(`✅ STREAM COMPLETE: ${filePath}`);
-        // Ensure response ends properly if not already ended
-        if (!res.headersSent && !res.destroyed) {
-          res.end();
-        }
-      });
-
-      stream.on('error', (error: any) => {
-        console.error(`❌ STREAM ERROR for ${filePath}:`, error);
-        if (!res.headersSent && !res.destroyed) {
-          res.status(500).json({ error: "Stream error", details: error.message });
-        }
-      });
-
-      // Pipe the stream to response
-      stream.pipe(res);
+      }
       
     } catch (error: any) {
       console.error(`🔴 ERROR serving file ${req.params.filePath}:`, error);

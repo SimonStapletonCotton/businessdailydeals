@@ -1,0 +1,30 @@
+objects/product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG
+NNxGFI1n-VBRJ5vpPqqKV.JPG:1  Failed to load resource: the server responded with a status of 500 ()Understand this error
+index-Dc9GFlJ8.js:477 ❌ IMAGE FAILED TO LOAD: /public-objects/product-images/NNxGFI1n-VBRJ5vpPqqKV.JPG?t=1755016067 t
+onError @ index-Dc9GFlJ8.js:477Understand this error
+Tg7hPOh3CxbWQt8rzmY1N.jpg:1  Failed to load resource: the server responded with a status of 500 ()Understand this error
+6y9M7PQvU4JNi6f8A39ra.jpg:1  Failed to load resource: the server responded with a status of 500 ()Understand this error
+index-Dc9GFlJ8.js:477 ❌ IMAGE FAILED TO LOAD: /public-objects/product-images/Tg7hPOh3CxbWQt8rzmY1N.jpg?t=1755016067 t
+onError @ index-Dc9GFlJ8.js:477Understand this error
+index-Dc9GFlJ8.js:477 ❌ IMAGE FAILED TO LOAD: /public-objects/product-images/6y9M7PQvU4JNi6f8A39ra.jpg?t=1755016067 t
+onError @ index-Dc9GFlJ8.js:477Understand this error
+index-Dc9GFlJ8.js:477 🖼️ DealImage render: Object
+index-Dc9GFlJ8.js:477 ❌ No src provided, showing placeholder
+index-Dc9GFlJ8.js:477 🖼️ DealImage render: Object
+index-Dc9GFlJ8.js:477 ❌ No src provided, showing placeholder
+index-Dc9GFlJ8.js:477 🖼️ DealImage render: Object
+index-Dc9GFlJ8.js:477 ❌ No src provided, showing placeholder
+index-Dc9GFlJ8.js:477 🖼️ DealImage render: Object
+index-Dc9GFlJ8.js:477 ✅ Rendering image with src: /public-objects/product-images/OjuD4ef-pGlmFVsGktiuC.JPG
+index-Dc9GFlJ8.js:477 🖼️ DealImage render: Object
+index-Dc9GFlJ8.js:477 ✅ Rendering image with src: /public-objects/product-images/OjuD4ef-pGlmFVsGktiuC.JPG
+index-Dc9GFlJ8.js:477 🟢 BANNER AD: Image loaded https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=200&fit=crop&crop=center
+OjuD4ef-pGlmFVsGktiuC.JPG:1  Failed to load resource: the server responded with a status of 500 ()Understand this error
+index-Dc9GFlJ8.js:477 ❌ IMAGE FAILED TO LOAD: /public-objects/product-images/OjuD4ef-pGlmFVsGktiuC.JPG?t=1755016073 t
+onError @ index-Dc9GFlJ8.js:477Understand this error
+index-Dc9GFlJ8.js:477 ❌ IMAGE FAILED TO LOAD: /public-objects/product-images/OjuD4ef-pGlmFVsGktiuC.JPG?t=1755016073 t
+onError @ index-Dc9GFlJ8.js:477Understand this error
+index-Dc9GFlJ8.js:477 🟢 BANNER AD: Image loaded https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=200&fit=crop&crop=center
+index-Dc9GFlJ8.js:477 🟢 BANNER AD: Image loaded https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center
+index-Dc9GFlJ8.js:477 🟢 BANNER AD: Image loaded https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=200&fit=crop&crop=center
+index-Dc9GFlJ8.js:477 🟢 BANNER AD: Image loaded https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=200&fit=crop&crop=center
