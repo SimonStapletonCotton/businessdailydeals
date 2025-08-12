@@ -13,6 +13,7 @@
 - Automatic scaling and maintenance
 - Built-in SSL certificate
 - Professional URL structure
+- May support www.deal-stream-simons27.replit.app
 
 **Next Steps:**
 - Continue using current URL
