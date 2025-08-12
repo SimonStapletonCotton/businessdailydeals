@@ -21,13 +21,13 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
     );
   }
 
-  // Force absolute URL to prevent relative path issues
-  const absoluteSrc = src.startsWith('/') ? src : `/${src}`;
-  console.log('SimpleImage: src =', src, 'absoluteSrc =', absoluteSrc);
+  // Create a full URL to completely avoid relative path issues
+  const fullUrl = `${window.location.origin}${src.startsWith('/') ? src : `/${src}`}`;
+  console.log('SimpleImage: src =', src, 'fullUrl =', fullUrl);
   
   return (
     <img 
-      src={absoluteSrc} 
+      src={fullUrl} 
       alt={alt} 
       style={{
         width: '100%',
@@ -36,9 +36,9 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
         borderRadius: '8px'
       }}
       className={className}
-      onLoad={() => console.log('✅ SimpleImage loaded:', absoluteSrc)}
+      onLoad={() => console.log('✅ SimpleImage loaded:', fullUrl)}
       onError={(e) => {
-        console.log('❌ SimpleImage failed:', absoluteSrc);
+        console.log('❌ SimpleImage failed:', fullUrl);
         const target = e.target as HTMLImageElement;
         target.style.display = 'none';
         const parent = target.parentElement;
