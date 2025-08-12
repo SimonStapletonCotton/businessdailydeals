@@ -36,34 +36,6 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
       }}
       className={className}
       onLoad={() => console.log('✅ Image loaded:', src)}
-      onError={(e) => {
-        console.log('❌ Image failed:', src);
-        const target = e.target as HTMLImageElement;
-        target.style.display = 'none';
-        const parent = target.parentElement;
-        if (parent) {
-          parent.innerHTML = `
-            <div style="
-              width: 100%; 
-              height: 200px; 
-              background: linear-gradient(135deg, #f97316, #ea580c); 
-              border-radius: 8px; 
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              font-size: 1.2rem; 
-              color: white;
-              text-align: center;
-              padding: 10px;
-              font-weight: bold;
-              box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            ">
-              🎰 DEAL IMAGE<br/>
-              <small style="font-size: 0.8rem; opacity: 0.9; margin-top: 4px; display: block;">Casino Loading...</small>
-            </div>
-          `;
-        }
-      }}
     />
   );
 }
