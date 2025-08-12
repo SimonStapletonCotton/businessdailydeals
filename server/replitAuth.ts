@@ -197,7 +197,7 @@ export async function setupAuth(app: Express) {
         }
         
         console.log("🔐 SESSION CREATED: User logged in successfully");
-        return res.redirect("/");
+        return res.redirect("/?auth=oauth-success");
       });
     })(req, res, next);
   });

@@ -200,12 +200,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         console.log("🔐 DEBUG AUTH: User logged in successfully:", testUser.id);
-        res.json({ 
-          message: "Debug authentication successful", 
-          user: testUser,
-          sessionId: req.sessionID,
-          isAuthenticated: req.isAuthenticated()
-        });
+        console.log("🔐 DEBUG AUTH: Session after login:", req.sessionID);
+        console.log("🔐 DEBUG AUTH: Is authenticated:", req.isAuthenticated());
+        
+        // Redirect to home page to complete the login process
+        res.redirect("/?auth=debug-success");
       });
     } catch (error) {
       console.error("Debug auth error:", error);
