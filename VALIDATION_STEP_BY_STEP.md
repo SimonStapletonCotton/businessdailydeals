@@ -13,7 +13,10 @@ Customer visits supplier location with coupon code (printed or digital)
 
 ### Step 3: Supplier Uses Verification System
 
-**Supplier accesses**: `www.businessdailydeals.co.za/coupon-verification`
+**Supplier workflow** (already familiar with platform as advertiser):
+1. **Login**: Uses existing Business Daily Deals account
+2. **Access**: Navigate to coupon verification page  
+3. **Verify**: Enter customer's coupon code
 
 **Process**:
 1. **Enter Code**: Supplier types `BDD-ABC123`
@@ -160,13 +163,15 @@ userAgent: "Mozilla/5.0..."
 
 ## Real-World Usage
 
-**Typical Supplier Workflow**:
-1. Customer arrives with coupon
-2. Supplier opens verification page on tablet/computer
-3. Types/scans coupon code
-4. Sees instant validation result
-5. If valid, clicks redeem and adds location
-6. Customer receives service, supplier gets verification code
+**Typical Supplier Workflow** (Platform Users):
+1. Customer arrives with coupon code
+2. Supplier logs into existing Business Daily Deals account
+3. Opens coupon verification page (familiar interface)
+4. Types customer's coupon code  
+5. Reviews instant validation result and customer details
+6. If valid, clicks redeem and adds branch location
+7. Provides service, keeps verification code for records
+8. Customer satisfied, supplier protected from fraud
 
 **Customer Experience**:
 - Brings coupon to any authorized location

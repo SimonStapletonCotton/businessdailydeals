@@ -92,14 +92,17 @@ Every redemption attempt is logged:
 
 ## How It Works in Practice
 
-### For Suppliers (Verification Page)
-1. Enter coupon code
-2. System instantly shows:
-   - Is it valid?
-   - Has it been used?
-   - When/where was it used?
-   - Customer details
-3. If valid, can redeem with location notes
+### For Suppliers (Already Platform Users)
+Since suppliers are already familiar with Business Daily Deals as advertisers:
+1. **Easy Access**: Suppliers log into their existing account
+2. **Navigate to Verification**: Access /coupon-verification page  
+3. **Enter Coupon Code**: Type the customer's coupon code
+4. **Instant Validation**: System shows complete coupon status:
+   - Is it valid and ready to redeem?
+   - Has it been used already (with location/date)?
+   - Customer purchase details and contact info
+5. **Simple Redemption**: If valid, click redeem and add location notes
+6. **Verification Code**: Receive confirmation code for records
 
 ### For Customers
 - Clear error messages if coupon already used
