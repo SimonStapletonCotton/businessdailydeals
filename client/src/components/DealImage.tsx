@@ -21,7 +21,7 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
     );
   }
 
-  // Use simple approach - just show the image without complex error handling
+  // Simple image display with fallback
   return (
     <img 
       src={src} 
@@ -35,10 +35,12 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
       }}
       className={className}
       onError={(e) => {
-        // Replace with placeholder on error
         const target = e.target as HTMLImageElement;
         target.style.display = 'none';
-        target.parentElement!.innerHTML = `<div style="width: 100%; height: 200px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #64748b;">📷</div>`;
+        const parent = target.parentElement;
+        if (parent) {
+          parent.innerHTML = '<div style="width: 100%; height: 200px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #64748b;">📷</div>';
+        }
       }}
     />
   );
