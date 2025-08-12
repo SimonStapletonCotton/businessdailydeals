@@ -84,7 +84,7 @@ function Router() {
       <Route path="/working-home" component={WorkingHome} />
       
       {/* Make core pages accessible to everyone - ensure home is first */}
-      <Route path="/" component={WorkingHome} />
+      <Route path="/" component={Home} />
       <Route path="/home" component={Home} />
       <Route path="/hot-deals" component={HotDeals} />
       
