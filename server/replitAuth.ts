@@ -65,6 +65,7 @@ async function upsertUser(
     firstName: claims["first_name"],
     lastName: claims["last_name"],
     profileImageUrl: claims["profile_image_url"],
+    userType: "buyer", // Default to buyer, can be changed later
   });
 }
 
@@ -80,20 +81,33 @@ export async function setupAuth(app: Express) {
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
     verified: passport.AuthenticateCallback
   ) => {
+    console.log("🔐 VERIFY FUNCTION: Starting token verification");
+    
     const claims = tokens.claims();
     if (!claims) {
+      console.error("🔐 VERIFY ERROR: No claims in token");
       verified(new Error("No claims in token"), false);
       return;
     }
+    
+    console.log("🔐 VERIFY SUCCESS: Claims found:", { sub: claims.sub, email: claims.email });
+    
     const user = {
       id: claims.sub,
       email: claims.email,
     };
-    updateUserSession(user, tokens);
-    // Ensure the ID is accessible after session updates
-    user.id = claims.sub;
-    await upsertUser(claims);
-    verified(null, user);
+    
+    try {
+      updateUserSession(user, tokens);
+      // Ensure the ID is accessible after session updates
+      user.id = claims.sub;
+      await upsertUser(claims);
+      console.log("🔐 VERIFY COMPLETE: User upserted successfully");
+      verified(null, user);
+    } catch (error) {
+      console.error("🔐 VERIFY ERROR: Failed to upsert user:", error);
+      verified(error, false);
+    }
   };
 
   for (const domain of process.env
