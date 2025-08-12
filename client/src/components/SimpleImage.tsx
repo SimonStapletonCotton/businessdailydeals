@@ -35,7 +35,10 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
       
       try {
         console.log('🔄 Fetching image:', src);
-        const response = await fetch(src);
+        // Remove cache busting for fetch to avoid query parameter issues
+        const cleanSrc = src.split('?')[0];
+        console.log('🔄 Clean URL:', cleanSrc);
+        const response = await fetch(cleanSrc);
         console.log('🔄 Response status:', response.status);
         
         if (!response.ok) {
@@ -45,10 +48,10 @@ export function SimpleImage({ src, alt, className = "" }: { src?: string | null;
         const blob = await response.blob();
         const objectUrl = URL.createObjectURL(blob);
         setImageSrc(objectUrl);
-        console.log('✅ Image loaded successfully:', src);
+        console.log('✅ Image loaded successfully:', cleanSrc);
         
       } catch (err) {
-        console.log('❌ Image fetch failed:', src, err);
+        console.log('❌ Image fetch failed:', cleanSrc, err);
         setError(true);
       } finally {
         setLoading(false);
