@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { generateAuthToken, validateAuthToken, simpleAuthMiddleware } from "./simpleAuth";
 import { sendDealRequestToAdmin, sendPaymentNotificationToAdmin, sendPaymentConfirmationToCustomer } from "./email";
 import Stripe from "stripe";
 import { db } from "./db";
@@ -43,6 +44,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(securityHeaders);
   app.use(ipSecurity);
   app.use(validateInput);
+  
+  // Add simple auth middleware to all routes
+  app.use(simpleAuthMiddleware);
   
   // Apply rate limiting only to API routes and exclude Vite dev resources
   app.use((req, res, next) => {
@@ -236,7 +240,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.join(process.cwd(), 'test-auth.html'));
   });
 
-  // Working login endpoint that sets session properly
+  // Simple token-based login that actually works
   app.post("/api/simple-login", async (req, res) => {
     try {
       // Get or create test user
@@ -251,38 +255,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Set user in session with proper structure
-      req.session.userId = testUser.id;
-      req.session.user = testUser;
-      req.session.isAuthenticated = true;
+      // Generate auth token
+      const token = generateAuthToken(testUser);
       
-      // Also set for passport compatibility
-      if (!req.session.passport) {
-        req.session.passport = {};
-      }
-      req.session.passport.user = testUser;
+      // Set as cookie
+      res.cookie('authToken', token, {
+        httpOnly: true,
+        secure: false, // Set to true in production
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        sameSite: 'lax'
+      });
       
-      // Force session save
-      req.session.save((err) => {
-        if (err) {
-          console.error("Session save error:", err);
-          return res.status(500).json({ error: "Session save failed" });
-        }
-        
-        console.log("🔐 SIMPLE LOGIN: Session saved successfully");
-        console.log("🔐 SIMPLE LOGIN: User ID in session:", req.session.userId);
-        console.log("🔐 SIMPLE LOGIN: Session ID:", req.sessionID);
-        
-        res.json({ 
-          success: true,
-          message: "Logged in successfully", 
-          user: testUser,
-          sessionId: req.sessionID,
-          sessionData: {
-            userId: req.session.userId,
-            isAuthenticated: req.session.isAuthenticated
-          }
-        });
+      console.log("🔐 TOKEN LOGIN: Generated token for user:", testUser.id);
+      
+      res.json({ 
+        success: true,
+        message: "Logged in successfully", 
+        user: testUser,
+        token: token
       });
     } catch (error) {
       console.error("Simple login error:", error);
@@ -453,43 +443,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Working auth check endpoint
+  // Token-based auth check that works
   app.get('/api/auth/user', async (req: any, res) => {
     try {
-      console.log("🔐 AUTH CHECK: Session ID:", req.sessionID);
-      console.log("🔐 AUTH CHECK: Session user:", req.session?.user?.id);
-      console.log("🔐 AUTH CHECK: Session userId:", req.session?.userId);
-      console.log("🔐 AUTH CHECK: Passport user:", req.session?.passport?.user?.id);
+      console.log("🔐 TOKEN CHECK: Has user?", !!req.user);
+      console.log("🔐 TOKEN CHECK: User ID:", req.user?.id);
       
-      // Check session-based authentication (from simple login)
-      if (req.session?.userId && req.session?.user) {
-        console.log("🔐 AUTH CHECK: Found user in session");
-        return res.json(req.session.user);
+      // Check token-based authentication
+      if (req.user) {
+        console.log("🔐 TOKEN CHECK: Found authenticated user");
+        return res.json(req.user);
       }
       
-      // Check passport user in session
-      if (req.session?.passport?.user) {
-        console.log("🔐 AUTH CHECK: Found passport user in session");
-        return res.json(req.session.passport.user);
-      }
-      
-      // Check passport authentication
-      if (req.isAuthenticated && req.isAuthenticated() && req.user) {
-        console.log("🔐 AUTH CHECK: Found authenticated passport user");
-        const userId = req.user.claims?.sub || req.user.id;
-        if (userId) {
-          const user = await storage.getUser(userId);
-          if (user) {
-            return res.json(user);
-          }
-        }
-      }
-      
-      console.log("🔐 AUTH CHECK: No authentication found");
-      // Not authenticated
+      console.log("🔐 TOKEN CHECK: No authentication found");
       res.status(401).json({ 
         message: "Unauthorized", 
-        loginUrl: "/api/login",
+        loginUrl: "/login",
         redirectReason: "Not authenticated"
       });
     } catch (error) {
