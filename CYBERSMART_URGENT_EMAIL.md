@@ -1,34 +1,34 @@
-# Urgent Cybersmart Support Request
+# URGENT: Cybersmart Support Request
 
-**Subject:** URGENT: Node.js Application Deployment Assistance Required
+**Subject: Node.js Application Configuration Issue - www.businessdailydeals.co.za**
 
----
+Dear Cybersmart Support Team,
 
-Hi Cybersmart Team,
+We have successfully created the Node.js application in cPanel with:
+- ✅ Node.js 18.20.8 enabled
+- ✅ package.json created
+- ✅ server/index.js created
+- ✅ Application shows "started" status
 
-I need immediate assistance with deploying my Business Daily Deals marketplace application.
+**ISSUE:** Website shows "We're sorry but something went wrong" error despite server status showing "started"
 
-**Current Status:**
-- Node.js app configured in cPanel (Node.js 18.20.8)
-- Environment variables set correctly
-- Application files ready for upload
+**URGENT REQUEST:** Please assist with:
+1. **Check Node.js app configuration** - verify startup script points to correct file
+2. **Review error logs** - check what's causing the startup failure
+3. **Verify file permissions** - ensure proper read/execute permissions
+4. **Database setup** - we need database "businessdailydeals_prod" created
 
-**Immediate Help Needed:**
-1. **File Upload**: I have a deployment package (`businessdailydeals-upload.tar.gz`) that needs to be uploaded and extracted to `/home/simonsta/public_html/businessdailydeals/`
+**FILES LOCATION:**
+- Application folder: public_html/businessdailydeals/
+- Main file: server/index.js
+- Package file: package.json
 
-2. **NPM Install**: Run `npm install` in the application directory to install dependencies
+**NEXT STEP:** Once basic "Coming Soon" page loads, we'll upload the complete marketplace files.
 
-3. **Database Creation**: Create MySQL database named `businessdailydeals_prod` and provide credentials
-
-4. **Application Start**: Restart the Node.js application after setup
-
-**Timeline:** This is urgent - the marketplace is ready for production launch today.
-
-**Contact:** Please call me immediately if possible, or respond via email with next steps.
-
-The application is fully developed and tested. I just need technical assistance with the server deployment process.
-
-Thank you for immediate attention to this matter.
+Please provide remote assistance to resolve this Node.js startup issue.
 
 Best regards,
-Simons
+Business Daily Deals Team
+support@businessdailydeals.co.za
+
+**PHONE:** Request immediate callback for live troubleshooting session
