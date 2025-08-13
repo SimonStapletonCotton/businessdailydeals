@@ -21,43 +21,11 @@ interface BannerAdsProps {
   className?: string;
 }
 
-// Sample banner ads data (replace with database data later)
+// Banner ads data - TO ADD MORE COMPANIES: Simply add new objects to this array
+// Follow the same format with unique id numbers
 const sampleAds: BannerAd[] = [
   {
     id: "1",
-    title: "Premium IT Solutions for South African Businesses",
-    description: "Transform your business with our cutting-edge technology solutions. Cloud services, cybersecurity, and 24/7 support.",
-    companyName: "TechSolutions Pro",
-    imageUrl: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=200&fit=crop&crop=center",
-    linkUrl: "https://techsolutions.co.za",
-    category: "Technology",
-    contactPhone: "011 234 5678",
-    contactEmail: "info@techsolutions.co.za"
-  },
-  {
-    id: "2", 
-    title: "Industrial Equipment & Manufacturing Solutions",
-    description: "Quality machinery, parts, and manufacturing equipment. Serving South African industry for over 20 years.",
-    companyName: "SA Manufacturing Co",
-    imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=200&fit=crop&crop=center",
-    linkUrl: "https://samanufacturing.co.za",
-    category: "Manufacturing",
-    contactPhone: "021 345 6789",
-    contactEmail: "sales@samanufacturing.co.za"
-  },
-  {
-    id: "3",
-    title: "Nationwide Transport & Logistics Services",
-    description: "Fast, reliable delivery across South Africa. From same-day courier to heavy freight solutions.",
-    companyName: "Prime Logistics",
-    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
-    linkUrl: "https://primelogistics.co.za",
-    category: "Logistics",
-    contactPhone: "031 456 7890",
-    contactEmail: "bookings@primelogistics.co.za"
-  },
-  {
-    id: "4",
     title: "Industrial Water Storage Solutions - Water Bladders",
     description: "High-capacity flexible water bladders for industrial, agricultural, and emergency water storage. www.waterbladders.co.za",
     companyName: "Water Bladders SA",
@@ -65,18 +33,22 @@ const sampleAds: BannerAd[] = [
     linkUrl: "https://www.waterbladders.co.za",
     category: "Water Storage",
     contactPhone: "082 495 7997"
-  },
-  {
-    id: "5",
-    title: "Professional Business Consulting & Advisory",
-    description: "Strategic business consulting, financial planning, and growth advisory services for South African enterprises.",
-    companyName: "Cape Business Services",
-    imageUrl: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=200&fit=crop&crop=center",
-    linkUrl: "https://capebusiness.co.za",
-    category: "Consulting",
-    contactPhone: "021 678 9012",
-    contactEmail: "consult@capebusiness.co.za"
   }
+  
+  // TO ADD MORE COMPANIES: Copy and paste the template below, then modify the details:
+  /*
+  ,{
+    id: "2",  // Use next number (2, 3, 4, etc.)
+    title: "Your Company Main Service Title",
+    description: "Description of your products/services. What makes your company special?",
+    companyName: "Your Company Name",
+    imageUrl: "https://images.unsplash.com/photo-XXXXXXXXX?w=400&h=200&fit=crop&crop=center",  // Find image on Unsplash
+    linkUrl: "https://www.yourcompanywebsite.co.za",
+    category: "Your Industry Category",
+    contactPhone: "Your Phone Number",
+    contactEmail: "Your Email (optional)"
+  }
+  */
 ];
 
 export function BannerAds({ position, className = "" }: BannerAdsProps) {
