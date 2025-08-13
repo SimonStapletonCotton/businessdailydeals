@@ -168,8 +168,8 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
   if (variant === "compact") {
     return (
       <>
-        <Card className="hover:shadow-lg transition-shadow border-2 border-red-200 hover:border-red-300 h-fit">
-          <CardContent className="p-4">
+        <Card className="hover:shadow-lg transition-shadow border-2 border-red-200 hover:border-red-300 h-[420px] flex flex-col">
+          <CardContent className="p-4 flex flex-col h-full">
             <SimpleImage
               src={deal.imageUrl}
               alt={deal.title}
@@ -185,8 +185,8 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
                 </Badge>
               )}
             </div>
-            <h3 className="font-semibold text-slate-900 mb-2 text-sm line-clamp-2">{deal.title}</h3>
-            <p className="text-xs text-slate-600 mb-3 line-clamp-2">{deal.description}</p>
+            <h3 className="font-semibold text-slate-900 mb-2 text-sm line-clamp-2 min-h-[2.5rem]">{deal.title}</h3>
+            <p className="text-xs text-slate-600 mb-3 line-clamp-2 min-h-[2.5rem] flex-1">{deal.description}</p>
             <div className="flex items-center justify-between mb-3">
               <div>
                 <span className="text-lg font-bold text-slate-900">R{parseFloat(deal.price).toLocaleString()}</span>
@@ -200,7 +200,7 @@ export default function DealCard({ deal, variant = "regular" }: DealCardProps) {
             </div>
             <Button
               size="sm" 
-              className="w-full bg-red-600 hover:bg-red-700 text-white text-xs h-8"
+              className="w-full bg-red-600 hover:bg-red-700 text-white text-xs h-8 mt-auto"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

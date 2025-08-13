@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Navbar from "@/components/navbar";
 import DealCard from "@/components/deal-card-fixed";
+import { BannerAds } from "@/components/banner-ads";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
@@ -214,6 +215,11 @@ export default function HotDeals() {
                     variant="compact" 
                   />
                 ))}
+              </div>
+              
+              {/* Banner Ads Section - Added to Hot Deals */}
+              <div className="mt-12 mb-8">
+                <BannerAds />
               </div>
               
               {/* Show More Button */}
