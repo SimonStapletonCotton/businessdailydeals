@@ -1,23 +1,3 @@
-# URGENT: Cybersmart Support Request - Business Daily Deals
-
-## TO: Cybersmart Technical Support
-## FROM: Simon (www.businessdailydeals.co.za)
-## SUBJECT: URGENT - Simple Fix Required for Node.js App
-
----
-
-**ISSUE**: Our Node.js application starts successfully but serves a "coming soon" placeholder instead of our complete Business Daily Deals marketplace.
-
-**ROOT CAUSE**: Passenger requires the main application file at the root level of the application directory.
-
-**SIMPLE FIX REQUIRED**:
-
-1. **Create a file called `app.js`** in the application root directory: 
-   `public_html/businessdailydeals-fixed/app.js`
-
-2. **Use this exact content** for the app.js file:
-
-```javascript
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
@@ -77,22 +57,3 @@ app.listen(port, () => {
 });
 
 module.exports = app;
-```
-
-3. **Update Node.js App Configuration**:
-   - Change startup file from `server/index.js` to `app.js`
-   - Restart the application
-
-**EXPECTED RESULT**: www.businessdailydeals.co.za will display the complete Business Daily Deals marketplace instead of "coming soon"
-
-**TECHNICAL EXPLANATION**: Passenger requires the main entry point at the application root. The current configuration looks for `server/index.js` in a subfolder, which isn't compatible with Passenger's requirements.
-
-**URGENCY**: This is a simple 5-minute fix that will immediately resolve the deployment issue.
-
-**CONTACT**: Please confirm completion or call if you need clarification.
-
-Thank you for your immediate assistance.
-
----
-
-**NOTE**: This is a standard Passenger configuration requirement - not a complex development issue.
