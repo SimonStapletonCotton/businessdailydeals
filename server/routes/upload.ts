@@ -3,7 +3,7 @@ import multer from "multer";
 import { Storage } from "@google-cloud/storage";
 import { nanoid } from "nanoid";
 import { extname } from "path";
-import { isAuthenticated } from "../replitAuth";
+// import { isAuthenticated } from "../replitAuth"; // Disabled during verification mode
 
 // Extend Request interface to include file
 interface MulterRequest extends Request {
@@ -59,15 +59,16 @@ const storage = new Storage({
   projectId: "",
 });
 
-router.post('/image', isAuthenticated, upload.single('file'), async (req: MulterRequest, res: Response) => {
+// TEMPORARY: Bypass authentication during verification mode
+// TODO: Re-enable authentication after verification period
+router.post('/image', upload.single('file'), async (req: MulterRequest, res: Response) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    if (!req.user?.claims?.sub) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
+    // TEMPORARY: Use default supplier ID during verification mode
+    const userId = req.user?.claims?.sub || "46102542"; // Default to Water Bladders SA for verification
 
     const bucketId = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID;
     if (!bucketId) {

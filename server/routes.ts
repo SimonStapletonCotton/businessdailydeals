@@ -48,6 +48,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // DISABLE AUTH MIDDLEWARE FOR TESTING
   // app.use(simpleAuthMiddleware);
   
+  // Apply simple auth middleware only to enable authenticated() checks but still allow bypass during verification
+  app.use(simpleAuthMiddleware);
+  
   // DISABLE RATE LIMITING FOR TESTING
   // app.use((req, res, next) => {
   //   if (req.path.includes('/@') || req.path.includes('/node_modules') || req.path.includes('/.vite/')) {

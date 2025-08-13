@@ -30,7 +30,7 @@ export function clearAuthToken(token: string): void {
 export function simpleAuthMiddleware(req: any, res: any, next: any) {
   const token = req.headers.authorization?.replace('Bearer ', '') || 
                 req.query.token ||
-                req.cookies.authToken;
+                req.cookies?.authToken;
   
   if (token) {
     const user = validateAuthToken(token);
