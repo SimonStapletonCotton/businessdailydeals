@@ -146,33 +146,63 @@ PRIVATE_OBJECT_DIR=[client_provides]
 - Uptime monitoring with alerts
 - Basic web analytics setup
 
-## Files & Documentation Provided
-1. Complete application source code
-2. Database schema and initial data
-3. Deployment scripts and configuration
-4. Environment setup documentation
-5. Production cleanup scripts
+## What Cybersmart Needs to Provide
 
-## Support Contacts
-- **Technical Lead**: [Your contact information]
-- **Project Owner**: [Business owner contact]
-- **Preferred Communication**: Email, WhatsApp business hours
+### 1. Server Setup & Configuration
+- Linux server with Node.js 18+ installed
+- MySQL 8.0+ database with full access credentials
+- Domain pointing: www.businessdailydeals.co.za to your server
+- SSL certificate installation and configuration
+- Basic email hosting: support@businessdailydeals.co.za
 
-## Go-Live Timeline
-- **Server Setup**: 2-3 business days
-- **Application Deployment**: 1 business day  
-- **Testing & Validation**: 1-2 business days
-- **Total Timeline**: 5-7 business days
+### 2. Access & Credentials You'll Receive
+```
+MySQL Database Credentials:
+- Host: localhost (or your MySQL server)
+- Username: [cybersmart provides]
+- Password: [cybersmart provides]  
+- Database Name: [cybersmart provides]
 
-## Cost Expectations
-Please provide hosting quotes for:
-- Server hosting (specs above)
-- MySQL database hosting
+Server Access:
+- SSH access to upload and configure files
+- File management access (FTP/SFTP)
+- Server management panel access
+```
+
+### 3. Environment Setup
+- Set NODE_ENV=production
+- Set PORT=5000 (or your preferred port)
+- Configure reverse proxy (Nginx/Apache) to serve the application
+- Set up process manager (PM2 or similar) for application stability
+
+### 4. Ongoing Services
+- Server monitoring and maintenance
+- Daily database backups with 30-day retention
+- Security updates and patches
+- 99.9% uptime commitment
+- Technical support during business hours
+
+## What You Need to Do After Setup
+1. **Upload your application files** to the server
+2. **Provide external API keys** for:
+   - SendGrid (email service)
+   - Google Cloud Storage (image hosting)
+3. **Test the website** to ensure everything works
+
+## Cost Quote Request
+Please provide monthly hosting costs for:
+- Server hosting (Node.js + MySQL)
 - Domain management
 - SSL certificate
-- Email services
-- Monthly maintenance
+- Email hosting
+- Technical support
 
----
+## Timeline
+- **Setup**: 3-5 business days
+- **Go-Live**: Once you upload files and test
 
-**Note**: This is a complete, production-ready B2B marketplace with full functionality including user authentication, payment processing, email notifications, and file management. The application has been tested and is currently running successfully.
+## Technical Notes
+- Application is a complete B2B marketplace (already built and tested)
+- No custom development needed from Cybersmart
+- Standard Node.js hosting with MySQL database
+- Professional business application ready for production use
