@@ -80,7 +80,7 @@ app.use((req, res, next) => {
       if (process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID) {
         log("🔄 Pre-initializing Google Cloud Storage...");
         const { Storage } = await import("@google-cloud/storage");
-        global.objectStorageClient = new Storage({
+        (global as any).objectStorageClient = new Storage({
           credentials: {
             audience: "replit",
             subject_token_type: "access_token",

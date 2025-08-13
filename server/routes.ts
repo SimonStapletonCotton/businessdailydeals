@@ -2408,11 +2408,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Use singleton client for signed URL generation
-      if (!global.objectStorageClient) {
+      if (!(global as any).objectStorageClient) {
         const { Storage } = await import("@google-cloud/storage");
         const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
         
-        global.objectStorageClient = new Storage({
+        (global as any).objectStorageClient = new Storage({
           credentials: {
             audience: "replit",
             subject_token_type: "access_token",
@@ -2438,7 +2438,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const bucket = global.objectStorageClient.bucket(bucketId);
+      const bucket = (global as any).objectStorageClient.bucket(bucketId);
       const file = bucket.file(`public/${filePath}`);
       
       // Check if file exists first
@@ -2480,11 +2480,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         try {
           // Use the same singleton client for validation
-          if (!global.objectStorageClient) {
+          if (!(global as any).objectStorageClient) {
             const { Storage } = await import("@google-cloud/storage");
             const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
             
-            global.objectStorageClient = new Storage({
+            (global as any).objectStorageClient = new Storage({
               credentials: {
                 audience: "replit",
                 subject_token_type: "access_token",
@@ -2510,7 +2510,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
           }
 
-          const bucket = global.objectStorageClient.bucket(bucketId);
+          const bucket = (global as any).objectStorageClient.bucket(bucketId);
           const file = bucket.file(`public/${filePath}`);
           const [exists] = await file.exists();
           
