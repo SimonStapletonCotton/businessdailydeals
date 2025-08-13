@@ -890,8 +890,8 @@ export class DatabaseStorage implements IStorage {
 
   // Credit management for deals
   private calculateDealCredits(dealType: 'hot' | 'regular'): number {
-    // Check if we're in the promotional period (FREE until Jan 1, 2026)
-    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    // Check if we're in the promotional period (FREE until Feb 20, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-02-20');
     if (isPromotionalPeriod) {
       return 0; // All deals are FREE during promotional period
     }
@@ -906,18 +906,18 @@ export class DatabaseStorage implements IStorage {
   }
 
   private async chargeDealCredits(supplierId: string, credits: number, dealId: string, dealType: string): Promise<void> {
-    // Check if we're in the global promotional period (FREE until Jan 1, 2026)
-    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    // Check if we're in the global promotional period (FREE until Feb 20, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-02-20');
     if (isPromotionalPeriod || credits === 0) {
       // FREE period - no credits charged
-      console.log(`All deals are FREE until Jan 1, 2026 - no credits charged for ${dealType} deal`);
+      console.log(`All deals are FREE until Feb 20, 2026 - no credits charged for ${dealType} deal`);
       
       // Record the transaction as FREE
       await this.createCreditTransaction({
         userId: supplierId,
         amount: '0.00',
         type: 'promotional_free',
-        description: `FREE promotional period until Jan 1, 2026 - ${dealType.toUpperCase()} deal posting (normally ${credits > 0 ? credits : (dealType === 'hot' ? 50 : 20)} credits)`,
+        description: `FREE promotional period until Feb 20, 2026 - ${dealType.toUpperCase()} deal posting (normally ${credits > 0 ? credits : (dealType === 'hot' ? 50 : 20)} credits)`,
         dealId: dealId
       });
       return;

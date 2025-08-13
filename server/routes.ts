@@ -964,8 +964,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
       const creditsNeeded = extraDays * creditsPerDay;
 
-      // Check if we're in promotional period (FREE until December 31st, 2025)
-      const promotionalEndDate = new Date('2025-12-31T23:59:59.000Z');
+      // Check if we're in promotional period (FREE until February 20th, 2026)
+      const promotionalEndDate = new Date('2026-02-20T23:59:59.000Z');
       const isPromotionalPeriod = new Date() < promotionalEndDate;
       
       // Get credit balance for response (needed regardless of promotional period)
