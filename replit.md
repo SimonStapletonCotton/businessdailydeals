@@ -127,6 +127,8 @@ Backup requirements: Critical - cannot start from beginning if crashes occur, ne
 - **Deployment Package**: Complete production build prepared and ready
 - **Technical Issue**: Passenger Error ID b1c8a852 preventing application startup
 - **Support Escalated**: Technical team requested to fix Passenger/Node.js configuration
+- **Promotional Period Updated**: All dates extended to February 20th, 2026 across entire system
+- **Backend Security**: Credit charging completely disabled until February 21st, 2026
 - **Status**: Awaiting Cybersmart technical team to resolve server configuration issue
 
 ### Image System Complete (August 12, 2025)
