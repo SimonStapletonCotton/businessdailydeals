@@ -1,79 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Download Business Daily Deals - Fixed Package</title>
+    <title>Download Business Daily Deals Fix</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
-            max-width: 600px; 
-            margin: 50px auto; 
-            padding: 20px;
             background: linear-gradient(135deg, #ffcc80, #ffb74d);
+            margin: 0; 
+            padding: 50px;
+            text-align: center;
         }
         .container {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
+        h1 { color: #ff6600; margin-bottom: 20px; }
         .download-btn {
             background: #ff6600;
             color: white;
-            padding: 15px 30px;
+            padding: 20px 40px;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 18px;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            margin: 20px 0;
+            margin: 20px;
+            transition: background 0.3s;
         }
         .download-btn:hover {
             background: #e55a00;
         }
-        .file-info {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
             margin: 20px 0;
+            text-align: left;
+        }
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #ff6600;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Business Daily Deals - Fixed Deployment Package</h1>
+        <h1>Business Daily Deals - Cybersmart Fix</h1>
         
-        <div class="file-info">
-            <strong>File:</strong> businessdailydeals-production-fixed.tar.gz<br>
-            <strong>Size:</strong> 313 KB<br>
-            <strong>Fixed:</strong> Complete marketplace with all features
-        </div>
-        
-        <a href="/businessdailydeals-production-fixed.tar.gz" 
-           class="download-btn" 
-           download="businessdailydeals-production-fixed.tar.gz">
-            Download Fixed Package
+        <a href="/cybersmart-root-fix.tar.gz" class="download-btn" download="cybersmart-root-fix.tar.gz">
+            📦 Download Fix Package
         </a>
         
-        <h3>What's Fixed:</h3>
-        <ul style="text-align: left;">
-            <li>Complete server with all API routes</li>
-            <li>MySQL database integration</li>
-            <li>All 13 marketplace features</li>
-            <li>React frontend build</li>
-            <li>Session management</li>
-            <li>FREE promotional period until Feb 20, 2026</li>
-        </ul>
+        <div class="instructions">
+            <h3>Upload Instructions:</h3>
+            <div class="step">
+                <strong>1.</strong> Click the download button above
+            </div>
+            <div class="step">
+                <strong>2.</strong> Extract the downloaded file on your computer
+            </div>
+            <div class="step">
+                <strong>3.</strong> Find the file: <code>cybersmart-root-app.js</code>
+            </div>
+            <div class="step">
+                <strong>4.</strong> Upload to Cybersmart: <code>public_html/businessdailydeals-fixed/</code>
+            </div>
+            <div class="step">
+                <strong>5.</strong> Rename it to: <code>app.js</code>
+            </div>
+            <div class="step">
+                <strong>6.</strong> Update Node.js startup file to: <code>app.js</code>
+            </div>
+            <div class="step">
+                <strong>7.</strong> Restart your Node.js application
+            </div>
+        </div>
         
-        <h3>Upload Instructions:</h3>
-        <ol style="text-align: left;">
-            <li>Download this fixed package</li>
-            <li>Upload to Cybersmart cPanel File Manager</li>
-            <li>Extract to public_html/businessdailydeals</li>
-            <li>Restart Node.js application</li>
-            <li>Visit www.businessdailydeals.co.za</li>
-        </ol>
+        <p><strong>This fix will load your complete Business Daily Deals marketplace!</strong></p>
     </div>
+
+    <script>
+        // Force download on click
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadBtn = document.querySelector('.download-btn');
+            downloadBtn.addEventListener('click', function(e) {
+                // Create a temporary link to force download
+                const link = document.createElement('a');
+                link.href = '/cybersmart-root-fix.tar.gz';
+                link.download = 'cybersmart-root-fix.tar.gz';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    </script>
 </body>
 </html>
