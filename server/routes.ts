@@ -811,13 +811,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
 
       // Check if expiry date extends beyond promotional period
-      const promotionalEndDate = new Date('2025-12-31T23:59:59.000Z');
+      const promotionalEndDate = new Date('2026-02-20T23:59:59.000Z');
       if (cleanedData.expiresAt && cleanedData.expiresAt > promotionalEndDate) {
         const daysAfterPromo = Math.ceil((cleanedData.expiresAt.getTime() - promotionalEndDate.getTime()) / (1000 * 60 * 60 * 24));
         const creditsPerDay = cleanedData.dealType === "hot" ? 5 : 2;
         const creditsNeeded = daysAfterPromo * creditsPerDay;
         
-        console.log(`Warning: Deal extends ${daysAfterPromo} days beyond promotional period, will require ${creditsNeeded} credits starting Jan 1, 2026`);
+        console.log(`Warning: Deal extends ${daysAfterPromo} days beyond promotional period, will require ${creditsNeeded} credits starting Feb 21, 2026`);
         
         // You could add a warning response here, but for now we'll just log it
         // The user chose this date, so we'll honor it but log the implications

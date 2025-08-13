@@ -873,7 +873,7 @@ export class DatabaseStorage implements IStorage {
 
   async activateSupplierPromotionalPeriod(supplierId: string): Promise<User> {
     const now = new Date();
-    const promotionalEnd = new Date('2026-01-01T00:00:00Z'); // FREE until January 1st, 2026
+    const promotionalEnd = new Date('2026-02-20T00:00:00Z'); // FREE until February 20th, 2026
     
     const [user] = await db.update(users)
       .set({
@@ -884,7 +884,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, supplierId))
       .returning();
     
-    console.log(`Activated FREE promotional period for supplier ${supplierId} ending ${promotionalEnd.toISOString()} (Jan 1st, 2026)`);
+    console.log(`Activated FREE promotional period for supplier ${supplierId} ending ${promotionalEnd.toISOString()} (Feb 20th, 2026)`);
     return user;
   }
 

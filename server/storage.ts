@@ -805,8 +805,8 @@ export class DatabaseStorage implements IStorage {
     // Now delete the deal
     await db.delete(deals).where(eq(deals.id, id));
 
-    // Check if we're in promotional period (FREE until Jan 1, 2026) 
-    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    // Check if we're in promotional period (FREE until Feb 20, 2026) 
+    const isPromotionalPeriod = new Date() < new Date('2026-02-20');
     
     if (!isPromotionalPeriod && parseFloat(deal.creditsCost || '0') > 0) {
       // Refund credits if deal was paid for (only after promotional period)
@@ -873,7 +873,7 @@ export class DatabaseStorage implements IStorage {
 
   async activateSupplierPromotionalPeriod(supplierId: string): Promise<User> {
     const now = new Date();
-    const promotionalEnd = new Date('2026-01-01T00:00:00Z'); // FREE until January 1st, 2026
+    const promotionalEnd = new Date('2026-02-20T00:00:00Z'); // FREE until February 20th, 2026
     
     const [user] = await db.update(users)
       .set({
@@ -884,7 +884,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, supplierId))
       .returning();
     
-    console.log(`Activated FREE promotional period for supplier ${supplierId} ending ${promotionalEnd.toISOString()} (Jan 1st, 2026)`);
+    console.log(`Activated FREE promotional period for supplier ${supplierId} ending ${promotionalEnd.toISOString()} (Feb 20th, 2026)`);
     return user;
   }
 
@@ -906,11 +906,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   private async chargeDealCredits(supplierId: string, credits: number, dealId: string, dealType: string): Promise<void> {
-    // Check if we're in the global promotional period (FREE until Jan 1, 2026)
-    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    // Check if we're in the global promotional period (FREE until Feb 20, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-02-20');
     if (isPromotionalPeriod || credits === 0) {
       // FREE period - no credits charged
-      console.log(`All deals are FREE until Jan 1, 2026 - no credits charged for ${dealType} deal`);
+      console.log(`All deals are FREE until Feb 20, 2026 - no credits charged for ${dealType} deal`);
       
       // Record the transaction as FREE
       await this.createCreditTransaction({
