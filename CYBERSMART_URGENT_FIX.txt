@@ -1,158 +1,30 @@
-Subject: URGENT - Fix app.js route issue for Business Daily Deals
+Subject: URGENT - Disable Node.js completely
 
-Hi Cybersmart Support,
+Hi Cybersmart,
 
-The app.js file was updated but there's still an issue. The website shows "Coming Soon" instead of the marketplace.
+The issue is that your server is still trying to run Node.js even after creating index.html.
 
-URGENT FIX NEEDED:
+PLEASE DO THIS:
+1. In cPanel, go to "Node.js App" section
+2. DISABLE or DELETE the Node.js application completely
+3. Make sure index.html is in the public_html folder
+4. The website should now serve the HTML file directly
 
-Please check that the app.js file in /home/simonsta/public_html/businessdailydeals-fixed/ contains this EXACT code at the very end (around line 220-250):
+OR
 
-// Serve the React app for all routes
-app.get('*', (req, res) => {
-  const indexPath = path.join(__dirname, 'client/dist/index.html');
-  
-  if (require('fs').existsSync(indexPath)) {
-    console.log('✅ Serving React app from:', indexPath);
-    res.sendFile(indexPath);
-  } else {
-    console.log('⚠️ React build not found, serving production page');
-    res.send(`
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <title>Business Daily Deals - South Africa's Premier B2B Marketplace</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <meta name="description" content="South Africa's leading B2B marketplace connecting suppliers and buyers with exclusive deals and promotions.">
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { 
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 75%, #8fa3b8 100%);
-              min-height: 100vh;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: #333;
-            }
-            .container {
-              background: rgba(255, 255, 255, 0.95);
-              padding: 50px;
-              border-radius: 20px;
-              box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-              max-width: 900px;
-              width: 90%;
-              text-align: center;
-              backdrop-filter: blur(10px);
-            }
-            .logo {
-              font-size: 3.5em;
-              color: #ff6600;
-              font-weight: bold;
-              margin-bottom: 10px;
-              text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
-              animation: glow 2s ease-in-out infinite alternate;
-            }
-            @keyframes glow {
-              from { text-shadow: 3px 3px 6px rgba(255,102,0,0.4); }
-              to { text-shadow: 3px 3px 20px rgba(255,102,0,0.8); }
-            }
-            .subtitle {
-              font-size: 1.4em;
-              color: #64748b;
-              margin-bottom: 30px;
-              font-weight: 300;
-            }
-            .promo-banner {
-              background: linear-gradient(135deg, #ff6600, #e55a00);
-              color: white;
-              padding: 25px;
-              border-radius: 15px;
-              margin: 30px 0;
-              font-size: 1.3em;
-              font-weight: bold;
-              box-shadow: 0 8px 25px rgba(255,102,0,0.3);
-              animation: pulse 3s infinite;
-            }
-            @keyframes pulse {
-              0%, 100% { transform: scale(1); }
-              50% { transform: scale(1.02); }
-            }
-            .status {
-              background: #e8f5e8;
-              color: #2d5a2d;
-              padding: 20px;
-              border-radius: 10px;
-              margin: 20px 0;
-              border-left: 5px solid #4caf50;
-            }
-            .features {
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-              gap: 20px;
-              margin: 30px 0;
-            }
-            .feature {
-              background: #f8f9fa;
-              padding: 20px;
-              border-radius: 10px;
-              border-left: 4px solid #ff6600;
-            }
-            .feature h3 {
-              color: #ff6600;
-              margin-bottom: 10px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="logo">🎰 Business Daily Deals</div>
-            <div class="subtitle">South Africa's Premier B2B Marketplace</div>
-            
-            <div class="promo-banner">
-              🎉 FREE PROMOTIONAL PERIOD UNTIL 20TH FEBRUARY 2026! 🎉<br>
-              <small>Post unlimited deals at no cost during our launch phase</small>
-            </div>
-            
-            <div class="status">
-              <strong>✅ Production Server Successfully Running</strong><br>
-              Complete marketplace features are now active and ready for business!
-            </div>
-            
-            <div class="features">
-              <div class="feature">
-                <h3>🔥 Hot Deals</h3>
-                <p>Premium placement for your best offers with maximum visibility</p>
-              </div>
-              <div class="feature">
-                <h3>📊 Analytics</h3>
-                <p>Track your deal performance and supplier metrics</p>
-              </div>
-              <div class="feature">
-                <h3>💳 Credit System</h3>
-                <p>Flexible payment options with South African Rand pricing</p>
-              </div>
-              <div class="feature">
-                <h3>🛡️ Secure Platform</h3>
-                <p>Enterprise-grade security with coupon verification</p>
-              </div>
-            </div>
-            
-            <p style="margin-top: 30px; color: #666;">
-              <strong>Ready for Business:</strong> Your marketplace is fully operational with all features enabled.
-            </p>
-          </div>
-        </body>
-      </html>
-    `);
-  }
-});
+If you can't disable Node.js:
+1. Create .htaccess file in public_html with this content:
 
-If this section is missing or different, please replace the ENTIRE app.js file with the complete code I sent earlier.
+DirectoryIndex index.html
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.html [L]
 
-After fixing, restart the Node.js application.
+This will force the server to serve index.html instead of trying to run Node.js.
 
-URGENT - Please do this immediately.
+The "something went wrong" error means Node.js is still running and crashing. We need to bypass Node.js completely and serve the static HTML file.
 
-Thank you,
+Please try disabling Node.js first, then the .htaccess approach if needed.
+
 Simon
