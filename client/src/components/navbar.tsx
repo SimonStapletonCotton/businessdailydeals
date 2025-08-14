@@ -10,7 +10,7 @@ import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Navbar() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -372,13 +372,21 @@ export default function Navbar() {
             {!isAuthenticated && (
               <Button
                 className="bg-white text-slate-600 hover:bg-white/90 hover:text-slate-700 font-medium"
-                onClick={() => (window.location.href = "/api/login")}
+                onClick={() => {
+                  console.log("Login button clicked - redirecting to /api/login");
+                  window.location.href = "/api/login";
+                }}
                 data-testid="button-login"
               >
                 <User className="h-4 w-4 mr-2" />
                 Login to Access Deals
               </Button>
             )}
+            
+            {/* Debug: Show auth status */}
+            <div className="text-xs text-white bg-black/20 px-2 py-1 rounded">
+              Auth: {isAuthenticated ? 'YES' : 'NO'} | Loading: {isLoading ? 'YES' : 'NO'}
+            </div>
 
             {/* Mobile menu */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
