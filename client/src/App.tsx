@@ -88,8 +88,9 @@ function Router() {
       {/* Make core pages accessible to everyone - ensure home is first */}
       <Route path="/" component={HomeFixed} />
       <Route path="/home" component={HomeFixed} />
-      <Route path="/home-ultimate" component={HomeUltimate} />
-      <Route path="/old-home" component={HomeFeb} />
+      <Route path="/home-ultimate" component={HomeFixed} />
+      <Route path="/old-home" component={HomeFixed} />
+      <Route path="/landing" component={HomeFixed} />
       <Route path="/hot-deals" component={HotDeals} />
       
       {/* Keep some features auth-protected */}
