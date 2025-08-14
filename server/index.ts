@@ -10,13 +10,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Force cache busting for all requests
+// Force cache busting for all requests - AGGRESSIVE
 app.use((req, res, next) => {
+  const timestamp = Date.now();
   res.set({
-    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
     'Pragma': 'no-cache',
     'Expires': '0',
-    'ETag': Date.now().toString()
+    'Last-Modified': new Date(timestamp).toUTCString(),
+    'ETag': `"${timestamp}"`,
+    'Vary': 'Cache-Control',
+    'X-Timestamp': timestamp.toString()
   });
   next();
 });

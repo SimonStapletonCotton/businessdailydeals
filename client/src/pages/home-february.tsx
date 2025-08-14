@@ -73,7 +73,7 @@ export default function HomeFebruary() {
             <div className="flex items-center">
               <Flame className="h-5 w-5 mr-2 text-orange-200" />
               <p className="text-lg sm:text-xl font-bold">
-                🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL 20TH FEBRUARY 2026! 🎉
+                ⭐ BREAKING: FREE DEALS UNTIL FEBRUARY 20TH, 2026! ⭐
               </p>
               <Flame className="h-5 w-5 ml-2 text-orange-200" />
             </div>
@@ -204,7 +204,7 @@ export default function HomeFebruary() {
                 <p className="text-sm font-semibold text-white">🎉 FREE PROMOTION ACTIVE</p>
               </div>
               <p className="text-xs text-slate-500">
-                Suppliers post deals FREE until February 20th, 2026!
+                FEBRUARY 20TH, 2026 PROMO ACTIVE - Post deals FREE!
               </p>
             </div>
             <div>
