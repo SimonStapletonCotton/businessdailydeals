@@ -872,7 +872,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/supplier/deals', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
+      console.log(`🔍 Fetching deals for supplier: ${userId}`);
       const deals = await storage.getDealsBySupplier(userId);
+      console.log(`✅ Found ${deals.length} deals for supplier ${userId}`);
       res.json(deals);
     } catch (error) {
       console.error("Error fetching supplier deals:", error);
@@ -883,7 +885,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/supplier/expired-deals', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
+      console.log(`🔍 Fetching expired deals for supplier: ${userId}`);
       const expiredDeals = await storage.getExpiredDealsBySupplier(userId);
+      console.log(`✅ Found ${expiredDeals.length} expired deals for supplier ${userId}`);
       res.json(expiredDeals);
     } catch (error) {
       console.error("Error fetching expired deals:", error);

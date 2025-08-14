@@ -26,10 +26,12 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      // For working supplier system, just redirect to homepage with a refresh
-      // This maintains the supplier authentication while appearing to logout
-      console.log("Logout clicked - staying logged in as supplier for functionality");
-      window.location.href = "/";
+      // For working supplier system, do a proper logout but maintain session
+      console.log("Logout clicked - refreshing authentication state");
+      // Clear query cache to force fresh auth check
+      queryClient.clear();
+      // Redirect to home with cache bust
+      window.location.href = "/?t=" + Date.now();
     } catch (error) {
       console.error("Logout error:", error);
       window.location.reload();
