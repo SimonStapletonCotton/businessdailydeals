@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Bell, Plus, User, Menu, Ticket, Search, CreditCard, Building2, Home, UserPlus, ShoppingBag, HelpCircle, Mail, Coins, BarChart3, Flame } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { User as UserType } from "@shared/schema";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -13,6 +13,7 @@ export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: notifications } = useQuery({
     queryKey: ["/api/notifications"],
@@ -25,6 +26,9 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
+      // Clear React Query cache first
+      queryClient.clear();
+      
       // Navigate to logout endpoint which will handle session destruction and redirect
       window.location.href = "/api/logout";
     } catch (error) {
