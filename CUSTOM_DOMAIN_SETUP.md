@@ -1,39 +1,48 @@
-# Add Custom Domain to Your Deployed Business Daily Deals
+# Business Daily Deals - Custom Domain Setup
 
-## Deployment Complete ✅
-Your marketplace is now deployed on Replit's cloud infrastructure.
+## Current Situation
+- **Technical URL**: https://b4c4fa9a-c209-4d1e-9ad6-d30acf9c86d2.worf.prod.repl.run/
+- **Business Need**: Professional domain like www.businessdailydeals.co.za
+- **Status**: Marketplace fully operational, needs professional branding
 
-## Adding www.businessdailydeals.co.za
+## Custom Domain Options
 
-### Step 1: Access Deployment Settings
-1. In your Replit workspace, look for the **Deployments** tab or section
-2. Find your active deployment (should show as "Live")
-3. Click on **Settings** or **Configure**
+### Option 1: Connect Your Existing Domain
+If you own **www.businessdailydeals.co.za**, you can:
+1. Point your domain to the Replit app
+2. Set up DNS records with your domain registrar
+3. Keep all existing functionality with professional URL
 
-### Step 2: Add Custom Domain
-1. Look for **Custom Domain** or **Domain** section
-2. Click **Add Domain** or **Configure Domain**
-3. Enter: `www.businessdailydeals.co.za`
-4. Click **Add** or **Save**
+### Option 2: Purchase New Domain
+Register a professional domain such as:
+- www.businessdailydeals.co.za (South African focus)
+- www.businessdailydeals.com (international)
+- www.bddeals.co.za (shorter version)
 
-### Step 3: Get DNS Records
-Replit will provide you with:
-- **A Record**: Points your domain to Replit's servers
-- **TXT Record**: Verifies domain ownership
+### Option 3: Subdomain Solution
+Use a memorable subdomain like:
+- marketplace.yourcompany.co.za
+- deals.yourcompany.co.za
 
-### Step 4: Update DNS at Cybersmart
-1. Log into Cybersmart hosting account
-2. Go to **DNS Management** or **Domain Manager**
-3. Add the A record provided by Replit
-4. Add the TXT record provided by Replit
-5. Save changes
+## Benefits of Custom Domain
+✅ **Professional Image**: Builds trust with suppliers and buyers  
+✅ **Marketing Ready**: Perfect for business cards, advertising, presentations  
+✅ **Brand Recognition**: Reinforces Business Daily Deals branding  
+✅ **SEO Benefits**: Better search engine optimization  
+✅ **Customer Trust**: Professional domain increases credibility  
 
-### Step 5: Verification
-- DNS propagation takes 1-24 hours
-- Replit will automatically verify your domain
-- SSL certificate will be issued automatically
+## Replit Custom Domain Setup Process
+1. **Deploy your app**: Go to Deployments tab → Click Deploy
+2. **Access Settings**: In Deployments → Settings tab
+3. **Link Domain**: Choose "Link a domain" or "Manually connect"  
+4. **Enter Domain**: Type your professional domain name
+5. **Configure DNS**: Add Replit's provided A and TXT records to your registrar
+6. **Wait for Verification**: DNS propagation (few minutes to 48 hours)
+7. **Professional Launch**: Your marketplace accessible via custom domain
 
-## Result
-**www.businessdailydeals.co.za** → Your Business Daily Deals marketplace
+## Immediate Action Required
+- Deploy your app through Replit Deployments tab first
+- Choose your professional domain name
+- Follow Replit's domain connection wizard
 
-Your 13 deals and complete functionality remain intact with your professional domain!
+Your marketplace functionality remains exactly the same - just with a professional business address that builds trust with suppliers and buyers.
