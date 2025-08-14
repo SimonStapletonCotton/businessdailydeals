@@ -283,8 +283,8 @@ export default function Home() {
             <span>🎉</span>
           </h2>
           <p className="text-lg md:text-xl text-white leading-relaxed">
-            Post unlimited deals completely <strong>FREE</strong> during our launch period!<br/>
-            Build your customer base with zero cost advertising.
+            Post unlimited deals completely <strong>FREE UNTIL 20TH FEBRUARY 2026!</strong><br/>
+            Build your customer base with zero cost advertising during our extended launch period.
           </p>
         </div>
       </div>

@@ -296,11 +296,11 @@ export default function PostDeal() {
         <div className="mb-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white text-center" data-testid="promotional-banner">
           <div className="flex items-center justify-center mb-2">
             <Flame className="h-6 w-6 mr-2 text-orange-200" />
-            <h2 className="text-2xl font-bold">🎉 FREE UNTIL 1ST JANUARY 2026!</h2>
+            <h2 className="text-2xl font-bold">🎉 FREE UNTIL 20TH FEBRUARY 2026!</h2>
             <Flame className="h-6 w-6 ml-2 text-orange-200" />
           </div>
           <p className="text-lg mb-2">
-            <strong>All deal posting is 100% FREE for suppliers until 1st January 2026!</strong>
+            <strong>All deal posting is 100% FREE for suppliers until 20th February 2026!</strong>
           </p>
           <p className="text-sm opacity-90">
             Post unlimited HOT and REGULAR deals at no cost • Build your customer base • Start selling today
