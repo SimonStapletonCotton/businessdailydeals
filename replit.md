@@ -118,7 +118,7 @@ Backup requirements: Critical - cannot start from beginning if crashes occur, ne
 **Status**: LIVE and fully operational with complete B2B marketplace functionality  
 **Features Active**: Complete deals management, supplier analytics, credit system, professional theme  
 **Promotional Period**: FREE until February 20, 2026 - prominently displayed  
-**Latest Update**: August 14, 2025 - REDEPLOYMENT COMPLETE - Stable business URL active for immediate launch
+**Latest Update**: August 14, 2025 - Promotional period extended to February 20, 2026 across entire system
 
 ## Recent Changes
 

@@ -703,8 +703,8 @@ export class DatabaseStorage implements IStorage {
     // Calculate credits cost based on deal type
     const creditsCost = this.calculateDealCredits(dealData.dealType || 'regular');
     
-    // Check if supplier is in promotional period (FREE until Jan 1, 2026)
-    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    // Check if supplier is in promotional period (FREE until Feb 20, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-02-20T23:59:59Z');
     const finalCreditsCost = isPromotionalPeriod ? 0 : creditsCost;
     
     const dealWithCredits = { 
@@ -873,7 +873,7 @@ export class DatabaseStorage implements IStorage {
 
   async activateSupplierPromotionalPeriod(supplierId: string): Promise<User> {
     const now = new Date();
-    const promotionalEnd = new Date('2026-02-20T00:00:00Z'); // FREE until February 20th, 2026
+    const promotionalEnd = new Date('2026-02-20T23:59:59Z'); // FREE until February 20th, 2026
     
     const [user] = await db.update(users)
       .set({
@@ -891,7 +891,7 @@ export class DatabaseStorage implements IStorage {
   // Credit management for deals
   private calculateDealCredits(dealType: 'hot' | 'regular'): number {
     // Check if we're in the promotional period (FREE until Feb 20, 2026)
-    const isPromotionalPeriod = new Date() < new Date('2026-02-20');
+    const isPromotionalPeriod = new Date() < new Date('2026-02-20T23:59:59Z');
     if (isPromotionalPeriod) {
       return 0; // All deals are FREE during promotional period
     }
@@ -967,8 +967,8 @@ export class DatabaseStorage implements IStorage {
     const newCredits = this.calculateDealCredits(newDealType);
     const creditDifference = newCredits - originalCredits;
 
-    // Check if we're in the promotional period (FREE until Jan 1, 2026)
-    const isPromotionalPeriod = new Date() < new Date('2026-01-01');
+    // Check if we're in the promotional period (FREE until Feb 20, 2026)
+    const isPromotionalPeriod = new Date() < new Date('2026-02-20T23:59:59Z');
 
     if (isPromotionalPeriod) {
       // During promotional period, all changes are FREE

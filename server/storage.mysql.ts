@@ -204,8 +204,8 @@ export class MySQLDatabaseStorage {
 
   // Credit system operations
   calculateDealCredits(dealType: 'hot' | 'regular'): number {
-    // During promotional period (until Jan 1, 2026), all deals are free
-    const promotionalEndDate = new Date('2026-01-01');
+    // During promotional period (until Feb 20, 2026), all deals are free
+    const promotionalEndDate = new Date('2026-02-20T23:59:59Z');
     const currentDate = new Date();
     
     if (currentDate < promotionalEndDate) {
