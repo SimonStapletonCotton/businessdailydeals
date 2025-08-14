@@ -1,124 +1,46 @@
-# Troubleshooting: Site Still Shows "Coming Soon"
+# 404 Error Troubleshooting for Cybersmart
 
-## You've Done:
-✅ Created `app.js` file  
-✅ Changed startup file to `app.js`  
-✅ Restarted the application
+The 404 error means the file isn't being served properly. Here are the troubleshooting steps:
 
-## But Still Getting "Coming Soon"
+## Issue: File Location or Name Problem
 
-## Possible Issues & Solutions:
+**Check these in File Manager:**
+1. **File name**: Must be exactly `index.html` (not Index.html or index.HTML)
+2. **File location**: Must be in the ROOT of public_html (not in a subfolder)
+3. **File extension**: Must end with .html (not .txt or no extension)
 
-### 1. Check app.js File Location
-**Verify the file is in the correct location:**
-- File should be at: `/home/simonsta/public_html/businessdailydeals-fixed/app.js`
-- NOT in any subfolder
-- Must be directly in the `businessdailydeals-fixed` directory
+## Most Common Issues:
 
-### 2. Verify app.js Content
-**Make sure the file contains this EXACT content:**
+### 1. Wrong Directory
+- File should be: `/public_html/index.html`
+- NOT: `/public_html/businessdailydeals/index.html`
+- NOT: `/public_html/www/index.html`
 
-```javascript
-const express = require('express');
-const path = require('path');
-const session = require('express-session');
+### 2. Wrong File Name
+- Should be: `index.html`
+- NOT: `Index.html` or `INDEX.html`
+- NOT: `index.htm`
 
-const app = express();
-const port = process.env.PORT || 5000;
+### 3. File Saved as Text
+- Make sure it's saved as HTML file
+- Check the file icon - should show as web page, not text document
 
-console.log('Business Daily Deals starting from app.js');
+## Quick Fix Steps:
+1. Go to File Manager
+2. Navigate to public_html (the ROOT folder)
+3. Delete the current index.html
+4. Create NEW FILE called exactly: `index.html`
+5. Paste the content again
+6. Save and close
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+## Alternative: Ask Cybersmart
+Subject: File Upload Issue - 404 Error
 
-app.use(session({
-  secret: 'business-daily-deals-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }
-}));
+"Hi, I uploaded index.html to public_html but getting 404 error. Can you check:
+1. Is the file in the correct location?
+2. Is it named exactly 'index.html'?
+3. Are there any server cache issues?
 
-// Try to load complete routes
-try {
-  const { registerRoutes } = require('./server/routes');
-  registerRoutes(app).then(() => {
-    console.log('Complete marketplace loaded');
-  }).catch(err => {
-    console.log('Using fallback mode');
-  });
-} catch (error) {
-  console.log('Routes not available, using basic server');
-}
+Please help troubleshoot why the uploaded HTML file isn't being served."
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'client')));
-app.use(express.static(path.join(__dirname, 'client/dist')));
-
-// Fallback route
-app.get('*', (req, res) => {
-  const reactIndex = path.join(__dirname, 'client/dist/index.html');
-  if (require('fs').existsSync(reactIndex)) {
-    res.sendFile(reactIndex);
-  } else {
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-        <head><title>Business Daily Deals</title></head>
-        <body>
-          <h1>Business Daily Deals - B2B Marketplace</h1>
-          <p>Application successfully running - Loading complete marketplace...</p>
-        </body>
-      </html>
-    `);
-  }
-});
-
-app.listen(port, () => {
-  console.log('Business Daily Deals running on port ' + port);
-});
-
-module.exports = app;
-```
-
-### 3. Check Node.js App Status
-In cPanel Node.js Selector:
-- Make sure the app shows as "Running" 
-- If it shows "Stopped", click "Start"
-- If there are any error messages, note them
-
-### 4. Check Passenger Log
-Look at the log file: `/home/simonsta/logs/businessdailydeals.log`
-- Check for any error messages
-- Look for startup messages from app.js
-
-### 5. Force Restart Again
-- In Node.js Selector, click "Stop" then "Start" 
-- Or click "Restart" again
-- Wait 30 seconds, then check the site
-
-### 6. Alternative Test
-If still not working, create a simple test app.js:
-
-```javascript
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 5000;
-
-app.get('*', (req, res) => {
-  res.send('<h1>Business Daily Deals - TEST MODE</h1><p>App.js is working!</p>');
-});
-
-app.listen(port, () => {
-  console.log('Test app running on port ' + port);
-});
-
-module.exports = app;
-```
-
-If this test version works, then gradually add back the complete code.
-
-## Next Steps:
-1. Double-check the app.js file location and content
-2. Check the application status in Node.js Selector
-3. Look at the Passenger log for errors
-4. Try the simple test version if needed
+The website should work - this is just a file serving issue.
