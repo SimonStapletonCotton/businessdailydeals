@@ -222,28 +222,16 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
-  // TEMPORARY: Working supplier test session for marketplace functionality
-  // This allows the hardcoded supplier (simons@cybersmart.co.za) to access all features
-  const testSupplierSession = {
-    id: "46102542",
-    email: "simons@cybersmart.co.za",
-    username: "simons",
-    userType: "supplier",
-    creditBalance: 100,
-    isVerified: true,
-    claims: {
-      sub: "46102542"
-    }
-  };
+  if (!req.user) {
+    return res.status(401).json({ 
+      message: "Unauthorized",
+      loginUrl: "/api/login",
+      redirectReason: "Not authenticated"
+    });
+  }
+
+  const user = req.user as any;
   
-  // Attach test supplier to request for consistent API behavior
-  req.user = testSupplierSession;
-  
-  console.log("🔐 USING TEST SUPPLIER SESSION:", testSupplierSession.email);
-  return next();
-  
-  // Note: The following code is disabled for testing but kept for production deployment
-  /*
   if (!user.expires_at) {
     return res.status(401).json({ 
       message: "Unauthorized",
@@ -281,5 +269,4 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
       redirectReason: "Failed to refresh session, please login again"
     });
   }
-  */
 };

@@ -39,6 +39,19 @@ export default function Home() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Promotional Banner */}
+        <div className="bg-gradient-to-r from-red-600 to-orange-600 text-white text-center py-4 mb-8 rounded-lg shadow-lg">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold mb-2">🎉 FREE PROMOTIONAL PERIOD! 🎉</h2>
+            <p className="text-lg">
+              All deal posting is <strong>completely FREE</strong> until <strong>February 20th, 2026</strong>
+            </p>
+            <p className="text-sm mt-1 opacity-90">
+              Start advertising your business today at no cost - Limited time offer!
+            </p>
+          </div>
+        </div>
+
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
