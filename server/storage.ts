@@ -1090,17 +1090,23 @@ export class DatabaseStorage implements IStorage {
 
   // Notification operations
   async getUserNotifications(userId: string): Promise<NotificationWithDeal[]> {
-    const result = await db
-      .select()
-      .from(notifications)
-      .leftJoin(deals, eq(notifications.dealId, deals.id))
-      .where(eq(notifications.userId, userId))
-      .orderBy(desc(notifications.createdAt));
+    try {
+      const result = await db
+        .select()
+        .from(notifications)
+        .leftJoin(deals, eq(notifications.dealId, deals.id))
+        .where(eq(notifications.userId, userId))
+        .orderBy(desc(notifications.createdAt));
 
-    return result.map(row => ({
-      ...row.notifications,
-      deal: row.deals!
-    }));
+      return result.map(row => ({
+        ...row.notifications,
+        deal: row.deals!
+      }));
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      // Return empty array if notifications table has issues
+      return [];
+    }
   }
 
   async createNotification(notificationData: InsertNotification): Promise<Notification> {
