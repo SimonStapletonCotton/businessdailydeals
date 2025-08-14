@@ -121,12 +121,12 @@ Backup requirements: Critical - cannot start from beginning if crashes occur, ne
 
 ## Recent Changes
 
-### Cybersmart Deployment - Technical Support Engaged (August 13, 2025)
-- **Current Issue**: Passenger serving "coming soon" instead of complete marketplace
-- **Root Cause Identified**: Passenger requires main application file at root level (app.js), not in subfolder
-- **Solution Provided**: Complete technical support request sent to Cybersmart with exact code and configuration steps
-- **Cybersmart Task**: Create app.js file in application root, update startup file configuration to app.js, restart application
-- **Status**: Awaiting Cybersmart technical team implementation (5-minute fix)
+### Cybersmart Deployment - MySQL Credentials Received (August 14, 2025)
+- **Progress**: app.js file created, Node.js app configured with correct startup file
+- **MySQL Database**: Cybersmart created database and user with full privileges
+- **Credentials Received**: Database: simonsta_business_deals, User: simonsta_bdd, Host: localhost
+- **Final Step**: Add MySQL environment variables to Node.js app configuration and restart
+- **Status**: Ready for final environment variable configuration to complete deployment
 
 ### Cybersmart Deployment SUCCESS (August 13, 2025)
 - **Infrastructure Ready**: Node.js 18.20.8 enabled, SSL configured, email created
