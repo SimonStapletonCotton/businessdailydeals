@@ -67,14 +67,14 @@ export default function HomeFebruary() {
         </div>
       </section>
 
-      {/* FREE Promotional Banner - FEBRUARY 20TH 2026 */}
-      <section className="bg-green-600 py-6 relative z-10">
+      {/* MEGA PROMOTIONAL BANNER - FEBRUARY 20TH 2026 - CACHE BREAKER */}
+      <section className="bg-red-600 py-8 relative z-10 border-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-2">
             <div className="flex items-center">
               <Flame className="h-5 w-5 mr-2 text-orange-200" />
               <p className="text-lg sm:text-xl font-bold">
-                ⭐ BREAKING: FREE DEALS UNTIL FEBRUARY 20TH, 2026! ⭐
+                🚨 URGENT: ALL DEALS FREE UNTIL FEBRUARY 20TH, 2026! 🚨
               </p>
               <Flame className="h-5 w-5 ml-2 text-orange-200" />
             </div>
