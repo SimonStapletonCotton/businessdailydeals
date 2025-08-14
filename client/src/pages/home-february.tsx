@@ -6,6 +6,7 @@ import { Link } from "wouter";
 import Navbar from "@/components/navbar";
 
 export default function HomeFebruary() {
+  console.log("🔥 FEBRUARY PAGE LOADED - This should show February 20th!");
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -24,7 +25,7 @@ export default function HomeFebruary() {
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight uppercase" data-testid="text-hero-title">
               BUSINESS DAILY
               <span className="block bg-gradient-to-r from-blue-200 to-white bg-clip-text text-transparent">
-                DEALS
+                DEALS - FEB 2026!
               </span>
             </h1>
             <div className="bg-slate-600 px-6 py-3 rounded-lg mb-4 inline-block shadow-lg">
