@@ -86,13 +86,15 @@ function Router() {
       <Route path="/test-dashboard" component={TestDashboard} />
       <Route path="/working-home" component={WorkingHome} />
       
-      {/* Make core pages accessible to everyone - ensure home is first */}
+      {/* FORCE COMPLETE CACHE BYPASS - FEBRUARY 2026 */}
       <Route path="/" component={HomeProduction} />
       <Route path="/home" component={HomeProduction} />
       <Route path="/home-ultimate" component={HomeProduction} />
       <Route path="/old-home" component={HomeProduction} />
       <Route path="/landing" component={HomeProduction} />
       <Route path="/home-fixed" component={HomeFixed} />
+      <Route path="/index.html" component={HomeProduction} />
+      <Route path="/index" component={HomeProduction} />
       <Route path="/hot-deals" component={HotDeals} />
       
       {/* Keep some features auth-protected */}

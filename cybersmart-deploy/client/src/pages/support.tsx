@@ -195,7 +195,7 @@ export default function Support() {
                     How do I register as a supplier?
                   </h4>
                   <p className="text-sm text-slate-600 dark:text-slate-300">
-                    Click "Register as SUPPLIER" from the main menu and complete the registration form. All registrations are currently FREE until January 1st, 2026.
+                    Click "Register as SUPPLIER" from the main menu and complete the registration form. All registrations are currently FREE until February 20th, 2026.
                   </p>
                 </div>
                 

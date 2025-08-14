@@ -276,7 +276,7 @@ export default function HomeProduction() {
               <div className="space-y-2 text-slate-300">
                 <p>South African B2B Marketplace</p>
                 <p>Credit System: 1 Credit = R2.50</p>
-                <p className="font-semibold text-green-400">FREE until February 20th, 2026!</p>
+                <p className="font-semibold text-green-400">FREE until February 20th, 2026! (NOT January 1st)</p>
               </div>
             </div>
           </div>

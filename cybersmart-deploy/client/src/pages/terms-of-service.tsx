@@ -71,7 +71,7 @@ export default function TermsOfService() {
                   </h3>
                   <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 p-4 rounded-lg border border-emerald-200 dark:border-emerald-700">
                     <p className="font-medium text-emerald-800 dark:text-emerald-200 mb-2">
-                      Current Promotional Offer (Valid until January 1st, 2026):
+                      Current Promotional Offer (Valid until February 20th, 2026):
                     </p>
                     <ul className="list-disc list-inside space-y-1 text-emerald-700 dark:text-emerald-300">
                       <li>All supplier registrations are FREE</li>
@@ -80,7 +80,7 @@ export default function TermsOfService() {
                       <li>Full access to all platform features</li>
                     </ul>
                     <p className="text-sm text-emerald-600 dark:text-emerald-400 mt-2">
-                      After January 1st, 2026, standard pricing will apply as per our rates structure.
+                      After February 20th, 2026, standard pricing will apply as per our rates structure.
                     </p>
                   </div>
                 </section>
