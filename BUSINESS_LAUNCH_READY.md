@@ -1,7 +1,8 @@
 # BUSINESS DAILY DEALS - READY FOR LAUNCH
 
-## Your Professional Business URL
-**https://deal-stream-simons27.replit.app**
+## Your Business URLs
+**Current Working**: https://b4c4fa9a-c209-4d1e-9ad6-d30acf9c86d2.worf.prod.repl.run/  
+**Professional** (updating): https://deal-stream-simons27.replit.app
 
 ## Status: LIVE AND BUSINESS-READY
 ✅ **Professional Domain**: Clean, memorable .replit.app address  
@@ -27,7 +28,8 @@
 - Mobile-responsive interface
 
 ## Launch Strategy
-1. **Immediate Use**: Start using https://deal-stream-simons27.replit.app
+1. **Immediate Use**: Start using your current working URL  
+2. **Professional URL**: Will be available after deployment completes
 2. **Marketing Materials**: Update business cards, emails, website
 3. **Supplier Outreach**: Begin connecting South African suppliers
 4. **Buyer Engagement**: Promote to business buyers
