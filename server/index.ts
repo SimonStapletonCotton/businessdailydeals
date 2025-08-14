@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+// Cache buster: 1755192175
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { testDatabaseConnection } from "./db";
@@ -7,6 +8,17 @@ import { initializeDatabase } from "./db-selector";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Force cache busting for all requests
+app.use((req, res, next) => {
+  res.set({
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+    'ETag': Date.now().toString()
+  });
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();

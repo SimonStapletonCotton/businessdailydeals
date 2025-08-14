@@ -562,7 +562,7 @@ export default function HomeComprehensive() {
                   <p className="text-sm font-semibold text-white">🎉 FREE PROMOTION ACTIVE</p>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Suppliers post deals FREE until January 1st, 2026!
+                  Suppliers post deals FREE until February 20th, 2026!
                 </p>
               </div>
             </div>
