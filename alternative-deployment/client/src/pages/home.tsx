@@ -279,7 +279,7 @@ export default function Home() {
         <div className="rounded-2xl p-8 border-4 border-yellow-400 text-center" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", backdropFilter: "blur(10px)" }}>
           <h2 className="text-3xl md:text-4xl font-bold text-yellow-300 mb-4 flex items-center justify-center gap-2">
             <span>🎉</span>
-            <span>FREE UNTIL JANUARY 1ST, 2026!</span>
+            <span>FREE UNTIL FEBRUARY 20TH, 2026!</span>
             <span>🎉</span>
           </h2>
           <p className="text-lg md:text-xl text-white leading-relaxed">

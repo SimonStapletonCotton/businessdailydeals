@@ -157,7 +157,7 @@ export default function HomeCasino() {
         </div>
         
         <div className="promo-banner">
-          <div className="promo-title">🎉 FREE UNTIL JANUARY 1ST, 2026! 🎉</div>
+          <div className="promo-title">🎉 FREE UNTIL FEBRUARY 20TH, 2026! 🎉</div>
           <div className="promo-text">
             Post unlimited deals completely <strong>FREE</strong> during our launch period!<br/>
             Build your customer base with zero cost advertising.
