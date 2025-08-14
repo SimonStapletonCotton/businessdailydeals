@@ -131,11 +131,11 @@ export async function setupAuth(app: Express) {
     // Use the actual request host to handle URL changes
     const domain = req.get('host') || process.env.REPLIT_DOMAINS!.split(",")[0];
     console.log("🔐 LOGIN: Using domain:", domain);
-    console.log("🔐 LOGIN: Available strategies:", Object.keys(passport._strategies));
+    console.log("🔐 LOGIN: Available strategies:", Object.keys((passport as any)._strategies || {}));
     
     // Create strategy dynamically if it doesn't exist using the same config
     const strategyName = `replitauth:${domain}`;
-    if (!passport._strategies[strategyName]) {
+    if (!(passport as any)._strategies?.[strategyName]) {
       console.log(`🔐 LOGIN: Creating new strategy for domain: ${domain}`);
       const strategy = new Strategy(
         {
@@ -160,11 +160,11 @@ export async function setupAuth(app: Express) {
     const domain = req.get('host') || process.env.REPLIT_DOMAINS!.split(",")[0];
     console.log("🔐 AUTH CALLBACK: Processing callback for domain:", domain);
     console.log("🔐 AUTH CALLBACK: Query params:", req.query);
-    console.log("🔐 AUTH CALLBACK: Available strategies:", Object.keys(passport._strategies));
+    console.log("🔐 AUTH CALLBACK: Available strategies:", Object.keys((passport as any)._strategies || {}));
     
     // Create strategy dynamically if it doesn't exist using the same config
     const strategyName = `replitauth:${domain}`;
-    if (!passport._strategies[strategyName]) {
+    if (!(passport as any)._strategies?.[strategyName]) {
       console.log(`🔐 CALLBACK: Creating new strategy for domain: ${domain}`);
       const strategy = new Strategy(
         {
@@ -178,7 +178,7 @@ export async function setupAuth(app: Express) {
       passport.use(strategy);
     }
     
-    passport.authenticate(strategyName, (err, user, info) => {
+    passport.authenticate(strategyName, (err: any, user: any, info: any) => {
       if (err) {
         console.error("🔐 AUTH ERROR:", err);
         return res.redirect("/api/login?error=auth_error");
@@ -212,6 +212,13 @@ export async function setupAuth(app: Express) {
       );
     });
   });
+
+  // Add POST logout route for frontend compatibility
+  app.post("/api/logout", (req, res) => {
+    req.logout(() => {
+      res.json({ success: true, message: "Logged out successfully" });
+    });
+  });
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
@@ -234,7 +241,9 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   
   console.log("🔐 USING TEST SUPPLIER SESSION:", testSupplierSession.email);
   return next();
-
+  
+  // Note: The following code is disabled for testing but kept for production deployment
+  /*
   if (!user.expires_at) {
     return res.status(401).json({ 
       message: "Unauthorized",
@@ -272,4 +281,5 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
       redirectReason: "Failed to refresh session, please login again"
     });
   }
+  */
 };

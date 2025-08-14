@@ -39,16 +39,17 @@ export default function Navbar() {
       });
       console.log("Logout response status:", response.status);
       
-      // Force complete page reload to clear all state
-      setTimeout(() => {
+      if (response.ok) {
+        // Force complete page reload to clear all state
         window.location.replace('/');
-      }, 100);
+      } else {
+        console.warn("Logout request failed, still proceeding with client-side logout");
+        window.location.replace('/');
+      }
     } catch (error) {
       console.error("Logout error:", error);
-      // Force reload even on error
-      setTimeout(() => {
-        window.location.replace('/');
-      }, 100);
+      // Force reload even on error to clear client state
+      window.location.replace('/');
     }
   };
 
