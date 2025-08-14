@@ -438,7 +438,7 @@ export default function SupplierDashboard() {
         <div className="mb-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white text-center" data-testid="promotional-banner">
           <div className="flex items-center justify-center mb-2">
             <Flame className="h-6 w-6 mr-2 text-orange-200" />
-            <h2 className="text-2xl font-bold">🎉 FREE UNTIL 20TH FEBRUARY 2026!</h2>
+            <h2 className="text-2xl font-bold">🎉 FREE UNTIL 20TH FEBRUARY 2026! ✨</h2>
             <Flame className="h-6 w-6 ml-2 text-orange-200" />
           </div>
           <p className="text-lg mb-2">
