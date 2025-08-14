@@ -118,7 +118,7 @@ Backup requirements: Critical - cannot start from beginning if crashes occur, ne
 **Status**: LIVE and fully operational with complete B2B marketplace functionality  
 **Features Active**: Complete deals management, supplier analytics, credit system, professional theme  
 **Promotional Period**: FREE until February 20, 2026 - prominently displayed  
-**Latest Update**: August 14, 2025 - PRODUCTION CACHE CRISIS RESOLVED: Discovered production serves from cybersmart-deploy directory. Fixed ALL deployment files containing January 1st dates. Updated rates-management.tsx, home-simple.tsx, home-comprehensive.tsx, support.tsx, and terms-of-service.tsx in cybersmart-deploy to display February 20th, 2026. Production cache completely bypassed.
+**Latest Update**: August 14, 2025 - PERSISTENT CACHE LOOP IDENTIFIED: Despite fixing all deployment directories (cybersmart-deploy, alternative-deployment) and server restarts, production URL continues serving cached January 1st content. User reports same recurring issues with February 20th dates and logout functionality. Root cause appears to be deeper infrastructure-level caching beyond file-level fixes.
 
 ## Recent Changes
 
