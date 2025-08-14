@@ -6,14 +6,11 @@ import { Flame, ArrowRight, TrendingUp, Users, ShieldCheck, Clock } from "lucide
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 
-// CACHE-BUSTING TIMESTAMP: 1755194000000
-const CACHE_BUSTER = Date.now();
-console.log("🔥 FIXED HOMEPAGE LOADED - CACHE BUSTER:", CACHE_BUSTER);
-console.log("🎯 PROMOTIONAL PERIOD: FREE until February 20th, 2026");
+// Cache issue resolved - keeping February 2026 content
+console.log("✅ Homepage loaded with February 20th, 2026 promotional period");
 
 export default function HomeFixed() {
   useEffect(() => {
-    console.log("🔥 FIXED HOMEPAGE MOUNTED - February 20th, 2026 ACTIVE!");
     document.title = "Business Daily Deals - South African B2B Marketplace";
   }, []);
 
@@ -27,16 +24,13 @@ export default function HomeFixed() {
     staleTime: 0,
   });
 
-  const currentTime = new Date().toLocaleString();
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-orange-100 to-slate-200">
       <Navbar />
       
-      {/* EXTREME CACHE BUSTER BANNER */}
-      <div className="bg-red-600 text-white p-2 text-center font-bold">
-        🔥 CACHE FIXED - LOADED: {currentTime} - BUSTER: {CACHE_BUSTER}
-      </div>
+      {/* Cache fix successful - remove debug banner */}
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
