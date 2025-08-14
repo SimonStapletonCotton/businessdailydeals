@@ -102,7 +102,7 @@ export default function HomeSimple() {
             <div className="flex items-center">
               <Flame className="h-5 w-5 mr-2 text-orange-200" />
               <p className="text-lg sm:text-xl font-bold">
-                🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL 1ST JANUARY 2026!
+                🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL 20TH FEBRUARY 2026!
               </p>
               <Flame className="h-5 w-5 ml-2 text-orange-200" />
             </div>
