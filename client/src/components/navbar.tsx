@@ -26,12 +26,15 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      // For working supplier system, do a proper logout but maintain session
-      console.log("Logout clicked - refreshing authentication state");
-      // Clear query cache to force fresh auth check
+      console.log("Logout clicked - doing complete logout");
+      // Clear all caches and cookies
       queryClient.clear();
-      // Redirect to home with cache bust
-      window.location.href = "/?t=" + Date.now();
+      localStorage.clear();
+      sessionStorage.clear();
+      // Make actual logout request
+      await fetch('/api/logout', { method: 'POST' });
+      // Force complete page reload
+      window.location.replace('/');
     } catch (error) {
       console.error("Logout error:", error);
       window.location.reload();

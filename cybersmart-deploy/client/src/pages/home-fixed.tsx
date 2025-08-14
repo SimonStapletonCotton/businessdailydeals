@@ -108,7 +108,7 @@ export default function HomeFixed() {
               margin: "0 0 20px 0",
               color: "#ffff00"
             }}>
-              🎉 FREE UNTIL JANUARY 1ST, 2026! 🎉
+              🎉 FREE UNTIL FEBRUARY 20TH, 2026! 🎉
             </h2>
             <p style={{
               fontSize: "20px",
