@@ -776,6 +776,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Hottest deals endpoint - must be before dynamic route
+  // Hot deals endpoint for homepage
+  app.get('/api/deals/hot', async (req, res) => {
+    try {
+      const hotDeals = await storage.getHotDeals();
+      res.json(hotDeals);
+    } catch (error: any) {
+      console.error("Hot deals fetch error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   app.get('/api/deals/hottest', async (req, res) => {
     try {
       const deals = await storage.getDeals('hot');
