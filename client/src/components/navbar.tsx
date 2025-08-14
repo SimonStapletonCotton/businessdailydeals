@@ -369,23 +369,25 @@ export default function Navbar() {
               </>
             )}
 
-            {!isAuthenticated && (
+            {/* Always show LOGIN button when not authenticated */}
+            {!isAuthenticated && !isLoading && (
               <Button
-                className="bg-white text-slate-600 hover:bg-white/90 hover:text-slate-700 font-medium"
+                className="bg-white text-slate-600 hover:bg-white/90 hover:text-slate-700 font-medium px-4 py-2"
                 onClick={() => {
-                  console.log("Login button clicked - redirecting to /api/login");
+                  console.log("🔐 LOGIN BUTTON CLICKED - Redirecting to /api/login");
                   window.location.href = "/api/login";
                 }}
                 data-testid="button-login"
+                style={{ minWidth: '200px' }}
               >
                 <User className="h-4 w-4 mr-2" />
-                Login to Access Deals
+                LOGIN TO ACCESS DEALS
               </Button>
             )}
             
-            {/* Debug: Show auth status */}
-            <div className="text-xs text-white bg-black/20 px-2 py-1 rounded">
-              Auth: {isAuthenticated ? 'YES' : 'NO'} | Loading: {isLoading ? 'YES' : 'NO'}
+            {/* Temporary debug - always visible */}
+            <div className="text-xs text-red-500 bg-yellow-200 px-2 py-1 rounded font-bold">
+              AUTH: {isAuthenticated ? 'LOGGED IN' : 'LOGGED OUT'} | LOADING: {isLoading ? 'YES' : 'NO'}
             </div>
 
             {/* Mobile menu */}
