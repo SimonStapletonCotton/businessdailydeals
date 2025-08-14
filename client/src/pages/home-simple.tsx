@@ -286,7 +286,7 @@ export default function HomeSimple() {
               <Link href="/support" className="hover:text-white ml-2">Support</Link>
             </p>
             <p className="text-xs text-slate-500 mt-2">
-              🎉 FREE deal posting for suppliers until January 1st, 2026!
+              🎉 FREE deal posting for suppliers until February 20th, 2026!
             </p>
           </div>
         </div>

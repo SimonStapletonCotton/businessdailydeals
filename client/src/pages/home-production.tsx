@@ -31,10 +31,7 @@ export default function HomeProduction() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-orange-100 to-slate-200">
       <Navbar />
       
-      {/* PRODUCTION CACHE BUSTER CONFIRMATION */}
-      <div className="bg-green-600 text-white p-2 text-center font-bold">
-        ✅ PRODUCTION FIXED - February 20th, 2026 - TIMESTAMP: {PRODUCTION_TIMESTAMP}
-      </div>
+      {/* SUCCESS CONFIRMATION - REMOVE AFTER CONFIRMING */}
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
