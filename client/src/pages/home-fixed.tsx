@@ -1,183 +1,244 @@
+import React, { useEffect } from "react";
+import Navbar from "@/components/navbar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Flame, ArrowRight, TrendingUp, Users, ShieldCheck, Clock } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
+
+// CACHE-BUSTING TIMESTAMP: 1755194000000
+const CACHE_BUSTER = Date.now();
+console.log("🔥 FIXED HOMEPAGE LOADED - CACHE BUSTER:", CACHE_BUSTER);
+console.log("🎯 PROMOTIONAL PERIOD: FREE until February 20th, 2026");
+
 export default function HomeFixed() {
+  useEffect(() => {
+    console.log("🔥 FIXED HOMEPAGE MOUNTED - February 20th, 2026 ACTIVE!");
+    document.title = "Business Daily Deals - South African B2B Marketplace";
+  }, []);
+
+  const { data: stats } = useQuery({
+    queryKey: ["/api/stats"],
+    staleTime: 0,
+  });
+
+  const { data: hotDeals } = useQuery({
+    queryKey: ["/api/deals", "hot"],
+    staleTime: 0,
+  });
+
+  const currentTime = new Date().toLocaleString();
+
   return (
-    <>
-      {/* Force visible styles with high specificity */}
-      <style>{`
-        html, body {
-          margin: 0 !important;
-          padding: 0 !important;
-          width: 100% !important;
-          height: 100% !important;
-          overflow-x: auto !important;
-        }
-        #root {
-          margin: 0 !important;
-          padding: 0 !important;
-          width: 100% !important;
-          min-height: 100vh !important;
-        }
-        .home-container {
-          display: block !important;
-          position: relative !important;
-          width: 100% !important;
-          min-height: 100vh !important;
-          background: linear-gradient(135deg, #ff6600 0%, #cc5200 100%) !important;
-          color: white !important;
-          z-index: 999999999 !important;
-        }
-        @keyframes spinSeven {
-          0% { transform: rotateY(0deg); }
-          100% { transform: rotateY(360deg); }
-        }
-        .spinning-seven {
-          display: inline-block;
-          font-weight: bold;
-          text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
-          transform-style: preserve-3d;
-        }
-        .seven-1 {
-          animation: spinSeven 2s linear infinite;
-          color: #ff0000 !important;
-        }
-        .seven-2 {
-          animation: spinSeven 2.5s linear infinite;
-          color: #cc0000 !important;
-        }
-        .seven-3 {
-          animation: spinSeven 3s linear infinite;
-          color: #ff3333 !important;
-        }
-      `}</style>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-orange-100 to-slate-200">
+      <Navbar />
       
-      <div className="home-container">
-        {/* Header */}
-        <div style={{
-          padding: "20px",
-          textAlign: "center",
-          backgroundColor: "rgba(0,0,0,0.2)",
-          borderBottom: "2px solid #ff8833"
-        }}>
-          <h1 style={{
-            fontSize: "48px",
-            fontWeight: "bold",
-            margin: "0",
-            color: "white",
-            textShadow: "2px 2px 4px rgba(0,0,0,0.5)"
-          }}>
-            🎰 BUSINESS DAILY DEALS 🎰
-          </h1>
-          <p style={{
-            fontSize: "24px",
-            margin: "10px 0 0 0",
-            color: "#ffcc99"
-          }}>
-            South Africa's Premier B2B Marketplace
-          </p>
-        </div>
-
-        {/* Main Content */}
-        <div style={{
-          padding: "40px 20px",
-          textAlign: "center"
-        }}>
-          {/* Casino 7's Animation */}
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "30px",
-            marginBottom: "40px",
-            fontSize: "84px",
-            fontFamily: "Georgia, serif"
-          }}>
-            <span className="spinning-seven seven-1">7</span>
-            <span className="spinning-seven seven-2">7</span>
-            <span className="spinning-seven seven-3">7</span>
-          </div>
-
-          {/* Promotional Text */}
-          <div style={{
-            backgroundColor: "rgba(255,255,255,0.1)",
-            padding: "30px",
-            borderRadius: "15px",
-            marginBottom: "40px",
-            border: "3px solid #ff8833"
-          }}>
-            <h2 style={{
-              fontSize: "36px",
-              margin: "0 0 20px 0",
-              color: "#ffff00"
-            }}>
-              🎉 FREE UNTIL FEBRUARY 20TH, 2026! 🎉
-            </h2>
-            <p style={{
-              fontSize: "20px",
-              margin: "0",
-              lineHeight: "1.6"
-            }}>
-              Post unlimited deals completely FREE during our launch period!<br/>
-              Build your customer base with zero cost advertising.
-            </p>
-          </div>
-
-          {/* Navigation Buttons */}
-          <div style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "20px"
-          }}>
-            <a href="/hot-deals" style={{
-              display: "inline-block",
-              padding: "20px 40px",
-              backgroundColor: "red",
-              color: "white",
-              textDecoration: "none",
-              borderRadius: "10px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              border: "3px solid #cc0000",
-              transition: "all 0.3s ease"
-            }}>
-              🔥 HOT DEALS
-            </a>
-            <a href="/regular-deals" style={{
-              display: "inline-block",
-              padding: "20px 40px",
-              backgroundColor: "#ff8833",
-              color: "white",
-              textDecoration: "none",
-              borderRadius: "10px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              border: "3px solid #cc6600"
-            }}>
-              📦 REGULAR DEALS
-            </a>
-            <a href="/register-supplier" style={{
-              display: "inline-block",
-              padding: "20px 40px",
-              backgroundColor: "green",
-              color: "white",
-              textDecoration: "none",
-              borderRadius: "10px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              border: "3px solid #006600"
-            }}>
-              🏭 BECOME A SUPPLIER
-            </a>
-          </div>
-        </div>
+      {/* EXTREME CACHE BUSTER BANNER */}
+      <div className="bg-red-600 text-white p-2 text-center font-bold">
+        🔥 CACHE FIXED - LOADED: {currentTime} - BUSTER: {CACHE_BUSTER}
       </div>
 
-      {/* Animations */}
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-    </>
+      {/* Hero Section */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center mb-16">
+          <h1 className="text-6xl font-bold text-gray-800 mb-6 leading-tight">
+            Business Daily Deals
+          </h1>
+          <h2 className="text-3xl text-gray-700 mb-8">
+            South Africa's Premier B2B Marketplace
+          </h2>
+          
+          {/* PROMOTIONAL BANNER - February 20th, 2026 */}
+          <Card className="bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0 shadow-2xl mb-12 mx-auto max-w-4xl">
+            <CardContent className="p-8">
+              <div className="flex items-center justify-center mb-4">
+                <Clock className="h-8 w-8 mr-3" />
+                <span className="text-3xl font-bold">LIMITED TIME OFFER</span>
+              </div>
+              <h3 className="text-5xl font-extrabold mb-4">
+                🎉 100% FREE DEAL POSTING 🎉
+              </h3>
+              <p className="text-xl mb-6">
+                No charges for suppliers until <strong>February 20th, 2026</strong>
+              </p>
+              <div className="bg-white/20 rounded-lg p-4 text-center">
+                <p className="text-lg">
+                  Build your customer base during our promotional launch period!
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Link to="/register">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-8 py-4 text-xl shadow-lg transform hover:scale-105 transition-all"
+                data-testid="button-start-selling"
+              >
+                <Flame className="h-6 w-6 mr-2" />
+                Start Selling Today - FREE!
+              </Button>
+            </Link>
+            <Link to="/hot-deals">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="border-2 border-orange-500 text-orange-600 hover:bg-orange-50 px-8 py-4 text-xl shadow-lg transform hover:scale-105 transition-all"
+                data-testid="button-browse-deals"
+              >
+                <ArrowRight className="h-6 w-6 mr-2" />
+                Browse Hot Deals
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        {stats && (stats as any).totalDeals && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <Card className="text-center bg-white/80 backdrop-blur shadow-xl">
+              <CardContent className="p-8">
+                <TrendingUp className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+                <h3 className="text-3xl font-bold text-gray-800 mb-2">{(stats as any).totalDeals}</h3>
+                <p className="text-gray-600 text-lg">Active Deals</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center bg-white/80 backdrop-blur shadow-xl">
+              <CardContent className="p-8">
+                <Users className="h-12 w-12 text-blue-500 mx-auto mb-4" />
+                <h3 className="text-3xl font-bold text-gray-800 mb-2">{(stats as any).activeSuppliers}</h3>
+                <p className="text-gray-600 text-lg">Active Suppliers</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center bg-white/80 backdrop-blur shadow-xl">
+              <CardContent className="p-8">
+                <ShieldCheck className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                <h3 className="text-3xl font-bold text-gray-800 mb-2">R{(stats as any).totalSavings?.toLocaleString()}</h3>
+                <p className="text-gray-600 text-lg">Total Savings</p>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* How It Works */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-800 mb-12">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="bg-white/80 backdrop-blur shadow-xl">
+              <CardContent className="p-8 text-center">
+                <div className="bg-orange-500 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+                  1
+                </div>
+                <h3 className="text-xl font-bold mb-4">Suppliers Post Deals</h3>
+                <p className="text-gray-600">
+                  List your products and services with special pricing for the B2B market.
+                  <strong> 100% FREE until February 20th, 2026!</strong>
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="bg-white/80 backdrop-blur shadow-xl">
+              <CardContent className="p-8 text-center">
+                <div className="bg-blue-500 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+                  2
+                </div>
+                <h3 className="text-xl font-bold mb-4">Buyers Discover</h3>
+                <p className="text-gray-600">
+                  Search and browse deals, set up keyword notifications for relevant opportunities.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="bg-white/80 backdrop-blur shadow-xl">
+              <CardContent className="p-8 text-center">
+                <div className="bg-green-500 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+                  3
+                </div>
+                <h3 className="text-xl font-bold mb-4">Connect & Save</h3>
+                <p className="text-gray-600">
+                  Direct inquiries between buyers and suppliers, with secure coupon system for tracking.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Featured Hot Deals */}
+        {hotDeals && Array.isArray(hotDeals) && hotDeals.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-4xl font-bold text-gray-800 text-center mb-12">Featured Hot Deals</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {hotDeals.slice(0, 3).map((deal: any) => (
+                <Card key={deal.id} className="bg-white shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+                  <CardContent className="p-6">
+                    {deal.imageUrl && (
+                      <img 
+                        src={deal.imageUrl} 
+                        alt={deal.title}
+                        className="w-full h-48 object-cover rounded-lg mb-4"
+                      />
+                    )}
+                    <div className="flex items-center mb-2">
+                      <Flame className="h-5 w-5 text-red-500 mr-2" />
+                      <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-semibold">
+                        HOT DEAL
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">{deal.title}</h3>
+                    <p className="text-gray-600 mb-4">{deal.description?.substring(0, 100)}...</p>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <span className="text-2xl font-bold text-green-600">R{deal.price}</span>
+                        {deal.originalPrice && (
+                          <span className="text-gray-500 line-through ml-2">R{deal.originalPrice}</span>
+                        )}
+                      </div>
+                      <Link to={`/deals/${deal.id}`}>
+                        <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
+                          View Deal
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Call to Action */}
+        <div className="text-center">
+          <Card className="bg-gradient-to-r from-slate-800 to-slate-900 text-white border-0 shadow-2xl">
+            <CardContent className="p-12">
+              <h2 className="text-4xl font-bold mb-6">Ready to Start?</h2>
+              <p className="text-xl mb-8 max-w-2xl mx-auto">
+                Join South Africa's fastest-growing B2B marketplace. 
+                <strong> No charges until February 20th, 2026!</strong>
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/register">
+                  <Button 
+                    size="lg" 
+                    className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-xl"
+                    data-testid="button-register-supplier"
+                  >
+                    Register as Supplier
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-white text-black bg-white hover:bg-gray-100 px-8 py-4 text-xl"
+                    data-testid="button-register-buyer"
+                  >
+                    Register as Buyer
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   );
 }

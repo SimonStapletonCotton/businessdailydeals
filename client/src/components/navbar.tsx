@@ -31,13 +31,24 @@ export default function Navbar() {
       queryClient.clear();
       localStorage.clear();
       sessionStorage.clear();
-      // Make actual logout request
-      await fetch('/api/logout', { method: 'POST' });
-      // Force complete page reload
-      window.location.replace('/');
+      
+      // Make actual logout request with credentials
+      const response = await fetch('/api/logout', { 
+        method: 'POST',
+        credentials: 'include'
+      });
+      console.log("Logout response status:", response.status);
+      
+      // Force complete page reload to clear all state
+      setTimeout(() => {
+        window.location.replace('/');
+      }, 100);
     } catch (error) {
       console.error("Logout error:", error);
-      window.location.reload();
+      // Force reload even on error
+      setTimeout(() => {
+        window.location.replace('/');
+      }, 100);
     }
   };
 
