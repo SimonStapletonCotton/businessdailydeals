@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { forceHomeRoute, clearRouteCache } from "@/utils/forceHomeRoute";
 import Landing from "@/pages/landing";
-import Home from "@/pages/home-comprehensive";
+import HomeFeb from "@/pages/home-february"; // Force February 2026 display
 import HotDeals from "@/pages/hot-deals";
 import RegularDeals from "@/pages/regular-deals";
 import FindMeDeal from "@/pages/find-me-deal";
@@ -84,8 +84,8 @@ function Router() {
       <Route path="/working-home" component={WorkingHome} />
       
       {/* Make core pages accessible to everyone - ensure home is first */}
-      <Route path="/" component={Home} />
-      <Route path="/home" component={Home} />
+      <Route path="/" component={HomeFeb} />
+      <Route path="/home" component={HomeFeb} />
       <Route path="/hot-deals" component={HotDeals} />
       
       {/* Keep some features auth-protected */}

@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
-// Cache buster: 1755192175
+// Cache buster: 1755192568
+// Force complete reload
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { testDatabaseConnection } from "./db";
