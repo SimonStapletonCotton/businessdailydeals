@@ -139,7 +139,7 @@ export default function SupplierRegistration() {
             <strong>Register now and post unlimited deals 100% FREE until 20th February 2026!</strong>
           </p>
           <p className="text-sm opacity-90">
-            No setup fees • No monthly charges • No credit purchases required until Jan 2026
+            No setup fees • No monthly charges • No credit purchases required until February 20th, 2026
           </p>
           <div className="mt-3 inline-flex items-center bg-white/20 rounded-full px-4 py-2 text-sm font-medium">
             <Shield className="h-4 w-4 mr-2" />

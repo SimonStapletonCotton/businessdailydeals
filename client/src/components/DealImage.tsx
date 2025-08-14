@@ -37,10 +37,7 @@ export function DealImage({ src, alt, className = "" }: { src?: string | null; a
       onError={(e) => {
         const target = e.target as HTMLImageElement;
         target.style.display = 'none';
-        const parent = target.parentElement;
-        if (parent) {
-          parent.innerHTML = '<div style="width: 100%; height: 200px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #64748b;">📷</div>';
-        }
+        target.style.visibility = 'hidden';
       }}
     />
   );
