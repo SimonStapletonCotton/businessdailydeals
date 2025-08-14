@@ -25,18 +25,12 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      // Call logout endpoint
-      const response = await fetch("/api/logout", {
-        method: "GET",
-        credentials: "include"
-      });
-      
-      // Force refresh to clear all client-side state
-      window.location.reload();
+      // Navigate to logout endpoint which will handle session destruction and redirect
+      window.location.href = "/api/logout";
     } catch (error) {
       console.error("Logout error:", error);
-      // Fallback: try direct redirect
-      window.location.href = "/api/logout";
+      // Force refresh as fallback
+      window.location.reload();
     }
   };
 
