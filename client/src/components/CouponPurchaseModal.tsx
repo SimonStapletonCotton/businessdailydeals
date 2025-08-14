@@ -32,7 +32,7 @@ export function CouponPurchaseModal({
 
   // Check if we're in promotional period (FREE until Dec 31, 2025)
   const now = new Date();
-  const promotionalEndDate = new Date('2025-12-31T23:59:59Z');
+  const promotionalEndDate = new Date('2026-02-20T23:59:59Z');
   const isPromotionalPeriod = now <= promotionalEndDate;
 
   const handlePurchase = async () => {

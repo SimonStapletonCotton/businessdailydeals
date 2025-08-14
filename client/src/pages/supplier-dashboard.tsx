@@ -84,30 +84,7 @@ export default function SupplierDashboard() {
     enabled: true, // Remove auth requirement for testing
   });
 
-  // Production sync mutation
-  const syncProductionMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiRequest("POST", "/api/admin/populate-deals", {});
-      return response.json();
-    },
-    onSuccess: (data) => {
-      toast({
-        title: "Production Sync Complete! 🎉",
-        description: `Successfully populated ${data.total} deals with images. Production is now synchronized!`,
-      });
-      // Refresh all deal queries
-      queryClient.invalidateQueries({ queryKey: ["/api/supplier/deals"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/deals"] });
-    },
-    onError: (error: any) => {
-      console.error("Production sync error:", error);
-      toast({
-        title: "Sync Failed",
-        description: "Failed to sync production database. Please check console for details.",
-        variant: "destructive",
-      });
-    },
-  });
+
 
   const reactivateDealMutation = useMutation({
     mutationFn: async ({ dealId, expiresAt }: { dealId: string; expiresAt: string }) => {
@@ -297,8 +274,8 @@ export default function SupplierDashboard() {
     const creditsPerDay = deal.dealType === "hot" ? 5 : 2;
     const totalCredits = extraDays * creditsPerDay;
 
-    // Check if we're in promotional period (FREE until December 31st, 2025)
-    const promotionalEndDate = new Date('2025-12-31T23:59:59.000Z');
+    // Check if we're in promotional period (FREE until February 20th, 2026)
+    const promotionalEndDate = new Date('2026-02-20T23:59:59.000Z');
     const isPromotionalPeriod = new Date() < promotionalEndDate;
 
     if (!isPromotionalPeriod) {
@@ -453,24 +430,7 @@ export default function SupplierDashboard() {
                 View Analytics
               </Button>
             </Link>
-            <Button 
-              onClick={() => syncProductionMutation.mutate()}
-              disabled={syncProductionMutation.isPending}
-              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 text-lg shadow-lg"
-              data-testid="button-sync-production"
-            >
-              {syncProductionMutation.isPending ? (
-                <>
-                  <Clock className="h-5 w-5 mr-2 animate-spin" />
-                  Syncing...
-                </>
-              ) : (
-                <>
-                  <RotateCcw className="h-5 w-5 mr-2" />
-                  Fix Production
-                </>
-              )}
-            </Button>
+
           </div>
         </div>
 
@@ -818,7 +778,7 @@ export default function SupplierDashboard() {
                                     if (extraDays <= 0) return "Please select a date after the current expiry";
                                     
                                     // Check if we're in promotional period
-                                    const promotionalEndDate = new Date('2025-12-31T23:59:59.000Z');
+                                    const promotionalEndDate = new Date('2026-02-20T23:59:59.000Z');
                                     const isPromotionalPeriod = new Date() < promotionalEndDate;
                                     
                                     if (isPromotionalPeriod) {
@@ -826,7 +786,7 @@ export default function SupplierDashboard() {
                                         <div className="text-green-700 font-medium">
                                           <div>{extraDays} extra day{extraDays > 1 ? 's' : ''}</div>
                                           <div>🎉 FREE during promotional period!</div>
-                                          <div className="text-xs">Free until December 31st, 2025</div>
+                                          <div className="text-xs">Free until February 20th, 2026</div>
                                         </div>
                                       );
                                     }
