@@ -42,18 +42,17 @@ export default function SupplierDashboard() {
   });
 
   useEffect(() => {
-    // AUTHENTICATION BYPASS - Allow access for testing
-    // if (!isLoading && !isAuthenticated) {
-    //   toast({
-    //     title: "Unauthorized",
-    //     description: "You are logged out. Logging in again...",
-    //     variant: "destructive",
-    //   });
-    //   setTimeout(() => {
-    //     window.location.href = "/api/login";
-    //   }, 500);
-    //   return;
-    // }
+    if (!isLoading && !isAuthenticated) {
+      toast({
+        title: "Unauthorized",
+        description: "You are logged out. Logging in again...",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 500);
+      return;
+    }
     if (!isLoading && isAuthenticated && user?.userType !== "supplier") {
       toast({
         title: "Access Denied",
@@ -65,13 +64,13 @@ export default function SupplierDashboard() {
 
   const { data: deals, isLoading: dealsLoading, refetch: refetchDeals } = useQuery<DealWithSupplier[]>({
     queryKey: ["/api/supplier/deals"],
-    enabled: true, // Remove auth requirement for testing
+    enabled: isAuthenticated,
     staleTime: 0, // Always fetch fresh data
   });
 
   const { data: inquiries, isLoading: inquiriesLoading } = useQuery<InquiryWithDetails[]>({
     queryKey: ["/api/supplier/inquiries"],
-    enabled: true, // Remove auth requirement for testing
+    enabled: isAuthenticated,
   });
 
   const { data: expiredDeals, isLoading: expiredDealsLoading } = useQuery<DealWithSupplier[]>({

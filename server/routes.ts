@@ -38,158 +38,20 @@ if (process.env.STRIPE_SECRET_KEY) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Security monitoring disabled for production deployment
-  
-  // DISABLE ALL SECURITY MIDDLEWARE FOR TESTING
-  // app.use(securityHeaders);
-  // app.use(ipSecurity);
-  // app.use(validateInput);
-  
-  // DISABLE AUTH MIDDLEWARE FOR TESTING
-  // app.use(simpleAuthMiddleware);
-  
-  // TEMPORARILY DISABLE ALL AUTH MIDDLEWARE TO FIX BACKEND API
-  // app.use(simpleAuthMiddleware);
-  
-  // Skip all middleware for API routes during testing
-  app.use('/api', (req, res, next) => {
-    // Add test user to request for testing
-    if (!req.user) {
-      req.user = { claims: { sub: "46102542" } };
-    }
-    next();
-  });
-  
-  // DISABLE RATE LIMITING FOR TESTING
-  // app.use((req, res, next) => {
-  //   if (req.path.includes('/@') || req.path.includes('/node_modules') || req.path.includes('/.vite/')) {
-  //     return next();
-  //   }
-  //   return generalLimiter(req, res, next);
-  // });
-  
-  // QUICK TEST: Simple deals endpoint without any middleware
-  app.get('/api/test-deals', async (req, res) => {
-    try {
-      res.json([
-        {
-          id: "test-1",
-          title: "Test Hot Deal",
-          description: "This is a test deal",
-          price: "100.00",
-          dealType: "hot",
-          category: "Test"
-        }
-      ]);
-    } catch (error) {
-      res.status(500).json({ error: "Test failed" });
-    }
-  });
+  // Set up authentication and middleware
+  await setupAuth(app);
 
-  // DIRECT DATABASE TEST: Bypass all middleware issues
-  app.get('/api/debug/supplier-deals', async (req, res) => {
-    try {
-      console.log("🔧 DEBUG: Testing direct database access for supplier deals");
-      const testUserId = "46102542";
-      console.log(`Testing with user ID: ${testUserId}`);
-      
-      const deals = await storage.getDealsBySupplier(testUserId);
-      console.log(`✅ DEBUG: Found ${deals.length} deals directly from database`);
-      res.json({
-        success: true,
-        userId: testUserId,
-        dealsCount: deals.length,
-        deals: deals
-      });
-    } catch (error) {
-      console.error("❌ DEBUG: Database error:", error);
-      res.status(500).json({ 
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-        stack: error instanceof Error ? error.stack : undefined
-      });
-    }
-  });
-
-  // Basic health check endpoint with production fix capability
+  // Basic health check endpoint
   app.get('/api/health', async (req, res) => {
     try {
-      // Special production fix trigger
-      if (req.query.fix === 'production' && req.query.secret === 'cybersmartprod2025') {
-        console.log("🔧 PRODUCTION FIX TRIGGERED via health endpoint");
-        
-        // Clear existing deals first
-        await db.delete(deals);
-        console.log("✅ Cleared existing deals");
-
-        // Create production deals
-        const productionDeals = [
-          {
-            id: "prod-deal-1",
-            supplierId: "46102542",
-            title: "DAM LINERS - Premium Quality",
-            description: "Professional dam liners for bulk water storage with worldwide installation service",
-            price: "140.00",
-            originalPrice: "180.00",
-            category: "Mining",
-            dealType: "hot" as const,
-            dealStatus: "active" as const
-          },
-          {
-            id: "prod-deal-2", 
-            supplierId: "46102542",
-            title: "Vitamin C Supplements",
-            description: "High quality vitamin C supplements for health and wellness",
-            price: "45.00",
-            originalPrice: "55.00",
-            category: "Health",
-            dealType: "hot" as const,
-            dealStatus: "active" as const
-          },
-          {
-            id: "prod-deal-3",
-            supplierId: "46102542", 
-            title: "Premium Business Cards",
-            description: "Professional business cards with premium printing quality",
-            price: "25.00",
-            originalPrice: "35.00",
-            category: "Printing",
-            dealType: "regular" as const,
-            dealStatus: "active" as const
-          }
-        ];
-
-        let successCount = 0;
-        for (const deal of productionDeals) {
-          try {
-            await db.insert(deals).values(deal);
-            console.log(`✅ Created deal: ${deal.title}`);
-            successCount++;
-          } catch (dealError) {
-            console.error(`❌ Failed to create deal ${deal.title}:`, dealError);
-          }
-        }
-
-        return res.json({ 
-          status: 'production-fix-complete', 
-          message: `Successfully populated ${successCount} deals`,
-          total: productionDeals.length,
-          timestamp: new Date().toISOString(),
-          service: 'Business Daily Deals B2B Marketplace' 
-        });
-      }
-
-      await storage.getUser('health-check-test');
-      res.status(200).json({
+      res.json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
         service: 'Business Daily Deals B2B Marketplace'
       });
     } catch (error) {
-      res.status(503).json({
-        status: 'unhealthy',
-        timestamp: new Date().toISOString(),
-        service: 'Business Daily Deals B2B Marketplace',
+      res.status(500).json({
+        status: 'error',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
@@ -425,97 +287,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     `);
   });
 
-  // SYSTEM ADMIN ENDPOINTS - Using different path to avoid middleware conflicts
-  
-  // Test system endpoint to verify routing
-  app.get('/api/system-admin/test', (req, res) => {
-    console.log("🔧 SYSTEM ADMIN TEST ENDPOINT HIT");
-    res.json({ message: "System admin routing is working!", timestamp: new Date().toISOString() });
-  });
-  
-  // Direct production fix endpoint 
-  app.post('/api/system-admin/fix-production', async (req: any, res) => {
-    try {
-      console.log("🔧 SYSTEM ADMIN ENDPOINT HIT: /api/system-admin/fix-production");
-      console.log("🔧 Starting production database fix...");
-      
-      // Clear existing deals first
-      await db.delete(deals);
-      console.log("✅ Cleared existing deals");
 
-      // Create deals with only essential fields that we know exist
-      const productionDeals = [
-        {
-          id: "prod-deal-1",
-          supplierId: "46102542",
-          title: "DAM LINERS - Premium Quality",
-          description: "Professional dam liners for bulk water storage with worldwide installation service",
-          price: "140.00",
-          originalPrice: "180.00",
-          category: "Mining",
-          dealType: "hot",
-          dealStatus: "active"
-        },
-        {
-          id: "prod-deal-2", 
-          supplierId: "46102542",
-          title: "Vitamin C Supplements",
-          description: "High quality vitamin C supplements for health and wellness",
-          price: "45.00",
-          originalPrice: "55.00",
-          category: "Health",
-          dealType: "hot",
-          dealStatus: "active"
-        },
-        {
-          id: "prod-deal-3",
-          supplierId: "46102542", 
-          title: "Premium Business Cards",
-          description: "Professional business cards with premium printing quality",
-          price: "25.00",
-          originalPrice: "35.00",
-          category: "Printing",
-          dealType: "regular",
-          dealStatus: "active"
-        }
-      ];
-
-      let successCount = 0;
-      for (const deal of productionDeals) {
-        try {
-          await db.insert(deals).values({
-            id: deal.id,
-            supplierId: deal.supplierId,
-            title: deal.title,
-            description: deal.description,
-            price: deal.price,
-            originalPrice: deal.originalPrice,
-            category: deal.category,
-            dealType: deal.dealType as "hot" | "regular",
-            dealStatus: deal.dealStatus as "active"
-          });
-          console.log(`✅ Created deal: ${deal.title}`);
-          successCount++;
-        } catch (dealError) {
-          console.error(`❌ Failed to create deal ${deal.title}:`, dealError);
-        }
-      }
-
-      console.log(`🎉 Production fix complete: ${successCount} deals created`);
-      res.json({ 
-        success: true, 
-        message: `Successfully populated ${successCount} deals`,
-        total: productionDeals.length 
-      });
-
-    } catch (error) {
-      console.error("❌ Production fix failed:", error);
-      res.status(500).json({ 
-        error: error.message,
-        details: "Production database population failed"
-      });
-    }
-  });
 
   // Logout endpoint
   app.post('/api/logout', (req: any, res) => {
@@ -1381,88 +1153,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Direct production fix endpoint 
-  app.post('/api/admin/fix-production', async (req: any, res) => {
-    try {
-      console.log("🔧 Starting production database fix...");
-      
-      // Clear existing deals first
-      await db.delete(deals);
-      console.log("✅ Cleared existing deals");
 
-      // Create deals with only essential fields that we know exist
-      const productionDeals = [
-        {
-          id: "prod-deal-1",
-          supplierId: "46102542",
-          title: "DAM LINERS - Premium Quality",
-          description: "Professional dam liners for bulk water storage with worldwide installation service",
-          price: "140.00",
-          originalPrice: "180.00",
-          category: "Mining",
-          dealType: "hot",
-          dealStatus: "active"
-        },
-        {
-          id: "prod-deal-2", 
-          supplierId: "46102542",
-          title: "Vitamin C Supplements",
-          description: "High quality vitamin C supplements for health and wellness",
-          price: "45.00",
-          originalPrice: "55.00",
-          category: "Health",
-          dealType: "hot",
-          dealStatus: "active"
-        },
-        {
-          id: "prod-deal-3",
-          supplierId: "46102542", 
-          title: "Premium Business Cards",
-          description: "Professional business cards with premium printing quality",
-          price: "25.00",
-          originalPrice: "35.00",
-          category: "Printing",
-          dealType: "regular",
-          dealStatus: "active"
-        }
-      ];
-
-      let successCount = 0;
-      for (const deal of productionDeals) {
-        try {
-          await db.insert(deals).values({
-            id: deal.id,
-            supplierId: deal.supplierId,
-            title: deal.title,
-            description: deal.description,
-            price: deal.price,
-            originalPrice: deal.originalPrice,
-            category: deal.category,
-            dealType: deal.dealType as "hot" | "regular",
-            dealStatus: deal.dealStatus as "active"
-          });
-          console.log(`✅ Created deal: ${deal.title}`);
-          successCount++;
-        } catch (dealError) {
-          console.error(`❌ Failed to create deal ${deal.title}:`, dealError);
-        }
-      }
-
-      console.log(`🎉 Production fix complete: ${successCount} deals created`);
-      res.json({ 
-        success: true, 
-        message: `Successfully populated ${successCount} deals`,
-        total: productionDeals.length 
-      });
-
-    } catch (error) {
-      console.error("❌ Production fix failed:", error);
-      res.status(500).json({ 
-        error: error.message,
-        details: "Production database population failed"
-      });
-    }
-  });
 
   // Production database population endpoint (admin only)
   app.post('/api/admin/populate-deals', async (req: any, res) => {
