@@ -13,8 +13,15 @@ console.log("🎯 FINAL HOMEPAGE VERSION LOADING:", FINAL_VERSION);
 
 export default function HomepageFinal() {
   useEffect(() => {
-    document.title = "Business Daily Deals - FREE POSTING UNTIL FEBRUARY 20TH 2026";
+    document.title = "FEBRUARY 20TH 2026 FREE PROMO - Business Daily Deals";
     console.log("🚀 FINAL HOMEPAGE: February 20th, 2026 promotional period IS ACTIVE");
+    console.log("🎯 HOMEPAGE THEME: Purple/Pink - should be unmistakable");
+    
+    // Add visual debug info to page
+    const debugDiv = document.createElement('div');
+    debugDiv.style.cssText = 'position:fixed;top:0;right:0;background:red;color:white;padding:10px;z-index:9999;font-size:14px;';
+    debugDiv.textContent = `FINAL HOMEPAGE LOADED: ${new Date().toLocaleTimeString()}`;
+    document.body.appendChild(debugDiv);
     
     // Clear browser cache aggressively
     if ('caches' in window) {

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cache Test - February 20th 2026</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        body { font-size: 24px; background: purple; color: white; padding: 50px; text-align: center; }
+        .banner { background: red; color: yellow; padding: 30px; font-size: 36px; border: 5px solid yellow; }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        FEBRUARY 20TH, 2026 - FREE PROMOTIONAL PERIOD ACTIVE!
+    </div>
+    <h1>Cache Test Success</h1>
+    <p>If you see this purple page, the server is working correctly.</p>
+    <p>Date/Time: <span id="time"></span></p>
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 5000);
+    </script>
+    <p>Redirecting to homepage in 5 seconds...</p>
+</body>
+</html>
