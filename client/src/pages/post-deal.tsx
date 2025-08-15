@@ -672,7 +672,7 @@ export default function PostDeal() {
                       </FormControl>
                       <FormDescription>
                         When should this deal expire? Leave blank for no expiry.<br/>
-                        <span className="text-amber-600 font-medium">⚠️ Note: Deals are FREE until Feb 20, 2026. Extensions beyond this date will require credits starting Feb 21, 2026.</span>
+                        <span className="text-amber-600 font-medium">⚠️ Note: Deals are FREE until February 20th, 2026. Extensions beyond this date will require credits starting February 21st, 2026.</span>
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
