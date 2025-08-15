@@ -12,6 +12,7 @@ import HomeUltimate from "@/pages/home-ultimate"; // Force February 2026 display
 import HomeFixed from "@/pages/home-fixed"; // Cache-busting fixed homepage
 import HomeProduction from "@/pages/home-production"; // Production cache-buster
 import HomeFresh from "@/pages/home-fresh"; // Fresh cache-busted homepage
+import HomepageFinal from "@/pages/homepage-final"; // Final visual distinct homepage
 import HotDeals from "@/pages/hot-deals";
 import RegularDeals from "@/pages/regular-deals";
 import FindMeDeal from "@/pages/find-me-deal";
@@ -87,15 +88,15 @@ function Router() {
       <Route path="/test-dashboard" component={TestDashboard} />
       <Route path="/working-home" component={WorkingHome} />
       
-      {/* FORCE COMPLETE CACHE BYPASS - FEBRUARY 2026 */}
-      <Route path="/" component={HomeFresh} />
-      <Route path="/home" component={HomeFresh} />
-      <Route path="/home-ultimate" component={HomeFresh} />
-      <Route path="/old-home" component={HomeFresh} />
-      <Route path="/landing" component={HomeFresh} />
-      <Route path="/home-fixed" component={HomeFresh} />
-      <Route path="/index.html" component={HomeFresh} />
-      <Route path="/index" component={HomeFresh} />
+      {/* FINAL VISUAL HOMEPAGE - UNMISTAKABLE PURPLE THEME */}
+      <Route path="/" component={HomepageFinal} />
+      <Route path="/home" component={HomepageFinal} />
+      <Route path="/home-ultimate" component={HomepageFinal} />
+      <Route path="/old-home" component={HomepageFinal} />
+      <Route path="/landing" component={HomepageFinal} />
+      <Route path="/home-fixed" component={HomepageFinal} />
+      <Route path="/index.html" component={HomepageFinal} />
+      <Route path="/index" component={HomepageFinal} />
       <Route path="/hot-deals" component={HotDeals} />
       
       {/* Keep some features auth-protected */}

@@ -28,14 +28,17 @@ export default function Navbar() {
     try {
       console.log("🔄 Starting logout process...");
       
-      // Step 1: Clear all client-side state immediately
+      // Step 1: Clear all React Query cache
       queryClient.clear();
+      queryClient.invalidateQueries();
+      
+      // Step 2: Clear browser storage
       localStorage.clear();
       sessionStorage.clear();
       
       console.log("✅ Client state cleared");
       
-      // Step 2: Call logout endpoint to clear server session
+      // Step 3: Call logout endpoint
       const response = await fetch('/api/logout', { 
         method: 'POST',
         credentials: 'include',
@@ -46,16 +49,14 @@ export default function Navbar() {
       
       console.log("🔄 Logout API response:", response.status);
       
-      // Step 3: Force complete page refresh with cache-busting
-      console.log("🔄 Redirecting to fresh homepage...");
-      const cacheBust = Date.now();
-      window.location.href = `/?fresh=true&t=${cacheBust}`;
+      // Step 4: Force hard reload to completely reset application state
+      console.log("🔄 Forcing hard reload...");
+      window.location.replace(`/?logout=${Date.now()}`);
       
     } catch (error) {
       console.error("⚠️ Logout error:", error);
-      // Always redirect to fresh homepage
-      const cacheBust = Date.now();
-      window.location.href = `/?fresh=true&t=${cacheBust}`;
+      // Force reload even on error
+      window.location.replace(`/?logout=${Date.now()}`);
     }
   };
 
