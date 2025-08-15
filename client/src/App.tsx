@@ -13,6 +13,7 @@ import HomeFixed from "@/pages/home-fixed"; // Cache-busting fixed homepage
 import HomeProduction from "@/pages/home-production"; // Production cache-buster
 import HomeFresh from "@/pages/home-fresh"; // Fresh cache-busted homepage
 import HomepageFinal from "@/pages/homepage-final"; // Final visual distinct homepage
+import NewHomepage from "@/pages/new-homepage"; // Brand new route to bypass all caching
 import HotDeals from "@/pages/hot-deals";
 import RegularDeals from "@/pages/regular-deals";
 import FindMeDeal from "@/pages/find-me-deal";
@@ -87,6 +88,7 @@ function Router() {
       <Route path="/coupon-verification" component={CouponVerification} />
       <Route path="/test-dashboard" component={TestDashboard} />
       <Route path="/working-home" component={WorkingHome} />
+      <Route path="/new" component={NewHomepage} />
       
       {/* FINAL VISUAL HOMEPAGE - UNMISTAKABLE PURPLE THEME */}
       <Route path="/" component={HomepageFinal} />
