@@ -46,14 +46,16 @@ export default function Navbar() {
       
       console.log("🔄 Logout API response:", response.status);
       
-      // Step 3: Force complete page refresh regardless of API response
-      console.log("🔄 Redirecting to homepage...");
-      window.location.href = '/';
+      // Step 3: Force complete page refresh with cache-busting parameter
+      console.log("🔄 Redirecting to homepage with cache bust...");
+      const cacheBust = Date.now();
+      window.location.href = `/?logout=${cacheBust}&cb=${Math.random()}`;
       
     } catch (error) {
       console.error("⚠️ Logout error:", error);
-      // Always redirect even on error
-      window.location.href = '/';
+      // Always redirect even on error with cache bust
+      const cacheBust = Date.now();
+      window.location.href = `/?logout=${cacheBust}&cb=${Math.random()}`;
     }
   };
 

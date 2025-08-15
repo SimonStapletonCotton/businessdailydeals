@@ -7,15 +7,24 @@ import { Flame, ArrowRight, TrendingUp, Users, ShieldCheck, Clock } from "lucide
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 
-// PRODUCTION CACHE BUSTER - February 20th, 2026 - FORCE REBUILD
-const PRODUCTION_TIMESTAMP = Date.now() + Math.random() * 1000;
-console.log("🚀 PRODUCTION HOMEPAGE LOADED - February 20th, 2026:", PRODUCTION_TIMESTAMP);
-console.log("✅ Homepage loaded with February 20th, 2026 promotional period");
+// FORCE FEBRUARY 20TH 2026 DISPLAY - CACHE OVERRIDE
+const CACHE_BUST_ID = "FEB-20-2026-" + Date.now();
+console.log("🔥 FORCING FEBRUARY 20TH 2026 DISPLAY:", CACHE_BUST_ID);
+console.log("✅ February 20th, 2026 promotional period ACTIVE");
 
 export default function HomeProduction() {
   useEffect(() => {
-    document.title = "Business Daily Deals - South African B2B Marketplace";
+    document.title = "Business Daily Deals - FEBRUARY 20TH 2026 FREE PROMO ACTIVE";
     console.log("✅ PRODUCTION: February 20th, 2026 promotional period active");
+    
+    // Force cache refresh if this is a logout redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('logout')) {
+      console.log("🔄 Logout detected - forcing cache refresh");
+      // Clear any remaining client state
+      localStorage.clear();
+      sessionStorage.clear();
+    }
   }, []);
 
   const { data: stats } = useQuery({
@@ -44,11 +53,11 @@ export default function HomeProduction() {
             South Africa's Premier B2B Marketplace - Connecting Suppliers and Buyers with Exceptional Deals
           </p>
           
-          {/* PROMOTIONAL BANNER - FEBRUARY 2026 - CACHE BUSTER */}
-          <div className="bg-green-600 text-white p-6 rounded-xl mb-8 max-w-4xl mx-auto shadow-2xl border-4 border-green-700" data-cache-bust="feb-2026-final">
-            <div className="text-3xl font-bold mb-2">🎉 SPECIAL LAUNCH PROMOTION! 🎉</div>
+          {/* PROMOTIONAL BANNER - FEBRUARY 20TH 2026 - FORCE UPDATE */}
+          <div className="bg-red-600 text-white p-6 rounded-xl mb-8 max-w-4xl mx-auto shadow-2xl border-4 border-red-700" data-testid="promo-banner-feb-2026">
+            <div className="text-3xl font-bold mb-2">🎉 FREE PROMOTIONAL PERIOD! 🎉</div>
             <div className="text-xl">
-              <strong>FREE Deal Posting until February 20th, 2026!</strong>
+              <strong>All deal posting FREE until February 20th, 2026!</strong>
             </div>
             <div className="text-lg mt-2 opacity-90">
               Build your supplier network during our promotional period - then start earning with our credit system
