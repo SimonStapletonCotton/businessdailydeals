@@ -7,9 +7,10 @@ import { Flame, ArrowRight, TrendingUp, Users, ShieldCheck, Clock } from "lucide
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 
-// PRODUCTION CACHE BUSTER - February 20th, 2026 - UPDATED
-const PRODUCTION_TIMESTAMP = Date.now() + Math.random();
+// PRODUCTION CACHE BUSTER - February 20th, 2026 - FORCE REBUILD
+const PRODUCTION_TIMESTAMP = Date.now() + Math.random() * 1000;
 console.log("🚀 PRODUCTION HOMEPAGE LOADED - February 20th, 2026:", PRODUCTION_TIMESTAMP);
+console.log("✅ Homepage loaded with February 20th, 2026 promotional period");
 
 export default function HomeProduction() {
   useEffect(() => {
@@ -43,8 +44,8 @@ export default function HomeProduction() {
             South Africa's Premier B2B Marketplace - Connecting Suppliers and Buyers with Exceptional Deals
           </p>
           
-          {/* PROMOTIONAL BANNER - FEBRUARY 2026 */}
-          <div className="bg-green-600 text-white p-6 rounded-xl mb-8 max-w-4xl mx-auto shadow-2xl border-4 border-green-700">
+          {/* PROMOTIONAL BANNER - FEBRUARY 2026 - CACHE BUSTER */}
+          <div className="bg-green-600 text-white p-6 rounded-xl mb-8 max-w-4xl mx-auto shadow-2xl border-4 border-green-700" data-cache-bust="feb-2026-final">
             <div className="text-3xl font-bold mb-2">🎉 SPECIAL LAUNCH PROMOTION! 🎉</div>
             <div className="text-xl">
               <strong>FREE Deal Posting until February 20th, 2026!</strong>
