@@ -6,6 +6,7 @@ import { Star, TrendingUp, Users, ShoppingBag, Search, Eye, Flame, Package } fro
 import { Link } from "wouter";
 
 export default function Home() {
+  // Updated: August 15, 2025 - February 20, 2026 promotional period
   const [stats] = useState({
     activeSuppliers: "1",
     totalDeals: "13", 
