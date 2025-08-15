@@ -25,9 +25,14 @@ import { isUnauthorizedError } from "@/lib/authUtils";
 import { z } from "zod";
 import { DealPricingInfo } from "@/components/deal-pricing-info";
 
-const formSchema = insertDealSchema.omit({ supplierId: true }).extend({
+const formSchema = insertDealSchema.omit({ supplierId: true, createdAt: true, updatedAt: true }).extend({
   keywords: z.array(z.string()).optional(),
   expiresAt: z.date().optional(),
+  discount: z.number().optional(),
+  minOrder: z.number().optional(),
+  size: z.string().optional(),
+  quantityAvailable: z.number().optional(),
+  productSpecifications: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;

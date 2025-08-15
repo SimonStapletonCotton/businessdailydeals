@@ -72,6 +72,11 @@ export const deals = pgTable("deals", {
   description: text("description").notNull(),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   originalPrice: decimal("original_price", { precision: 10, scale: 2 }),
+  discount: decimal("discount", { precision: 5, scale: 2 }),
+  minOrder: integer("min_order"),
+  size: text("size"),
+  quantityAvailable: integer("quantity_available"),
+  productSpecifications: text("product_specifications"),
   dealType: text("deal_type").notNull().default("regular"), // 'hot' or 'regular'
   category: text("category").notNull(),
   keywords: jsonb("keywords").$type<string[]>(),
