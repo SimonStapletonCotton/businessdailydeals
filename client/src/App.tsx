@@ -90,15 +90,15 @@ function Router() {
       <Route path="/working-home" component={WorkingHome} />
       <Route path="/new" component={NewHomepage} />
       
-      {/* FINAL VISUAL HOMEPAGE - UNMISTAKABLE PURPLE THEME */}
-      <Route path="/" component={HomepageFinal} />
-      <Route path="/home" component={HomepageFinal} />
-      <Route path="/home-ultimate" component={HomepageFinal} />
-      <Route path="/old-home" component={HomepageFinal} />
-      <Route path="/landing" component={HomepageFinal} />
-      <Route path="/home-fixed" component={HomepageFinal} />
-      <Route path="/index.html" component={HomepageFinal} />
-      <Route path="/index" component={HomepageFinal} />
+      {/* FORCE NEW HOMEPAGE ON ALL ROUTES - BYPASS ALL CACHING */}
+      <Route path="/" component={NewHomepage} />
+      <Route path="/home" component={NewHomepage} />
+      <Route path="/home-ultimate" component={NewHomepage} />
+      <Route path="/old-home" component={NewHomepage} />
+      <Route path="/landing" component={NewHomepage} />
+      <Route path="/home-fixed" component={NewHomepage} />
+      <Route path="/index.html" component={NewHomepage} />
+      <Route path="/index" component={NewHomepage} />
       <Route path="/hot-deals" component={HotDeals} />
       
       {/* Keep some features auth-protected */}

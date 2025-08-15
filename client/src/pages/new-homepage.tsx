@@ -9,28 +9,37 @@ import { Link } from "wouter";
 
 export default function NewHomepage() {
   useEffect(() => {
-    document.title = "NEW HOMEPAGE - FEBRUARY 20TH 2026 FREE";
+    document.title = "Business Daily Deals - FREE UNTIL FEBRUARY 20TH 2026";
     
-    // Add unmistakable visual proof this page loaded
+    // Add UNMISTAKABLE visual proof this page loaded
     const proof = document.createElement('div');
     proof.style.cssText = `
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      right: 0; 
-      background: #ff0000; 
-      color: #ffffff; 
-      padding: 20px; 
-      text-align: center; 
-      font-size: 24px; 
-      font-weight: bold; 
-      z-index: 10000;
-      border: 5px solid yellow;
+      position: fixed !important; 
+      top: 0 !important; 
+      left: 0 !important; 
+      right: 0 !important; 
+      background: #dc2626 !important; 
+      color: #ffffff !important; 
+      padding: 30px !important; 
+      text-align: center !important; 
+      font-size: 28px !important; 
+      font-weight: bold !important; 
+      z-index: 99999 !important;
+      border: 8px solid #fbbf24 !important;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8) !important;
     `;
-    proof.textContent = "✅ NEW HOMEPAGE LOADED - FEBRUARY 20TH 2026 FREE PROMOTION ACTIVE!";
+    proof.innerHTML = "🎉 FEBRUARY 20TH 2026 FREE PROMOTION ACTIVE! 🎉<br/>Updated: " + new Date().toLocaleString();
     document.body.appendChild(proof);
     
+    // Remove the banner after 10 seconds so it doesn't block content
+    setTimeout(() => {
+      if (proof.parentNode) {
+        proof.parentNode.removeChild(proof);
+      }
+    }, 10000);
+    
     console.log("🎯 NEW HOMEPAGE LOADED WITH FEBRUARY 20TH 2026 DATES");
+    console.log("📅 Current timestamp:", Date.now());
   }, []);
 
   const { data: stats } = useQuery({

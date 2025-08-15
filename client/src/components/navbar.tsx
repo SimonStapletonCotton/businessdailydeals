@@ -49,14 +49,18 @@ export default function Navbar() {
       
       console.log("🔄 Logout API response:", response.status);
       
-      // Step 4: Force hard reload to completely reset application state
-      console.log("🔄 Forcing hard reload...");
-      window.location.replace(`/?logout=${Date.now()}`);
+      // Step 4: Force complete page replacement and reload
+      console.log("🔄 Forcing complete page reload...");
+      setTimeout(() => {
+        window.location.replace(`/?logout=${Date.now()}&refresh=${Math.random()}`);
+      }, 500);
       
     } catch (error) {
       console.error("⚠️ Logout error:", error);
-      // Force reload even on error
-      window.location.replace(`/?logout=${Date.now()}`);
+      // Force reload even on error with delay
+      setTimeout(() => {
+        window.location.replace(`/?logout=${Date.now()}&refresh=${Math.random()}`);
+      }, 500);
     }
   };
 
