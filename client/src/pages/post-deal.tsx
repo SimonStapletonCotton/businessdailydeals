@@ -307,7 +307,7 @@ export default function PostDeal() {
           </p>
           <div className="mt-3 inline-flex items-center bg-white/20 rounded-full px-4 py-2 text-sm font-medium">
             <Package className="h-4 w-4 mr-2" />
-            Normally R125 for HOT deals • R50 for REGULAR deals • Now FREE until Jan 2026!
+            Normally R125 for HOT deals • R50 for REGULAR deals • Now FREE until Feb 20, 2026!
           </div>
         </div>
 
