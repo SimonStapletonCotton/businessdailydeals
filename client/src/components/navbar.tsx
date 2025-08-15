@@ -26,30 +26,34 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      console.log("Logout clicked - doing complete logout");
-      // Clear all caches and cookies
+      console.log("🔄 Starting logout process...");
+      
+      // Step 1: Clear all client-side state immediately
       queryClient.clear();
       localStorage.clear();
       sessionStorage.clear();
       
-      // Make actual logout request with credentials
+      console.log("✅ Client state cleared");
+      
+      // Step 2: Call logout endpoint to clear server session
       const response = await fetch('/api/logout', { 
         method: 'POST',
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
-      console.log("Logout response status:", response.status);
       
-      if (response.ok) {
-        // Force complete page reload to clear all state
-        window.location.replace('/');
-      } else {
-        console.warn("Logout request failed, still proceeding with client-side logout");
-        window.location.replace('/');
-      }
+      console.log("🔄 Logout API response:", response.status);
+      
+      // Step 3: Force complete page refresh regardless of API response
+      console.log("🔄 Redirecting to homepage...");
+      window.location.href = '/';
+      
     } catch (error) {
-      console.error("Logout error:", error);
-      // Force reload even on error to clear client state
-      window.location.replace('/');
+      console.error("⚠️ Logout error:", error);
+      // Always redirect even on error
+      window.location.href = '/';
     }
   };
 

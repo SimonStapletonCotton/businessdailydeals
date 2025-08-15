@@ -30,7 +30,7 @@ export function CouponPurchaseModal({
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
 
-  // Check if we're in promotional period (FREE until Dec 31, 2025)
+  // Check if we're in promotional period (FREE until February 20, 2026)
   const now = new Date();
   const promotionalEndDate = new Date('2026-02-20T23:59:59Z');
   const isPromotionalPeriod = now <= promotionalEndDate;
@@ -132,7 +132,7 @@ export function CouponPurchaseModal({
                   </span>
                 </div>
                 <p className="text-sm text-green-700 dark:text-green-300">
-                  All coupon purchases are FREE until December 31st, 2025!
+                  All coupon purchases are FREE until February 20th, 2026!
                   Generate your coupon instantly at no cost.
                 </p>
               </div>
