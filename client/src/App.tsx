@@ -11,6 +11,7 @@ import HomeFeb from "@/pages/home-february";
 import HomeUltimate from "@/pages/home-ultimate"; // Force February 2026 display
 import HomeFixed from "@/pages/home-fixed"; // Cache-busting fixed homepage
 import HomeProduction from "@/pages/home-production"; // Production cache-buster
+import HomeFresh from "@/pages/home-fresh"; // Fresh cache-busted homepage
 import HotDeals from "@/pages/hot-deals";
 import RegularDeals from "@/pages/regular-deals";
 import FindMeDeal from "@/pages/find-me-deal";
@@ -87,14 +88,14 @@ function Router() {
       <Route path="/working-home" component={WorkingHome} />
       
       {/* FORCE COMPLETE CACHE BYPASS - FEBRUARY 2026 */}
-      <Route path="/" component={HomeProduction} />
-      <Route path="/home" component={HomeProduction} />
-      <Route path="/home-ultimate" component={HomeProduction} />
-      <Route path="/old-home" component={HomeProduction} />
-      <Route path="/landing" component={HomeProduction} />
-      <Route path="/home-fixed" component={HomeFixed} />
-      <Route path="/index.html" component={HomeProduction} />
-      <Route path="/index" component={HomeProduction} />
+      <Route path="/" component={HomeFresh} />
+      <Route path="/home" component={HomeFresh} />
+      <Route path="/home-ultimate" component={HomeFresh} />
+      <Route path="/old-home" component={HomeFresh} />
+      <Route path="/landing" component={HomeFresh} />
+      <Route path="/home-fixed" component={HomeFresh} />
+      <Route path="/index.html" component={HomeFresh} />
+      <Route path="/index" component={HomeFresh} />
       <Route path="/hot-deals" component={HotDeals} />
       
       {/* Keep some features auth-protected */}
