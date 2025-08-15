@@ -22,7 +22,7 @@ export default function PrivacyPolicy() {
             Your privacy is important to us. This policy explains how we collect, use, and protect your information.
           </p>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
-            Last updated: January 2025 • Effective: January 1, 2025
+            Last updated: August 2025 • Effective: August 15, 2025
           </p>
         </div>
 

@@ -7,8 +7,8 @@ import { Flame, ArrowRight, TrendingUp, Users, ShieldCheck, Clock } from "lucide
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 
-// PRODUCTION CACHE BUSTER - February 20th, 2026
-const PRODUCTION_TIMESTAMP = Date.now();
+// PRODUCTION CACHE BUSTER - February 20th, 2026 - UPDATED
+const PRODUCTION_TIMESTAMP = Date.now() + Math.random();
 console.log("🚀 PRODUCTION HOMEPAGE LOADED - February 20th, 2026:", PRODUCTION_TIMESTAMP);
 
 export default function HomeProduction() {
@@ -276,7 +276,7 @@ export default function HomeProduction() {
               <div className="space-y-2 text-slate-300">
                 <p>South African B2B Marketplace</p>
                 <p>Credit System: 1 Credit = R2.50</p>
-                <p className="font-semibold text-green-400">FREE until February 20th, 2026! (NOT January 1st)</p>
+                <p className="font-semibold text-green-400">FREE until February 20th, 2026!</p>
               </div>
             </div>
           </div>
