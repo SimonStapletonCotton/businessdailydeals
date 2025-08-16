@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Business Daily Deals - Production Files</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
+        .file-link { display: block; padding: 10px; margin: 5px 0; background: #f9f9f9; border-left: 4px solid #4CAF50; text-decoration: none; color: #333; }
+        .file-link:hover { background: #e8f5e8; }
+        .instructions { background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Business Daily Deals - Production Files</h1>
+        
+        <div class="instructions">
+            <strong>Instructions:</strong> Right-click any link below and select "Save link as..." or "Save target as..." to download the file.
+        </div>
+        
+        <h3>Production Server:</h3>
+        <a href="dist/index.js" class="file-link">index.js (179KB - Complete Server)</a>
+        
+        <h3>Frontend Files:</h3>
+        <a href="dist/public/index.html" class="file-link">index.html (Main Frontend)</a>
+        
+        <h3>Configuration:</h3>
+        <a href="dist/start.sh" class="file-link">start.sh (Production Startup Script)</a>
+        <a href="dist/.env.production" class="file-link">.env.production (Environment Config)</a>
+        <a href="dist/package.json" class="file-link">package.json (Deployment Config)</a>
+        
+        <h3>Complete Package:</h3>
+        <a href="business-daily-deals-production.tar.gz" class="file-link">business-daily-deals-production.tar.gz (Everything in one file)</a>
+        
+        <div class="instructions">
+            <h3>Quick Deploy:</h3>
+            <p><strong>For Cybersmart:</strong> Download all files, upload to your server, point www.businessdailydeals.co.za to server, run ./start.sh</p>
+            <p><strong>For any host:</strong> Download files, upload to server with Node.js 18+, run npm start</p>
+        </div>
+    </div>
+</body>
+</html>
