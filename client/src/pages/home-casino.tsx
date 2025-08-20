@@ -1,19 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useEffect } from "react";
 
 export default function HomeCasino() {
+  useEffect(() => {
+    document.title = "Business Daily Deals - FREE UNTIL FEBRUARY 20TH 2026";
+    console.log("🎰 ORIGINAL CASINO HOMEPAGE LOADED WITH FEBRUARY 20TH 2026");
+  }, []);
   return (
     <>
       <style>{`
         body {
           margin: 0;
           padding: 0;
-          background: linear-gradient(135deg, #ff6600 0%, #cc4400 100%) !important;
+          background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 75%, #8fa3b8 100%) !important;
           min-height: 100vh !important;
         }
         
         .casino-container {
-          background: linear-gradient(135deg, #ff6600 0%, #cc4400 100%) !important;
+          background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 25%, #c8b8a0 75%, #8fa3b8 100%) !important;
           min-height: 100vh !important;
           width: 100% !important;
           padding: 20px !important;
@@ -159,8 +164,8 @@ export default function HomeCasino() {
         <div className="promo-banner">
           <div className="promo-title">🎉 FREE UNTIL FEBRUARY 20TH, 2026! 🎉</div>
           <div className="promo-text">
-            Post unlimited deals completely <strong>FREE</strong> during our launch period!<br/>
-            Build your customer base with zero cost advertising.
+            Post unlimited deals completely <strong>FREE</strong> during our promotional launch period!<br/>
+            Build your customer base with zero cost advertising until February 20th, 2026.
           </div>
         </div>
         

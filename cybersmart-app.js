@@ -27,7 +27,7 @@ async function connectDatabase() {
   try {
     db = await mysql.createConnection(config.database);
     console.log('✅ Connected to Cybersmart MySQL database');
-    console.log('🎰 Casino-themed homepage with February 2026 promotional content ready');
+    console.log('🎰 ORIGINAL Casino homepage with 3 spinning 7s and February 2026 promotional content ready');
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
     process.exit(1);
