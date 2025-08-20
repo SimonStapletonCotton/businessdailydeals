@@ -1,26 +1,27 @@
-BUSINESS DAILY DEALS - READY FOR CYBERSMART DEPLOYMENT
+QUICK FIX: Missing Frontend Files
 
-Status: Production build complete (179KB optimized server)
-Content: February 20th, 2026 promotional period implemented
-Database: MySQL auto-detection configured for Cybersmart servers
+ERROR: "ENOENT: no such file or directory, stat '/home/simonsta/public_html/businessdailydeals/public/index.html'"
 
-FILES TO UPLOAD TO CYBERSMART:
-1. app.js (rename from dist/index.js) - Main server file
-2. public/ folder (from dist/public/) - All frontend files
-3. .env.production - Environment configuration
-4. start.sh - Production startup script
+SOLUTION:
+You need to upload the frontend files (HTML, CSS, JavaScript) to the `public/` folder.
 
-CYBERSMART SETUP:
-1. Upload all files to web server
-2. Point www.businessdailydeals.co.za to server
-3. Run: ./start.sh
-4. MySQL will auto-connect using localhost
+FILES TO UPLOAD:
+1. Download the `cpanel-public/` folder from the deployment package
+2. Upload it to: `/home/simonsta/public_html/businessdailydeals/`
+3. Rename the uploaded folder from `cpanel-public` to `public`
 
-FEATURES READY:
-- 13 active deals with professional images
-- Supplier authentication system
-- Credit system (1 Credit = R2.50)
-- Search and categories
-- FREE promotional period until February 20, 2026
+EXPECTED STRUCTURE:
+/home/simonsta/public_html/businessdailydeals/
+├── app.js (your server file)
+├── package.json
+├── .htaccess
+└── public/
+    ├── index.html
+    ├── assets/
+    └── other frontend files
 
-The marketplace is production-ready for immediate launch.
+VERIFICATION:
+Once uploaded, restart your Node.js app and visit www.businessdailydeals.co.za
+The marketplace homepage should load with February 2026 content.
+
+The server is working correctly - it just needs the frontend files to serve to visitors.

@@ -1,36 +1,34 @@
-# 📥 DOWNLOAD YOUR PRODUCTION APP
+# Download Instructions - Frontend Files Missing
 
-## The Problem:
-- Replit URL `www.deal-stream-simons27.replit.app` shows old cached version
-- You need the current February 2026 content in production
+## ERROR SOLVED: Missing public/index.html
 
-## The Solution:
-Your production-ready Business Daily Deals app is built and ready to download from the `dist/` folder.
+Your server is running perfectly! It just needs the website files (HTML, CSS, JavaScript) that visitors see.
 
-## 📁 Download Options:
+## DOWNLOAD & UPLOAD:
 
-### Complete Package:
-- `business-daily-deals-production.tar.gz` - Everything in one file
+### 1. Download Frontend Package:
+**File:** `cpanel-public.tar.gz` or the `cpanel-public/` folder
 
-### Individual Files:
-- `dist/index.js` - Main server (179KB production build)
-- `dist/public/` - Frontend with February 2026 content
-- `dist/start.sh` - Production startup script
-- `dist/.env.production` - Environment configuration
+### 2. Upload to cPanel:
+1. Extract/download the `cpanel-public/` folder
+2. Upload entire folder to: `/home/simonsta/public_html/businessdailydeals/`
+3. **Important:** Rename `cpanel-public` to `public` after upload
 
-## 🚀 Quick Deploy Instructions:
+### 3. Final Structure Should Look Like:
+```
+/home/simonsta/public_html/businessdailydeals/
+├── app.js ✅ (already uploaded)
+├── package.json ✅ (already uploaded)
+├── .htaccess ✅ (already uploaded)
+└── public/ ❌ (MISSING - needs upload)
+    ├── index.html
+    ├── assets/
+    └── other files
+```
 
-### For Cybersmart:
-1. Download all files from `dist/` folder
-2. Upload to your web server
-3. Point www.businessdailydeals.co.za to the server
-4. Run: `./start.sh`
-5. Your marketplace is live!
+### 4. Restart & Test:
+1. Restart your Node.js app in cPanel
+2. Visit: www.businessdailydeals.co.za
+3. Should see the marketplace with February 20, 2026 content
 
-### For Any Web Host:
-1. Download `dist/` contents
-2. Upload to server with Node.js 18+
-3. Run: `npm start`
-4. Access via your domain
-
-**This gives you the real February 2026 version, not the cached Replit deployment!**
+**The server backend is working perfectly - just needs the frontend website files for visitors to see.**
