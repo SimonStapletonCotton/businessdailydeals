@@ -6,6 +6,7 @@ import { Search, ArrowRight, Flame, Star, Users, TrendingUp, Zap, Globe, Buildin
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { DealImage } from "@/components/DealImage";
+import { useEffect } from "react";
 
 // Business Statistics Component
 function BusinessStatistics() {
@@ -257,6 +258,11 @@ function RegularDealsHomepage() {
 }
 
 export default function HomeComprehensive() {
+  useEffect(() => {
+    document.title = "Business Daily Deals - FREE UNTIL FEBRUARY 20TH 2026";
+    console.log("🎰 COMPREHENSIVE HOMEPAGE WITH SLOT MACHINE LOADED - FEBRUARY 20TH 2026");
+  }, []);
+  
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -369,7 +375,7 @@ export default function HomeComprehensive() {
             <div className="flex items-center">
               <Flame className="h-5 w-5 mr-2 text-orange-200" />
               <p className="text-lg sm:text-xl font-bold">
-                🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL 20TH FEBRUARY 2026!
+                🎉 SUPPLIERS: POST DEALS FOR FREE UNTIL FEBRUARY 20TH, 2026!
               </p>
               <Flame className="h-5 w-5 ml-2 text-orange-200" />
             </div>

@@ -16,6 +16,7 @@ import HomepageFinal from "@/pages/homepage-final"; // Final visual distinct hom
 import NewHomepage from "@/pages/new-homepage"; // Brand new route to bypass all caching
 import CybersmartHomepage from "@/pages/cybersmart-homepage"; // Production casino-themed homepage
 import HomeCasino from "@/pages/home-casino"; // Original casino homepage
+import HomeComprehensive from "@/pages/home-comprehensive"; // Screenshot-matching homepage
 import HotDeals from "@/pages/hot-deals";
 import RegularDeals from "@/pages/regular-deals";
 import FindMeDeal from "@/pages/find-me-deal";
@@ -92,9 +93,9 @@ function Router() {
       <Route path="/working-home" component={WorkingHome} />
       <Route path="/new" component={NewHomepage} />
       
-      {/* FORCE ORIGINAL CASINO HOMEPAGE - RESTORE WORKING VERSION */}
-      <Route path="/" component={HomeCasino} />
-      <Route path="/home" component={HomeCasino} />
+      {/* FORCE COMPREHENSIVE HOMEPAGE - EXACT MATCH TO SCREENSHOT */}
+      <Route path="/" component={HomeComprehensive} />
+      <Route path="/home" component={HomeComprehensive} />
       <Route path="/home-ultimate" component={NewHomepage} />
       <Route path="/old-home" component={NewHomepage} />
       <Route path="/landing" component={NewHomepage} />
