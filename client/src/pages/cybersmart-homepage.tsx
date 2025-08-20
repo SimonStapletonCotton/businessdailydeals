@@ -31,16 +31,66 @@ export default function CybersmartHomepage() {
     }}>
       <Navbar />
       
-      {/* Casino-style animated banner with red 7's */}
+      {/* Casino 7's Container - Contained spinning area near top */}
+      <div style={{
+        background: 'rgba(0,0,0,0.8)',
+        margin: '20px auto',
+        maxWidth: '600px',
+        padding: '30px',
+        borderRadius: '20px',
+        border: '4px solid #d4af37',
+        boxShadow: '0 0 30px rgba(212, 175, 55, 0.8)',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '40px',
+          marginBottom: '20px'
+        }}>
+          <span style={{ 
+            color: '#ff0000', 
+            fontSize: '6rem', 
+            fontWeight: 'bold',
+            animation: 'spin 3s linear infinite',
+            textShadow: '0 0 20px #ff0000'
+          }}>7</span>
+          <span style={{ 
+            color: '#ff0000', 
+            fontSize: '6rem', 
+            fontWeight: 'bold',
+            animation: 'spin 3s linear infinite 1s',
+            textShadow: '0 0 20px #ff0000'
+          }}>7</span>
+          <span style={{ 
+            color: '#ff0000', 
+            fontSize: '6rem', 
+            fontWeight: 'bold',
+            animation: 'spin 3s linear infinite 2s',
+            textShadow: '0 0 20px #ff0000'
+          }}>7</span>
+        </div>
+        <div style={{
+          color: '#d4af37',
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+        }}>
+          🎰 JACKPOT LAUNCH! 🎰
+        </div>
+      </div>
+
+      {/* FREE Promotional Banner */}
       <div style={{
         background: 'linear-gradient(45deg, #ff6b00, #ff8f00, #ff6b00)',
         color: 'white',
         textAlign: 'center',
         padding: '40px 20px',
         margin: '20px',
-        border: '8px solid #d4af37',
-        borderRadius: '20px',
-        boxShadow: '0 0 30px rgba(212, 175, 55, 0.6)',
+        border: '4px solid #d4af37',
+        borderRadius: '15px',
+        boxShadow: '0 0 25px rgba(255, 107, 0, 0.6)',
         animation: 'pulse 2s infinite'
       }}>
         <div style={{ 
@@ -49,9 +99,7 @@ export default function CybersmartHomepage() {
           marginBottom: '15px',
           textShadow: '3px 3px 6px rgba(0,0,0,0.5)'
         }}>
-          <span style={{ color: '#ff0000', fontSize: '4rem' }}>7</span>
           🎉 FREE PROMOTIONAL PERIOD ACTIVE! 🎉
-          <span style={{ color: '#ff0000', fontSize: '4rem' }}>7</span>
         </div>
         <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>
           ALL DEAL POSTING IS FREE UNTIL FEBRUARY 20TH, 2026!
@@ -66,35 +114,21 @@ export default function CybersmartHomepage() {
           display: 'inline-block',
           fontWeight: 'bold'
         }}>
-          <span style={{ color: '#ff0000', fontSize: '2rem' }}>7</span>
           NO COST • NO FEES • START TODAY!
-          <span style={{ color: '#ff0000', fontSize: '2rem' }}>7</span>
         </div>
       </div>
 
-      {/* One-armed bandit style animation */}
+      {/* Main Title */}
       <div className="text-center mb-8">
-        <div style={{
+        <h1 style={{
           fontSize: '6rem',
           fontWeight: 'bold',
           color: '#4a5568',
           marginBottom: '20px',
-          textShadow: '4px 4px 8px rgba(0,0,0,0.3)'
+          textShadow: '4px 4px 8px rgba(255,255,255,0.8)'
         }}>
-          <span style={{ color: '#ff0000', animation: 'spin 3s linear infinite' }}>7</span>
-          <span style={{ color: '#000', margin: '0 20px' }}>Business Daily</span>
-          <span style={{ color: '#ff0000', animation: 'spin 3s linear infinite reverse' }}>7</span>
-        </div>
-        <div style={{
-          fontSize: '6rem',
-          fontWeight: 'bold',
-          color: '#ff6b00',
-          textShadow: '4px 4px 8px rgba(0,0,0,0.3)'
-        }}>
-          <span style={{ color: '#ff0000', animation: 'bounce 2s infinite' }}>7</span>
-          <span style={{ margin: '0 30px' }}>Deals</span>
-          <span style={{ color: '#ff0000', animation: 'bounce 2s infinite 0.5s' }}>7</span>
-        </div>
+          Business Daily <span style={{ color: '#ff6b00' }}>Deals</span>
+        </h1>
       </div>
 
       {/* Hero Section */}
@@ -427,9 +461,7 @@ export default function CybersmartHomepage() {
           boxShadow: '0 0 40px rgba(212,175,55,0.4)'
         }}>
           <h2 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '24px' }}>
-            <span style={{ color: '#ff0000', fontSize: '4rem' }}>7</span>
             Join South Africa's Premier B2B Marketplace
-            <span style={{ color: '#ff0000', fontSize: '4rem' }}>7</span>
           </h2>
           <p style={{ fontSize: '1.5rem', marginBottom: '32px', opacity: '0.95' }}>
             Start growing your business today - completely FREE until February 20th, 2026!
