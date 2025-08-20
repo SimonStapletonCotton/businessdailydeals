@@ -13,6 +13,7 @@ NEW PROMOTIONAL PERIOD: FREE deal posting for suppliers until 20th February 2026
 Color scheme preference: Orange halftone casino-style theme with animated red 7's, professional gradient backgrounds (specific: orange halftone on left #ffcc80 → #ffb74d graduating to slate halftone #c8b8a0 → #8fa3b8 on right), mid charcoal navbar (#64748b)
 Quality expectations: Comprehensive implementations with thorough attention to detail - "master coder should think of every combination"
 Backup requirements: Critical - cannot start from beginning if crashes occur, need complete documentation
+Deployment preference: Wants automatic updates without manual file uploads to hosting
 
 ## System Architecture
 
