@@ -95,7 +95,7 @@ function HotDealsHomepage() {
       }
       const data = await res.json();
       console.log("🔥 HOT DEALS API RESPONSE:", data.length, "deals received");
-      console.log("HOT DEALS IDs:", data.map(d => d.id));
+      console.log("HOT DEALS IDs:", data.map((d: any) => d.id));
       return data;
     },
     staleTime: 0, // Always fetch fresh data
@@ -189,7 +189,7 @@ function RegularDealsHomepage() {
       }
       const data = await res.json();
       console.log("🟠 REGULAR DEALS API RESPONSE:", data.length, "deals received");
-      console.log("REGULAR DEALS IDs:", data.map(d => d.id));
+      console.log("REGULAR DEALS IDs:", data.map((d: any) => d.id));
       return data;
     },
     staleTime: 0, // Always fetch fresh data
