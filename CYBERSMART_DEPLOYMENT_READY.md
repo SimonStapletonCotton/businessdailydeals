@@ -1,50 +1,49 @@
-# CYBERSMART SHARED HOSTING DEPLOYMENT - READY
+# ✅ CYBERSMART DEPLOYMENT READY - Casino-Themed Homepage
 
-## Response to Priya's Requirements
+## CORRECT VERSION FOR CYBERSMART:
 
-### ✅ COMPATIBILITY CONFIRMED:
-- **MySQL 5.7.44**: Our app has MySQL auto-detection built-in
-- **Apache Web Server**: Production build optimized for Apache
-- **Shared Hosting**: Application designed for shared hosting environments
-- **Node.js**: Production server bundle ready (179KB optimized)
+The Cybersmart hosting now has the **WRONG VERSION**. I've created the correct casino-themed homepage with:
 
-### 📋 DATABASE SETUP REQUEST:
-**Database Name**: `businessdailydeals_main` (as requested)
+- ✅ **Charcoal menu** (#64748b navbar)
+- ✅ **Orange halftone background** (#ffcc80 → #ffb74d graduating to #c8b8a0 → #8fa3b8)
+- ✅ **3 animated red casino 7's** throughout the design
+- ✅ **February 20th, 2026 promotional content**
+- ✅ **One-armed bandit style animations**
 
-**Required Tables**: Our schema includes:
-- users (authentication and profiles)
-- deals (marketplace listings) 
-- keywords (notification system)
-- notifications (alert system)
-- credit_transactions (payment system)
-- banner_ads (advertising)
-- companies (supplier directory)
+## FILES TO REPLACE ON CYBERSMART:
 
-### 📁 FILES READY FOR CPANEL UPLOAD:
-1. **app.js** (179KB Node.js server - renamed from cybersmart-app.js)
-2. **public/** folder (complete frontend with February 2026 content)
-3. **.env.production** (environment configuration)
-4. **start.sh** (startup script)
+### 1. Updated Server (Casino-themed):
+- **File**: `cybersmart-app.js`
+- **Replace**: Current `app.js` on Cybersmart
+- **Contains**: Casino homepage routing, February 2026 content
 
-### 🔧 ENVIRONMENT CONFIGURATION:
-Once database details are provided, we'll configure:
-```
-MYSQL_HOST=localhost
-MYSQL_USER=[provided by Cybersmart]
-MYSQL_PASSWORD=[provided by Cybersmart]
-MYSQL_DATABASE=businessdailydeals_main
-NODE_ENV=production
-```
+### 2. Updated Frontend (Casino-themed):
+- **File**: `cybersmart-public/` folder
+- **Replace**: Current `public/` folder on Cybersmart
+- **Contains**: Casino-themed homepage with 3 red 7's, orange background
 
-### 🚀 LAUNCH FEATURES READY:
-- February 20th, 2026 promotional period (FREE until then)
-- 13 active deals with professional images
-- Supplier authentication system
-- Credit system (1 Credit = R2.50)
-- Search and category filters
-- SSL certificate integration ready
+### 3. Upload Instructions:
+1. **Delete old files**: Remove current `app.js` and `public/` folder
+2. **Upload**: `cybersmart-app.js` → rename to `app.js`
+3. **Upload**: `cybersmart-public/` → rename to `public/`
+4. **Restart**: Node.js app in cPanel
+5. **Verify**: Visit www.businessdailydeals.co.za
 
-### 📈 FUTURE MIGRATION PATH:
-Application designed for easy scaling to Cloud VPS when business grows, maintaining full PostgreSQL compatibility.
+## EXPECTED RESULT:
+- Homepage loads with casino theme (charcoal menu, orange gradient background)
+- 3 animated red 7's visible throughout the design
+- "FREE until February 20th, 2026" promotional banners
+- One-armed bandit style animations
+- All functionality working (deals, search, registration)
 
-**STATUS**: Ready for immediate deployment upon database creation and connection details.
+## VERIFICATION CHECKLIST:
+- [ ] Casino-themed design visible
+- [ ] 3 red 7's animated on homepage
+- [ ] Orange halftone gradient background
+- [ ] Charcoal navigation menu
+- [ ] February 2026 promotional content
+- [ ] Hot deals loading correctly
+- [ ] Statistics showing real data
+- [ ] All navigation links working
+
+**This is the production-ready version with your requested casino theme and February 2026 promotional content.**
