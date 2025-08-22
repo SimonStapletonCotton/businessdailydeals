@@ -328,6 +328,10 @@ app.get('/api/business/stats', async (req, res) => {
 
 // Catch-all handler for React Router
 app.get('*', (req, res) => {
+  // Don't redirect API calls
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -338,11 +342,12 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🎉 Business Daily Deals server running on port ${PORT}`);
   console.log(`🌐 Environment: production`);
   console.log(`💾 Database: ${dbConfig.database}`);
   console.log(`📅 Promotional Period: FREE until February 20, 2026`);
+  console.log(`🎯 Test API: http://localhost:${PORT}/test-api.html`);
   testDatabaseConnection();
 });
 
