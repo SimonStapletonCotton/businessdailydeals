@@ -126,6 +126,15 @@ Deployment preference: Wants automatic updates without manual file uploads to ho
 
 ## Recent Changes
 
+### Main Branch Restoration Complete (August 22, 2025)
+- **Source Files Restored**: Successfully recovered client/, server/, shared/ directories after cleanup
+- **Configuration Files Fixed**: Restored vite.config.ts, tsconfig.json, components.json, postcss.config.js, tailwind.config.ts
+- **Deals Functionality Working**: Both Hot Deals (8 items) and Regular Deals (5 items) loading properly
+- **Development Server Running**: Full-stack application operational with PostgreSQL database
+- **Casino Homepage Active**: Orange-to-slate gradient theme with February 20th, 2026 promotional content
+- **API Endpoints Verified**: All deals, user authentication, and business stats APIs functioning
+- **Ready for Production**: Main branch ready for force push with complete working codebase
+
 ### GitHub Integration Complete (August 22, 2025)
 - **Repository Created**: https://github.com/SimonStapletonCotton/businessdailydeals
 - **Full Codebase Synced**: Complete marketplace pushed to GitHub main branch
