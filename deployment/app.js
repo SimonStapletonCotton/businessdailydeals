@@ -67,11 +67,19 @@ const sampleDeals = {
       price: 'R2,500 - R15,000',
       originalPrice: 'R5,000 - R25,000',
       discount: '50%',
-      supplier: 'Office Solutions SA',
+      supplier: {
+        id: 'supplier-1',
+        companyName: 'Office Solutions SA',
+        isVerified: true
+      },
       location: 'Johannesburg, GP',
       imageUrl: '/public-objects/business-furniture.jpg',
       dealType: 'hot',
-      expiryDate: '2026-03-15'
+      expiryDate: '2026-03-15',
+      supplierId: 'supplier-1',
+      category: 'Office Supplies',
+      isActive: true,
+      createdAt: '2025-01-15T10:00:00Z'
     },
     {
       id: '2', 
@@ -80,11 +88,19 @@ const sampleDeals = {
       price: 'R0.50 per page',
       originalPrice: 'R1.20 per page',
       discount: '58%',
-      supplier: 'PrintTech Solutions',
+      supplier: {
+        id: 'supplier-2',
+        companyName: 'PrintTech Solutions',
+        isVerified: true
+      },
       location: 'Cape Town, WC',
       imageUrl: '/public-objects/printing-services.jpg',
       dealType: 'hot',
-      expiryDate: '2026-02-28'
+      expiryDate: '2026-02-28',
+      supplierId: 'supplier-2',
+      category: 'Printing & Advertising',
+      isActive: true,
+      createdAt: '2025-01-20T10:00:00Z'
     },
     {
       id: '3',
@@ -93,11 +109,19 @@ const sampleDeals = {
       price: 'R850 per case',
       originalPrice: 'R1,400 per case',
       discount: '39%',
-      supplier: 'CleanPro Distributors',
+      supplier: {
+        id: 'supplier-3',
+        companyName: 'CleanPro Distributors',
+        isVerified: true
+      },
       location: 'Durban, KZN',
       imageUrl: '/public-objects/cleaning-supplies.jpg',
       dealType: 'hot',
-      expiryDate: '2026-03-01'
+      expiryDate: '2026-03-01',
+      supplierId: 'supplier-3',
+      category: 'Cleaning & Maintenance',
+      isActive: true,
+      createdAt: '2025-01-25T10:00:00Z'
     },
     {
       id: '4',
