@@ -16,12 +16,29 @@ The app expects these environment variables (already configured for Cybersmart):
 - `MYSQL_PASSWORD=!$}e{SJW_q)xa`
 - `MYSQL_DATABASE=simonsta_businessdailydeals_main`
 
+## Automated Setup:
+
+**Run the preparation script:**
+```bash
+node deployment/prepare-cpanel.js
+```
+
+This automatically:
+- Copies latest React build files to `deployment/public/`
+- Verifies all required files are present
+- Creates deployment summary
+
 ## cPanel Setup Instructions:
 
-1. **Upload Files**:
-   - Upload `package.json` to your domain folder
-   - Upload `app.js` to your domain folder  
-   - Copy `../dist/public/` contents to `public/` folder
+1. **Prepare Files** (automated):
+   ```bash
+   node deployment/prepare-cpanel.js
+   ```
+
+2. **Upload Files**:
+   - Upload `deployment/package.json` to your domain folder
+   - Upload `deployment/app.js` to your domain folder  
+   - Upload `deployment/public/` folder to your domain folder
 
 2. **Configure Node.js App**:
    - In cPanel → Node.js App
