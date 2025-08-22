@@ -1,0 +1,325 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BULLETPROOF: Prevent any CSS from hiding images */
+img[src*="public-objects"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
+
+
+
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mobile cache buster - force reload */
+.mobile-update {
+  content: "v32.0-SOFTER-ORANGE-LIGHTER-SLATE";
+}
+
+/* Force cache refresh for all browsers */
+html {
+  --cache-buster: "2025-01-09-v32-SOFTER-GRADIENT";
+}
+
+/* Background starts below navbar - not above it */
+body {
+  background: white !important;
+  min-height: 100vh !important;
+}
+
+/* Page-specific background colors starting below navbar */
+
+/* Home page - medium orange left graduating to light slate right */
+.page-home {
+  background: linear-gradient(to right, #ff8f00, #ffab40, #ffcc80, #ffb74d, #e2e8f0, #f8fafc) !important;
+  min-height: calc(100vh - 64px) !important;
+}
+
+/* Hot deals page - light green pastel theme */
+.page-deals {
+  background: linear-gradient(120deg, #dcfce7 0%, #bbf7d0 30%, #86efac 60%, #ecfdf5 80%, #f0fdf4 90%, #f7fee7 100%) !important;
+  min-height: calc(100vh - 64px) !important;
+}
+
+/* Regular deals page - light purple pastel theme */
+.page-regular {
+  background: linear-gradient(45deg, #e9d5ff 0%, #ddd6fe 30%, #c4b5fd 60%, #f3e8ff 80%, #faf5ff 90%, #fefbff 100%) !important;
+  min-height: calc(100vh - 64px) !important;
+}
+
+/* Supplier pages - light teal pastel theme */
+.page-supplier {
+  background: linear-gradient(60deg, #ccfbf1 0%, #a7f3d0 30%, #6ee7b7 60%, #d1fae5 80%, #ecfdf5 90%, #f0fdf4 100%) !important;
+  min-height: calc(100vh - 64px) !important;
+}
+
+/* Registration pages - light rose pastel theme */
+.page-register {
+  background: linear-gradient(90deg, #fce7f3 0%, #fbcfe8 30%, #f9a8d4 60%, #fdf2f8 80%, #fef7f2 90%, #fffbf7 100%) !important;
+  min-height: calc(100vh - 64px) !important;
+}
+
+/* General pages - light yellow pastel theme */
+.page-general {
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 30%, #fde68a 60%, #fffbeb 80%, #fffef0 90%, #ffffff 100%) !important;
+  min-height: calc(100vh - 64px) !important;
+}
+
+/* Default fallback - light gray pastel theme */
+.page-content {
+  background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 30%, #e2e8f0 60%, #cbd5e1 80%, #94a3b8 90%, #64748b 100%) !important;
+  min-height: calc(100vh - 64px) !important;
+}
+
+/* Fix any hidden text issues */
+* {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Casino slot machine animations - vertical spinning */
+@keyframes spin-vertical-slow {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes spin-vertical-medium {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes spin-vertical-fast {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-spin-vertical-slow {
+  animation: spin-vertical-slow 4s linear infinite;
+}
+
+.animate-spin-vertical-medium {
+  animation: spin-vertical-medium 2.5s linear infinite;
+}
+
+.animate-spin-vertical-fast {
+  animation: spin-vertical-fast 1.8s linear infinite;
+}
+
+/* Authentic casino 7 styling */
+.casino-seven {
+  font-size: 2.75rem;
+  font-family: 'Arial Black', 'Helvetica Bold', Arial, sans-serif;
+  font-weight: 900;
+  color: #dc2626;
+  text-shadow: 
+    3px 3px 0px #991b1b,
+    -1px -1px 0px #991b1b,
+    1px -1px 0px #991b1b,
+    -1px 1px 0px #991b1b,
+    6px 6px 12px rgba(0, 0, 0, 0.8);
+  transform: scaleX(1.3) scaleY(1.1);
+  letter-spacing: 0px;
+  line-height: 1;
+  position: relative;
+  -webkit-text-stroke: 2px #8b0000;
+}
+
+.casino-seven::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    transparent 30%, 
+    transparent 70%, 
+    rgba(0, 0, 0, 0.1) 100%);
+  pointer-events: none;
+  border-radius: 2px;
+}
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(0 0% 20%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 20%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 20%);
+  --primary: hsl(85 30% 35%);
+  --primary-foreground: hsl(0 0% 98%);
+  --secondary: hsl(85 15% 85%);
+  --secondary-foreground: hsl(0 0% 20%);
+  --muted: hsl(85 15% 95%);
+  --muted-foreground: hsl(0 0% 45%);
+  --accent: hsl(85 25% 75%);
+  --accent-foreground: hsl(0 0% 20%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(85 15% 90%);
+  --input: hsl(85 15% 90%);
+  --ring: hsl(85 30% 35%);
+  --success: hsl(85 40% 35%);
+  --success-foreground: hsl(0 0% 100%);
+  --chart-1: hsl(85 40% 45%);
+  --chart-2: hsl(15 30% 35%);
+  --chart-3: hsl(85 50% 25%);
+  --chart-4: hsl(45 35% 40%);
+  --chart-5: hsl(120 25% 30%);
+  --radius: 0.5rem;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.dark {
+  --background: hsl(0 0% 15%);
+  --foreground: hsl(0 0% 95%);
+  --card: hsl(0 0% 15%);
+  --card-foreground: hsl(0 0% 95%);
+  --popover: hsl(0 0% 15%);
+  --popover-foreground: hsl(0 0% 95%);
+  --primary: hsl(85 25% 55%);
+  --primary-foreground: hsl(0 0% 15%);
+  --secondary: hsl(0 0% 25%);
+  --secondary-foreground: hsl(0 0% 95%);
+  --muted: hsl(0 0% 25%);
+  --muted-foreground: hsl(0 0% 65%);
+  --accent: hsl(0 0% 25%);
+  --accent-foreground: hsl(0 0% 95%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(0 0% 95%);
+  --border: hsl(0 0% 25%);
+  --input: hsl(0 0% 25%);
+  --ring: hsl(85 25% 55%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    font-family: Inter, system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #root {
+    width: 100%;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Page-specific background styles - DISABLED */
+  .page-home-DISABLED {
+    @apply bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50;
+  }
+  
+  /* Clear all conflicting styles */
+  .page-home,
+  .page-home.mobile-update,
+  .page-landing,
+  .page-deals,
+  .page-dashboard {
+    background: none !important;
+    color: inherit !important;
+    display: block !important;
+  }
+  
+  .page-landing {
+    @apply bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50;
+  }
+  
+  .page-deals {
+    @apply bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50;
+  }
+  
+  .page-dashboard {
+    @apply bg-gradient-to-br from-slate-50 via-stone-50 to-gray-50;
+  }
+  
+  .page-credits {
+    @apply bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50;
+  }
+  
+  .page-rates {
+    @apply bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-50;
+  }
+  
+  .page-search {
+    @apply bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50;
+  }
+  
+  .page-contact {
+    @apply bg-gradient-to-br from-rose-50 via-pink-50 to-red-50;
+  }
+  
+  .page-directory {
+    @apply bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50;
+  }
+  
+  .page-pricing {
+    @apply bg-gradient-to-br from-emerald-50 via-green-50 to-lime-50;
+  }
+  
+  .page-post {
+    @apply bg-gradient-to-br from-slate-50 via-stone-50 to-gray-50;
+  }
+}
+
+/* Custom styles for B2B platform */
+.deal-card-hot {
+  @apply border-2 border-accent border-opacity-20 hover:border-opacity-40 transition-all duration-300;
+}
+
+.deal-card-regular {
+  @apply border border-border hover:border-primary hover:border-opacity-40 transition-all duration-300;
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, hsl(200 10% 25%) 0%, hsl(85 30% 35%) 100%);
+}
+
+.gradient-supplier {
+  background: linear-gradient(135deg, hsl(200 15% 20%) 0%, hsl(85 25% 30%) 100%);
+}
+
+.notification-badge {
+  @apply absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center;
+}
+
+/* Force dialog two-column layout */
+.dialog-two-columns {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 2rem !important;
+  min-height: 500px !important;
+}
+
+/* Override any conflicting dialog styles */
+[data-radix-dialog-content] .dialog-two-columns {
+  display: grid !important;
+}

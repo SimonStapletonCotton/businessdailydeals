@@ -1,0 +1,180 @@
+import express, { type Request, Response, NextFunction } from "express";
+// Cache buster: 1755192568
+// Force complete reload
+import { registerRoutes } from "./routes";
+import { setupVite, serveStatic, log } from "./vite";
+import { testDatabaseConnection } from "./db";
+import { initializeDatabase } from "./db-selector";
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Force cache busting for all requests - AGGRESSIVE
+app.use((req, res, next) => {
+  const timestamp = Date.now();
+  res.set({
+    'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+    'Last-Modified': new Date(timestamp).toUTCString(),
+    'ETag': `"${timestamp}"`,
+    'Vary': 'Cache-Control',
+    'X-Timestamp': timestamp.toString()
+  });
+  next();
+});
+
+app.use((req, res, next) => {
+  const start = Date.now();
+  const path = req.path;
+  let capturedJsonResponse: Record<string, any> | undefined = undefined;
+
+  const originalResJson = res.json;
+  res.json = function (bodyJson, ...args) {
+    capturedJsonResponse = bodyJson;
+    return originalResJson.apply(res, [bodyJson, ...args]);
+  };
+
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    if (path.startsWith("/api")) {
+      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
+      if (capturedJsonResponse) {
+        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+      }
+
+      if (logLine.length > 80) {
+        logLine = logLine.slice(0, 79) + "…";
+      }
+
+      log(logLine);
+    }
+  });
+
+  next();
+});
+
+(async () => {
+  try {
+    log("🚀 Starting Business Daily Deals B2B Marketplace...");
+    
+    // Log environment information for debugging
+    log(`🌐 NODE_ENV: ${process.env.NODE_ENV || 'not set'}`);
+    log(`🚢 PORT: ${process.env.PORT || 'not set (will default to 5000)'}`);
+    log(`💾 DATABASE_URL: ${process.env.DATABASE_URL ? 'configured' : 'not set'}`);
+    
+    // Verify required environment variables
+    const requiredEnvVars = ['DATABASE_URL'];
+    const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+    
+    if (missingEnvVars.length > 0) {
+      log(`❌ Missing required environment variables: ${missingEnvVars.join(', ')}`);
+      log(`🔍 Available environment variables: ${Object.keys(process.env).filter(key => !key.includes('SECRET') && !key.includes('KEY')).join(', ')}`);
+      process.exit(1);
+    }
+    
+    log("✅ Environment variables verified");
+    
+    // Check MySQL credentials and initialize database
+    const hasMySQLCredentials = process.env.MYSQL_HOST && 
+                              process.env.MYSQL_USER && 
+                              process.env.MYSQL_PASSWORD && 
+                              process.env.MYSQL_DATABASE;
+    
+    if (hasMySQLCredentials) {
+      log("🔄 MySQL credentials detected, initializing unified database...");
+      try {
+        const db = await initializeDatabase();
+        log("✅ MySQL unified database connection established");
+      } catch (error) {
+        log(`❌ MySQL connection failed: ${error}`);
+        log("⚠️ Falling back to PostgreSQL");
+        await testDatabaseConnection();
+      }
+      
+      // Pre-initialize object storage to prevent timing issues
+      if (process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID) {
+        log("🔄 Pre-initializing Google Cloud Storage...");
+        const { Storage } = await import("@google-cloud/storage");
+        (global as any).objectStorageClient = new Storage({
+          credentials: {
+            audience: "replit",
+            subject_token_type: "access_token",
+            token_url: "http://127.0.0.1:1106/token",
+            type: "external_account",
+            credential_source: {
+              url: "http://127.0.0.1:1106/credential",
+              format: { type: "json", subject_token_field_name: "access_token" }
+            },
+            universe_domain: "googleapis.com"
+          },
+          projectId: ""
+        });
+        log("✅ Google Cloud Storage pre-initialized");
+      }
+    } else {
+      log("ℹ️ Using PostgreSQL development database");
+      await testDatabaseConnection();
+    }
+
+    // Register API routes BEFORE Vite middleware to ensure proper routing
+    const server = await registerRoutes(app);
+    log("✅ Routes registered successfully");
+
+    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+      const status = err.status || err.statusCode || 500;
+      const message = err.message || "Internal Server Error";
+      
+      log(`❌ Error ${status}: ${message}`);
+      res.status(status).json({ message });
+      throw err;
+    });
+
+    // importantly only setup vite in development and after
+    // setting up all the other routes so the catch-all route
+    // doesn't interfere with the other routes
+    if (app.get("env") === "development") {
+      await setupVite(app, server);
+      log("✅ Vite development server setup complete");
+    } else {
+      serveStatic(app);
+      log("✅ Static file serving enabled for production");
+    }
+
+    // Use PORT environment variable for production deployment compatibility
+    // Default to 5000 for development, but prefer production PORT if available
+    const port = parseInt(process.env.PORT || '5000', 10);
+    
+    server.listen({
+      port,
+      host: "0.0.0.0",
+      reusePort: true,
+    }, () => {
+      log(`🎉 Business Daily Deals server successfully started on port ${port}`);
+      log(`🌐 Environment: ${app.get("env")}`);
+      log(`📊 Health check available at: http://0.0.0.0:${port}/api/health`);
+    });
+
+    // Graceful shutdown handling
+    process.on('SIGTERM', () => {
+      log('🔄 SIGTERM received, shutting down gracefully...');
+      server.close(() => {
+        log('✅ Server closed');
+        process.exit(0);
+      });
+    });
+
+    process.on('SIGINT', () => {
+      log('🔄 SIGINT received, shutting down gracefully...');
+      server.close(() => {
+        log('✅ Server closed');
+        process.exit(0);
+      });
+    });
+
+  } catch (error) {
+    log(`❌ Failed to start server: ${error}`);
+    process.exit(1);
+  }
+})();
