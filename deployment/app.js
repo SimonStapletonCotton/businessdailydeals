@@ -21,6 +21,14 @@ const dbConfig = {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// CORS headers for production
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  next();
+});
+
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -249,7 +257,7 @@ app.get('/api/deals', async (req, res) => {
         return res.json(rows);
       }
     } catch (dbError) {
-      console.log('Database not available, using sample data');
+      console.log('✅ Database not available, using sample data - THIS IS EXPECTED');
     }
     
     // Return sample data

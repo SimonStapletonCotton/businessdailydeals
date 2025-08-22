@@ -38,6 +38,11 @@
    - Install dependencies: `npm install`
    - Start server: `node app.js`
 
+5. **Test API (if deals not loading)**:
+   - Upload `test-api.html` to your domain folder
+   - Visit `yourdomain.com/test-api.html` 
+   - Check if APIs return data correctly
+
 ## Features Included:
 
 - Casino-themed homepage with animated slot machine
