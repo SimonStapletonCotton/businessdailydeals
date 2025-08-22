@@ -49,24 +49,218 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
+// Sample deals data (fallback for when database is not available)
+const sampleDeals = {
+  hot: [
+    {
+      id: '1',
+      title: 'Premium Office Furniture Sale',
+      description: 'High-quality office furniture at wholesale prices. Perfect for startups and established businesses.',
+      price: 'R2,500 - R15,000',
+      originalPrice: 'R5,000 - R25,000',
+      discount: '50%',
+      supplier: 'Office Solutions SA',
+      location: 'Johannesburg, GP',
+      imageUrl: '/public-objects/business-furniture.jpg',
+      dealType: 'hot',
+      expiryDate: '2026-03-15'
+    },
+    {
+      id: '2', 
+      title: 'Industrial Printing Services',
+      description: 'Bulk printing services for marketing materials, business cards, and corporate stationery.',
+      price: 'R0.50 per page',
+      originalPrice: 'R1.20 per page',
+      discount: '58%',
+      supplier: 'PrintTech Solutions',
+      location: 'Cape Town, WC',
+      imageUrl: '/public-objects/printing-services.jpg',
+      dealType: 'hot',
+      expiryDate: '2026-02-28'
+    },
+    {
+      id: '3',
+      title: 'Professional Cleaning Supplies',
+      description: 'Commercial grade cleaning products for offices, restaurants, and industrial facilities.',
+      price: 'R850 per case',
+      originalPrice: 'R1,400 per case',
+      discount: '39%',
+      supplier: 'CleanPro Distributors',
+      location: 'Durban, KZN',
+      imageUrl: '/public-objects/cleaning-supplies.jpg',
+      dealType: 'hot',
+      expiryDate: '2026-03-01'
+    },
+    {
+      id: '4',
+      title: 'IT Equipment Liquidation',
+      description: 'Refurbished computers, laptops, and networking equipment with warranty.',
+      price: 'R3,500 - R12,000',
+      originalPrice: 'R8,000 - R20,000',
+      discount: '56%',
+      supplier: 'TechSource SA',
+      location: 'Pretoria, GP',
+      imageUrl: '/public-objects/it-equipment.jpg',
+      dealType: 'hot',
+      expiryDate: '2026-02-25'
+    },
+    {
+      id: '5',
+      title: 'Catering Equipment Sale',
+      description: 'Professional kitchen equipment for restaurants, cafes, and catering businesses.',
+      price: 'R5,500 - R35,000',
+      originalPrice: 'R12,000 - R55,000',
+      discount: '54%',
+      supplier: 'Kitchen Pro SA',
+      location: 'Port Elizabeth, EC',
+      imageUrl: '/public-objects/catering-equipment.jpg',
+      dealType: 'hot',
+      expiryDate: '2026-03-10'
+    },
+    {
+      id: '6',
+      title: 'Security System Installation',
+      description: 'Complete CCTV and access control systems for business premises.',
+      price: 'R8,500 installation',
+      originalPrice: 'R15,000 installation',
+      discount: '43%',
+      supplier: 'SecureGuard Systems',
+      location: 'Bloemfontein, FS',
+      imageUrl: '/public-objects/security-systems.jpg',
+      dealType: 'hot',
+      expiryDate: '2026-02-20'
+    },
+    {
+      id: '7',
+      title: 'Fleet Vehicle Maintenance',
+      description: 'Comprehensive vehicle servicing packages for business fleets and delivery services.',
+      price: 'R1,200 per service',
+      originalPrice: 'R2,200 per service',
+      discount: '45%',
+      supplier: 'FleetCare SA',
+      location: 'East London, EC',
+      imageUrl: '/public-objects/fleet-maintenance.jpg',
+      dealType: 'hot',
+      expiryDate: '2026-03-05'
+    },
+    {
+      id: '8',
+      title: 'Marketing & Branding Package',
+      description: 'Complete branding solution including logo design, website, and marketing materials.',
+      price: 'R12,500 package',
+      originalPrice: 'R25,000 package',
+      discount: '50%',
+      supplier: 'Brand Boost Marketing',
+      location: 'Sandton, GP',
+      imageUrl: '/public-objects/marketing-package.jpg',
+      dealType: 'hot',
+      expiryDate: '2026-02-15'
+    }
+  ],
+  regular: [
+    {
+      id: '9',
+      title: 'Bulk Stationery Supply',
+      description: 'Office stationery in bulk quantities. Perfect for schools, offices, and government departments.',
+      price: 'R25 per unit',
+      originalPrice: 'R35 per unit',
+      discount: '29%',
+      supplier: 'Paper Plus',
+      location: 'Kempton Park, GP',
+      imageUrl: '/public-objects/office-stationery.jpg',
+      dealType: 'regular',
+      expiryDate: '2026-04-30'
+    },
+    {
+      id: '10',
+      title: 'Professional Photography Services',
+      description: 'Corporate headshots, event photography, and product photography services.',
+      price: 'R1,500 per session',
+      originalPrice: 'R2,500 per session',
+      discount: '40%',
+      supplier: 'Lens Masters Studio',
+      location: 'Rosebank, GP',
+      imageUrl: '/public-objects/photography-services.jpg',
+      dealType: 'regular',
+      expiryDate: '2026-05-15'
+    },
+    {
+      id: '11',
+      title: 'Accounting Software Licenses',
+      description: 'Professional accounting software with training and support included.',
+      price: 'R3,500 per license',
+      originalPrice: 'R5,500 per license',
+      discount: '36%',
+      supplier: 'AccountTech Solutions',
+      location: 'Century City, WC',
+      imageUrl: '/public-objects/accounting-software.jpg',
+      dealType: 'regular',
+      expiryDate: '2026-06-01'
+    },
+    {
+      id: '12',
+      title: 'Industrial Machinery Parts',
+      description: 'Spare parts and components for manufacturing and industrial equipment.',
+      price: 'R500 - R5,000',
+      originalPrice: 'R800 - R7,500',
+      discount: '37%',
+      supplier: 'MachParts Industrial',
+      location: 'Pinetown, KZN',
+      imageUrl: '/public-objects/machinery-parts.jpg',
+      dealType: 'regular',
+      expiryDate: '2026-07-20'
+    },
+    {
+      id: '13',
+      title: 'Corporate Training Workshops',
+      description: 'Professional development and skills training for employees and management.',
+      price: 'R2,500 per person',
+      originalPrice: 'R4,000 per person',
+      discount: '37%',
+      supplier: 'Skills Development SA',
+      location: 'Midrand, GP',
+      imageUrl: '/public-objects/corporate-training.jpg',
+      dealType: 'regular',
+      expiryDate: '2026-08-10'
+    }
+  ]
+};
+
 // API Routes for deals
 app.get('/api/deals', async (req, res) => {
   try {
-    const connection = await mysql.createConnection(dbConfig);
     const { type } = req.query;
     
-    let query = 'SELECT * FROM deals WHERE deal_status = "active"';
-    if (type === 'hot') {
-      query += ' AND deal_type = "hot"';
-    } else if (type === 'regular') {
-      query += ' AND deal_type = "regular"';
+    // Try database first, fallback to sample data
+    try {
+      const connection = await mysql.createConnection(dbConfig);
+      let query = 'SELECT * FROM deals WHERE deal_status = "active"';
+      if (type === 'hot') {
+        query += ' AND deal_type = "hot"';
+      } else if (type === 'regular') {
+        query += ' AND deal_type = "regular"';
+      }
+      query += ' ORDER BY created_at DESC';
+      
+      const [rows] = await connection.execute(query);
+      await connection.end();
+      
+      if (rows.length > 0) {
+        return res.json(rows);
+      }
+    } catch (dbError) {
+      console.log('Database not available, using sample data');
     }
-    query += ' ORDER BY created_at DESC';
     
-    const [rows] = await connection.execute(query);
-    await connection.end();
+    // Return sample data
+    if (type === 'hot') {
+      res.json(sampleDeals.hot);
+    } else if (type === 'regular') {
+      res.json(sampleDeals.regular);
+    } else {
+      res.json([...sampleDeals.hot, ...sampleDeals.regular]);
+    }
     
-    res.json(rows);
   } catch (error) {
     console.error('Error fetching deals:', error);
     res.status(500).json({ error: 'Internal server error' });
