@@ -341,14 +341,22 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Start server
-app.listen(PORT, '0.0.0.0', () => {
+// Start server - bind to all interfaces for cPanel
+const server = app.listen(PORT, () => {
   console.log(`🎉 Business Daily Deals server running on port ${PORT}`);
-  console.log(`🌐 Environment: production`);
-  console.log(`💾 Database: ${dbConfig.database}`);
-  console.log(`📅 Promotional Period: FREE until February 20, 2026`);
-  console.log(`🎯 Test API: http://localhost:${PORT}/test-api.html`);
-  testDatabaseConnection();
+  console.log(`🌐 Environment: production`);  
+  console.log(`📂 Serving from: ${__dirname}/public`);
+  console.log(`🎯 Test API: /test-api.html`);
+  console.log(`📅 FREE promotional period until February 20, 2026`);
+  
+  // Test database connection
+  testDatabaseConnection().then(connected => {
+    if (connected) {
+      console.log('✅ Database ready for MySQL connections');
+    } else {
+      console.log('⚠️ Using sample data (database not connected)');
+    }
+  });
 });
 
-module.exports = app;
+// Remove module.exports for direct execution on cPanel
