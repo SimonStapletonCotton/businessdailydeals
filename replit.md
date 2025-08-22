@@ -1,7 +1,7 @@
-# Business Daily Deals B2B Marketplace
+# Business Daily Deals - Deployment Branch
 
 ## Overview
-Business Daily Deals (www.businessdailydeals.co.za) is a full-stack B2B marketplace for the South African market. It connects suppliers and buyers, facilitating the exchange of goods and services through targeted deal notifications and special pricing. The platform aims to be a fully operational and modern B2B e-commerce solution, currently under development, with production deployment hosted by Cybersmart in South Africa. Key capabilities include suppliers posting premium "hot deals" and standard "regular deals," and buyers discovering opportunities via search, categories, and keyword-based notifications. The platform features dynamic business analytics that scale organically with growth.
+This is the clean deployment branch containing only production-ready files for Business Daily Deals B2B marketplace (www.businessdailydeals.co.za). Contains the complete Node.js application ready for cPanel deployment with Cybersmart MySQL integration.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -17,22 +17,25 @@ Deployment preference: Wants automatic updates without manual file uploads to ho
 
 ## System Architecture
 
-### Frontend Architecture
-- **Framework**: React 18 with TypeScript
-- **Routing**: Wouter for client-side routing
-- **State Management**: TanStack Query for server state management and caching
-- **UI Components**: Shadcn/ui component library with Radix UI primitives
-- **Styling**: Tailwind CSS with CSS variables for theming
-- **Form Handling**: React Hook Form with Zod validation
-- **Build Tool**: Vite for development and bundling
-- **UI/UX Decisions**: Orange casino-themed design with animated red 7's, gradient backgrounds, enhanced layouts, professional interface. Engaging one-armed bandit style animations on homepage. Spot colored action buttons.
+## Deployment Files
 
-### Backend Architecture
-- **Framework**: Express.js with TypeScript
-- **API Design**: RESTful API structure with modular route handlers
-- **Database Layer**: Drizzle ORM for type-safe database operations
-- **Session Management**: Express sessions.
-- **Middleware**: Custom logging, error handling, and authentication middleware.
+### Production Structure
+```
+/
+├── app.js              # Node.js production server
+├── package.json        # Dependencies for production
+├── public/             # React build (casino homepage + 13 deals)
+│   ├── index.html      # Entry point
+│   └── assets/         # CSS/JS bundles
+├── .replit             # Replit configuration
+└── replit.md           # This documentation
+```
+
+### Production Server (app.js)
+- Express.js server with CommonJS compatibility
+- MySQL integration for Cybersmart hosting
+- PostgreSQL fallback for development
+- Static file serving from public/ folder
 
 ### Database Schema
 - **Users**: User profiles with buyer/supplier roles, notification preferences, credit balance tracking.
