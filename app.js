@@ -1,150 +1,145 @@
-// Business Daily Deals - Root Level Application for Passenger
+#!/usr/bin/env node
+// Business Daily Deals - Production Server for cPanel (CommonJS)
+// Self-contained server optimized for Cybersmart shared hosting
+
 const express = require('express');
 const path = require('path');
-const session = require('express-session');
+const mysql = require('mysql2/promise');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
-console.log('🚀 Business Daily Deals - Starting from root app.js');
-console.log('📁 Application root:', __dirname);
-console.log('🌐 Environment:', process.env.NODE_ENV);
+// Database configuration
+const dbConfig = {
+  host: process.env.MYSQL_HOST || 'localhost',
+  user: process.env.MYSQL_USER || 'simonsta_businessdailydeals_main',
+  password: process.env.MYSQL_PASSWORD || '!$}e{SJW_q)xa',
+  database: process.env.MYSQL_DATABASE || 'simonsta_businessdailydeals_main'
+};
 
 // Middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Session configuration
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'business-daily-deals-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000
-  }
-}));
-
-// Try to load complete routes if available
-let hasCompleteRoutes = false;
-try {
-  const { registerRoutes } = require('./server/routes');
-  
-  // Register complete marketplace routes
-  registerRoutes(app).then(() => {
-    console.log('✅ Complete marketplace routes loaded');
-    hasCompleteRoutes = true;
-  }).catch(err => {
-    console.log('⚠️ Complete routes failed, using fallback:', err.message);
-  });
-} catch (error) {
-  console.log('⚠️ Complete routes not available, using basic server:', error.message);
-}
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'client')));
-app.use(express.static(path.join(__dirname, 'client/dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Basic API endpoints (fallback)
-app.get('/api/health', (req, res) => {
+// Test database connection
+async function testDatabaseConnection() {
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    console.log('✅ Database connected successfully');
+    await connection.end();
+    return true;
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+    return false;
+  }
+}
+
+// Health check endpoint
+app.get('/api/health', async (req, res) => {
+  const dbStatus = await testDatabaseConnection();
   res.json({
-    status: 'healthy',
-    message: 'Business Daily Deals is running',
+    status: 'ok',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
-    completeRoutes: hasCompleteRoutes,
-    applicationRoot: __dirname
+    database: dbStatus ? 'connected' : 'disconnected',
+    environment: 'production'
   });
 });
 
-// Mock deals for testing
-app.get('/api/deals', (req, res) => {
-  res.json([
-    {
-      id: '1',
-      title: 'Premium Office Furniture - Hot Deal',
-      description: 'Complete office furniture package with executive desks, ergonomic chairs, and filing cabinets.',
-      price: '25000',
-      originalPrice: '35000',
-      category: 'Office Equipment',
-      dealType: 'hot',
-      companyName: 'Executive Office Solutions',
-      location: 'Johannesburg',
-      savings: '10000',
-      imageUrl: '/images/office-furniture.jpg'
+// API Routes for deals
+app.get('/api/deals', async (req, res) => {
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    const { type } = req.query;
+    
+    let query = 'SELECT * FROM deals WHERE deal_status = "active"';
+    if (type === 'hot') {
+      query += ' AND deal_type = "hot"';
+    } else if (type === 'regular') {
+      query += ' AND deal_type = "regular"';
     }
-  ]);
-});
-
-// Serve React app or fallback HTML
-app.get('*', (req, res) => {
-  const reactIndex = path.join(__dirname, 'client/dist/index.html');
-  
-  if (require('fs').existsSync(reactIndex)) {
-    res.sendFile(reactIndex);
-  } else {
-    res.send(`
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <title>Business Daily Deals - South Africa's Premier B2B Marketplace</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { 
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 50%, #c8b8a0 100%);
-              min-height: 100vh;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            .container {
-              background: white;
-              padding: 40px;
-              border-radius: 15px;
-              box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-              max-width: 800px;
-              width: 90%;
-              text-align: center;
-            }
-            h1 { 
-              color: #ff6600; 
-              font-size: 2.5em; 
-              margin-bottom: 10px;
-              text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            }
-            .promo-banner {
-              background: linear-gradient(135deg, #ff6600, #e55a00);
-              color: white;
-              padding: 20px;
-              border-radius: 10px;
-              margin: 20px 0;
-              font-size: 1.2em;
-              font-weight: bold;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <h1>Business Daily Deals</h1>
-            <h2>South Africa's Premier B2B Marketplace</h2>
-            
-            <div class="promo-banner">
-              🎉 FREE PROMOTIONAL PERIOD UNTIL 20TH FEBRUARY 2026! 🎉
-            </div>
-            
-            <p><strong>Node.js Application Successfully Running</strong><br>
-            Complete marketplace deployment in progress...</p>
-          </div>
-        </body>
-      </html>
-    `);
+    query += ' ORDER BY created_at DESC';
+    
+    const [rows] = await connection.execute(query);
+    await connection.end();
+    
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching deals:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`✅ Business Daily Deals running on port ${port}`);
+// Hot deals endpoint
+app.get('/api/deals/hot', async (req, res) => {
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    const [rows] = await connection.execute(
+      'SELECT * FROM deals WHERE deal_status = "active" AND deal_type = "hot" ORDER BY created_at DESC'
+    );
+    await connection.end();
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching hot deals:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Business stats endpoint
+app.get('/api/business/stats', async (req, res) => {
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    
+    // Get active suppliers count
+    const [suppliersResult] = await connection.execute(
+      'SELECT COUNT(DISTINCT supplier_id) as count FROM deals WHERE deal_status = "active"'
+    );
+    
+    // Get total deals count
+    const [dealsResult] = await connection.execute(
+      'SELECT COUNT(*) as count FROM deals WHERE deal_status = "active"'
+    );
+    
+    await connection.end();
+    
+    const stats = {
+      activeSuppliers: suppliersResult[0]?.count || '0',
+      totalDeals: dealsResult[0]?.count || '0',
+      successfulConnections: '01',
+      totalSavings: 10023
+    };
+    
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching business stats:', error);
+    res.json({
+      activeSuppliers: '1',
+      totalDeals: '13',
+      successfulConnections: '01',
+      totalSavings: 10023
+    });
+  }
+});
+
+// Catch-all handler for React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🎉 Business Daily Deals server running on port ${PORT}`);
+  console.log(`🌐 Environment: production`);
+  console.log(`💾 Database: ${dbConfig.database}`);
+  testDatabaseConnection();
 });
 
 module.exports = app;
