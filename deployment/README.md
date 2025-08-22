@@ -38,10 +38,13 @@
    - Install dependencies: `npm install`
    - Start server: `node app.js`
 
-5. **Test API (if deals not loading)**:
+5. **Test & Debug (if deals not loading)**:
    - Upload `test-api.html` to your domain folder
    - Visit `yourdomain.com/test-api.html` 
-   - Check if APIs return data correctly
+   - This will show you exactly what's wrong:
+     * Server not running = configure Node.js app in cPanel
+     * APIs not responding = check app.js entry point
+     * No deals data = server working but sample data issue
 
 ## Features Included:
 

@@ -10,32 +10,49 @@
     <script>
     async function testAPI() {
         const results = document.getElementById('results');
+        results.innerHTML = '<p>🔍 Testing server status...</p>';
         
         try {
-            // Test health endpoint
-            results.innerHTML += '<h3>Testing /api/health:</h3>';
+            // Test if server is running at all
+            results.innerHTML += '<h3>Step 1: Testing if server is running</h3>';
             const healthRes = await fetch('/api/health');
+            
+            if (!healthRes.ok) {
+                throw new Error(`Server returned ${healthRes.status}: ${healthRes.statusText}`);
+            }
+            
             const healthData = await healthRes.json();
-            results.innerHTML += '<pre>' + JSON.stringify(healthData, null, 2) + '</pre>';
+            results.innerHTML += '<pre style="background: #e8f5e8; padding: 10px;">' + JSON.stringify(healthData, null, 2) + '</pre>';
+            results.innerHTML += '<p><strong>✅ Server is running!</strong></p>';
             
-            // Test deals endpoint
-            results.innerHTML += '<h3>Testing /api/deals:</h3>';
-            const dealsRes = await fetch('/api/deals');
-            const dealsData = await dealsRes.json();
-            results.innerHTML += '<pre>' + JSON.stringify(dealsData.slice(0, 2), null, 2) + '</pre>';
-            results.innerHTML += '<p><strong>Total deals: ' + dealsData.length + '</strong></p>';
+            // Test deals API
+            results.innerHTML += '<h3>Step 2: Testing deals API</h3>';
+            const dealsRes = await fetch('/api/deals?type=hot');
             
-            // Test hot deals
-            results.innerHTML += '<h3>Testing /api/deals?type=hot:</h3>';
-            const hotRes = await fetch('/api/deals?type=hot');
-            const hotData = await hotRes.json();
-            results.innerHTML += '<pre>' + JSON.stringify(hotData.slice(0, 1), null, 2) + '</pre>';
-            results.innerHTML += '<p><strong>Hot deals: ' + hotData.length + '</strong></p>';
+            if (!dealsRes.ok) {
+                throw new Error(`Deals API returned ${dealsRes.status}: ${dealsRes.statusText}`);
+            }
             
-            results.innerHTML += '<h2 style="color: green;">✅ All APIs Working!</h2>';
+            const hotData = await dealsRes.json();
+            results.innerHTML += '<p><strong>Hot deals found: ' + hotData.length + '</strong></p>';
+            
+            if (hotData.length > 0) {
+                results.innerHTML += '<h4>Sample deal data:</h4>';
+                results.innerHTML += '<pre style="background: #e8f5e8; padding: 10px;">' + JSON.stringify(hotData[0], null, 2) + '</pre>';
+                results.innerHTML += '<h2 style="color: green;">✅ Everything Working! Hot deals should load.</h2>';
+            } else {
+                results.innerHTML += '<h2 style="color: orange;">⚠️ Server running but no deals data</h2>';
+            }
             
         } catch (error) {
-            results.innerHTML += '<h2 style="color: red;">❌ API Error: ' + error.message + '</h2>';
+            results.innerHTML += '<h2 style="color: red;">❌ Server Issue: ' + error.message + '</h2>';
+            results.innerHTML += '<p>Possible causes:</p>';
+            results.innerHTML += '<ul>';
+            results.innerHTML += '<li>Node.js app not started in cPanel</li>';
+            results.innerHTML += '<li>Wrong entry point (should be app.js)</li>';
+            results.innerHTML += '<li>Port binding issues</li>';
+            results.innerHTML += '<li>Missing dependencies (run npm install)</li>';
+            results.innerHTML += '</ul>';
         }
     }
     

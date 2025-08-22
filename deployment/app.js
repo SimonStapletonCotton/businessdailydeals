@@ -260,14 +260,18 @@ app.get('/api/deals', async (req, res) => {
       console.log('✅ Database not available, using sample data - THIS IS EXPECTED');
     }
     
-    // Return sample data
+    // Return sample data with proper logging
+    let returnData;
     if (type === 'hot') {
-      res.json(sampleDeals.hot);
+      returnData = sampleDeals.hot;
     } else if (type === 'regular') {
-      res.json(sampleDeals.regular);
+      returnData = sampleDeals.regular;
     } else {
-      res.json([...sampleDeals.hot, ...sampleDeals.regular]);
+      returnData = [...sampleDeals.hot, ...sampleDeals.regular];
     }
+    
+    console.log(`✅ Returning ${returnData.length} ${type || 'all'} deals from sample data`);
+    res.json(returnData);
     
   } catch (error) {
     console.error('Error fetching deals:', error);
